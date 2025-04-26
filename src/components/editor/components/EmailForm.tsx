@@ -42,8 +42,8 @@ const EmailForm: React.FC<EmailFormProps> = ({ onCancel, onSave }) => {
 
         {showInfo && (
           <div className="absolute right-0 top-[55px] bg-white p-2 rounded shadow-md text-xs w-60 text-gray-600 z-10">
-            Your email is used to send you a copy of your message. We don't
-            share your email with third parties.
+          Your email is used to send you a copy of your message. We don&apos;t share your email with third parties.
+
           </div>
         )}
       </div>
