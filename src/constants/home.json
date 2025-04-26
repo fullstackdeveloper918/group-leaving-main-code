@@ -1,0 +1,179 @@
+{
+  "data": [
+    {
+      "id":1,
+      "title": "Upload your own",
+     "card_lable":"new",
+      "img": "https://via.placeholder.com/150",
+      "cardType": "See More..."
+    },
+    {
+      "id":2,
+      "title": "Mum to be",
+      "card_lable":"new",
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Baby"
+    },
+    {
+      "id":3,
+      "title": "Enjoy your maternity leave",
+      "card_lable":"popular",
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Baby"
+    },
+    {
+      "id":4,
+      "title": "Big congratulations on your little arrival",
+     "card_lable":"popular",
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Baby"
+    },
+    {
+      "id":5,
+      "title": "Awesome people make awesome babies",
+     "card_lable":"popular",
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Baby"
+    },
+    {
+      "id":6,
+      "title": "A new adventure with baby awaits",
+   "card_lable":"trending",
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Baby"
+    },
+    {
+      "id":7,
+      "title": "Welcome baby with love",
+      "isNew": false,
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Baby"
+    },
+    {
+      "id":8,
+      "title": "Little one’s big debut",
+      "isNew": false,
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Baby"
+    },
+    {
+      "id":9,
+      "title": "Bundle of joy has arrived",
+      "isNew": false,
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Baby"
+    },
+    {
+      "id":10,
+      "title": "Congratulations on your new job!",
+      "isNew": false,
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Congratulations"
+    },
+    {
+      "id":11,
+      "title": "Congratulations on your promotion!",
+      "isNew": false,
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Congratulations"
+    },
+    {
+      "id":12,
+      "title": "Big congratulations on your little arrival",
+      "isNew": false,
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Congratulations"
+    },
+    {
+      "id":13,
+      "title": "You did it! Congratulations!",
+      "isNew": false,
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Congratulations"
+    },
+    {
+      "id":14,
+      "title": "Congrats on your graduation!",
+      "isNew": false,
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Congratulations"
+    },
+    {
+      "id":15,
+      "title": "Congratulations on your engagement!",
+      "isNew": false,
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Congratulations"
+    },
+    {
+      "id":16,
+      "title": "Congratulations on your wedding!",
+      "isNew": false,
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Congratulations"
+    },
+    {
+      "id":17,
+      "title": "Congratulations on your retirement!",
+      "isNew": false,
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Congratulations"
+    },
+    {
+      "id":18,
+      "title": "Welcome to the world",
+      "isNew": false,
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Welcome"
+    },
+    {
+      "id":19,
+      "title": "Welcome to the new office!",
+      "isNew": false,
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Welcome"
+    },
+    {
+      "id":20,
+      "title": "Welcome to your new home",
+      "isNew": false,
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Welcome"
+    },
+    {
+      "id":21,
+      "title": "Welcome aboard!",
+      "isNew": false,
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Welcome"
+    },
+    {
+      "id":22,
+      "title": "Warm welcome to our team",
+      "isNew": false,
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Welcome"
+    },
+    {
+      "id":23,
+      "title": "Welcome to the family!",
+      "isNew": false,
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Welcome"
+    },
+    {
+      "id":24,
+      "title": "Welcome to your new adventure",
+      "isNew": false,
+      "img": "https://via.placeholder.com/150",
+      "cardType": "Welcome"
+    },
+    {
+      "id":25,
+      "title": "Welcome home, friend!",
+      "isNew": false,
+      "img":  "https://via.placeholder.com/150",
+      "cardType": "Welcome"
+    }
+  ]
+}

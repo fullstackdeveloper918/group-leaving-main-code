@@ -1,0 +1,36 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "Anonymous",
+      "rating": 3,
+      "is_verified_review": true,
+      "time": "15 hours ago",
+      "comment": "My first time using this service, and it all went well! The receptionist was very pleased with card, too!"
+    },
+    {
+      "id": 2,
+      "name": "Anonymous",
+      "rating": 3.5,
+      "is_verified_review": true,
+      "time": "17 hours ago",
+      "comment": "Very easy to use and reasonably priced."
+    },
+    {
+      "id": 3,
+      "name": "Siobhan",
+      "rating": 2.5,
+      "is_verified_review": true,
+      "time": "17 hours ago",
+      "comment": "Your service was five star, thank you very much for a great service."
+    },
+    {
+      "id": 4,
+      "name": "Anonymous",
+      "rating": 5,
+      "is_verified_review": true,
+      "time": "20 hours ago",
+      "comment": "Easy to fill-in. Recipient was extremely pleased."
+    }
+  ]
+}

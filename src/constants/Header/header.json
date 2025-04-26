@@ -1,0 +1,81 @@
+
+
+
+{
+    "popular_card": [
+      {
+        "id": 0,
+        "title": "Farewell"
+      },
+      {
+        "id": 1,
+        "title": "Birtday"
+      },
+      {
+        "id": 2,
+        "title": "New Baby"
+      },
+      {
+        "id": 3,
+        "title": "Retirement"
+      }
+    ],
+    "alloccasions": [
+      {
+        "id": 0,
+        "title": "Farewell"
+      },
+      {
+        "id": 1,
+        "title": "Wedding"
+      },
+      {
+        "id": 2,
+        "title": "Get Well"
+      },
+      {
+        "id": 3,
+        "title": "Retirement"
+      },
+      {
+        "id": 4,
+        "title": "Sympathy"
+      },
+      {
+        "id": 5,
+        "title": "Wedding"
+      },
+      {
+        "id": 6,
+        "title": "Employee Appreciation"
+      },
+      {
+        "id": 7,
+        "title": "Boss"
+      },
+      {
+        "id": 8,
+        "title": "Get Well"
+      },
+      {
+        "id": 9,
+        "title": "Thank you"
+      },
+      {
+        "id": 10,
+        "title": "Congrats"
+      },
+      {
+        "id": 11,
+        "title": "Work Anniversary"
+      },
+      {
+        "id": 12,
+        "title": "Welcome"
+      },
+      {
+        "id": 13,
+        "title": "Teacher"
+      }
+    ]
+  }

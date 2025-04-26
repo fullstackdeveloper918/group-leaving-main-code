@@ -1,0 +1,72 @@
+.carousel-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 600px;
+    height: 600px;
+    overflow: hidden;
+    margin: 20px auto;
+  }
+  
+  /* Image Container to align images horizontally */
+  .image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 600px;
+    width: 600px;
+    transition: transform 0.5s ease;
+  }
+  
+  /* Common Styles for all images */
+  .carousel-image {
+    width: 500px;
+    height: 600px;
+    object-fit: cover;
+    transition: transform 0.5s ease, z-index 0.3s ease;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+  }
+  
+  /* Left Image */
+  .left {
+    transform: translateX(-8rem) scale(0.8);
+  }
+  
+  /* Right Image */
+  .right {
+    transform: translateX(9rem) scale(0.8);
+  }
+  
+  /* Center Image (Larger) */
+  .center {
+    transform: scale(1.2);
+    z-index: 1;
+  }
+  
+  /* Navigation Button Styles */
+  .nav-btn {
+    position: absolute;
+    top: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 30px;
+    z-index: 2;
+    transform: translateY(-50%);
+  }
+  
+  .nav-btn.left {
+    left: 0;
+  }
+  
+  .nav-btn.right {
+    right: 0;
+  }
+  
