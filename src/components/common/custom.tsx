@@ -11,6 +11,7 @@ import SlideImg_2 from "../../assets/images/slide2.png";
 import SlideImg_3 from "../../assets/images/slide3.png";
 import SlideImg_4 from "../../assets/images/slide4.png";
 import SlideImg_5 from "../../../public/paper_grid.png";
+import SlideImg_6 from "../../../public/fafafa.png";
 import Modal from "react-modal";
 import axios from "axios";
 import { Rnd } from "react-rnd";
@@ -79,6 +80,14 @@ const initialSlides = [
     text: "Learn Next.js best practices for fast web apps.",
     link: "https://nextjs.org/docs/advanced-features",
     card_img: SlideImg_4,
+  },
+  {
+    id: "slide-6",
+    title: "new slide",
+    subtitle: "new slide for new content",
+    text: "new content",
+    link: "https://nextjs.org/docs/advanced-features",
+    card_img: SlideImg_6,
   },
 ];
 const Custom: React.FC = () => {
@@ -205,6 +214,14 @@ const Custom: React.FC = () => {
               link: "https://nextjs.org/docs/advanced-features",
               card_img: SlideImg_4,
             },
+            {
+              id: "slide-6",
+              title: "new slide",
+              subtitle: "new slide for new content",
+              text: "new content",
+              link: "https://nextjs.org/docs/advanced-features",
+              card_img: SlideImg_6,
+            },
           ] as any);
 
       // Create a new array of slides that includes placeholders if needed
@@ -276,6 +293,14 @@ const Custom: React.FC = () => {
               link: "https://nextjs.org/docs/advanced-features",
               card_img: SlideImg_4,
             },
+            {
+              id: "slide-6",
+              title: "new slide",
+              subtitle: "new slide for new content",
+              text: "new content",
+              link: "https://nextjs.org/docs/advanced-features",
+              card_img: SlideImg_6,
+            },
           ] as any);
 
       // Create a new array of slides that includes placeholders if needed
@@ -284,8 +309,7 @@ const Custom: React.FC = () => {
     }
   }, []);
 
-
-  console.log(showModal,"setShowModal12334")
+  console.log(showModal, "setShowModal12334");
   const sendEditorData = async () => {
     const item = {
       editor_messages: elements,
@@ -317,13 +341,21 @@ const Custom: React.FC = () => {
   };
 
   const handleAddMessageClick = () => {
-    console.log("dfdkjfd")
-    setShowModal(true);
+    console.log(activeSlideIndex, "activeSlideIndex");
+    if (activeSlideIndex < slides.length - 1) {
+      const lastSlideIndex = slides.length - 1; // Get the last slide index
+
+      // Update the active slide index to the last slide
+      setActiveSlideIndex(lastSlideIndex);
+      setShowModal(true);
+    } else {
+      setShowModal(true);
+    }
   };
 
-  useEffect(()=>{
-console.log(showModal,"showModal")
-  },[showModal])
+  useEffect(() => {
+    console.log(showModal, "showModal");
+  }, [showModal]);
 
   const closeModal = () => setIsOpen(false);
 
@@ -466,14 +498,13 @@ console.log(showModal,"showModal")
       subtitle: "New Subtitle",
       text: "This is a new slide",
       link: "https://example.com",
-      card_img: SlideImg_5
+      card_img: SlideImg_5,
     };
     setSlides((prevSlides: any[]) => [...prevSlides, newSlide]);
-    
+
     // :white_tick: Active slide ko update mat kar, abhi same rehne de
     toast.success(`New slide added`);
   };
-
 
   const fetchImageAsBase64 = async (imageUrl: string) => {
     try {
@@ -551,12 +582,12 @@ console.log(showModal,"showModal")
 
     pdf.save("slides_with_positions.pdf");
   };
-  console.log(activeSlideIndex,"handleAddPage11")
+  console.log(activeSlideIndex, "handleAddPage11");
 
   const handleSlideChange = (index: number) => {
     // Store previous active index
     const prevActiveIndex = activeSlideIndex;
-console.log(index,"handleAddPage")
+    console.log(index, "handleAddPage");
     // Set new active index
     setActiveSlideIndex(index);
 
@@ -592,6 +623,9 @@ console.log(index,"handleAddPage")
     router.push(`/envelop/${id}`);
   };
 
+  const closeModals = () => {
+    setShowModal(false);
+  };
 
   return (
     <>
@@ -700,85 +734,88 @@ console.log(index,"handleAddPage")
                     className={`carousel-slide ${positionClass}`}
                     onClick={() => handleSlideChange(index)}
                   >
-              
-                      <div className="slide-content">
-                        <img
-                          src={
-                            typeof slide.card_img === "string"
-                              ? slide.card_img
-                              : slide.card_img?.src
-                          }
-                          alt={`slide-${index + 1}`}
-                          className="slide-image"
-                        />
-                        {positionClass === "slide-prev" && (
-                          <>
-                            <div className="slide-hover"></div>
-                            <div
-                              className="slide-button-overlay"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handlePrevSlide();
-                              }}
-                            >
-                              <FaChevronLeft />
-                            </div>
-                          </>
-                        )}
-                        {positionClass === "slide-next" && (
-                          <>
-                            <div className="slide-hover"></div>
-                            <div
-                              className="slide-button-overlay"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleNextSlide();
-                              }}
-                            >
-                              <FaChevronRight />
-                            </div>
-                          </>
-                        )}
+                    <div className="slide-content">
+                      <img
+                        src={
+                          typeof slide.card_img === "string"
+                            ? slide.card_img
+                            : slide.card_img?.src
+                        }
+                        alt={`slide-${index + 1}`}
+                        className="slide-image"
+                      />
+                      {positionClass === "slide-prev" && (
+                        <>
+                          <div className="slide-hover"></div>
+                          <div
+                            className="slide-button-overlay"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handlePrevSlide();
+                            }}
+                          >
+                            <FaChevronLeft />
+                          </div>
+                        </>
+                      )}
+                      {positionClass === "slide-next" && (
+                        <>
+                          <div className="slide-hover"></div>
+                          <div
+                            className="slide-button-overlay"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleNextSlide();
+                            }}
+                          >
+                            <FaChevronRight />
+                          </div>
+                        </>
+                      )}
 
-                        {index === activeSlideIndex && showModal && (
+                      {/* Conditionally render TextEditor on the last slide */}
+                      {index === slides.length - 1 &&
+                        index === activeSlideIndex &&
+                        showModal && (
                           <TextEditor
-                            setShowModal={setShowModal}
+                            onHide={closeModals}
                             setElements={setElements}
                             elements={elements}
                             selectedElement={null}
-                            cardIndex={{ activeSlide: activeSlideIndex }} 
+                            cardIndex={{ activeSlide: activeSlideIndex }}
                           />
                         )}
-                      </div>
-          
-                
+                    </div>
+
                     {index === activeSlideIndex &&
                       elements
                         .filter((el) => el.slideIndex === activeSlideIndex)
                         .map((el, i) => {
-                          console.log(el, "elulu");
                           const originalIndex = elements.findIndex(
                             (e) => e === el
                           );
                           return (
                             <DraggableElement
-                            key={originalIndex}
-                            content={el.content}
-                            type={el.type}
-                            index={{ original: originalIndex, activeSlide: activeSlideIndex }} // 👈 yahan object bhej do
-                            setElements={setElements}
-                            elements={elements}
-                            initialX={el.x || 0}
-                            initialY={el.y || 0}
-                            width={el.width || 320}
-                            height={el.height || 200}
-                            isDraggable={true}
-                            color={el.color} // Passing color
-                            fontFamily={el.fontFamily} // Passing fontFamily
-                            fontSize={el.fontSize} // Passing fontSize
-                            fontWeight={el.fontWeight} // Passing fontWeight
-                          />
-                          
+                              key={originalIndex}
+                              content={el.content}
+                              type={el.type}
+                              index={{
+                                original: originalIndex,
+                                activeSlide: activeSlideIndex,
+                              }}
+                              activeSlide={activeSlideIndex}
+                              setElements={setElements}
+                              elements={elements}
+                              initialX={el.x || 0}
+                              initialY={el.y || 0}
+                              width={el.width || 320}
+                              height={el.height || 200}
+                              isDraggable={true}
+                              color={el.color}
+                              fontFamily={el.fontFamily}
+                              fontSize={el.fontSize}
+                              fontWeight={el.fontWeight}
+                            />
                           );
                         })}
                   </div>
@@ -827,12 +864,12 @@ console.log(index,"handleAddPage")
           onRequestClose={closeModal}
           className="p-4 bg-white rounded-lg shadow-lg max-w-xl mx-auto relative"
         >
-           <button
-    onClick={closeModal}
-    className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl"
-  >
-    &times;
-  </button>
+          <button
+            onClick={closeModal}
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl"
+          >
+            &times;
+          </button>
           <h2 className="text-lg font-bold mb-4">Select a GIF</h2>
           <form onSubmit={handleSearch} className="mb-4 flex gap-2">
             <input

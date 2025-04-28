@@ -2,33 +2,32 @@ import React, { useState, useRef, useEffect } from "react";
 import { useEditorPosition } from "../hooks/useEditorPosition";
 import Toolbar from "./Toolbar";
 import ResizableContainer from "./ResizableContainer";
-import EmailForm from "./EmailForm";
 import { EditorState } from "../types/editor";
 import { Element } from "../types/editor";
+import { FaTrash } from "react-icons/fa"; // Importing the trash icon from react-icons
 
 interface TextEditorProps {
-  setShowModal: (value: boolean) => void;
+  onHide: () => void;
   setElements: React.Dispatch<React.SetStateAction<Element[]>>;
   elements: Element[];
   selectedElement: Element | null;
-  cardIndex:  {
+  content?: string; // content is now optional
+  cardIndex: {
     original?: number;
     activeSlide: number;
   };
 }
 
 const TextEditor: React.FC<TextEditorProps> = ({
-  setShowModal, 
+  onHide,
   setElements,
   elements,
   selectedElement,
-  cardIndex
-
+  content, // content now comes as a prop and is optional
+  cardIndex,
 }) => {
-  console.log("runningss");
-
   const [editorState, setEditorState] = useState<EditorState>({
-    content: "",
+    content: content || (selectedElement ? selectedElement.content : ""), // Use content prop or fallback to selectedElement's content
     fontSize: "24px",
     fontFamily: "Arial",
     fontWeight: "600",
@@ -41,20 +40,13 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const { position, setPosition, isDragging, startDragging } =
     useEditorPosition();
 
-  // Update editor state when selectedElement changes
-  // useEffect(() => {
-  //   if (selectedElement) {
-  //     setEditorState({
-  //       content: selectedElement.content,
-  //       fontSize: selectedElement.fontSize,
-  //       fontFamily: selectedElement.fontFamily,
-  //       fontWeight: selectedElement.fontWeight,
-  //       color: selectedElement.color,
-  //       isEditing: true,
-  //       showEmailForm: true,
-  //     });
-  //   }
-  // }, [selectedElement]);
+  // Update editor state when content prop or selectedElement changes
+  useEffect(() => {
+    setEditorState((prevState) => ({
+      ...prevState,
+      content: content || (selectedElement ? selectedElement.content : ""), // Re-evaluate content on prop or selectedElement change
+    }));
+  }, [content, selectedElement]); // Only update when content or selectedElement prop changes
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const content = e.target.value;
@@ -62,9 +54,9 @@ const TextEditor: React.FC<TextEditorProps> = ({
   };
 
   const toggleEmailForm = () => {
-    setShowModal(false);
+    onHide();
   };
-  console.log("cardIndex",cardIndex)
+
   const handleSave = () => {
     if (editorRef.current) {
       const newElement: Element = {
@@ -78,31 +70,41 @@ const TextEditor: React.FC<TextEditorProps> = ({
         fontWeight: editorState.fontWeight,
         color: editorState.color,
       };
-  
-      console.log(cardIndex, "updatedElements");
-  
+
       if (selectedElement) {
         // If an element is selected, edit only that element
         const updatedElements = elements.map((element, idx) => {
-          console.log(idx)
           if (idx === cardIndex?.original) {
             // Only update the selected element
             return { ...element, ...newElement };
           }
           return element;
         });
-  
-        console.log(updatedElements, "updatedElements12");
+
         setElements(updatedElements); // Update elements state with the edited element
       } else {
         // If no element is selected, add a new element
         setElements((prevElements) => [...prevElements, newElement]);
       }
-  
+
       toggleEmailForm(); // Close the modal after saving
     }
   };
-  
+
+  const handleDelete = () => {
+    if (selectedElement) {
+      console.log(selectedElement, "updataElements1");
+
+      // Check if selectedElement has an ID or another unique identifier
+      const updatedElements = elements.filter(
+        (element) => element.content !== selectedElement.content // Use a unique identifier like id
+      );
+
+      console.log(updatedElements, "updatedElements");
+      setElements(updatedElements); // Update elements state with the removed element
+    }
+    toggleEmailForm(); // Close the modal after deleting
+  };
 
   const handleCommand = (command: string, value?: string) => {
     document.execCommand(command, false, value);
@@ -110,17 +112,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
       editorRef.current.focus();
     }
   };
-
-  // useEffect(() => {
-  //   const link = document.createElement("link");
-  //   link.href = "https://fonts.googleapis.com/css2?family=Zeyada&display=swap";
-  //   link.rel = "stylesheet";
-  //   document.head.appendChild(link);
-
-  //   return () => {
-  //     document.head.removeChild(link);
-  //   };
-  // }, []);
 
   return (
     <div className="flex flex-col w-full max-w-2xl editor-design">
@@ -142,9 +133,9 @@ const TextEditor: React.FC<TextEditorProps> = ({
           <textarea
             ref={editorRef}
             placeholder="Type your text here..."
-            value={editorState.content}
+            value={editorState.content} // Bind to editorState.content
             onChange={handleContentChange}
-            className="min-h-[120px] px-4 py-3 focus:outline-none bg-transparent  rounded-md mx-2 mb-2 whitespace-pre-wrap textarea-border "
+            className="min-h-[120px] px-4 py-3 focus:outline-none bg-transparent rounded-md mx-2 mb-2 whitespace-pre-wrap textarea-border"
             style={{
               fontFamily: editorState.fontFamily,
               color: editorState.color,
@@ -152,7 +143,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
               fontWeight: editorState.fontWeight,
               cursor: isDragging ? "move" : "text",
               border: "2px solid #061178",
-              // Adjust cursor based on dragging state
             }}
           />
 
@@ -175,6 +165,13 @@ const TextEditor: React.FC<TextEditorProps> = ({
                   className="px-4 py-2 bg-[#061178] text-white rounded flex items-center gap-1 hover:bg-indigo-800 transition editor-save"
                 >
                   Save
+                </button>
+                {/* Add delete button */}
+                <button
+                  onClick={handleDelete}
+                  className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition editor-delete"
+                >
+                  <FaTrash /> {/* Trash icon */}
                 </button>
               </div>
             </div>
