@@ -35,7 +35,7 @@ const DemoCard = ({ params }: any) => {
     setIsModalVisible(true);
   };
   const shareableLink =
-    "https://group-leaving-new.vercel.app/demo/fwzDVjvbQ_X";
+    "https://group-leaving-april.vercel.app/demo/fwzDVjvbQ_X";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(shareableLink);
