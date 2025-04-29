@@ -343,12 +343,6 @@ const Custom: React.FC = () => {
 
 
   const getEditorDaya = async () => {
-    // const item = {
-    //   editor_messages: elements,
-    //   user_uuid: userInfo?.uuid,
-    //   messages_unique_id: id,
-    // };
-
     try {
       const response = await fetch(
         "https://dating.goaideme.com/card/edit-messages-by-unique-id/fwzDVjvbQ_X",
