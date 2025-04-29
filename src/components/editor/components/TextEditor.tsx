@@ -23,11 +23,11 @@ const TextEditor: React.FC<TextEditorProps> = ({
   setElements,
   elements,
   selectedElement,
-  content, // content now comes as a prop and is optional
+  content,
   cardIndex,
 }) => {
   const [editorState, setEditorState] = useState<EditorState>({
-    content: content || (selectedElement ? selectedElement.content : ""), // Use content prop or fallback to selectedElement's content
+    content: content || (selectedElement ? selectedElement.content : ""), 
     fontSize: "24px",
     fontFamily: "Arial",
     fontWeight: "600",
@@ -40,11 +40,10 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const { position, setPosition, isDragging, startDragging } =
     useEditorPosition();
 
-  // Update editor state when content prop or selectedElement changes
   useEffect(() => {
     setEditorState((prevState) => ({
       ...prevState,
-      content: content || (selectedElement ? selectedElement.content : ""), // Re-evaluate content on prop or selectedElement change
+      content: content || (selectedElement ? selectedElement.content : ""), 
     }));
   }, [content, selectedElement]); // Only update when content or selectedElement prop changes
 
