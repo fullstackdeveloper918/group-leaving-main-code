@@ -24,6 +24,8 @@ const ImageEditor: React.FC<TextEditorProps> = ({
   content,
   cardIndex,
 }) => {
+
+  console.log("imageEditorcontent",content)
   const { position, setPosition, isDragging, startDragging } =
     useEditorPosition();
 
@@ -137,6 +139,7 @@ const ImageEditor: React.FC<TextEditorProps> = ({
               <button
                 onClick={onHide}
                 className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition"
+                style={{color:"red"}}
               >
                 Cancel
               </button>
@@ -149,6 +152,9 @@ const ImageEditor: React.FC<TextEditorProps> = ({
               <button
                 onClick={handleDelete}
                 className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition"
+                style={{
+                  color:"red"
+                }}
               >
                 <FaTrash />
               </button>

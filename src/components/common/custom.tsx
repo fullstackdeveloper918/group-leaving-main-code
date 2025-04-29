@@ -341,6 +341,43 @@ const Custom: React.FC = () => {
     }
   };
 
+
+  const getEditorDaya = async () => {
+    // const item = {
+    //   editor_messages: elements,
+    //   user_uuid: userInfo?.uuid,
+    //   messages_unique_id: id,
+    // };
+
+    try {
+      const response = await fetch(
+        "https://dating.goaideme.com/card/edit-messages-by-unique-id/fwzDVjvbQ_X",
+        {
+          method: "Get",
+          headers: {
+            "Content-Type": "application/json",
+          },
+  
+
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to upload data");
+      }
+
+      const data = await response.json();
+
+      setElements(data?.data[0].editor_messages)
+      console.log("Data uploaded successfully:", data?.data[0]);
+    } catch (error) {
+      console.error("Error uploading data:", error);
+    }
+  };
+
+  useEffect(()=>{
+    getEditorDaya()
+  },[])
   const handleAddMessageClick = () => {
     console.log(activeSlideIndex, "activeSlideIndex");
     if (activeSlideIndex < slides.length - 1) {

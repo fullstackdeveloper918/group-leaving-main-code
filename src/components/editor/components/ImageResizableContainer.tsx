@@ -1,5 +1,5 @@
-import React, { useRef, ReactNode } from "react";
-import { Position } from "../types/editor";
+import React, { useRef, ReactNode, useState } from "react";
+import { Position } from "../types/editor"; // Assuming this is defined elsewhere
 
 interface ResizableContainerProps {
   children: ReactNode;
@@ -24,17 +24,26 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Handle resizing logic
   const handleResize = (
     e: React.MouseEvent,
-    direction: "top-left" | "top-right" | "bottom-left" | "bottom-right"
+    direction:
+      | "top-left"
+      | "top-right"
+      | "bottom-left"
+      | "bottom-right"
+      | "left"
+      | "right"
+      | "top"
+      | "bottom"
   ) => {
     e.preventDefault();
     e.stopPropagation();
 
     const startX = e.clientX;
     const startY = e.clientY;
-    const startWidth = containerRef.current?.offsetWidth || 200;
-    const startHeight = containerRef.current?.offsetHeight || 200;
+    const startWidth = width;
+    const startHeight = height;
     const startLeft = position.x;
     const startTop = position.y;
 
@@ -42,33 +51,37 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
       const dx = moveEvent.clientX - startX;
       const dy = moveEvent.clientY - startY;
 
-      let delta = Math.max(dx, dy);
-      if (direction.includes("left") || direction.includes("top")) {
-        delta = -Math.min(dx, dy);
-      }
-
-      const newSize = Math.max(100, startWidth + delta);
-
+      let newWidth = startWidth;
+      let newHeight = startHeight;
       let newLeft = startLeft;
       let newTop = startTop;
 
+      if (direction.includes("right")) {
+        newWidth = Math.max(50, startWidth + dx);
+      }
       if (direction.includes("left")) {
-        newLeft = startLeft + (startWidth - newSize);
+        newWidth = Math.max(50, startWidth - dx);
+        newLeft = startLeft + dx;
       }
 
+      if (direction.includes("bottom")) {
+        newHeight = Math.max(50, startHeight + dy);
+      }
       if (direction.includes("top")) {
-        newTop = startTop + (startHeight - newSize);
+        newHeight = Math.max(50, startHeight - dy);
+        newTop = startTop + dy;
       }
 
-      const updatedPosition: Position = {
+      // Update position and size
+      setPosition({
         x: newLeft,
         y: newTop,
-        width: newSize,
-        height: newSize,
-      };
+        width: newWidth,
+        height: newHeight,
+      });
 
-      setPosition(updatedPosition);
-      onResize?.(newSize, newSize);
+      // Call the onResize callback if provided
+      onResize?.(newWidth, newHeight);
     };
 
     const onMouseUp = () => {
@@ -89,11 +102,11 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
         height,
         transform: `translate(${position.x}px, ${position.y}px)`,
         cursor: isDragging ? "grabbing" : "grab",
-         border: "3px solid #44AAFF",
+        border: "3px solid #44AAFF",
       }}
       onMouseDown={startDragging}
     >
-      {/* Resizers */}
+      {/* Resizing Handles */}
       <div
         className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-blue-400 cursor-nwse-resize"
         onMouseDown={(e) => handleResize(e, "top-left")}
@@ -110,6 +123,26 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
         className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-blue-400 cursor-nwse-resize"
         onMouseDown={(e) => handleResize(e, "bottom-right")}
       />
+
+      {/* Side Resizers (if you want to support side-only resizing) */}
+      <div
+        className="absolute top-0 left-1/2 transform -translate-x-1/2 w-3 h-1 cursor-n-resize"
+        onMouseDown={(e) => handleResize(e, "top")}
+      />
+      <div
+        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3 h-1  cursor-s-resize"
+        onMouseDown={(e) => handleResize(e, "bottom")}
+      />
+      <div
+        className="absolute top-1/2 left-0 transform -translate-y-1/2 h-3 w-1  cursor-w-resize"
+        onMouseDown={(e) => handleResize(e, "left")}
+      />
+      <div
+        className="absolute top-1/2 right-0 transform -translate-y-1/2 h-3 w-1  cursor-e-resize"
+        onMouseDown={(e) => handleResize(e, "right")}
+      />
+
+      {/* Render Children (Image, Content, etc.) */}
       {children}
     </div>
   );

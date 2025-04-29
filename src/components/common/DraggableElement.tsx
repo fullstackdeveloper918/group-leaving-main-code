@@ -84,6 +84,8 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     }
   }, [showImageModal, showModal, elements, selectedElement, index.original]);
 
+  
+
   const updateElement = (
     newX: number,
     newY: number,
@@ -134,6 +136,8 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   const handleDelete = () => {
     setElements((prev) => prev.filter((_, i) => i !== index.original));
   };
+
+  console.log(activeSlide,showModal , selectedElement , isEditing , "Here to fix ossies")
 
   return (
     <>
