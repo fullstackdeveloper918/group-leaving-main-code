@@ -101,6 +101,7 @@ const Custom: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [gifs, setGifs] = useState<string[]>([]);
   const [activeSlide, setActiveSlide] = useState<any>();
+  const [currentSlide, setCurrentSlide] = useState(0);
   console.log(activeSlide, "activeSlide");
   // let slideIndex=activeSlide?3:0
   // console.log(slideIndex,"slideIndex");
@@ -503,7 +504,7 @@ const Custom: React.FC = () => {
     setSlides((prevSlides: any[]) => [...prevSlides, newSlide]);
 
     // :white_tick: Active slide ko update mat kar, abhi same rehne de
-    toast.success(`New slide added`);
+    // toast.success(`New slide added`);
   };
 
   const fetchImageAsBase64 = async (imageUrl: string) => {
@@ -774,17 +775,15 @@ const Custom: React.FC = () => {
                       )}
 
                       {/* Conditionally render TextEditor on the last slide */}
-                      {index === slides.length - 1 &&
-                        index === activeSlideIndex &&
-                        showModal && (
-                          <TextEditor
-                            onHide={closeModals}
-                            setElements={setElements}
-                            elements={elements}
-                            selectedElement={null}
-                            cardIndex={{ activeSlide: activeSlideIndex }}
-                          />
-                        )}
+                      {index === activeSlideIndex && showModal && (
+                        <TextEditor
+                          onHide={closeModals}
+                          setElements={setElements}
+                          elements={elements}
+                          selectedElement={null}
+                          cardIndex={{ activeSlide: activeSlideIndex }}
+                        />
+                      )}
                     </div>
 
                     {index === activeSlideIndex &&
@@ -804,6 +803,7 @@ const Custom: React.FC = () => {
                                 activeSlide: activeSlideIndex,
                               }}
                               activeSlide={activeSlideIndex}
+                              setCurrentSlide={setCurrentSlide}
                               setElements={setElements}
                               elements={elements}
                               initialX={el.x || 0}

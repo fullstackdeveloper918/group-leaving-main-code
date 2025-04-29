@@ -24,6 +24,7 @@ interface DraggableElementProps {
   fontSize?: string;
   fontWeight?: string;
   activeSlide: number;
+  setCurrentSlide?: (index: number) => void;
 }
 
 interface UserInfo {
@@ -48,6 +49,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   fontSize = "16px",
   fontWeight = "normal",
   activeSlide,
+  setCurrentSlide,
 }) => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [position, setPosition] = useState({ x: initialX, y: initialY });
@@ -55,13 +57,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   const [showModal, setShowModal] = useState(false);
   const [selectedElement, setSelectedElement] = useState<any>(null);
   const [showImageModal, setShowImageModal] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-
-  useEffect(() => {
-    if (activeSlide !== index.activeSlide) {
-      setIsEditing(false);
-    }
-  }, [activeSlide, index.activeSlide]);
+  const isEditing = activeSlide === index.activeSlide;
 
   useEffect(() => {
     const cookies = nookies.get();
@@ -70,6 +66,23 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
       : null;
     setUserInfo(userInfoFromCookie);
   }, []);
+
+  // 🔄 Sync size and position when modal closes and element is updated
+  useEffect(() => {
+    if (selectedElement) {
+      const updatedElement = elements[index.original];
+      if (updatedElement) {
+        setSize({
+          width: updatedElement.width,
+          height: updatedElement.height,
+        });
+        setPosition({
+          x: updatedElement.x,
+          y: updatedElement.y,
+        });
+      }
+    }
+  }, [showImageModal, showModal, elements, selectedElement, index.original]);
 
   const updateElement = (
     newX: number,
@@ -97,17 +110,18 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   };
 
   const handleClick = () => {
-    if (type === "text" && !showModal) {
+    if (type === "text" && !showModal && isEditing) {
       setSelectedElement(elements[index.original]);
       setShowModal(true);
+      if (setCurrentSlide) setCurrentSlide(activeSlide);
     }
   };
 
   const handleImageClick = () => {
-    console.log(elements[index.original], "check eelemt");
-    if ((type === "image" || type === "gif") && !showImageModal) {
+    if ((type === "image" || type === "gif") && !showImageModal && isEditing) {
       setSelectedElement(elements[index.original]);
       setShowImageModal(true);
+      if (setCurrentSlide) setCurrentSlide(activeSlide);
     }
   };
 
@@ -115,7 +129,6 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     setShowModal(false);
     setShowImageModal(false);
     setSelectedElement(null);
-    setIsEditing(false);
   };
 
   const handleDelete = () => {
@@ -142,10 +155,12 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
           }
         }}
         disableDragging={!isDraggable}
-        // enableResizing={isEditing || type === "image" || type === "gif"}
-        // className={`relative flex flex-col items-center ${
-        //   type === "text" ? "" : "border-blue-800 border-2"
-        // } justify-center bg-gray-50 rounded-md shadow-sm`}
+        enableResizing={isDraggable && (type === "image" || type === "gif")}
+        style={{
+          opacity: isEditing ? 1 : 0.5,
+          pointerEvents: "auto",
+          cursor: isDraggable ? "move" : "default",
+        }}
       >
         {/* IMAGE BLOCK */}
         {(type === "image" || type === "gif") && !showImageModal && (
@@ -153,7 +168,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
             <img
               src={content || "/placeholder.svg"}
               alt="uploaded"
-              className="w-full h-full object-cover rounded-md pointer-events-none"
+              className="object-cover rounded-md pointer-events-none"
             />
           </div>
         )}
@@ -163,9 +178,10 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
           <div
             className="text-sm"
             style={{
-              pointerEvents: "auto",
+              pointerEvents: isEditing ? "auto" : "none",
+              opacity: isEditing ? 1 : 0.5,
+              cursor: isEditing ? "pointer" : "not-allowed",
               userSelect: "none",
-              cursor: "pointer",
               width: "100%",
               height: "100%",
               padding: "8px",
@@ -180,7 +196,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
         )}
 
         {/* IMAGE EDITOR MODAL */}
-        {showImageModal && selectedElement && (
+        {showImageModal && selectedElement && isEditing && (
           <ImageEditor
             onHide={closeModals}
             setElements={setElements}
@@ -192,7 +208,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
         )}
 
         {/* TEXT EDITOR MODAL */}
-        {showModal && selectedElement && (
+        {showModal && selectedElement && isEditing && (
           <TextEditor
             onHide={closeModals}
             setElements={setElements}

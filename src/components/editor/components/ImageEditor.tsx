@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useEditorPosition } from "../hooks/useEditorPosition";
-import { EditorImageState, ImageElement } from "../types/editor";
-import { Element } from "../types/editor";
+import { EditorImageState, ImageElement, Element } from "../types/editor";
 import { FaTrash } from "react-icons/fa";
 import ImageResizableContainer from "./ImageResizableContainer";
 
@@ -25,84 +24,94 @@ const ImageEditor: React.FC<TextEditorProps> = ({
   content,
   cardIndex,
 }) => {
-  const [editorState, setEditorState] = useState<EditorImageState>({
-    content: content || (selectedElement ? selectedElement.content : ""),
-    fontSize: "16px",
-    fontFamily: "Arial",
-    fontWeight: "normal",
-    color: "#000",
-    isEditing: true,
-    showEmailForm: true,
-    width: selectedElement ? (selectedElement as ImageElement).width : 300,
-    height: selectedElement ? (selectedElement as ImageElement).height : 200,
-  });
-
   const { position, setPosition, isDragging, startDragging } =
     useEditorPosition();
 
+  // 🟨 Ensure square size on mount
   useEffect(() => {
-    setEditorState((prevState) => ({
-      ...prevState,
-      content: content || (selectedElement ? selectedElement.content : ""),
-      width: selectedElement ? (selectedElement as ImageElement).width : 100,
-      height: selectedElement ? (selectedElement as ImageElement).height : 100,
-    }));
-  }, [content, selectedElement]);
-
-  const toggleEmailForm = () => {
-    onHide();
-  };
-
-  const detectType = (content: string) => {
-    if (content.endsWith(".gif") || content.includes("tenor.com")) {
-      return "gif";
+    if (selectedElement) {
+      const squareSize = Math.max(
+        (selectedElement as ImageElement).width,
+        (selectedElement as ImageElement).height
+      );
+      setPosition({
+        x: selectedElement.x,
+        y: selectedElement.y,
+        width: squareSize,
+        height: squareSize,
+      });
     }
-    return "image";
+  }, [selectedElement, setPosition]);
+
+  // 🟨 Enforce square size during resize
+  const handleResize = (newWidth: number, newHeight: number) => {
+    const size = Math.max(newWidth, newHeight); // Square size
+    const updatedPosition = {
+      ...position,
+      width: size,
+      height: size,
+    };
+    setPosition(updatedPosition);
+
+    // 🔄 Immediate update to `elements` state (live update)
+    if (selectedElement && typeof cardIndex.original === "number") {
+      const updatedElements = elements.map((el, i) =>
+        i === cardIndex.original
+          ? {
+              ...el,
+              width: size,
+              height: size,
+              x: updatedPosition.x,
+              y: updatedPosition.y,
+            }
+          : el
+      );
+      setElements(updatedElements);
+      localStorage.setItem("slideElements", JSON.stringify(updatedElements));
+    }
   };
 
   const handleSave = () => {
+    const imageUrl = content || selectedElement?.content || "";
+
     const newElement: ImageElement = {
-      type: detectType(editorState.content),
-      content: editorState.content,
-      slideIndex: cardIndex?.activeSlide,
+      type:
+        imageUrl.endsWith(".gif") || imageUrl.includes("tenor.com")
+          ? "gif"
+          : "image",
+      content: imageUrl,
+      slideIndex: cardIndex.activeSlide,
       x: position.x,
       y: position.y,
-      fontSize: editorState.fontSize,
-      fontFamily: editorState.fontFamily,
-      fontWeight: editorState.fontWeight,
-      color: editorState.color,
-      width: editorState.width, // Use editorState width
-      height: editorState.height, // Use editorState height
+      width: position.width,
+      height: position.height,
+      fontSize: "16px", // default
+      fontFamily: "Arial", // default
+      fontWeight: "normal", // default
+      color: "#000000", // default
     };
-    if (selectedElement) {
-      const updatedElements = elements.map((element, idx) =>
-        idx === cardIndex?.original ? { ...element, ...newElement } : element
+
+    if (selectedElement && typeof cardIndex.original === "number") {
+      const updatedElements = elements.map((el, i) =>
+        i === cardIndex.original ? { ...el, ...newElement } : el
       );
       setElements(updatedElements);
     } else {
-      setElements((prevElements) => [...prevElements, newElement]);
+      setElements((prev) => [...prev, newElement]);
     }
 
-    toggleEmailForm();
+    onHide();
   };
 
   const handleDelete = () => {
     if (selectedElement) {
       const updatedElements = elements.filter(
-        (element) => element.content !== selectedElement.content
+        (el) => el.content !== selectedElement.content
       );
       setElements(updatedElements);
+      localStorage.setItem("slideElements", JSON.stringify(updatedElements));
     }
-    toggleEmailForm();
-  };
-
-  // Handle resize
-  const handleResize = (newWidth: number, newHeight: number) => {
-    setEditorState((prev) => ({
-      ...prev,
-      width: newWidth,
-      height: newHeight,
-    }));
+    onHide();
   };
 
   return (
@@ -112,35 +121,34 @@ const ImageEditor: React.FC<TextEditorProps> = ({
         setPosition={setPosition}
         isDragging={isDragging}
         startDragging={startDragging}
-        // width={editorState.width} // Use editorState width for resizing
-        // height={editorState.height} // Use editorState height for resizing
-        onResize={handleResize} // Pass resize handler
+        width={position.width}
+        height={position.height}
+        onResize={handleResize}
       >
-        {/* <div className="flex flex-col items-center rounded-md shadow-md w-full h-full"> */}
         <img
-          src={editorState?.content || "/placeholder.svg"}
+          src={content || selectedElement?.content || "/placeholder.svg"}
           alt="uploaded"
-          className="w-full h-full object-cover rounded-md pointer-events-none"
+          className="w-full h-full object-cover pointer-events-none select-none"
+          draggable={false}
         />
-        {/* </div> */}
         <div className="px-2 pb-2">
-          <div className="bg-white pt-2 px-4">
-            <div className="flex justify-center bg-white gap-2 py-2">
+          <div className="bg-white mt-2 px-4">
+            <div className="flex justify-center gap-2 py-2">
               <button
-                onClick={toggleEmailForm}
-                className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition editor-cancel"
+                onClick={onHide}
+                className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
-                className="px-4 py-2 bg-[#061178] text-white rounded flex items-center gap-1 hover:bg-indigo-800 transition editor-save"
+                className="px-4 py-2 bg-[#061178] text-white rounded hover:bg-indigo-800 transition"
               >
                 Save
               </button>
               <button
                 onClick={handleDelete}
-                className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition editor-delete"
+                className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition"
               >
                 <FaTrash />
               </button>

@@ -94,6 +94,7 @@ const ResizableContainer: React.FC<ResizableContainerProps> = ({
         height: position.height,
         transform: `translate(${position.x}px, ${position.y}px)`,
         transition: !hasMoved ? "none" : "transform 0.1s ease",
+        // border: "3px solid #44AAFF",
       }}
       onMouseDown={(e) => {
         startDragging(e);
