@@ -12,7 +12,7 @@ interface ResizableContainerProps {
   startDragging: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
+const ImageResizableContainer: React.FC<any> = ({
   children,
   position,
   width,
@@ -22,7 +22,7 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
   startDragging,
   onResize,
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<any>(null);
 
   // Handle resizing logic
   const handleResize = (
@@ -47,7 +47,7 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
     const startLeft = position.x;
     const startTop = position.y;
 
-    const onMouseMove = (moveEvent: MouseEvent) => {
+    const onMouseMove = (moveEvent: any) => {
       const dx = moveEvent.clientX - startX;
       const dy = moveEvent.clientY - startY;
 

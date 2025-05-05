@@ -16,7 +16,7 @@ interface TextEditorProps {
   };
 }
 
-const ImageEditor: React.FC<TextEditorProps> = ({
+const ImageEditor: React.FC<any> = ({
   onHide,
   setElements,
   elements,
@@ -57,7 +57,7 @@ const ImageEditor: React.FC<TextEditorProps> = ({
 
     // 🔄 Immediate update to `elements` state (live update)
     if (selectedElement && typeof cardIndex.original === "number") {
-      const updatedElements = elements.map((el, i) =>
+      const updatedElements = elements.map((el:any, i:any) =>
         i === cardIndex.original
           ? {
               ...el,
@@ -94,12 +94,12 @@ const ImageEditor: React.FC<TextEditorProps> = ({
     };
 
     if (selectedElement && typeof cardIndex.original === "number") {
-      const updatedElements = elements.map((el, i) =>
+      const updatedElements = elements.map((el:any, i:any) =>
         i === cardIndex.original ? { ...el, ...newElement } : el
       );
       setElements(updatedElements);
     } else {
-      setElements((prev) => [...prev, newElement]);
+      setElements((prev:any) => [...prev, newElement]);
     }
 
     onHide();
@@ -108,7 +108,7 @@ const ImageEditor: React.FC<TextEditorProps> = ({
   const handleDelete = () => {
     if (selectedElement) {
       const updatedElements = elements.filter(
-        (el) => el.content !== selectedElement.content
+        (el:any) => el.content !== selectedElement.content
       );
       setElements(updatedElements);
       localStorage.setItem("slideElements", JSON.stringify(updatedElements));

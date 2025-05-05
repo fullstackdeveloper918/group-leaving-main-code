@@ -115,15 +115,14 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     if (type === "text" && !showModal && isEditing) {
       setSelectedElement(elements[index.original]);
       setShowModal(true);
-      if (setCurrentSlide) setCurrentSlide(activeSlide);
+      setCurrentSlide?.(activeSlide);
     }
   };
-
   const handleImageClick = () => {
     if ((type === "image" || type === "gif") && !showImageModal && isEditing) {
       setSelectedElement(elements[index.original]);
       setShowImageModal(true);
-      if (setCurrentSlide) setCurrentSlide(activeSlide);
+      setCurrentSlide?.(activeSlide);
     }
   };
 
@@ -135,6 +134,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
 
   const handleDelete = () => {
     setElements((prev) => prev.filter((_, i) => i !== index.original));
+
   };
 
   console.log(activeSlide,showModal , selectedElement , isEditing , "Here to fix ossies")
@@ -213,14 +213,14 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
 
         {/* TEXT EDITOR MODAL */}
         {showModal && selectedElement && isEditing && (
-          <TextEditor
-            onHide={closeModals}
-            setElements={setElements}
-            content={content}
-            elements={elements}
-            selectedElement={selectedElement}
-            cardIndex={index}
-          />
+           <TextEditor
+           onHide={closeModals}
+           setElements={setElements}
+           content={content}
+           elements={elements}
+           selectedElement={selectedElement}
+           cardIndex={index}
+         />
         )}
       </Rnd>
     </>

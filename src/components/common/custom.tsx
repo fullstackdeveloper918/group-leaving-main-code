@@ -111,7 +111,7 @@ const Custom: React.FC = () => {
     setActiveSlideIndex(newIndex);
   }, [activeSlide]);
   const [elements, setElements] = useState<any[]>([]);
-  const [editorContent, setEditorContent] = useState("");
+  const [editorContent, setEditorContent] = useState<any>("");
   const sliderRef = useRef<HTMLInputElement>(null);
 
   console.log(id, "popo");
@@ -813,6 +813,7 @@ const Custom: React.FC = () => {
                           elements={elements}
                           selectedElement={null}
                           cardIndex={{ activeSlide: activeSlideIndex }}
+                          
                         />
                       )}
                     </div>
@@ -821,12 +822,11 @@ const Custom: React.FC = () => {
                       elements
                         .filter((el) => el.slideIndex === activeSlideIndex)
                         .map((el, i) => {
-                          const originalIndex = elements.findIndex(
-                            (e) => e === el
-                          );
+                          const originalIndex = elements.findIndex((el) => el === el);
                           return (
                             <DraggableElement
-                              key={originalIndex}
+                              // key={originalIndex}
+                              key={el.id}
                               content={el.content}
                               type={el.type}
                               index={{
