@@ -475,38 +475,27 @@ const Custom: React.FC = () => {
 
   const fetchGifs = async (term: string) => {
     try {
-      const response = await axios.get("https://tenor.googleapis.com/v2/search", {
-        params: {
-          q: term || "wave",
-          key: "AIzaSyBphMbpVXm8Rc9CnWX7W3LuePqIHgSWoDo",
-          client_key: "my_test_app",
-          limit: 50,
-          locale: "en_US",
-          media_filter: "minimal", // Enables sticker formats
-        },
-      });
-  
-      const stickers = response.data.results
-        .map((result: any) => {
-          const formats = result.media_formats;
-  
-          // Try to extract sticker-friendly formats
-          return (
-            formats.tinysticker?.url ||
-            formats.webp_transparent?.url ||
-            formats.tinywebm?.url ||
-            formats.gif?.url // fallback
-          );
-        })
-        .filter(Boolean); // remove undefined/null
-  
-      setGifs(stickers);
+      const response = await axios.get(
+        "https://tenor.googleapis.com/v2/search",
+        {
+          params: {
+            q: term || "wave",
+            key: "AIzaSyBphMbpVXm8Rc9CnWX7W3LuePqIHgSWoDo",
+            client_key: "my_test_app",
+            limit: 100,
+            locale: "en_US",
+          },
+        }
+      );
+
+      setGifs(
+        response.data.results.map((result: any) => result.media_formats.gif.url)
+      );
       sendEditorData();
     } catch (error) {
-      console.error("Error fetching stickers:", error);
+      console.error("Error fetching GIFs:", error);
     }
   };
-  
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
