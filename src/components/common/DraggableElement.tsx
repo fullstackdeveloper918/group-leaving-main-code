@@ -58,6 +58,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   const [selectedElement, setSelectedElement] = useState<any>(null);
   const [showImageModal, setShowImageModal] = useState(false);
   const isEditing = activeSlide === index.activeSlide;
+console.log(showImageModal,"wojo354234");
 
   useEffect(() => {
     const cookies = nookies.get();

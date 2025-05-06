@@ -231,7 +231,8 @@ const Custom: React.FC = () => {
       for (let i = initialSlides.length; i <= maxIndex; i++) {
         filledSlides.push({
           id: `slide-${i + 1}`,
-          title: `Slide ${i + 1}`,
+          title: "",
+          // title: `Slide ${i + 1}`,
           subtitle: "Placeholder Subtitle",
           text: "This is a dynamically generated slide.",
           link: "#",
@@ -386,7 +387,7 @@ const Custom: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log(showModal, "showModal");
+    console.log(showModal, "12345678");
   }, [showModal]);
 
   const closeModal = () => setIsOpen(false);
@@ -474,27 +475,38 @@ const Custom: React.FC = () => {
 
   const fetchGifs = async (term: string) => {
     try {
-      const response = await axios.get(
-        "https://tenor.googleapis.com/v2/search",
-        {
-          params: {
-            q: term || "wave",
-            key: "AIzaSyBphMbpVXm8Rc9CnWX7W3LuePqIHgSWoDo",
-            client_key: "my_test_app",
-            limit: 100,
-            locale: "en_US",
-          },
-        }
-      );
-
-      setGifs(
-        response.data.results.map((result: any) => result.media_formats.gif.url)
-      );
+      const response = await axios.get("https://tenor.googleapis.com/v2/search", {
+        params: {
+          q: term || "wave",
+          key: "AIzaSyBphMbpVXm8Rc9CnWX7W3LuePqIHgSWoDo",
+          client_key: "my_test_app",
+          limit: 50,
+          locale: "en_US",
+          media_filter: "minimal", // Enables sticker formats
+        },
+      });
+  
+      const stickers = response.data.results
+        .map((result: any) => {
+          const formats = result.media_formats;
+  
+          // Try to extract sticker-friendly formats
+          return (
+            formats.tinysticker?.url ||
+            formats.webp_transparent?.url ||
+            formats.tinywebm?.url ||
+            formats.gif?.url // fallback
+          );
+        })
+        .filter(Boolean); // remove undefined/null
+  
+      setGifs(stickers);
       sendEditorData();
     } catch (error) {
-      console.error("Error fetching GIFs:", error);
+      console.error("Error fetching stickers:", error);
     }
   };
+  
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -662,84 +674,68 @@ const Custom: React.FC = () => {
   return (
     <>
       <div className="card-carousel-container" id="main-carousle">
-        <div className="editor_option" style={{ marginBottom: "15px" }}>
-          <div>
-            <button
-              className="add_btn"
-              onClick={handleAddMessageClick}
-              style={{
-                padding: "10px",
-                borderRadius: "50px",
-              }}
-            >
-              Add Message
-            </button>
-          </div>
-          <div className="search_input">
-            <input type="file" accept="image/*" onChange={handleImageUpload} />
-            <div className="upload_svg">
-              <svg
-                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium mus-vubbuv"
-                focusable="false"
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                data-testid="AddPhotoAlternateIcon"
-              >
-                <path d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h3V2h2v3h3v2zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8zM5 19l3-4 2 3 3-4 4 5z"></path>
-              </svg>
-            </div>
-          </div>
-          <div className="search_input" onClick={openModal}>
-            <div className="upload_svg">
-              <svg
-                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium mus-vubbuv"
-                focusable="false"
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                data-testid="GifIcon"
-              >
-                <path d="M11.5 9H13v6h-1.5zM9 9H6c-.6 0-1 .5-1 1v4c0 .5.4 1 1 1h3c.6 0 1-.5 1-1v-2H8.5v1.5h-2v-3H10V10c0-.5-.4-1-1-1m10 1.5V9h-4.5v6H16v-2h2v-1.5h-2v-1z"></path>
-              </svg>
-            </div>
-          </div>
-          {/* <div style={{ textAlign: "center" }}>
-            <button
-              onClick={handleAddPage}
-              className="px-4 py-2 add_btn border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition"
-              style={{
-                color: "white",
-                marginLeft: "40px",
-                borderRadius: "70px",
-              }}
-            >
-              +
-            </button>
-          </div> */}
-          {id == "fwzDVjvbQ_X" ? (
-            ""
-          ) : (
-            <div style={{ textAlign: "center" }}>
-              <button className="add-btn" onClick={openEnvelop}>
-                Preview
-              </button>
-            </div>
-          )}
-          {/* <div style={{ textAlign: "center" }}>
-            <button style={{
-              padding: "10px",
-              borderRadius: "50px",
-            }} className="add_btn" onClick={sendEditorData}> click</button>
-          </div> */}
-          {/* <div style={{ textAlign: "center" }}>
-          <button
-            onClick={handleDownloadPDF}
-            className="px-4 py-2 add_btn border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition"
-            style={{color:"white", marginLeft:"20px", borderRadius: "70px"}}
-          >
-            Download
-          </button>
-        </div> */}
-        </div>
+      <div className="editor_option" style={{ marginBottom: "15px" }}>
+  <div>
+    <button
+      className="add_btn"
+      onClick={handleAddMessageClick}
+      disabled={showModal}
+      style={{
+        padding: "10px",
+        borderRadius: "50px",
+      }}
+    >
+      Add Message
+    </button>
+  </div>
+
+  <div className="search_input">
+    <input
+      type="file"
+      accept="image/*"
+      onChange={handleImageUpload}
+      disabled={showModal}
+    />
+    <div className={`upload_svg ${showModal ? "disabled" : ""}`}>
+      <svg
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium mus-vubbuv"
+        focusable="false"
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        data-testid="AddPhotoAlternateIcon"
+      >
+        <path d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h3V2h2v3h3v2zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8zM5 19l3-4 2 3 3-4 4 5z"></path>
+      </svg>
+    </div>
+  </div>
+
+  <div className="search_input">
+    <button onClick={openModal} disabled={showModal} style={{ all: 'unset', cursor: showModal ? 'not-allowed' : 'pointer' }}>
+      <div className={`upload_svg ${showModal ? "disabled" : ""}`}>
+        <svg
+          className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium mus-vubbuv"
+          focusable="false"
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          data-testid="GifIcon"
+        >
+          <path d="M11.5 9H13v6h-1.5zM9 9H6c-.6 0-1 .5-1 1v4c0 .5.4 1 1 1h3c.6 0 1-.5 1-1v-2H8.5v1.5h-2v-3H10V10c0-.5-.4-1-1-1m10 1.5V9h-4.5v6H16v-2h2v-1.5h-2v-1z"></path>
+        </svg>
+      </div>
+    </button>
+  </div>
+
+  {id == "fwzDVjvbQ_X" ? (
+    ""
+  ) : (
+    <div style={{ textAlign: "center" }}>
+      <button className="add-btn" onClick={openEnvelop} disabled={showModal}>
+        Preview
+      </button>
+    </div>
+  )}
+</div>
+
 
         <div className="card-carousel">
           <div className="carousel-wrapper">

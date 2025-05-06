@@ -1192,6 +1192,18 @@ body {
   height: 30px;
 }
 
+/* 👇 New CSS to style as disabled */
+.search_input .upload_svg.disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.search_input .upload_svg.disabled svg {
+  fill: #999;
+}
+
+
 .search_input {
   position: relative;
   width: 40px;
@@ -1232,7 +1244,16 @@ button.add_btn {
   border-radius: 7px;
   color: #fff;
   border: 1px solid;
+  cursor: pointer;
 }
+
+button.add_btn:disabled {
+  background: #ccc;       /* Gray background */
+  color: #666;            /* Dimmed text */
+  border-color: #bbb;     /* Optional: lighter border */
+  cursor: not-allowed;    /* Show disabled cursor */
+}
+
 /* editor_css end */
 
 /* Apply transition to all images */

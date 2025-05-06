@@ -75,7 +75,13 @@ const ImageEditor: React.FC<any> = ({
 
   const handleSave = () => {
     const imageUrl = content || selectedElement?.content || "";
-
+  
+    if (!imageUrl) {
+      console.warn("No image URL provided");
+      return;
+    }
+  
+    // Create new element
     const newElement: ImageElement = {
       type:
         imageUrl.endsWith(".gif") || imageUrl.includes("tenor.com")
@@ -87,23 +93,43 @@ const ImageEditor: React.FC<any> = ({
       y: position.y,
       width: position.width,
       height: position.height,
-      fontSize: "16px", // default
-      fontFamily: "Arial", // default
-      fontWeight: "normal", // default
-      color: "#000000", // default
+      fontSize: "16px",
+      fontFamily: "Arial",
+      fontWeight: "normal",
+      color: "#000000",
     };
-
+  
+    // Prevent duplicate: Check if element with same content and slide already exists
+    const isDuplicate = elements.some((el: ImageElement) =>
+      el.content === newElement.content &&
+      el.slideIndex === newElement.slideIndex &&
+      el.x === newElement.x &&
+      el.y === newElement.y &&
+      el.width === newElement.width &&
+      el.height === newElement.height
+    );
+  
+    if (isDuplicate) {
+      console.warn("Duplicate element. Not adding again.");
+      return;
+    }
+  
+    // Update existing element
     if (selectedElement && typeof cardIndex.original === "number") {
-      const updatedElements = elements.map((el:any, i:any) =>
+      const updatedElements = elements.map((el: ImageElement, i: number) =>
         i === cardIndex.original ? { ...el, ...newElement } : el
       );
       setElements(updatedElements);
     } else {
-      setElements((prev:any) => [...prev, newElement]);
+      // Add new element
+      setElements((prev: ImageElement[]) => [...prev, newElement]);
     }
-
+  
     onHide();
   };
+  
+
+  
 
   const handleDelete = () => {
     if (selectedElement) {

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Position } from "../types/editor";
 
 export const useEditorPosition = () => {
-  const [position, setPosition] = useState<Position>({
+  const [position, setPosition] = useState<any>({
     x: 0,
     y: 0,
     width: 400,
@@ -37,7 +37,7 @@ export const useEditorPosition = () => {
     if (!isDragging) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      setPosition((prev) => ({
+      setPosition((prev:any) => ({
         ...prev,
         x: e.clientX - dragOffset.x,
         y: e.clientY - dragOffset.y,
@@ -63,11 +63,11 @@ export const useEditorPosition = () => {
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
 
-      // setPosition((prev) => ({
-      //   ...prev,
-      //   x: (windowWidth - prev.width) / 2,
-      //   y: (windowHeight - prev.height) / 3,
-      // }));
+      setPosition((prev:any) => ({
+        ...prev,
+        x: (windowWidth - prev.width) / 2,
+        y: (windowHeight - prev.height) / 3,
+      }));
     };
 
     centerEditor();
