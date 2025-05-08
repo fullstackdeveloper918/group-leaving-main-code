@@ -58,7 +58,9 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   const [selectedElement, setSelectedElement] = useState<any>(null);
   const [showImageModal, setShowImageModal] = useState(false);
   const isEditing = activeSlide === index.activeSlide;
-console.log(showImageModal,"wojo354234");
+  console.log(showImageModal, "wojo354234");
+  console.log(showModal, "0988777");
+  console.log(elements, "content");
 
   useEffect(() => {
     const cookies = nookies.get();
@@ -84,8 +86,6 @@ console.log(showImageModal,"wojo354234");
       }
     }
   }, [showImageModal, showModal, elements, selectedElement, index.original]);
-
-  
 
   const updateElement = (
     newX: number,
@@ -119,6 +119,21 @@ console.log(showImageModal,"wojo354234");
       setCurrentSlide?.(activeSlide);
     }
   };
+
+  const [modal, setModal] = useState<any>(false);
+  console.log(modal, "112221");
+  const [modalIndex, setModalIndex] = useState<number | null>(null);
+
+  // const handleImageClick = (index: number) => {
+  //   if ((type === "image" || type === "gif") && !showImageModal && isEditing) {
+  //     setModalIndex(index);
+  //     setSelectedElement(elements[index]);
+  //     setShowImageModal(true);
+  //     setCurrentSlide?.(activeSlide);
+  //   }
+  // };
+  console.log(elements[index.original],"456789o");
+  
   const handleImageClick = () => {
     if ((type === "image" || type === "gif") && !showImageModal && isEditing) {
       setSelectedElement(elements[index.original]);
@@ -126,19 +141,24 @@ console.log(showImageModal,"wojo354234");
       setCurrentSlide?.(activeSlide);
     }
   };
-
   const closeModals = () => {
     setShowModal(false);
+    setModalIndex(null);
     setShowImageModal(false);
     setSelectedElement(null);
   };
 
   const handleDelete = () => {
     setElements((prev) => prev.filter((_, i) => i !== index.original));
-
   };
 
-  console.log(activeSlide,showModal , selectedElement , isEditing , "Here to fix ossies")
+  console.log(
+    activeSlide,
+    showModal,
+    selectedElement,
+    isEditing,
+    "Here to fix ossies"
+  );
 
   return (
     <>
@@ -168,7 +188,33 @@ console.log(showImageModal,"wojo354234");
         }}
       >
         {/* IMAGE BLOCK */}
-        {(type === "image" || type === "gif") && !showImageModal && (
+        {/* {(type === "image" || type === "gif") && (
+          <>
+            {modalIndex === index.original ? (
+              <img
+                src={content || "/placeholder.svg"}
+                alt="uploaded"
+                className="object-cover rounded-md pointer-events-none"
+              />
+            ) : (
+              <div
+                onClick={() => {
+                  if (modalIndex === null) handleImageClick(index.original);
+                }}
+                className={
+                  modalIndex !== null ? "pointer-events-none opacity-50" : ""
+                }
+              >
+                <img
+                  src={content || "/placeholder.svg"}
+                  alt="uploaded"
+                  className="object-cover rounded-md pointer-events-none"
+                />
+              </div>
+            )}
+          </>
+        )} */}
+ {(type === "image" || type === "gif") && !showImageModal && (
           <div onClick={handleImageClick}>
             <img
               src={content || "/placeholder.svg"}
@@ -214,14 +260,14 @@ console.log(showImageModal,"wojo354234");
 
         {/* TEXT EDITOR MODAL */}
         {showModal && selectedElement && isEditing && (
-           <TextEditor
-           onHide={closeModals}
-           setElements={setElements}
-           content={content}
-           elements={elements}
-           selectedElement={selectedElement}
-           cardIndex={index}
-         />
+          <TextEditor
+            onHide={closeModals}
+            setElements={setElements}
+            content={content}
+            elements={elements}
+            selectedElement={selectedElement}
+            cardIndex={index}
+          />
         )}
       </Rnd>
     </>

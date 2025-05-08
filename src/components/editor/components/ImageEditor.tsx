@@ -54,6 +54,7 @@ const ImageEditor: React.FC<any> = ({
       height: size,
     };
     setPosition(updatedPosition);
+    console.log(updatedPosition,"updatedElements");
 
     // 🔄 Immediate update to `elements` state (live update)
     if (selectedElement && typeof cardIndex.original === "number") {
@@ -61,7 +62,7 @@ const ImageEditor: React.FC<any> = ({
         i === cardIndex.original
           ? {
               ...el,
-              width: size,
+              width: size, 
               height: size,
               x: updatedPosition.x,
               y: updatedPosition.y,
@@ -69,6 +70,7 @@ const ImageEditor: React.FC<any> = ({
           : el
       );
       setElements(updatedElements);
+      
       localStorage.setItem("slideElements", JSON.stringify(updatedElements));
     }
   };
@@ -132,16 +134,26 @@ const ImageEditor: React.FC<any> = ({
   
 
   const handleDelete = () => {
-    if (selectedElement) {
-      const updatedElements = elements.filter(
-        (el:any) => el.content !== selectedElement.content
-      );
+    if (
+      selectedElement &&
+      typeof cardIndex.original === "number" &&
+      cardIndex.original >= 0
+    ) {
+      const updatedElements = elements.filter((_:any, index:any) => index !== cardIndex.original);
+  console.log("slideElements");
+  
       setElements(updatedElements);
       localStorage.setItem("slideElements", JSON.stringify(updatedElements));
     }
-    onHide();
+  
+    onHide(); // Close the editor after deletion
   };
-
+  
+console.log(content,"wrwerwe");
+console.log(elements,"asdfdghjklsdksjdglhdf");
+useEffect(() => {
+  localStorage.setItem("slideElements", JSON.stringify(elements));
+}, [elements]);
   return (
     <div className="flex flex-col w-full max-w-2xl editor-design">
       <ImageResizableContainer

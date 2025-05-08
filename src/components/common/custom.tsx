@@ -341,6 +341,35 @@ const Custom: React.FC = () => {
       console.error("Error uploading data:", error);
     }
   };
+  const updateEditorData = async () => {
+    const item = {
+      editor_messages: elements,
+      user_uuid: userInfo?.uuid,
+      messages_unique_id: id,
+    };
+
+    try {
+      const response = await fetch(
+        "https://dating.goaideme.com/card/update-editor-messages",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(item),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to upload data");
+      }
+
+      const data = await response.json();
+      console.log("Data uploaded successfully:", data);
+    } catch (error) {
+      console.error("Error uploading data:", error);
+    }
+  };
 
 
   const getEditorDaya = async () => {
@@ -456,6 +485,8 @@ const Custom: React.FC = () => {
                 slideIndex: activeSlideIndex,
                 x: 0,
                 y: 0,
+                width:0,
+                height:0,
                 user_uuid: userInfo?.uuid,
               };
 
@@ -519,11 +550,20 @@ const Custom: React.FC = () => {
           console.log("Matched Element:", element);
           // Add a new slide
           handleAddPage();
+
         }
       });
     }
+    // handleImageUpload()
   }, [elements]); // Watching slides.length and elements for changes
-
+  useEffect(() => {
+    const storedElements = localStorage.getItem("slideElements");
+    console.log("slide length", slides.length);
+    if (storedElements) {
+      updateEditorData()
+    }
+  }, [elements]);
+  // updateEditorData
   const handleAddPage = () => {
     const newSlide = {
       id: `slide-${slides.length}`,
@@ -659,7 +699,16 @@ const Custom: React.FC = () => {
   const closeModals = () => {
     setShowModal(false);
   };
+  const [openDropdown, setOpenDropdown] = useState(false);
 
+  const toggleDropdown = () => {
+    // if (!showModal) {
+      setOpenDropdown((prev) => !prev);
+    // }
+  };
+  console.log(openDropdown,"openDropdown");
+  console.log(elements,"openasdasdasaDropdown");
+  
   return (
     <>
       <div className="card-carousel-container" id="main-carousle">
@@ -713,6 +762,48 @@ const Custom: React.FC = () => {
       </div>
     </button>
   </div>
+  <div className="search_input" style={{ position: "relative" }}>
+      <button
+        onClick={toggleDropdown}
+        // disabled={showModal}
+        style={{ all: "unset", cursor: showModal ? "not-allowed" : "pointer" }}
+      >
+        <div className={`upload_svg ${showModal ? "disabled" : ""}`}>
+          <svg
+            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
+            focusable="false"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            data-testid="MoreHorizIcon"
+          >
+            <path d="M6 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 0c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 0c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2z" />
+          </svg>
+        </div>
+      </button>
+
+      {openDropdown && (
+  <div className="absolute right-0 mt-2  bg-white border border-gray-200 rounded-md shadow-lg z-50">
+ <div  className="px-4 py-2 hover:bg-gray-100 cursor-pointer" style={{whiteSpace:"nowrap"}}>
+    <input
+      type="file"
+      accept="image/*"
+      onChange={handleImageUpload}
+      disabled={showModal}
+    />
+    <div className={`upload_svg ${showModal ? "disabled" : ""}`}>
+      Add HandWriting
+    </div>
+  </div>
+    <div
+      className="px-4 py-2 hover:bg-gray-100 cursor-pointer" style={{whiteSpace:"nowrap"}}
+      onClick={() => alert("Add Signature")}
+    >
+    Add Sticker
+    </div>
+  </div>
+)}
+
+    </div>
 
   {id == "fwzDVjvbQ_X" ? (
     ""
@@ -919,6 +1010,8 @@ const Custom: React.FC = () => {
                       slideIndex: activeSlideIndex,
                       x: 0,
                       y: 0,
+                      width:0,
+                height:0,
                       user_uuid: userInfo?.uuid,
                     },
                   ]);
