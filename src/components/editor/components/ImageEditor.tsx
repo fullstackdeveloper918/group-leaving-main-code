@@ -14,6 +14,7 @@ interface TextEditorProps {
     original?: number;
     activeSlide: number;
   };
+  onDelete: () => void; 
 }
 
 const ImageEditor: React.FC<any> = ({
@@ -23,6 +24,7 @@ const ImageEditor: React.FC<any> = ({
   selectedElement,
   content,
   cardIndex,
+  onDelete,
 }) => {
 
   console.log("imageEditorcontent",content)
@@ -70,8 +72,8 @@ const ImageEditor: React.FC<any> = ({
           : el
       );
       setElements(updatedElements);
-      
       localStorage.setItem("slideElements", JSON.stringify(updatedElements));
+      
     }
   };
 
@@ -188,7 +190,7 @@ useEffect(() => {
                 Save
               </button>
               <button
-                onClick={handleDelete}
+                 onClick={onDelete}
                 className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition"
                 style={{
                   color:"red"

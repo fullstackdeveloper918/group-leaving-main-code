@@ -102,6 +102,8 @@ const Custom: React.FC = () => {
   const [gifs, setGifs] = useState<string[]>([]);
   const [activeSlide, setActiveSlide] = useState<any>();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [openDropdown, setOpenDropdown] = useState(false);
+
   console.log(activeSlide, "activeSlide");
   // let slideIndex=activeSlide?3:0
   // console.log(slideIndex,"slideIndex");
@@ -523,6 +525,7 @@ const Custom: React.FC = () => {
         response.data.results.map((result: any) => result.media_formats.gif.url)
       );
       sendEditorData();
+      setOpenDropdown(false)
     } catch (error) {
       console.error("Error fetching GIFs:", error);
     }
@@ -532,10 +535,11 @@ const Custom: React.FC = () => {
     e.preventDefault();
     if (searchTerm) fetchGifs(searchTerm);
   };
-
-  const openModal = () => {
+const [type, setType]=useState<any>("")
+  const openModal =(type: string) => {
     setIsOpen(true);
-    fetchGifs("trending");
+    setType(type)
+    fetchGifs(type === "Sticker" ? "stickers" : "trending");
   };
 
   useEffect(() => {
@@ -699,7 +703,6 @@ const Custom: React.FC = () => {
   const closeModals = () => {
     setShowModal(false);
   };
-  const [openDropdown, setOpenDropdown] = useState(false);
 
   const toggleDropdown = () => {
     // if (!showModal) {
@@ -748,7 +751,7 @@ const Custom: React.FC = () => {
   </div>
 
   <div className="search_input">
-    <button onClick={openModal} disabled={showModal} style={{ all: 'unset', cursor: showModal ? 'not-allowed' : 'pointer' }}>
+    <button onClick={() => openModal("GIF")} disabled={showModal} style={{ all: 'unset', cursor: showModal ? 'not-allowed' : 'pointer' }}>
       <div className={`upload_svg ${showModal ? "disabled" : ""}`}>
         <svg
           className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium mus-vubbuv"
@@ -796,7 +799,7 @@ const Custom: React.FC = () => {
   </div>
     <div
       className="px-4 py-2 hover:bg-gray-100 cursor-pointer" style={{whiteSpace:"nowrap"}}
-      onClick={() => alert("Add Signature")}
+      onClick={() => openModal("Sticker")}
     >
     Add Sticker
     </div>
@@ -977,7 +980,7 @@ const Custom: React.FC = () => {
           >
             &times;
           </button>
-          <h2 className="text-lg font-bold mb-4">Select a GIF</h2>
+          <h2 className="text-lg font-bold mb-4">Select a {type}</h2>
           <form onSubmit={handleSearch} className="mb-4 flex gap-2">
             <input
               type="text"

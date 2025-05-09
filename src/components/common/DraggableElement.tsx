@@ -93,23 +93,28 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     newWidth?: number,
     newHeight?: number
   ) => {
-    setElements((prev: any) => {
-      const updated = [...prev];
-      updated[index.original] = {
-        ...updated[index.original],
-        x: newX,
-        y: newY,
-        width: newWidth ?? updated[index.original].width,
-        height: newHeight ?? updated[index.original].height,
-        user_uuid: userInfo?.uuid,
-        color,
-        fontFamily,
-        fontSize,
-        fontWeight,
-      };
-      localStorage.setItem("slideElements", JSON.stringify(updated));
-      return updated;
-    });
+    if (typeof index.original === "number") {
+      setElements((prev: any) => {
+        const updated = [...prev];
+        updated[index.original] = {
+          ...updated[index.original],
+          x: newX,
+          y: newY,
+          width: newWidth ?? updated[index.original].width,
+          height: newHeight ?? updated[index.original].height,
+          user_uuid: userInfo?.uuid,
+          color,
+          fontFamily,
+          fontSize,
+          fontWeight,
+        };
+        localStorage.setItem("slideElements", JSON.stringify(updated));
+        console.log(updated,"updated");
+        
+        return updated;
+      });
+    }
+    
   };
 
   const handleClick = () => {
@@ -255,6 +260,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
             elements={elements}
             selectedElement={selectedElement}
             cardIndex={index}
+            onDelete={handleDelete}
           />
         )}
 
