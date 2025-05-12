@@ -73,7 +73,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   // 🔄 Sync size and position when modal closes and element is updated
   useEffect(() => {
     if (selectedElement) {
-      const updatedElement = elements[index.original];
+      const updatedElement = elements[index.activeSlide];
       if (updatedElement) {
         setSize({
           width: updatedElement.width,
@@ -85,7 +85,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
         });
       }
     }
-  }, [showImageModal, showModal, elements, selectedElement, index.original]);
+  }, [showImageModal, showModal, elements, selectedElement, index.activeSlide]);
 
   const updateElement = (
     newX: number,
@@ -93,15 +93,17 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     newWidth?: number,
     newHeight?: number
   ) => {
+    console.log(index.activeSlide, "0809797");
+
     if (typeof index.original === "number") {
       setElements((prev: any) => {
         const updated = [...prev];
-        updated[index.original] = {
-          ...updated[index.original],
+        updated[index.activeSlide] = {
+          ...updated[index.activeSlide],
           x: newX,
           y: newY,
-          width: newWidth ?? updated[index.original].width,
-          height: newHeight ?? updated[index.original].height,
+          width: newWidth ?? updated[index.activeSlide].width,
+          height: newHeight ?? updated[index.activeSlide].height,
           user_uuid: userInfo?.uuid,
           color,
           fontFamily,
@@ -109,17 +111,16 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
           fontWeight,
         };
         localStorage.setItem("slideElements", JSON.stringify(updated));
-        console.log(updated,"updated");
-        
+        console.log(updated, "updated");
+
         return updated;
       });
     }
-    
   };
 
   const handleClick = () => {
     if (type === "text" && !showModal && isEditing) {
-      setSelectedElement(elements[index.original]);
+      setSelectedElement(elements[index.activeSlide]);
       setShowModal(true);
       setCurrentSlide?.(activeSlide);
     }
@@ -137,11 +138,11 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   //     setCurrentSlide?.(activeSlide);
   //   }
   // };
-  console.log(elements[index.original],"456789o");
-  
+  console.log(elements[index.original], "456789o");
+
   const handleImageClick = () => {
     if ((type === "image" || type === "gif") && !showImageModal && isEditing) {
-      setSelectedElement(elements[index.original]);
+      setSelectedElement(elements[index.activeSlide]);
       setShowImageModal(true);
       setCurrentSlide?.(activeSlide);
     }
@@ -154,7 +155,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   };
 
   const handleDelete = () => {
-    setElements((prev) => prev.filter((_, i) => i !== index.original));
+    setElements((prev) => prev.filter((_, i) => i !== index.activeSlide));
   };
 
   console.log(
@@ -219,7 +220,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
             )}
           </>
         )} */}
- {(type === "image" || type === "gif") && !showImageModal && (
+        {(type === "image" || type === "gif") && !showImageModal && (
           <div onClick={handleImageClick}>
             <img
               src={content || "/placeholder.svg"}

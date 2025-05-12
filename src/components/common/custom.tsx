@@ -506,30 +506,59 @@ const Custom: React.FC = () => {
     }
   };
 
-  const fetchGifs = async (term: string) => {
-    try {
-      const response = await axios.get(
-        "https://tenor.googleapis.com/v2/search",
-        {
-          params: {
-            q: term || "wave",
-            key: "AIzaSyBphMbpVXm8Rc9CnWX7W3LuePqIHgSWoDo",
-            client_key: "my_test_app",
-            limit: 100,
-            locale: "en_US",
-          },
-        }
-      );
+ const fetchGifs = async (term: string, type: 'GIF' | 'Sticker' = 'GIF') => {
+  try {
+    let response;
 
-      setGifs(
-        response.data.results.map((result: any) => result.media_formats.gif.url)
-      );
-      sendEditorData();
-      setOpenDropdown(false)
-    } catch (error) {
-      console.error("Error fetching GIFs:", error);
+    if (type === 'Sticker') {
+      response = await axios.get("https://tenor.googleapis.com/v2/search", {
+        params: {
+          q: term ,
+          key: "AIzaSyAPjx0xF2FgbpxJe60S-QdKvYozNrVyFGY",
+          client_key: "test",
+          limit: 100,
+          locale: "en_US",
+          media_filter: "minimal", // minimal helps return transparent formats
+          searchfilter: "sticker", // this helps target sticker results
+          // pos: "CPQDEO66mIr6nY0DGh4KCgA_v8rXTNc_NUcSEIXT4_0Str_J-e5yHwAAAAAwMg",
+        },
+      });
+    } else {
+      response = await axios.get("https://tenor.googleapis.com/v2/search", {
+        params: {
+          q: term ,
+          key: "AIzaSyAPjx0xF2FgbpxJe60S-QdKvYozNrVyFGY",
+          client_key: "test",
+          limit: 100,
+          locale: "en_US",
+          media_filter: "gif",
+          // pos: "CNgEEO66mIr6nY0DGh4KCgA_v8gQLVsvC1oSEFIVaAvkb94bNrNiQgAAAAAwMg",
+        },
+      });
     }
-  };
+
+    const gifUrls = response.data.results.map((result: any) => {
+      const formats = result.media_formats;
+      if (type === "Sticker") {
+        return (
+          formats?.tinygif_transparent?.url ||
+          formats?.mediumgif_transparent?.url ||
+          formats?.gif?.url
+        );
+      } else {
+        return formats.gif.url;
+      }
+    });
+
+    setGifs(gifUrls);
+    sendEditorData();
+    setOpenDropdown(false);
+  } catch (error) {
+    console.error("Error fetching GIFs/Stickers:", error);
+  }
+};
+
+
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -539,7 +568,7 @@ const [type, setType]=useState<any>("")
   const openModal =(type: string) => {
     setIsOpen(true);
     setType(type)
-    fetchGifs(type === "Sticker" ? "stickers" : "trending");
+   fetchGifs(type === "Sticker" ? "wave" : "trending", type as 'GIF' | 'Sticker'); 
   };
 
   useEffect(() => {
@@ -902,6 +931,8 @@ const [type, setType]=useState<any>("")
                         .filter((el) => el.slideIndex === activeSlideIndex)
                         .map((el, i) => {
                           const originalIndex = elements.findIndex((el) => el === el);
+                          console.log(originalIndex,"originalIndex1234567");
+                          
                           return (
                             <DraggableElement
                               // key={originalIndex}
@@ -984,7 +1015,7 @@ const [type, setType]=useState<any>("")
           <form onSubmit={handleSearch} className="mb-4 flex gap-2">
             <input
               type="text"
-              placeholder="Search GIFs"
+              placeholder= {`Search ${type}`}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="flex-grow px-4 py-2 border rounded-md"
