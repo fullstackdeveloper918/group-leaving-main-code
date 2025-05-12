@@ -198,7 +198,7 @@ const Login = () => {
 
               <Flex gap={18} justify="center" align="center" className="my-3">
                 <SocalLogin />
-                <MicroSoftLogin />
+                {/* <MicroSoftLogin /> */}
 
                 {/* <GooglePayWithCDN 
                     currencyCode='AUD' 

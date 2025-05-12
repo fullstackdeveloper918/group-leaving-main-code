@@ -157,7 +157,7 @@ const Register = () => {
 
               <Flex gap={24} justify="center" align="center" className="my-3">
                 <SocalLogin />
-                <MicroSoftLogin />
+                {/* <MicroSoftLogin /> */}
               </Flex>
 
               <div className="auth-footer text-center mt-2">
