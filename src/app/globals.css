@@ -592,6 +592,17 @@ body {
   max-width: 30px;
   margin: auto;
 }
+
+/* @media (min-height: 1540px) and (max-width: 1920px){ */
+  .slider-containe .absolute_img{
+    position: static;
+  }
+  .heroSectionHeight{
+    min-height: 100vh;
+  }
+/* } */
+
+
 /***************** demo page css ended *****************/
 
 /******** card img *********/
