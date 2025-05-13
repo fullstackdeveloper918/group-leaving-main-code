@@ -117,13 +117,16 @@ const ImageEditor: React.FC<any> = ({
       console.warn("Duplicate element. Not adding again.");
       return;
     }
+  console.log(cardIndex,"oeuru");
   
     // Update existing element
     if (selectedElement && typeof cardIndex.original === "number") {
-      const updatedElements = elements.map((el: ImageElement, i: number) =>
+      const updatedElements = elements.map((el: any, i: number) =>
         i === cardIndex.original ? { ...el, ...newElement } : el
       );
-      setElements(updatedElements);
+      console.log(updatedElements,"updatedElements");
+      
+      // setElements(updatedElements);
     } else {
       // Add new element
       setElements((prev: ImageElement[]) => [...prev, newElement]);
