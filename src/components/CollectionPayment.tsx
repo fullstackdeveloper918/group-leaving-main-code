@@ -99,7 +99,8 @@ const CollectionPayment = ({
         // name: name||"Anonymous",
         // description: "Test Transaction with Escrow",
         // order_id: data.orderId, // Use the order ID from the backend respo7nse
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Ensure this is set in .env.local
+        key: "rzp_test_NPDqhJnbXJi072", // Ensure this is set in .env.local
+        // key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Ensure this is set in .env.local
         amount: paymentAmount * 100, // Razorpay requires the amount in paise
         currency: "INR",
         name: name || "Anonymous",
