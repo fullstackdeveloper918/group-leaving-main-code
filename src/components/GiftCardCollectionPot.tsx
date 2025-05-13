@@ -11,9 +11,21 @@ const GiftCardCollectionPot = ({ brandKey, groupId }: any) => {
   const [isCustomAmount, setIsCustomAmount] = useState<any>(false); // Tracks if "Other" is selected
   const [customAmount, setCustomAmount] = useState<any>(20); // Custom amount input
   const [name, setName] = useState("");
+const [showWarning, setShowWarning] = useState(false);
+const [showPayment, setShowPayment] = useState(false);
+const handleProceed = () => {
+  if (name.trim() === "") {
+    setShowWarning(true);
+    return;
+  }
+  setShowWarning(false);
+  setShowPayment(true); // This will render the CollectionPayment component
+};
+
   const [giftCard, setGiftCard] = useState<any>("");
   const [makeAnonymous, setMakeAnonymous] = useState(false);
   console.log(brandKey, "brandKey");
+  console.log(isCustomAmount, "customAmount");
 
   const fetchGiftCard = async () => {
     try {
@@ -210,7 +222,7 @@ const GiftCardCollectionPot = ({ brandKey, groupId }: any) => {
               onChange={(e) => setName(e.target.value)}
               className="border-2 border-gray-300 px-4 py-2 rounded-md mb-4 w-full"
             />
-
+  {showWarning && <p className="text-red-500 mb-2">Please fill in your name</p>}
             <div className="flex items-center mb-4">
               <input
                 type="checkbox"
@@ -259,6 +271,7 @@ const GiftCardCollectionPot = ({ brandKey, groupId }: any) => {
                 brandKey={brandKey}
                 groupId={groupId}
                 amount={totalAmount}
+                setIsCustomAmount={setIsModalOpen}
                  cart_id={groupId} type={"card"}
               />
             </div>

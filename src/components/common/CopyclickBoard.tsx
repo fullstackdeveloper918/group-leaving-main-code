@@ -14,7 +14,7 @@ const CopyclickBoard = () => {
     const handleClick = () => {
       setShowCopyBoard((prev) => !prev);
     };
-    const [value, setValue] = useState(`https://group-leaving.vercel.app${url}`);
+    const [value, setValue] = useState(`https://group-leaving-april.vercel.app${url}`);
     let currentToastPromise: Promise<void> | null = null;
     const handleCopy = () => {
         navigator.clipboard.writeText(value).then(() => {

@@ -78,6 +78,7 @@ const MultiStepForm = ({ params }: any) => {
   const [selectedDate, setSelectedDate] = useState(""); // to store date value
   const [selectedTime, setSelectedTime] = useState(""); // to store time value
   const handleLogin = () => {
+    toast.error("Please login")
     router.push("/login");
   };
   const handleNext = () => {
@@ -227,30 +228,7 @@ const MultiStepForm = ({ params }: any) => {
     <>
       <div className="flex space-x-8 mb-8 absolute top-10">
         <ToastContainer />
-        {/* <div
-          className={`flex items-center space-x-2 ${
-            step >= 3 ? "text-blue-600" : "text-gray-500"
-          }`}
-        >
-          <div
-            className={`w-4 h-4 rounded-full ${
-              step >= 3 ? "bg-blue-600" : "bg-gray-400"
-            }`}
-          ></div>
-          <p className="md:text-md text-sm font-medium mb-0">Pay and Share</p>
-        </div> */}
-        {/* <div
-          className={`flex items-center space-x-2 ${
-            step >= 4 ? "text-blue-600" : "text-gray-500"
-          }`}
-        >
-          <div
-            className={`w-4 h-4 rounded-full ${
-              step >= 4 ? "bg-blue-600" : "bg-gray-400"
-            }`}
-          ></div>
-          <p className="md:text-md text-sm font-medium mb-0">Submit</p>
-        </div> */}
+
 
         {/* count steps  */}
         <div className="text-center after_line disabled">

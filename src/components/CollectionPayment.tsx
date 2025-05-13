@@ -24,6 +24,8 @@ const CollectionPayment = ({
   groupId,
   paymentAmount,
   name,
+  setIsCustomAmount,
+  handleProceed
 }: any) => {
   const router = useRouter();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
@@ -173,6 +175,8 @@ const CollectionPayment = ({
 
       const rzp1 = new window.Razorpay(options);
       rzp1.open();
+            setIsCustomAmount(false)
+
     } catch (error) {
       console.error("Payment failed", error);
     } finally {
@@ -184,7 +188,7 @@ const CollectionPayment = ({
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       <button
-        onClick={handlePayment}
+         onClick={() =>handlePayment()}
         disabled={isProcessing}
         className="mt-6 bg-blue-600 text-blueText w-full py-2 rounded-xl border-2 border-[blueText] hover:bg-blue-700"
       >
