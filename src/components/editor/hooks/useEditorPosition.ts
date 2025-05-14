@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Position } from "../types/editor";
 
-export const useEditorPosition = () => {
+export const useEditorPosition = (initialX: number = 0, initialY: number = 0) => {
   const [position, setPosition] = useState<any>({
-    x: 0,
-    y: 0,
+    x: initialX,
+    y: initialY,
     width: 400,
     height: 300,
   });
@@ -37,10 +37,14 @@ export const useEditorPosition = () => {
     if (!isDragging) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      setPosition((prev:any) => ({
+      // Calculate new x and y, ensuring they don't go below 0
+      const newX = Math.max(0, e.clientX - dragOffset.x);
+      const newY = Math.max(0, e.clientY - dragOffset.y);
+
+      setPosition((prev: any) => ({
         ...prev,
-        x: e.clientX - dragOffset.x,
-        y: e.clientY - dragOffset.y,
+        x: newX,
+        y: newY,
       }));
     };
 
@@ -63,7 +67,7 @@ export const useEditorPosition = () => {
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
 
-      setPosition((prev:any) => ({
+      setPosition((prev: any) => ({
         ...prev,
         x: (windowWidth - prev.width) / 2,
         y: (windowHeight - prev.height) / 3,

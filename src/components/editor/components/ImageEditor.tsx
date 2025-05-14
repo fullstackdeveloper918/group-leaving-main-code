@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useEditorPosition } from "../hooks/useEditorPosition";
-import { EditorImageState, ImageElement, Element } from "../types/editor";
 import { FaTrash } from "react-icons/fa";
 import ImageResizableContainer from "./ImageResizableContainer";
 
-interface TextEditorProps {
+interface ImageEditorProps {
   onHide: () => void;
-  setElements: React.Dispatch<React.SetStateAction<Element[]>>;
-  elements: Element[];
-  selectedElement: Element | null;
+  setElements: React.Dispatch<React.SetStateAction<any[]>>;
+  elements: any[];
+  selectedElement: any;
   content?: string;
   cardIndex: {
     original?: number;
     activeSlide: number;
   };
-  onDelete: () => void; 
+  onDelete: () => void;
 }
 
-const ImageEditor: React.FC<any> = ({
+const ImageEditor: React.FC<ImageEditorProps> = ({
   onHide,
   setElements,
   elements,
@@ -26,75 +25,52 @@ const ImageEditor: React.FC<any> = ({
   cardIndex,
   onDelete,
 }) => {
+  const { position, setPosition, isDragging, startDragging } = useEditorPosition(
+    selectedElement?.x || 0,
+    selectedElement?.y || 0
+  );
 
-  console.log("imageEditorcontent",content)
-  const { position, setPosition, isDragging, startDragging } =
-    useEditorPosition();
-
-  // 🟨 Ensure square size on mount
   useEffect(() => {
     if (selectedElement) {
-      const squareSize = Math.max(
-        (selectedElement as ImageElement).width,
-        (selectedElement as ImageElement).height
-      );
+      const squareSize = Math.max(selectedElement.width || 320, selectedElement.height || 200);
       setPosition({
-        x: selectedElement.x,
-        y: selectedElement.y,
+        x: Math.max(0, selectedElement.x || 0),
+        y: Math.max(0, selectedElement.y || 0),
         width: squareSize,
         height: squareSize,
       });
     }
   }, [selectedElement, setPosition]);
 
-  // 🟨 Enforce square size during resize
   const handleResize = (newWidth: number, newHeight: number) => {
-    const size = Math.max(newWidth, newHeight); // Square size
-    const updatedPosition = {
-      ...position,
-      width: size,
-      height: size,
-    };
+    const size = Math.max(newWidth, newHeight);
+    const updatedPosition = { ...position, width: size, height: size };
     setPosition(updatedPosition);
-    console.log(updatedPosition,"updatedElements");
 
-    // 🔄 Immediate update to `elements` state (live update)
     if (selectedElement && typeof cardIndex.original === "number") {
-      const updatedElements = elements.map((el:any, i:any) =>
-        i === cardIndex.original
-          ? {
-              ...el,
-              width: size, 
-              height: size,
-              x: updatedPosition.x,
-              y: updatedPosition.y,
-            }
-          : el
+      setElements((prev) =>
+        prev.map((el, i) =>
+          i === cardIndex.original
+            ? { ...el, width: size, height: size, x: updatedPosition.x, y: updatedPosition.y }
+            : el
+        )
       );
-      setElements(updatedElements);
-      localStorage.setItem("slideElements", JSON.stringify(updatedElements));
-      
     }
   };
 
   const handleSave = () => {
     const imageUrl = content || selectedElement?.content || "";
-  
     if (!imageUrl) {
       console.warn("No image URL provided");
       return;
     }
-  
-    // Create new element
-    const newElement: ImageElement = {
-      type:
-        imageUrl.endsWith(".gif") || imageUrl.includes("tenor.com")
-          ? "gif"
-          : "image",
+
+    const newElement = {
+      type: imageUrl.includes("tenor.com") ? "gif" : "image",
       content: imageUrl,
       slideIndex: cardIndex.activeSlide,
-      x: position.x,
-      y: position.y,
+      x: Math.max(0, position.x),
+      y: Math.max(0, position.y),
       width: position.width,
       height: position.height,
       fontSize: "16px",
@@ -102,63 +78,24 @@ const ImageEditor: React.FC<any> = ({
       fontWeight: "normal",
       color: "#000000",
     };
-  
-    // Prevent duplicate: Check if element with same content and slide already exists
-    const isDuplicate = elements.some((el: ImageElement) =>
-      el.content === newElement.content &&
-      el.slideIndex === newElement.slideIndex &&
-      el.x === newElement.x &&
-      el.y === newElement.y &&
-      el.width === newElement.width &&
-      el.height === newElement.height
-    );
-  
-    if (isDuplicate) {
-      console.warn("Duplicate element. Not adding again.");
-      return;
-    }
-  console.log(cardIndex,"oeuru");
-  
-    // Update existing element
-    if (selectedElement && typeof cardIndex.original === "number") {
-      const updatedElements = elements.map((el: any, i: number) =>
-        i === cardIndex.original ? { ...el, ...newElement } : el
+
+    if (typeof cardIndex.original === "number") {
+      setElements((prev) =>
+        prev.map((el, i) =>
+          i === cardIndex.original ? { ...el, ...newElement } : el
+        )
       );
-      console.log(updatedElements,"updatedElements");
-      
-      // setElements(updatedElements);
     } else {
-      // Add new element
-      setElements((prev: ImageElement[]) => [...prev, newElement]);
+      setElements((prev) => [...prev, newElement]);
     }
-  
+
     onHide();
   };
-  
-
-  
 
   const handleDelete = () => {
-    if (
-      selectedElement &&
-      typeof cardIndex.original === "number" &&
-      cardIndex.original >= 0
-    ) {
-      const updatedElements = elements.filter((_:any, index:any) => index !== cardIndex.original);
-  console.log("slideElements");
-  
-      setElements(updatedElements);
-      localStorage.setItem("slideElements", JSON.stringify(updatedElements));
-    }
-  
-    onHide(); // Close the editor after deletion
+    onDelete();
   };
-  
-console.log(content,"wrwerwe");
-console.log(elements,"asdfdghjklsdksjdglhdf");
-useEffect(() => {
-  localStorage.setItem("slideElements", JSON.stringify(elements));
-}, [elements]);
+
   return (
     <div className="flex flex-col w-full max-w-2xl editor-design">
       <ImageResizableContainer
@@ -182,7 +119,7 @@ useEffect(() => {
               <button
                 onClick={onHide}
                 className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition"
-                style={{color:"red"}}
+                style={{ color: "red" }}
               >
                 Cancel
               </button>
@@ -193,11 +130,9 @@ useEffect(() => {
                 Save
               </button>
               <button
-                 onClick={onDelete}
+                onClick={handleDelete}
                 className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition"
-                style={{
-                  color:"red"
-                }}
+                style={{ color: "red" }}
               >
                 <FaTrash />
               </button>
