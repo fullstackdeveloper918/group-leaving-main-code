@@ -934,29 +934,30 @@ const [type, setType]=useState<any>("")
                           console.log(originalIndex,"originalIndex1234567");
                           
                           return (
-                            <DraggableElement
-                              // key={originalIndex}
-                              key={el.id}
-                              content={el.content}
-                              type={el.type}
-                              index={{
-                                original: originalIndex,
-                                activeSlide: activeSlideIndex,
-                              }}
-                              activeSlide={activeSlideIndex}
-                              setCurrentSlide={setCurrentSlide}
-                              setElements={setElements}
-                              elements={elements}
-                              initialX={el.x || 0}
-                              initialY={el.y || 0}
-                              width={el.width || 320}
-                              height={el.height || 200}
-                              isDraggable={true}
-                              color={el.color}
-                              fontFamily={el.fontFamily}
-                              fontSize={el.fontSize}
-                              fontWeight={el.fontWeight}
-                            />
+                            ""
+                            // <DraggableElement
+                            //   // key={originalIndex}
+                            //   key={el.id}
+                            //   content={el.content}
+                            //   type={el.type}
+                            //   index={{
+                            //     original: originalIndex,
+                            //     activeSlide: activeSlideIndex,
+                            //   }}
+                            //   activeSlide={activeSlideIndex}
+                            //   setCurrentSlide={setCurrentSlide}
+                            //   setElements={setElements}
+                            //   elements={elements}
+                            //   initialX={el.x || 0}
+                            //   initialY={el.y || 0}
+                            //   width={el.width || 320}
+                            //   height={el.height || 200}
+                            //   isDraggable={true}
+                            //   color={el.color}
+                            //   fontFamily={el.fontFamily}
+                            //   fontSize={el.fontSize}
+                            //   fontWeight={el.fontWeight}
+                            // />
                           );
                         })}
                   </div>
