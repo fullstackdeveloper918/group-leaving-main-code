@@ -92,14 +92,14 @@ const ResizableContainer: React.FC<ResizableContainerProps> = ({
       style={{
         width: position.width,
         height: position.height,
-        transform: `translate(${position.x}px, ${position.y}px)`,
+        // transform: `translate(${position.x}px, ${position.y}px)`,
         transition: !hasMoved ? "none" : "transform 0.1s ease",
         // border: "3px solid #44AAFF",
       }}
       onMouseDown={(e) => {
         startDragging(e);
         setHasMoved(true); // when dragging starts, mark as moved
-      }}
+      }}               
     >
       {/* Resize handles */}
       <div
@@ -118,7 +118,6 @@ const ResizableContainer: React.FC<ResizableContainerProps> = ({
         className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-blue-400 cursor-nwse-resize"
         onMouseDown={(e) => handleResize(e, "bottom-right")}
       />
-
       {children}
     </div>
   );
