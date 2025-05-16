@@ -1,23 +1,48 @@
 import React, { useState, useRef, useEffect } from "react";
+import { FaTrash } from "react-icons/fa";
 import { useEditorPosition } from "../hooks/useEditorPosition";
 import Toolbar from "./Toolbar";
 import ResizableContainer from "./ResizableContainer";
-import { EditorState } from "../types/editor";
-import { Element } from "../types/editor";
-import { FaTrash } from "react-icons/fa"; // Importing the trash icon from react-icons
+
+// Interfaces
+interface Element {
+  type: string;
+  content: string;
+  slideIndex: number;
+  x: number;
+  y: number;
+  width?: number;
+  height?: number;
+  fontSize?: string;
+  fontFamily?: string;
+  fontWeight?: string;
+  color?: string;
+  user_uuid?: string;
+}
+
+interface EditorState {
+  content: string;
+  fontSize: string;
+  fontFamily: string;
+  fontWeight: string;
+  color: string;
+  isEditing: boolean;
+  showEmailForm: boolean;
+}
 
 interface TextEditorProps {
   onHide: () => void;
   setElements: React.Dispatch<React.SetStateAction<Element[]>>;
   elements: Element[];
   selectedElement: Element | null;
-  content?: string; // content is now optional
+  content?: string;
   cardIndex: {
     original?: number;
     activeSlide: number;
   };
 }
 
+// TextEditor Component
 const TextEditor: React.FC<TextEditorProps> = ({
   onHide,
   setElements,
@@ -27,41 +52,43 @@ const TextEditor: React.FC<TextEditorProps> = ({
   cardIndex,
 }) => {
   const [editorState, setEditorState] = useState<EditorState>({
-    content: content || (selectedElement ? selectedElement.content : ""), 
-    fontSize: "24px",
-    fontFamily: "Arial",
-    fontWeight: "600",
-    color: "#37CAEC",
+    content: content || (selectedElement ? selectedElement.content : ""),
+    fontSize: selectedElement?.fontSize || "24px",
+    fontFamily: selectedElement?.fontFamily || "Arial",
+    fontWeight: selectedElement?.fontWeight || "600",
+    color: selectedElement?.color || "#37CAEC",
     isEditing: true,
     showEmailForm: true,
   });
 
   const editorRef = useRef<HTMLTextAreaElement>(null);
-  const { position, setPosition, isDragging, startDragging } =
-    useEditorPosition();
+  const { position, setPosition, isDragging, startDragging } = useEditorPosition();
 
+  // Sync editor state with content or selectedElement changes
   useEffect(() => {
     setEditorState((prevState) => ({
       ...prevState,
-      content: content || (selectedElement ? selectedElement.content : ""), 
+      content: content || (selectedElement ? selectedElement.content : ""),
+      fontSize: selectedElement?.fontSize || prevState.fontSize,
+      fontFamily: selectedElement?.fontFamily || prevState.fontFamily,
+      fontWeight: selectedElement?.fontWeight || prevState.fontWeight,
+      color: selectedElement?.color || prevState.color,
     }));
-  }, [content, selectedElement]); // Only update when content or selectedElement prop changes
+  }, [content, selectedElement]);
 
+  // Handle text content changes
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const content = e.target.value;
     setEditorState((prev) => ({ ...prev, content }));
   };
 
-  const toggleEmailForm = () => {
-    onHide();
-  };
-
+  // Save the edited or new element
   const handleSave = () => {
     if (editorRef.current) {
       const newElement: Element = {
         type: "text",
-        content: editorRef.current.value, // Get content from the textarea
-        slideIndex: cardIndex?.activeSlide, // Dynamically set depending on your slides
+        content: editorRef.current.value,
+        slideIndex: cardIndex.activeSlide,
         x: position.x,
         y: position.y,
         fontSize: editorState.fontSize,
@@ -70,41 +97,31 @@ const TextEditor: React.FC<TextEditorProps> = ({
         color: editorState.color,
       };
 
-      if (selectedElement) {
-        // If an element is selected, edit only that element
-        const updatedElements = elements.map((element, idx) => {
-          if (idx === cardIndex?.original) {
-            // Only update the selected element
-            return { ...element, ...newElement };
-          }
-          return element;
-        });
-
-        setElements(updatedElements); // Update elements state with the edited element
+      if (selectedElement && cardIndex.original !== undefined) {
+        // Update existing element
+        setElements((prev) =>
+          prev.map((element, idx) =>
+            idx === cardIndex.original ? { ...element, ...newElement } : element
+          )
+        );
       } else {
-        // If no element is selected, add a new element
-        setElements((prevElements) => [...prevElements, newElement]);
+        // Add new element
+        setElements((prev) => [...prev, newElement]);
       }
 
-      toggleEmailForm(); // Close the modal after saving
+      onHide(); // Close modal
     }
   };
 
+  // Delete the selected element
   const handleDelete = () => {
-    if (selectedElement) {
-      console.log(selectedElement, "updataElements1");
-
-      // Check if selectedElement has an ID or another unique identifier
-      const updatedElements = elements.filter(
-        (element) => element.content !== selectedElement.content // Use a unique identifier like id
-      );
-
-      console.log(updatedElements, "updatedElements");
-      setElements(updatedElements); // Update elements state with the removed element
+    if (selectedElement && cardIndex.original !== undefined) {
+      setElements((prev) => prev.filter((_, idx) => idx !== cardIndex.original));
     }
-    toggleEmailForm(); // Close the modal after deleting
+    onHide(); // Close modal
   };
 
+  // Execute document commands for formatting
   const handleCommand = (command: string, value?: string) => {
     document.execCommand(command, false, value);
     if (editorRef.current) {
@@ -132,7 +149,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
           <textarea
             ref={editorRef}
             placeholder="Type your text here..."
-            value={editorState.content} // Bind to editorState.content
+            value={editorState.content}
             onChange={handleContentChange}
             className="min-h-[120px] px-4 py-3 focus:outline-none bg-transparent rounded-md mx-2 mb-2 whitespace-pre-wrap textarea-border"
             style={{
@@ -142,6 +159,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
               fontWeight: editorState.fontWeight,
               cursor: isDragging ? "move" : "text",
               border: "2px solid #061178",
+               transform: "none",
             }}
           />
 
@@ -154,7 +172,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
               />
               <div className="flex justify-center bg-white gap-2 py-2">
                 <button
-                  onClick={toggleEmailForm}
+                  onClick={onHide}
                   className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition editor-cancel"
                 >
                   Cancel
@@ -165,12 +183,11 @@ const TextEditor: React.FC<TextEditorProps> = ({
                 >
                   Save
                 </button>
-                {/* Add delete button */}
                 <button
                   onClick={handleDelete}
                   className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition editor-delete"
                 >
-                  <FaTrash /> {/* Trash icon */}
+                  <FaTrash />
                 </button>
               </div>
             </div>

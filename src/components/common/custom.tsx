@@ -1,8 +1,7 @@
 "use client";
 import type React from "react";
 import { useState, useEffect, useRef } from "react";
-import { useDrag } from "@use-gesture/react";
-// import { useSpring, animated } from "@react spring/web";
+// import { useDrag } from "@use-gFuel/react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import SlideImg_0 from "../../assets/images/slide0.png";
@@ -88,87 +87,6 @@ const initialSlides = [
   },
 ];
 
-const initialElements = [
-  {
-    type: "image",
-    content: "https://via.placeholder.com/150?text=Image1",
-    slideIndex: 1,
-    x: 0,
-    y: 0,
-    width: 150,
-    height: 150,
-  },
-  {
-    type: "image",
-    content: "https://via.placeholder.com/150?text=Image2",
-    slideIndex: 1,
-    x: 160,
-    y: 0,
-    width: 150,
-    height: 150,
-  },
-  {
-    type: "image",
-    content: "https://via.placeholder.com/150?text=Image3",
-    slideIndex: 1,
-    x: 320,
-    y: 0,
-    width: 150,
-    height: 150,
-  },
-  {
-    type: "gif",
-    content: "https://media.tenor.com/GfSX-u7VGM4AAAAC/tenor.gif",
-    slideIndex: 1,
-    x: 0,
-    y: 160,
-    width: 150,
-    height: 150,
-  },
-  {
-    type: "gif",
-    content: "https://media.tenor.com/5aT6h1QkohMAAAAC/tenor.gif",
-    slideIndex: 1,
-    x: 160,
-    y: 160,
-    width: 150,
-    height: 150,
-  },
-  {
-    type: "text",
-    content: "Text 1",
-    slideIndex: 1,
-    x: 0,
-    y: 320,
-    fontSize: "16px",
-    fontFamily: "Arial",
-    fontWeight: "normal",
-    color: "#000000",
-  },
-  {
-    type: "text",
-    content: "Text 2",
-    slideIndex: 1,
-    x: 160,
-    y: 320,
-    fontSize: "16px",
-    fontFamily: "Arial",
-    fontWeight: "normal",
-    color: "#000000",
-  },
-  {
-    type: "text",
-    content: "Text 3",
-    slideIndex: 1,
-    x: 320,
-    y: 320,
-    fontSize: "16px",
-    fontFamily: "Arial",
-    fontWeight: "normal",
-    color: "#000000",
-  },
-];
-
 const Custom: React.FC = () => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const router = useRouter();
@@ -185,7 +103,7 @@ const Custom: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [openDropdown, setOpenDropdown] = useState(false);
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
-  const [elements, setElements] = useState<any[]>(initialElements);
+  const [elements, setElements] = useState<any[]>([]);
   const [editorContent, setEditorContent] = useState<any>("");
   const sliderRef = useRef<HTMLInputElement>(null);
   const [type, setType] = useState<string>("");
@@ -208,14 +126,60 @@ const Custom: React.FC = () => {
     setUserInfo(userInfoFromCookie);
   }, []);
 
-  // Load elements from localStorage or use initialElements
+  // Load elements from API and initialize slides
   useEffect(() => {
-    const storedElements = localStorage.getItem("slideElements");
-    if (storedElements) {
-      setElements(JSON.parse(storedElements));
-    } else {
-      setElements(initialElements);
-    }
+    const getEditorData = async () => {
+      try {
+        const response = await fetch(
+          "https://dating.goaideme.com/card/edit-messages-by-unique-id/fwzDVjvbQ_X",
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        if (!response.ok) throw new Error("Failed to fetch data");
+        const data = await response.json();
+        const apiElements = data?.data[0]?.editor_messages || [];
+        setElements(apiElements);
+
+        // Determine the maximum slideIndex from API elements
+        const maxIndex = apiElements.length > 0
+          ? Math.max(...apiElements.map((el: any) => el.slideIndex), 0)
+          : 0;
+
+        // Initialize slides based on path and max slideIndex
+        let filledSlides = isEditorPath
+          ? [{
+              id: "slide-1",
+              title: "Development",
+              subtitle: "SCSS Only Slider",
+              text: "Learn to create a SCSS-only responsive slider.",
+              link: "https://blog.significa.pt/css-only-slider-71727effff0b",
+              card_img: SlideImg_0,
+            }]
+          : [...initialSlides];
+
+        // Add additional slides up to maxIndex
+        for (let i = filledSlides.length; i <= maxIndex; i++) {
+          filledSlides.push({
+            id: `slide-${i + 1}`,
+            title: "New Slide",
+            subtitle: "New Subtitle",
+            text: "This is a dynamically generated slide.",
+            link: "https://example.com",
+            card_img: SlideImg_5,
+          });
+        }
+
+        setSlides(filledSlides);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setElements([]);
+        setSlides(isEditorPath ? [initialSlides[0]] : initialSlides);
+      }
+    };
+
+    getEditorData();
   }, []);
 
   // Save elements to localStorage and update server
@@ -225,111 +189,6 @@ const Custom: React.FC = () => {
       updateEditorData();
     }
   }, [elements]);
-
-  // Initialize slides based on path and stored elements
-  useEffect(() => {
-    const storedElements = localStorage.getItem("slideElements");
-    const initialSlides = isEditorPath
-        ? [
-            {
-              id: "slide-1",
-              title: "Development",
-              subtitle: "SCSS Only Slider",
-              text: "Learn to create a SCSS-only responsive slider.",
-              link: "https://blog.significa.pt/css-only-slider-71727effff0b",
-              card_img: SlideImg_0,
-            },
-          ]
-        : ([
-            {
-              id: "slide-1",
-              title: "Development",
-              subtitle: "SCSS Only Slider",
-              text: "Learn to create a SCSS-only responsive slider.",
-              link: "https://blog.significa.pt/css-only-slider-71727effff0b",
-              card_img: SlideImg_0,
-            },
-            {
-              id: "slide-2",
-              title: "Web Design",
-              subtitle: "Creative Animations",
-              text: "Explore modern web design techniques.",
-              link: "https://medium.com/web-design",
-              card_img: SlideImg_1,
-            },
-            {
-              id: "slide-3",
-              title: "JavaScript",
-              subtitle: "Advanced ES6 Features",
-              text: "Master JavaScript ES6+ features in depth.",
-              link: "https://javascript.info/",
-              card_img: SlideImg_2,
-            },
-            {
-              id: "slide-4",
-              title: "React",
-              subtitle: "State Management",
-              text: "A guide to managing state effectively in React.",
-              link: "https://reactjs.org/docs/hooks-intro.html",
-              card_img: SlideImg_3,
-            },
-            {
-              id: "slide-5",
-              title: "Next.js",
-              subtitle: "Optimizing Performance",
-              text: "Learn Next.js best practices for fast web apps.",
-              link: "https://nextjs.org/docs/advanced-features",
-              card_img: SlideImg_4,
-            },
-            {
-              id: "slide-6",
-              title: "new slide",
-              subtitle: "new slide for new content",
-              text: "new content",
-              link: "https://nextjs.org/docs/advanced-features",
-              card_img: SlideImg_6,
-            },
-          ] as any);
-
-    let filledSlides = [...initialSlides];
-    if (storedElements) {
-      const parsed = JSON.parse(storedElements);
-      const maxIndex = Math.max(...parsed.map((el: any) => el.slideIndex), 0);
-      for (let i = initialSlides.length; i <= maxIndex; i++) {
-        filledSlides.push({
-          id: `slide-${i + 1}`,
-          title: "New Slide",
-          subtitle: "New Subtitle",
-          text: "This is a dynamically generated slide.",
-          link: "https://example.com",
-          card_img: SlideImg_5,
-        });
-      }
-    }
-    setSlides(filledSlides);
-  }, []);
-
-  // Fetch editor data from server
-  const getEditorData = async () => {
-    try {
-      const response = await fetch(
-        "https://dating.goaideme.com/card/edit-messages-by-unique-id/fwzDVjvbQ_X",
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      if (!response.ok) throw new Error("Failed to fetch data");
-      const data = await response.json();
-      setElements(data?.data[0].editor_messages || initialElements);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  useEffect(() => {
-    getEditorData();
-  }, []);
 
   // Send editor data to server
   const sendEditorData = async () => {
@@ -381,7 +240,6 @@ const Custom: React.FC = () => {
 
   // Handle adding a new message (and new slide)
   const handleAddMessageClick = () => {
-    // Create a new slide
     const newSlide = {
       id: `slide-${slides.length + 1}`,
       title: "New Slide",
@@ -391,15 +249,11 @@ const Custom: React.FC = () => {
       card_img: SlideImg_5,
     };
 
-    // Add the new slide to the slides array
     setSlides((prevSlides: any[]) => [...prevSlides, newSlide]);
-
-    // Set the new slide as the active slide
-    const newSlideIndex = slides.length; // Index of the newly added slide
+    const newSlideIndex = slides.length;
     setActiveSlideIndex(newSlideIndex);
-    setShowModal(true); // Open the modal for adding a message
+    setShowModal(true);
 
-    // Update the slider value to reflect the new active slide
     if (sliderRef.current) {
       sliderRef.current.value = newSlideIndex.toString();
     }
