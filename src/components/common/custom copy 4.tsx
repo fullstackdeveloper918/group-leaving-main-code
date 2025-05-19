@@ -914,7 +914,7 @@ const [type, setType]=useState<any>("")
                       )}
 
                       {/* Conditionally render TextEditor on the last slide */}
-                      {index === activeSlideIndex && showModal && (
+                      {/* {index === activeSlideIndex && showModal && (
                         <TextEditor
                           onHide={closeModals}
                           setElements={setElements}
@@ -923,7 +923,7 @@ const [type, setType]=useState<any>("")
                           cardIndex={{ activeSlide: activeSlideIndex }}
                           
                         />
-                      )}
+                      )} */}
                     </div>
 
                     {index === activeSlideIndex &&
