@@ -122,7 +122,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     }
   }, [selectedElement, index.original, width, height]);
 
-  // Update element in elements array and localStorage
+  // Update element in elements array and localStorage   
   const updateElement = (
     newX: number,
     newY: number,
@@ -236,6 +236,7 @@ console.log(selectedElement,"selectedElement");
             fontFamily,
             fontSize,
             fontWeight,
+             transform: "none",
           }}
           onClick={handleClick}
           dangerouslySetInnerHTML={{ __html: content }}

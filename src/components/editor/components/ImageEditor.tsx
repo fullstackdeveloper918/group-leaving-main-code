@@ -99,8 +99,8 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
   return (
     <div className="flex flex-col w-full max-w-2xl editor-design">
       <ImageResizableContainer
-        position={position}
-        setPosition={setPosition}
+        // position={position}
+        // setPosition={setPosition}
         isDragging={isDragging}
         startDragging={startDragging}
         width={position.width}
