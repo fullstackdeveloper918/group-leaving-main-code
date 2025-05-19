@@ -594,14 +594,13 @@ body {
 }
 
 /* @media (min-height: 1540px) and (max-width: 1920px){ */
-  .slider-containe .absolute_img{
-    position: static;
-  }
-  .heroSectionHeight{
-    min-height: 100vh;
-  }
+.slider-containe .absolute_img {
+  position: static;
+}
+.heroSectionHeight {
+  min-height: 100vh;
+}
 /* } */
-
 
 /***************** demo page css ended *****************/
 
@@ -1214,7 +1213,6 @@ body {
   fill: #999;
 }
 
-
 .search_input {
   position: relative;
   width: 40px;
@@ -1280,10 +1278,10 @@ button.add_btn {
 }
 
 button.add_btn:disabled {
-  background: #ccc;       /* Gray background */
-  color: #666;            /* Dimmed text */
-  border-color: #bbb;     /* Optional: lighter border */
-  cursor: not-allowed;    /* Show disabled cursor */
+  background: #ccc; /* Gray background */
+  color: #666; /* Dimmed text */
+  border-color: #bbb; /* Optional: lighter border */
+  cursor: not-allowed; /* Show disabled cursor */
 }
 
 /* editor_css end */
@@ -1650,7 +1648,7 @@ html {
 .carousel-wrapper {
   position: relative;
   width: 100%;
-  height: 600px;
+  height: 650px;
   margin: 0 auto;
 }
 
@@ -1663,8 +1661,8 @@ html {
 
 .carousel-slide {
   position: absolute;
-  width: 450px;
-  height: 550px;
+  width: 500px;
+  height: 650px;
   top: 0;
   left: 50%;
   transform-origin: center center;
@@ -1842,6 +1840,19 @@ html {
   background-color: #4a90e2;
 }
 
+.delete-red-btn {
+  color: red;
+  position: absolute;
+  top: 0;
+  right: -38px;
+
+  padding: 7px !important;
+  border-radius: 100% !important;
+}
+.delete-red-btn:hover {
+  background: red;
+  color: white;
+}
 .page-indicator {
   text-align: center;
   margin-top: 10px;

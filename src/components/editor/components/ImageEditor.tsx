@@ -131,8 +131,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
               </button>
               <button
                 onClick={handleDelete}
-                className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition"
-                style={{ color: "red" }}
+                className=" transition delete-red-btn"
               >
                 <FaTrash />
               </button>
