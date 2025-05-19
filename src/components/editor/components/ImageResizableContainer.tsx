@@ -3,21 +3,21 @@ import { Position } from "../types/editor";
 
 interface ResizableContainerProps {
   children: ReactNode;
-  position: Position;
+  // position: Position;
   width: number;
   height: number;
   onResize?: (newWidth: number, newHeight: number) => void;
-  setPosition: (position: Position) => void;
+  // setPosition: (position: Position) => void;
   isDragging: boolean;
   startDragging: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
   children,
-  position,
+  // position,
   width,
   height,
-  setPosition,
+  // setPosition,
   isDragging,
   startDragging,
   onResize,
@@ -43,8 +43,8 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
     const startY = e.clientY;
     const startWidth = width;
     const startHeight = height;
-    const startLeft = position.x;
-    const startTop = position.y;
+    // const startLeft = position.x;
+    // const startTop = position.y;
 
     const onMouseMove = (moveEvent: any) => {
       const dx = moveEvent.clientX - startX;
@@ -52,15 +52,15 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
 
       let newWidth = startWidth;
       let newHeight = startHeight;
-      let newLeft = startLeft;
-      let newTop = startTop;
+      // let newLeft = startLeft;
+      // let newTop = startTop;
 
       if (direction.includes("right")) {
         newWidth = Math.max(50, startWidth + dx);
       }
       if (direction.includes("left")) {
         newWidth = Math.max(50, startWidth - dx);
-        newLeft = startLeft + dx;
+        // newLeft = startLeft + dx;
       }
 
       if (direction.includes("bottom")) {
@@ -68,15 +68,15 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
       }
       if (direction.includes("top")) {
         newHeight = Math.max(50, startHeight - dy);
-        newTop = startTop + dy;
+        // newTop = startTop + dy;
       }
 
-      setPosition({
-        x: newLeft,
-        y: newTop,
-        width: newWidth,
-        height: newHeight,
-      });
+      // setPosition({
+      //   x: newLeft,
+      //   y: newTop,
+      //   width: newWidth,
+      //   height: newHeight,
+      // });
 
       onResize?.(newWidth, newHeight);
     };
@@ -97,7 +97,7 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
       style={{
         width,
         height,
-        transform: `translate(${position.x}px, ${position.y}px)`,
+        // transform: `translate(${position.x}px, ${position.y}px)`,
         cursor: isDragging ? "grabbing" : "grab",
         border: "3px solid #44AAFF",
       }}

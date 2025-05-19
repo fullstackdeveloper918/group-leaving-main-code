@@ -45,13 +45,13 @@ export default function MySignatures() {
   
   return (
     <div className="w-80 bg-white shadow-md rounded-lg ">
-      <div className="flex items-center justify-between p-4 cursor-pointer" onClick={() => setOpen(!open)}>
+      <div className="flex items-center justify-between p-4 " onClick={() => setOpen(!open)}>
         <div className="flex items-center space-x-2">
           <div className="relative">
             <FaComment className="text-gray-600" />
             <span className="absolute -top-2 -left-2 bg-blue-600 text-white bg-[#061178] text-xs font-semibold px-1.5 py-0.5 rounded-full">{elements.length}</span>
           </div>
-          <span className="font-semibold">My signatures</span>
+          <span className="font-semibold select-none">My signatures</span>
         </div>
         {open ? <IoIosArrowDown className="text-gray-600" /> : <IoIosArrowForward className="text-gray-600" />}
       </div>

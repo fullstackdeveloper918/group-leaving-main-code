@@ -505,7 +505,7 @@ const Custom: React.FC = () => {
   };
 
   return (
-    <div className="card-carousel-container" id="main-carousle">
+    <div className="card-carousel-container select-none" id="main-carousle">
       <div className="editor_option" style={{ marginBottom: "15px" }}>
         <div>
           <button
@@ -621,7 +621,7 @@ const Custom: React.FC = () => {
               return (
                 <div
                   key={slide.id}
-                  className={`carousel-slide ${positionClass}`}
+                  className={`carousel-slide ${positionClass} `}
                   onClick={() => handleSlideChange(index)}
                 >
                   <div className="slide-content">
