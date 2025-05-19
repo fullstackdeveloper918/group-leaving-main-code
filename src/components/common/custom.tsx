@@ -143,20 +143,23 @@ const Custom: React.FC = () => {
         setElements(apiElements);
 
         // Determine the maximum slideIndex from API elements
-        const maxIndex = apiElements.length > 0
-          ? Math.max(...apiElements.map((el: any) => el.slideIndex), 0)
-          : 0;
+        const maxIndex =
+          apiElements.length > 0
+            ? Math.max(...apiElements.map((el: any) => el.slideIndex), 0)
+            : 0;
 
         // Initialize slides based on path and max slideIndex
         let filledSlides = isEditorPath
-          ? [{
-              id: "slide-1",
-              title: "Development",
-              subtitle: "SCSS Only Slider",
-              text: "Learn to create a SCSS-only responsive slider.",
-              link: "https://blog.significa.pt/css-only-slider-71727effff0b",
-              card_img: SlideImg_0,
-            }]
+          ? [
+              {
+                id: "slide-1",
+                title: "Development",
+                subtitle: "SCSS Only Slider",
+                text: "Learn to create a SCSS-only responsive slider.",
+                link: "https://blog.significa.pt/css-only-slider-71727effff0b",
+                card_img: SlideImg_0,
+              },
+            ]
           : [...initialSlides];
 
         // Add additional slides up to maxIndex
@@ -280,7 +283,9 @@ const Custom: React.FC = () => {
   };
 
   // Handle image upload
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -325,17 +330,20 @@ const Custom: React.FC = () => {
   // Fetch GIFs or stickers
   const fetchGifs = async (term: string, type: "GIF" | "Sticker" = "GIF") => {
     try {
-      const response = await axios.get("https://tenor.googleapis.com/v2/search", {
-        params: {
-          q: term,
-          key: "AIzaSyAPjx0xF2FgbpxJe60S-QdKvYozNrVyFGY",
-          client_key: "test",
-          limit: 100,
-          locale: "en_US",
-          media_filter: type === "Sticker" ? "minimal" : "gif",
-          searchfilter: type === "Sticker" ? "sticker" : undefined,
-        },
-      });
+      const response = await axios.get(
+        "https://tenor.googleapis.com/v2/search",
+        {
+          params: {
+            q: term,
+            key: "AIzaSyAPjx0xF2FgbpxJe60S-QdKvYozNrVyFGY",
+            client_key: "test",
+            limit: 100,
+            locale: "en_US",
+            media_filter: type === "Sticker" ? "minimal" : "gif",
+            searchfilter: type === "Sticker" ? "sticker" : undefined,
+          },
+        }
+      );
       const gifUrls = response.data.results.map((result: any) =>
         type === "Sticker"
           ? result.media_formats?.tinygif_transparent?.url ||
@@ -359,7 +367,10 @@ const Custom: React.FC = () => {
   const openModal = (modalType: string) => {
     setIsOpen(true);
     setType(modalType);
-    fetchGifs(modalType === "Sticker" ? "wave" : "trending", modalType as "GIF" | "Sticker");
+    fetchGifs(
+      modalType === "Sticker" ? "wave" : "trending",
+      modalType as "GIF" | "Sticker"
+    );
   };
 
   // Add a new slide
@@ -382,7 +393,10 @@ const Custom: React.FC = () => {
       const blob = await response.blob();
       if (blob.type === "image/avif") {
         const imageBitmap = await createImageBitmap(blob);
-        const canvas = new OffscreenCanvas(imageBitmap.width, imageBitmap.height);
+        const canvas = new OffscreenCanvas(
+          imageBitmap.width,
+          imageBitmap.height
+        );
         const ctx = canvas.getContext("2d");
         ctx?.drawImage(imageBitmap, 0, 0);
         return canvas.convertToBlob({ type: "image/png" }).then((pngBlob) => {
@@ -415,7 +429,14 @@ const Custom: React.FC = () => {
       if (!base64Image) continue;
 
       if (i !== 0) pdf.addPage();
-      pdf.addImage(base64Image, "JPEG", 10, 10, slideWidth - 20, slideHeight / 2);
+      pdf.addImage(
+        base64Image,
+        "JPEG",
+        10,
+        10,
+        slideWidth - 20,
+        slideHeight / 2
+      );
 
       elements.forEach((el) => {
         if (el.slideIndex === i + 1) {
@@ -424,7 +445,14 @@ const Custom: React.FC = () => {
             pdf.setTextColor(0, 0, 255);
             pdf.text(el.content, 10 + el.x, slideHeight / 2 + 20 + el.y);
           } else if (el.type === "image" || el.type === "gif") {
-            pdf.addImage(el.content, "JPEG", 10 + el.x, slideHeight / 2 + 20 + el.y, 50, 50);
+            pdf.addImage(
+              el.content,
+              "JPEG",
+              10 + el.x,
+              slideHeight / 2 + 20 + el.y,
+              50,
+              50
+            );
           }
         }
       });
@@ -444,7 +472,8 @@ const Custom: React.FC = () => {
   };
 
   const handleNextSlide = () => {
-    if (activeSlideIndex < slides.length - 1) handleSlideChange(activeSlideIndex + 1);
+    if (activeSlideIndex < slides.length - 1)
+      handleSlideChange(activeSlideIndex + 1);
   };
 
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -540,7 +569,10 @@ const Custom: React.FC = () => {
           <button
             onClick={() => openModal("GIF")}
             disabled={showModal}
-            style={{ all: "unset", cursor: showModal ? "not-allowed" : "pointer" }}
+            style={{
+              all: "unset",
+              cursor: showModal ? "not-allowed" : "pointer",
+            }}
           >
             <div className={`upload_svg ${showModal ? "disabled" : ""}`}>
               <svg
@@ -558,7 +590,10 @@ const Custom: React.FC = () => {
         <div className="search_input" style={{ position: "relative" }}>
           <button
             onClick={toggleDropdown}
-            style={{ all: "unset", cursor: showModal ? "not-allowed" : "pointer" }}
+            style={{
+              all: "unset",
+              cursor: showModal ? "not-allowed" : "pointer",
+            }}
           >
             <div className={`upload_svg ${showModal ? "disabled" : ""}`}>
               <svg
@@ -600,7 +635,11 @@ const Custom: React.FC = () => {
         </div>
         {id !== "fwzDVjvbQ_X" && (
           <div style={{ textAlign: "center" }}>
-            <button className="add-btn" onClick={openEnvelop} disabled={showModal}>
+            <button
+              className="add-btn"
+              onClick={openEnvelop}
+              disabled={showModal}
+            >
               Preview
             </button>
           </div>
@@ -613,10 +652,14 @@ const Custom: React.FC = () => {
             {slides.map((slide: any, index: number) => {
               let positionClass = "slide-hidden";
               if (index === activeSlideIndex) positionClass = "slide-active";
-              else if (index === activeSlideIndex - 1) positionClass = "slide-prev";
-              else if (index === activeSlideIndex - 2) positionClass = "slide-prev-2";
-              else if (index === activeSlideIndex + 1) positionClass = "slide-next";
-              else if (index === activeSlideIndex + 2) positionClass = "slide-next-2";
+              else if (index === activeSlideIndex - 1)
+                positionClass = "slide-prev";
+              else if (index === activeSlideIndex - 2)
+                positionClass = "slide-prev-2";
+              else if (index === activeSlideIndex + 1)
+                positionClass = "slide-next";
+              else if (index === activeSlideIndex + 2)
+                positionClass = "slide-next-2";
 
               return (
                 <div
@@ -669,6 +712,8 @@ const Custom: React.FC = () => {
                         elements={elements}
                         selectedElement={selectedElement}
                         cardIndex={{ activeSlide: activeSlideIndex }}
+                        Xposition={selectedElement?.x || ""}
+                        Yposition={selectedElement?.y || ""}
                       />
                     )}
                   </div>
@@ -718,11 +763,17 @@ const Custom: React.FC = () => {
                 <div className="progress-track"></div>
                 <div
                   className="progress-fill"
-                  style={{ width: `${((activeSlideIndex + 1) / totalSlides) * 100}%` }}
+                  style={{
+                    width: `${((activeSlideIndex + 1) / totalSlides) * 100}%`,
+                  }}
                 ></div>
                 <div
                   className="progress-dot"
-                  style={{ left: `calc(${((activeSlideIndex + 1) / totalSlides) * 100}% - 7px)` }}
+                  style={{
+                    left: `calc(${
+                      ((activeSlideIndex + 1) / totalSlides) * 100
+                    }% - 7px)`,
+                  }}
                 ></div>
               </div>
             </div>

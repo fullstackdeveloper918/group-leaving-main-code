@@ -263,6 +263,8 @@ console.log(selectedElement,"selectedElement");
           elements={elements}
           selectedElement={selectedElement}
           cardIndex={index}
+          Xposition={selectedElement?.x||""}
+          Yposition={selectedElement?.y||""}
         />
       )}
     </Rnd>

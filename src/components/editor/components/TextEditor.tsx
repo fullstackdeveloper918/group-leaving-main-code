@@ -9,8 +9,8 @@ interface Element {
   type: string;
   content: string;
   slideIndex: number;
-  x: number;
-  y: number;
+  x: any;
+  y: any;
   width?: number;
   height?: number;
   fontSize?: string;
@@ -39,7 +39,9 @@ interface TextEditorProps {
   cardIndex: {
     original?: number;
     activeSlide: number;
-  };
+  },
+  Xposition:any,
+  Yposition:any
 }
 
 // TextEditor Component
@@ -50,6 +52,8 @@ const TextEditor: React.FC<TextEditorProps> = ({
   selectedElement,
   content,
   cardIndex,
+  Xposition,
+  Yposition
 }) => {
   const [editorState, setEditorState] = useState<EditorState>({
     content: content || (selectedElement ? selectedElement.content : ""),
@@ -89,8 +93,8 @@ const TextEditor: React.FC<TextEditorProps> = ({
         type: "text",
         content: editorRef.current.value,
         slideIndex: cardIndex.activeSlide,
-        x: position.x,
-        y: position.y,
+        x: Xposition,
+        y:Yposition,
         fontSize: editorState.fontSize,
         fontFamily: editorState.fontFamily,
         fontWeight: editorState.fontWeight,

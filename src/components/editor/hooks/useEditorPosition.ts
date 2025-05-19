@@ -3,8 +3,8 @@ import { Position } from "../types/editor";
 
 export const useEditorPosition = (initialX: number = 0, initialY: number = 0) => {
   const [position, setPosition] = useState<any>({
-    // x: initialX,
-    // y: initialY,
+    x: initialX,
+    y: initialY,
     width: 400,
     height: 300,
   });
