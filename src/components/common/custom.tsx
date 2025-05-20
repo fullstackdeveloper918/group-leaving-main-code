@@ -716,7 +716,7 @@ const Custom: React.FC = () => {
                         Yposition={selectedElement?.y || ""}
                       />
                     )}
-                  </div>
+                  </div>    
                   {index === activeSlideIndex &&
                     uniqueElements
                       .filter((el: any) => el.slideIndex === activeSlideIndex)

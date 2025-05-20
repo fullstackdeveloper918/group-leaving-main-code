@@ -48,8 +48,8 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
     setPosition(updatedPosition);
 
     if (selectedElement && typeof cardIndex.original === "number") {
-      setElements((prev) =>
-        prev.map((el, i) =>
+      setElements((prev:any) =>
+        prev.map((el:any, i:number) =>
           i === cardIndex.original
             ? { ...el, width: size, height: size, x: updatedPosition.x, y: updatedPosition.y }
             : el
@@ -80,13 +80,13 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
     };
 
     if (typeof cardIndex.original === "number") {
-      setElements((prev) =>
-        prev.map((el, i) =>
+      setElements((prev:any) =>
+        prev.map((el:any, i:number) =>
           i === cardIndex.original ? { ...el, ...newElement } : el
         )
       );
     } else {
-      setElements((prev) => [...prev, newElement]);
+      setElements((prev:any) => [...prev, newElement]);
     }
 
     onHide();
