@@ -649,7 +649,7 @@ const CustomEditior = () => {
             style={{
               width: "100px",
               height: "100px",
-              objectFit: "cover",
+              objectFit: "contain",
               pointerEvents: "none",
             }}
           />

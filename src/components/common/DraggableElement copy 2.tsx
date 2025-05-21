@@ -209,23 +209,7 @@ console.log(selectedElement,"selectedElement");
     >
       {(type === "image" || type === "gif") && !isImageModalOpenForThisElement && (
         <div onClick={handleImageClick}>
-        <img
-  src={content || "/placeholder.svg"}
-  alt="uploaded"
-  className="rounded-md pointer-events-none"
-  style={{
-    maxWidth: "100%",
-    maxHeight: "100%",
-    width: "100%",
-    height: "100%",
-    objectFit: "contain", // Or "cover" depending on your need
-    display: "block",
-    overflow: "hidden",
-  }}
-/>
-
-        
-          {/* <img
+          <img
             src={content || "/placeholder.svg"}
             alt="uploaded"
             className="object-cover rounded-md pointer-events-none"
@@ -233,7 +217,7 @@ console.log(selectedElement,"selectedElement");
               width: size.width,
               height: size.height,
             }}
-          /> */}
+          />
         </div>
       )}
 

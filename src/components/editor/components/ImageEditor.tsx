@@ -42,21 +42,36 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
     }
   }, [selectedElement, setPosition]);
 
-  const handleResize = (newWidth: number, newHeight: number) => {
-    const size = Math.max(newWidth, newHeight);
-    const updatedPosition = { ...position, width: size, height: size };
-    setPosition(updatedPosition);
+ const handleResize = (newWidth: number, newHeight: number) => {
+  const SLIDE_WIDTH = 500;
+  const SLIDE_HEIGHT = 650;
 
-    if (selectedElement && typeof cardIndex.original === "number") {
-      setElements((prev:any) =>
-        prev.map((el:any, i:number) =>
-          i === cardIndex.original
-            ? { ...el, width: size, height: size, x: updatedPosition.x, y: updatedPosition.y }
-            : el
-        )
-      );
-    }
+  // Clamp width and height to slide dimensions
+  const clampedWidth = Math.min(Math.max(newWidth, 50), SLIDE_WIDTH); // Min 50px, max 500px
+  const clampedHeight = Math.min(Math.max(newHeight, 50), SLIDE_HEIGHT); // Min 50px, max 650px
+
+  // Adjust position to keep the image within slide boundaries
+  const updatedPosition = {
+    ...position,
+    width: clampedWidth,
+    height: clampedHeight,
+    x: Math.min(Math.max(position.x, 0), SLIDE_WIDTH - clampedWidth),
+    y: Math.min(Math.max(position.y, 0), SLIDE_HEIGHT - clampedHeight),
   };
+
+  setPosition(updatedPosition);
+  console.log(updatedPosition, "updatedPosition");
+
+  if (selectedElement && typeof cardIndex.original === "number") {
+    setElements((prev: any) =>
+      prev.map((el: any, i: number) =>
+        i === cardIndex.original
+          ? { ...el, width: clampedWidth, height: clampedHeight, x: updatedPosition.x, y: updatedPosition.y }
+          : el
+      )
+    );
+  }
+};
 
   const handleSave = () => {
     const imageUrl = content || selectedElement?.content || "";
@@ -103,7 +118,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
         // setPosition={setPosition}
         isDragging={isDragging}
         startDragging={startDragging}
-        width={position.width}
+        width={position.width }
         height={position.height}
         onResize={handleResize}
       >

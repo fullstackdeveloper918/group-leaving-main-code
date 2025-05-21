@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { Position } from "../types/editor";
 
 export const useEditorPosition = (initialX: number = 0, initialY: number = 0) => {
+  const SLIDE_WIDTH = 500;
+  const SLIDE_HEIGHT = 650;
+
   const [position, setPosition] = useState<any>({
     x: initialX,
     y: initialY,
@@ -14,7 +17,6 @@ export const useEditorPosition = (initialX: number = 0, initialY: number = 0) =>
 
   // Start dragging on mouse down
   const startDragging = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Don't drag if clicked on certain elements
     if (
       (e.target as HTMLElement).contentEditable === "true" ||
       (e.target as HTMLElement).tagName === "BUTTON" ||
@@ -37,9 +39,9 @@ export const useEditorPosition = (initialX: number = 0, initialY: number = 0) =>
     if (!isDragging) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      // Calculate new x and y, ensuring they don't go below 0
-      const newX = Math.max(0, e.clientX - dragOffset.x);
-      const newY = Math.max(0, e.clientY - dragOffset.y);
+      // Calculate new x and y, ensuring they stay within slide boundaries
+      const newX = Math.min(Math.max(e.clientX - dragOffset.x, 0), SLIDE_WIDTH - position.width);
+      const newY = Math.min(Math.max(e.clientY - dragOffset.y, 0), SLIDE_HEIGHT - position.height);
 
       setPosition((prev: any) => ({
         ...prev,
@@ -59,7 +61,7 @@ export const useEditorPosition = (initialX: number = 0, initialY: number = 0) =>
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isDragging, dragOffset]);
+  }, [isDragging, dragOffset, position.width, position.height]);
 
   // Center editor initially
   useEffect(() => {
@@ -69,8 +71,8 @@ export const useEditorPosition = (initialX: number = 0, initialY: number = 0) =>
 
       setPosition((prev: any) => ({
         ...prev,
-        x: (windowWidth - prev.width) / 2,
-        y: (windowHeight - prev.height) / 3,
+        x: Math.min(Math.max((windowWidth - prev.width) / 2, 0), SLIDE_WIDTH - prev.width),
+        y: Math.min(Math.max((windowHeight - prev.height) / 3, 0), SLIDE_HEIGHT - prev.height),
       }));
     };
 
