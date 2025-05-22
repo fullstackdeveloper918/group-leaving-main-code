@@ -1619,7 +1619,7 @@ html {
   /* transform: translate(0px, 0px) !important; */
   /* width: 100% !important;
   height: auto !important; */
-  padding: 10px !important;
+  /* padding: 10px !important; */
 }
 .editor-cancel {
   color: red !important;
@@ -1638,6 +1638,10 @@ html {
 .editor-design {
   position: absolute;
   z-index: 10000;
+  width: 75% !important;
+}
+.react-draggable-dragged{
+  width: 100% !important;
 }
 /* Carousel styling */
 .card-carousel {

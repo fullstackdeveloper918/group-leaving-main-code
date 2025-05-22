@@ -57,7 +57,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
 }) => {
   const [editorState, setEditorState] = useState<EditorState>({
     content: content || (selectedElement ? selectedElement.content : ""),
-    fontSize: selectedElement?.fontSize || "20px",
+    fontSize: selectedElement?.fontSize || "24px",
     fontFamily: selectedElement?.fontFamily || "Arial",
     fontWeight: selectedElement?.fontWeight || "600",
     color: selectedElement?.color || "#37CAEC",
@@ -72,12 +72,12 @@ const TextEditor: React.FC<TextEditorProps> = ({
   // Initialize useEditorPosition with slide dimensions
   const { position, setPosition, isDragging, startDragging } =
     useEditorPosition({
-      initialX: selectedElement?.x ?? Xposition,
-      initialY: selectedElement?.y ?? Yposition,
+      initialX: Xposition,
+      initialY: Yposition,
       slideWidth: 500,
       slideHeight: 650,
-      editorWidth: selectedElement?.width ?? 375,
-      editorHeight: selectedElement?.height ?? 75,
+      editorWidth: 400, // Adjust based on actual width
+      editorHeight: 300, // Adjust based on actual height
     });
 
   // Sync editor state and position
@@ -91,18 +91,11 @@ const TextEditor: React.FC<TextEditorProps> = ({
       color: selectedElement?.color || prevState.color,
     }));
 
+    // Adjust position if Xposition or Yposition changes
     setPosition((prev) => ({
       ...prev,
-      x: Math.max(
-        0,
-        Math.min(Xposition, 500 - (selectedElement?.width || prev.width))
-      ),
-      y: Math.max(
-        0,
-        Math.min(Yposition, 650 - (selectedElement?.height || prev.height))
-      ),
-      width: selectedElement?.width || prev.width,
-      height: selectedElement?.height || prev.height,
+      x: Math.max(0, Math.min(Xposition, 500 - prev.width)),
+      y: Math.max(0, Math.min(Yposition, 650 - prev.height)),
     }));
   }, [content, selectedElement, Xposition, Yposition, setPosition]);
 
@@ -202,40 +195,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
     }
   };
 
-  const handleResize = (newWidth: number, newHeight: number) => {
-    const SLIDE_WIDTH = 500;
-    const SLIDE_HEIGHT = 650;
-
-    const clampedWidth = Math.min(Math.max(newWidth, 50), SLIDE_WIDTH);
-    const clampedHeight = Math.min(Math.max(newHeight, 50), SLIDE_HEIGHT);
-
-    const updatedPosition = {
-      ...position,
-      width: clampedWidth,
-      height: clampedHeight,
-      x: Math.min(position.x, SLIDE_WIDTH - clampedWidth),
-      y: Math.min(position.y, SLIDE_HEIGHT - clampedHeight),
-    };
-
-    setPosition(updatedPosition);
-
-    if (selectedElement && typeof cardIndex.original === "number") {
-      setElements((prev) =>
-        prev.map((el, i) =>
-          i === cardIndex.original
-            ? {
-                ...el,
-                width: clampedWidth,
-                height: clampedHeight,
-                x: updatedPosition.x,
-                y: updatedPosition.y,
-              }
-            : el
-        )
-      );
-    }
-  };
-
   return (
     <div
       ref={slideRef}
@@ -245,7 +204,8 @@ const TextEditor: React.FC<TextEditorProps> = ({
         top: `${position.y}px`,
         left: `${position.x}px`,
         zIndex: 1000,
-        // width: "79.5%"
+        width: "79.5%"
+
       }}
     >
       <div
@@ -267,31 +227,28 @@ const TextEditor: React.FC<TextEditorProps> = ({
         />
       </div>
       <ResizableContainer
-        // position={position}
-        // setPosition={setPosition}
+        position={position}
+        setPosition={setPosition}
         isDragging={isDragging}
         startDragging={startDragging}
-        onResize={handleResize} // Pass resize callback
-        width={position.width}
-        height={position.height}>
+      >
         <div className="flex flex-col w-full rounded-md shadow-md ">
           <textarea
             ref={editorRef}
             placeholder="Type your text here..."
             value={editorState.content}
             onChange={handleContentChange}
-            className=" focus:outline-none m-0 px-1 bg-transparent rounded-mdwhitespace-pre-wrap "
+            className=" focus:outline-none m-0 px-1 bg-transparent rounded-mdwhitespace-pre-wrap textarea-border"
             style={{
               fontFamily: editorState.fontFamily,
               color: editorState.color,
               fontSize: editorState.fontSize,
               fontWeight: editorState.fontWeight,
               cursor: isDragging ? "move" : "text",
-              // border: "2px solid #061178",
+              border: "2px solid #061178",
             }}
-          /> 
-    </div>
-     </ResizableContainer>
+          />
+
           <div className="px-2 pb-2 bg-white">
             <div className="border-t bg-white pt-2 px-4">
               <input
@@ -322,7 +279,8 @@ const TextEditor: React.FC<TextEditorProps> = ({
             </div>
           </div>
         </div>
-
+      </ResizableContainer>
+    </div>
   );
 };
 

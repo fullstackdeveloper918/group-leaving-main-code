@@ -27,7 +27,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
 }) => {
   const { position, setPosition, isDragging, startDragging } = useEditorPosition(
     selectedElement?.x || 0,
-    selectedElement?.y || 0
+    // selectedElement?.y || 0
   );
 
   useEffect(() => {
@@ -120,8 +120,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
         startDragging={startDragging}
         width={position.width }
         height={position.height}
-        onResize={handleResize}
-      >
+        onResize={handleResize}>
         <img
           src={content || selectedElement?.content || "/placeholder.svg"}
           alt="uploaded"

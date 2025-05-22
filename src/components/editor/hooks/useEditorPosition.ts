@@ -1,17 +1,29 @@
 import { useState, useEffect } from "react";
 import { Position } from "../types/editor";
 
-export const useEditorPosition = (initialX: number = 0, initialY: number = 0) => {
-  const SLIDE_WIDTH = 500;
-  const SLIDE_HEIGHT = 650;
+interface UseEditorPositionProps {
+  initialX?: number;
+  initialY?: number;
+  slideWidth?: number;
+  slideHeight?: number;
+  editorWidth?: number;
+  editorHeight?: number;
+}
 
-  const [position, setPosition] = useState<any>({
-    x: initialX,
-    y: initialY,
-    width: 400,
-    height: 300,
+export const useEditorPosition = ({
+  initialX = 0,
+  initialY = 0,
+  slideWidth = 500,
+  slideHeight = 650,
+  editorWidth = 400,
+  editorHeight = 300,
+}: UseEditorPositionProps) => {
+  const [position, setPosition] = useState<Position>({
+    x: Math.max(0, Math.min(initialX, slideWidth - editorWidth)),
+    y: Math.max(0, Math.min(initialY, slideHeight - editorHeight)),
+    width: editorWidth,
+    height: editorHeight,
   });
-
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
@@ -40,10 +52,10 @@ export const useEditorPosition = (initialX: number = 0, initialY: number = 0) =>
 
     const handleMouseMove = (e: MouseEvent) => {
       // Calculate new x and y, ensuring they stay within slide boundaries
-      const newX = Math.min(Math.max(e.clientX - dragOffset.x, 0), SLIDE_WIDTH - position.width);
-      const newY = Math.min(Math.max(e.clientY - dragOffset.y, 0), SLIDE_HEIGHT - position.height);
+      const newX = Math.max(0, Math.min(e.clientX - dragOffset.x, slideWidth - position.width));
+      const newY = Math.max(0, Math.min(e.clientY - dragOffset.y, slideHeight - position.height));
 
-      setPosition((prev: any) => ({
+      setPosition((prev) => ({
         ...prev,
         x: newX,
         y: newY,
@@ -61,28 +73,7 @@ export const useEditorPosition = (initialX: number = 0, initialY: number = 0) =>
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isDragging, dragOffset, position.width, position.height]);
-
-  // Center editor initially
-  useEffect(() => {
-    const centerEditor = () => {
-      const windowWidth = window.innerWidth;
-      const windowHeight = window.innerHeight;
-
-      setPosition((prev: any) => ({
-        ...prev,
-        x: Math.min(Math.max((windowWidth - prev.width) / 2, 0), SLIDE_WIDTH - prev.width),
-        y: Math.min(Math.max((windowHeight - prev.height) / 3, 0), SLIDE_HEIGHT - prev.height),
-      }));
-    };
-
-    centerEditor();
-    window.addEventListener("resize", centerEditor);
-
-    return () => {
-      window.removeEventListener("resize", centerEditor);
-    };
-  }, []);
+  }, [isDragging, dragOffset, slideWidth, slideHeight, position.width, position.height]);
 
   return { position, setPosition, isDragging, startDragging };
 };

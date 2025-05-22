@@ -735,8 +735,8 @@ console.log(selectedElement?.x,selectedElement?.y,"piopipi");
                           elements={elements}
                           initialX={el.x || 0}
                           initialY={el.y || 0}
-                          width={el.width || 320}
-                          height={el.height || 200}
+                          width={ 320}
+                          height={ 200}
                           isDraggable={true}
                           color={el.color}
                           fontFamily={el.fontFamily}

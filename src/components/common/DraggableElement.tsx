@@ -122,7 +122,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     }
   }, [selectedElement, index.original, width, height]);
 
-  // Update element in elements array and localStorage   
+  // Update element in elements array and localStorage
   const updateElement = (
     newX: number,
     newY: number,
@@ -152,7 +152,10 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   const handleClick = () => {
     // Only open text modal if no modal is open and editing is allowed
     if (type === "text" && !showTextModal && !showImageModal && isEditing) {
-      setSelectedElement({ ...elements[index.original], originalIndex: index.original });
+      setSelectedElement({
+        ...elements[index.original],
+        originalIndex: index.original,
+      });
       setShowTextModal(true);
       setShowImageModal(false);
       setCurrentSlide?.(activeSlide);
@@ -162,7 +165,12 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   // Handle image/GIF element click
   const handleImageClick = () => {
     // Only open image modal if no modal is open and editing is allowed
-    if ((type === "image" || type === "gif") && !showImageModal && !showTextModal && isEditing) {
+    if (
+      (type === "image" || type === "gif") &&
+      !showImageModal &&
+      !showTextModal &&
+      isEditing
+    ) {
       onImageClick(elements[index.original], index.original);
       setShowTextModal(false);
       setCurrentSlide?.(activeSlide);
@@ -175,16 +183,19 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     setShowImageModal(false);
     setSelectedElement(null);
   };
-console.log(selectedElement,"selectedElement");
+  console.log(selectedElement, "selectedElement");
 
   const isImageModalOpenForThisElement =
     showImageModal && selectedElement?.originalIndex === index.original;
-
+console.log(size, "size");
   return (
     <Rnd
       bounds="parent"
       position={position}
+
       size={type === "text" ? undefined : size}
+
+
       onDragStop={(_, d) => {
         setPosition({ x: d.x, y: d.y });
         updateElement(d.x, d.y);
@@ -199,33 +210,39 @@ console.log(selectedElement,"selectedElement");
         }
       }}
       disableDragging={!isDraggable}
-      enableResizing={isDraggable && (type === "image" || type === "gif") && isImageModalOpenForThisElement}
+      enableResizing={
+        isDraggable &&
+        (type === "image" || type === "gif") &&
+        isImageModalOpenForThisElement
+      }
       style={{
+        width: "100%",
+        height: "100%",
         opacity: isEditing ? 1 : 0.5,
         pointerEvents: "auto",
         cursor: isDraggable ? "move" : "default",
         transform: "none", // Explicitly remove transform
       }}
     >
-      {(type === "image" || type === "gif") && !isImageModalOpenForThisElement && (
-        <div onClick={handleImageClick}>
-        <img
-  src={content || "/placeholder.svg"}
-  alt="uploaded"
-  className="rounded-md pointer-events-none"
-  style={{
-    maxWidth: "100%",
-    maxHeight: "100%",
-    width: "100%",
-    height: "100%",
-    objectFit: "contain", // Or "cover" depending on your need
-    display: "block",
-    overflow: "hidden",
-  }}
-/>
+      {(type === "image" || type === "gif") &&
+        !isImageModalOpenForThisElement && (
+          <div onClick={handleImageClick}>
+            <img
+              src={content || "/placeholder.svg"}
+              alt="uploaded"
+              className="rounded-md pointer-events-none"
+              style={{
+                maxWidth: "100%",
+                maxHeight: "100%",
+                width: "100%",
+                height: "100%",
+                objectFit: "contain", // Or "cover" depending on your need
+                display: "block",
+                overflow: "hidden",
+              }}
+            />
 
-        
-          {/* <img
+            {/* <img
             src={content || "/placeholder.svg"}
             alt="uploaded"
             className="object-cover rounded-md pointer-events-none"
@@ -234,8 +251,8 @@ console.log(selectedElement,"selectedElement");
               height: size.height,
             }}
           /> */}
-        </div>
-      )}
+          </div>
+        )}
 
       {type === "text" && !showTextModal && (
         <div
@@ -252,37 +269,41 @@ console.log(selectedElement,"selectedElement");
             fontFamily,
             fontSize,
             fontWeight,
-             transform: "none",
+            transform: "none",
           }}
           onClick={handleClick}
           dangerouslySetInnerHTML={{ __html: content }}
         />
       )}
 
-      {showImageModal && selectedElement?.originalIndex === index.original && isEditing && (
-        <ImageEditor
-          onHide={closeModals}
-          setElements={setElements}
-          content={content}
-          elements={elements}
-          selectedElement={selectedElement}
-          cardIndex={index}
-          onDelete={() => onDelete(index.original)}
-        />
-      )}
+      {showImageModal &&
+        selectedElement?.originalIndex === index.original &&
+        isEditing && (
+          <ImageEditor
+            onHide={closeModals}
+            setElements={setElements}
+            content={content}
+            elements={elements}
+            selectedElement={selectedElement}
+            cardIndex={index}
+            onDelete={() => onDelete(index.original)}
+          />
+        )}
 
-      {showTextModal && selectedElement?.originalIndex === index.original && isEditing && (
-        <TextEditor
-          onHide={closeModals}
-          setElements={setElements}
-          content={content}
-          elements={elements}
-          selectedElement={selectedElement}
-          cardIndex={index}
-          Xposition={selectedElement?.x||0}
-          Yposition={selectedElement?.y||0}
-        />
-      )}
+      {showTextModal &&
+        selectedElement?.originalIndex === index.original &&
+        isEditing && (
+          <TextEditor
+            onHide={closeModals}
+            setElements={setElements}
+            content={content}
+            elements={elements}
+            selectedElement={selectedElement}
+            cardIndex={index}
+            Xposition={selectedElement?.x || 0}
+            Yposition={selectedElement?.y || 0}
+          />
+        )}
     </Rnd>
   );
 };
