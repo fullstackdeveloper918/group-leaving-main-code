@@ -532,6 +532,7 @@ const Custom: React.FC = () => {
     sendEditorData();
     router.push(`/envelop/${id}`);
   };
+console.log(selectedElement?.x,selectedElement?.y,"piopipi");
 
   return (
     <div className="card-carousel-container select-none" id="main-carousle">
@@ -715,6 +716,7 @@ const Custom: React.FC = () => {
                         Xposition={selectedElement?.x || 0}
                         Yposition={selectedElement?.y ||0}
                       />
+                     
                     )}
                   </div>    
                   {index === activeSlideIndex &&

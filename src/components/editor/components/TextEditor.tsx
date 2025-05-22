@@ -137,7 +137,14 @@ console.log(Yposition,"Yposition");
   };
 
   return (
-    <div className="flex flex-col w-full max-w-2xl editor-design">
+    <div className="flex flex-col w-full max-w-2xl "
+    
+    style={{
+        position: "absolute",
+        top: `${0}px`,
+        left: `${0}px`,
+        zIndex: 1000, // Ensure it appears above slide content
+      }}>
       <ResizableContainer
         position={position}
         setPosition={setPosition}
