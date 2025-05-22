@@ -279,8 +279,8 @@ console.log(selectedElement,"selectedElement");
           elements={elements}
           selectedElement={selectedElement}
           cardIndex={index}
-          Xposition={selectedElement?.x||""}
-          Yposition={selectedElement?.y||""}
+          Xposition={selectedElement?.x||0}
+          Yposition={selectedElement?.y||0}
         />
       )}
     </Rnd>

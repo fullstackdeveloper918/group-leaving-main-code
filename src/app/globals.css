@@ -1636,7 +1636,7 @@ html {
   color: #fff !important;
 }
 .editor-design {
-  /* position: absolute; */
+  position: absolute;
   z-index: 10000;
 }
 /* Carousel styling */

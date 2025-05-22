@@ -64,6 +64,9 @@ const TextEditor: React.FC<TextEditorProps> = ({
     isEditing: true,
     showEmailForm: true,
   });
+console.log(editorState,"editorState");
+console.log(Xposition,"Xposition");
+console.log(Yposition,"Yposition");
 
   const editorRef = useRef<HTMLTextAreaElement>(null);
   const { position, setPosition, isDragging, startDragging } = useEditorPosition();
@@ -93,7 +96,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
         type: "text",
         content: editorRef.current.value,
         slideIndex: cardIndex.activeSlide,
-        x: Xposition,
+         x: Xposition,
         y:Yposition,
         fontSize: editorState.fontSize,
         fontFamily: editorState.fontFamily,

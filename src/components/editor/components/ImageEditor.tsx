@@ -125,7 +125,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
         <img
           src={content || selectedElement?.content || "/placeholder.svg"}
           alt="uploaded"
-          className="w-full h-full object-cover pointer-events-none select-none"
+          className="w-full h-full object-contain pointer-events-none select-none"
           draggable={false}
         />
         <div className="px-2 pb-2">

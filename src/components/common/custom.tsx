@@ -712,8 +712,8 @@ const Custom: React.FC = () => {
                         elements={elements}
                         selectedElement={selectedElement}
                         cardIndex={{ activeSlide: activeSlideIndex }}
-                        Xposition={selectedElement?.x || ""}
-                        Yposition={selectedElement?.y || ""}
+                        Xposition={selectedElement?.x || 0}
+                        Yposition={selectedElement?.y ||0}
                       />
                     )}
                   </div>    
