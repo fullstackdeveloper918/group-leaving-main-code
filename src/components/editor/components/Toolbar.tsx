@@ -100,7 +100,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
     ));
 
   return (
-    <div className="p-2 border-b bg-white flex items-center flex-wrap gap-1">
+    <div className="p-2 border-b bg-white flex items-center  gap-1">
       {/* Font dropdown */}
       <div className="relative mr-1 flex items-center">
         <button

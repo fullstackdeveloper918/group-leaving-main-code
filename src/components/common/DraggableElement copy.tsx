@@ -1,9 +1,30 @@
-import type React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Rnd } from "react-rnd";
 import nookies from "nookies";
 import TextEditor from "../editor/components/TextEditor";
 import ImageEditor from "../editor/components/ImageEditor";
+
+// Interfaces
+interface UserInfo {
+  name: string;
+  email: string;
+  uuid?: string;
+}
+
+interface Element {
+  type: string;
+  content: string;
+  slideIndex: number;
+  x: number;
+  y: number;
+  width?: number;
+  height?: number;
+  fontSize?: string;
+  fontFamily?: string;
+  fontWeight?: string;
+  color?: string;
+  user_uuid?: string;
+}
 
 interface DraggableElementProps {
   content: string;
@@ -12,8 +33,8 @@ interface DraggableElementProps {
     original: number;
     activeSlide: number;
   };
-  setElements: React.Dispatch<React.SetStateAction<any[]>>;
-  elements: any[];
+  setElements: React.Dispatch<React.SetStateAction<Element[]>>;
+  elements: Element[];
   initialX: number;
   initialY: number;
   width?: number;
@@ -25,14 +46,15 @@ interface DraggableElementProps {
   fontWeight?: string;
   activeSlide: number;
   setCurrentSlide?: (index: number) => void;
+  showImageModal: boolean;
+  setShowImageModal: (value: boolean) => void;
+  selectedElement: any;
+  setSelectedElement: (element: any) => void;
+  onImageClick: (element: Element, index: number) => void;
+  onDelete: (index: number) => void;
 }
 
-interface UserInfo {
-  name: string;
-  email: string;
-  uuid?: string;
-}
-
+// DraggableElement Component
 export const DraggableElement: React.FC<DraggableElementProps> = ({
   content,
   type,
@@ -50,210 +72,211 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   fontWeight = "normal",
   activeSlide,
   setCurrentSlide,
+  showImageModal,
+  setShowImageModal,
+  selectedElement,
+  setSelectedElement,
+  onImageClick,
+  onDelete,
 }) => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [size, setSize] = useState({ width, height });
-  const [showModal, setShowModal] = useState(false);
-  const [selectedElement, setSelectedElement] = useState<any>(null);
-  const [showImageModal, setShowImageModal] = useState(false);
+  const [showTextModal, setShowTextModal] = useState(false);
   const isEditing = activeSlide === index.activeSlide;
-  console.log(showImageModal, "wojo354234");
-  console.log(showModal, "0988777");
-  console.log(elements, "content");
 
+  // Initialize userInfo from cookies
   useEffect(() => {
     const cookies = nookies.get();
-    const userInfoFromCookie = cookies.userInfo
+    const userInfoFromCookie: UserInfo | null = cookies.userInfo
       ? JSON.parse(cookies.userInfo)
       : null;
     setUserInfo(userInfoFromCookie);
   }, []);
 
-  // 🔄 Sync size and position when modal closes and element is updated
+  // Sync position and size with elements array
   useEffect(() => {
-    if (selectedElement) {
-      const updatedElement = elements[index.activeSlide];
-      if (updatedElement) {
+    const element = elements[index.original];
+    if (element) {
+      setPosition({
+        x: element.x || 0,
+        y: element.y || 0,
+      });
+      if (type === "image" || type === "gif") {
         setSize({
-          width: updatedElement.width,
-          height: updatedElement.height,
-        });
-        setPosition({
-          x: updatedElement.x,
-          y: updatedElement.y,
+          width: element.width || width,
+          height: element.height || height,
         });
       }
     }
-  }, [showImageModal, showModal, elements, selectedElement, index.activeSlide]);
+  }, [elements, index.original, type, width, height]);
 
+  // Update position and size when selectedElement changes
+  useEffect(() => {
+    if (selectedElement && selectedElement.originalIndex === index.original) {
+      setSize({
+        width: selectedElement.width || width,
+        height: selectedElement.height || height,
+      });
+      setPosition({ x: selectedElement.x, y: selectedElement.y });
+    }
+  }, [selectedElement, index.original, width, height]);
+
+  // Update element in elements array and localStorage
   const updateElement = (
     newX: number,
     newY: number,
     newWidth?: number,
     newHeight?: number
   ) => {
-    console.log(index.activeSlide, "0809797");
-
-    if (typeof index.original === "number") {
-      setElements((prev: any) => {
-        const updated = [...prev];
-        updated[index.activeSlide] = {
-          ...updated[index.activeSlide],
-          x: newX,
-          y: newY,
-          width: newWidth ?? updated[index.activeSlide].width,
-          height: newHeight ?? updated[index.activeSlide].height,
-          user_uuid: userInfo?.uuid,
-          color,
-          fontFamily,
-          fontSize,
-          fontWeight,
-        };
-        localStorage.setItem("slideElements", JSON.stringify(updated));
-        console.log(updated, "updated");
-
-        return updated;
-      });
-    }
+    setElements((prev) => {
+      const updated = [...prev];
+      updated[index.original] = {
+        ...updated[index.original],
+        x: newX,
+        y: newY,
+        width: newWidth ?? updated[index.original].width,
+        height: newHeight ?? updated[index.original].height,
+        user_uuid: userInfo?.uuid,
+        color,
+        fontFamily,
+        fontSize,
+        fontWeight,
+      };
+      localStorage.setItem("slideElements", JSON.stringify(updated));
+      return updated;
+    });
   };
 
+  // Handle text element click
   const handleClick = () => {
-    if (type === "text" && !showModal && isEditing) {
-      setSelectedElement(elements[index.activeSlide]);
-      setShowModal(true);
+    // Only open text modal if no modal is open and editing is allowed
+    if (type === "text" && !showTextModal && !showImageModal && isEditing) {
+      setSelectedElement({
+        ...elements[index.original],
+        originalIndex: index.original,
+      });
+      setShowTextModal(true);
+      setShowImageModal(false);
       setCurrentSlide?.(activeSlide);
     }
   };
 
-  const [modal, setModal] = useState<any>(false);
-  console.log(modal, "112221");
-  const [modalIndex, setModalIndex] = useState<number | null>(null);
-
-  // const handleImageClick = (index: number) => {
-  //   if ((type === "image" || type === "gif") && !showImageModal && isEditing) {
-  //     setModalIndex(index);
-  //     setSelectedElement(elements[index]);
-  //     setShowImageModal(true);
-  //     setCurrentSlide?.(activeSlide);
-  //   }
-  // };
-  console.log(elements[index.original], "456789o");
-
+  // Handle image/GIF element click
   const handleImageClick = () => {
-    if ((type === "image" || type === "gif") && !showImageModal && isEditing) {
-      setSelectedElement(elements[index.activeSlide]);
-      setShowImageModal(true);
+    // Only open image modal if no modal is open and editing is allowed
+    if (
+      (type === "image" || type === "gif") &&
+      !showImageModal &&
+      !showTextModal &&
+      isEditing
+    ) {
+      onImageClick(elements[index.original], index.original);
+      setShowTextModal(false);
       setCurrentSlide?.(activeSlide);
     }
   };
+
+  // Close all modals
   const closeModals = () => {
-    setShowModal(false);
-    setModalIndex(null);
+    setShowTextModal(false);
     setShowImageModal(false);
     setSelectedElement(null);
   };
+  console.log(selectedElement, "selectedElement");
 
-  const handleDelete = () => {
-    setElements((prev) => prev.filter((_, i) => i !== index.activeSlide));
-  };
-
-  console.log(
-    activeSlide,
-    showModal,
-    selectedElement,
-    isEditing,
-    "Here to fix ossies"
-  );
-
+  const isImageModalOpenForThisElement =
+    showImageModal && selectedElement?.originalIndex === index.original;
+  console.log(content, selectedElement, "size here to set");
   return (
-    <>
-      <Rnd
-        bounds="parent"
-        position={position}
-        size={type === "text" ? undefined : size}
-        onDragStop={(_, d) => {
-          setPosition({ x: d.x, y: d.y });
-          updateElement(d.x, d.y);
-        }}
-        onResizeStop={(_, __, ref, ___, pos) => {
-          if (type !== "text") {
-            const newWidth = parseInt(ref.style.width);
-            const newHeight = parseInt(ref.style.height);
-            setSize({ width: newWidth, height: newHeight });
-            setPosition(pos);
-            updateElement(pos.x, pos.y, newWidth, newHeight);
-          }
-        }}
-        disableDragging={!isDraggable}
-        enableResizing={isDraggable && (type === "image" || type === "gif")}
-        style={{
-          opacity: isEditing ? 1 : 0.5,
-          pointerEvents: "auto",
-          cursor: isDraggable ? "move" : "default",
-        }}
-      >
-        {/* IMAGE BLOCK */}
-        {/* {(type === "image" || type === "gif") && (
-          <>
-            {modalIndex === index.original ? (
-              <img
-                src={content || "/placeholder.svg"}
-                alt="uploaded"
-                className="object-cover rounded-md pointer-events-none"
-              />
-            ) : (
-              <div
-                onClick={() => {
-                  if (modalIndex === null) handleImageClick(index.original);
-                }}
-                className={
-                  modalIndex !== null ? "pointer-events-none opacity-50" : ""
-                }
-              >
-                <img
-                  src={content || "/placeholder.svg"}
-                  alt="uploaded"
-                  className="object-cover rounded-md pointer-events-none"
-                />
-              </div>
-            )}
-          </>
-        )} */}
-        {(type === "image" || type === "gif") && !showImageModal && (
+    <Rnd
+    className={type === "text" ? "editor-react-drag" :""}
+      bounds="parent"
+      position={position}
+      size={type === "text" ? undefined : size}
+      onDragStop={(_, d) => {
+        setPosition({ x: d.x, y: d.y });
+        updateElement(d.x, d.y);
+      }}
+      onResizeStop={(_, __, ref, ___, pos) => {
+        if (type !== "text" && isImageModalOpenForThisElement) {
+          const newWidth = parseInt(ref.style.width);
+          const newHeight = parseInt(ref.style.height);
+          setSize({ width: newWidth, height: newHeight });
+          setPosition(pos);
+          updateElement(pos.x, pos.y, newWidth, newHeight);
+        }
+      }}
+      disableDragging={!isDraggable}
+      enableResizing={
+        isDraggable &&
+        (type === "image" || type === "gif") &&
+        isImageModalOpenForThisElement
+      }
+      style={{
+        width: "100%",
+        height: "100%",
+        opacity: isEditing ? 1 : 0.5,
+        pointerEvents: "auto",
+        cursor: isDraggable ? "move" : "default",
+        transform: "none", // Explicitly remove transform
+      }}
+    >
+      {(type === "image" || type === "gif") &&
+        !isImageModalOpenForThisElement && (
           <div onClick={handleImageClick}>
             <img
               src={content || "/placeholder.svg"}
               alt="uploaded"
-              className="object-cover rounded-md pointer-events-none"
+              className="rounded-md pointer-events-none"
+              style={{
+                maxWidth: "100%",
+                maxHeight: "100%",
+                width: "100%",
+                height: "100%",
+                objectFit: "contain", // Or "cover" depending on your need
+                display: "block",
+                overflow: "hidden",
+              }}
             />
+
+            {/* <img
+            src={content || "/placeholder.svg"}
+            alt="uploaded"
+            className="object-cover rounded-md pointer-events-none"
+            style={{
+              width: size.width,
+              height: size.height,
+            }}
+          /> */}
           </div>
         )}
 
-        {/* TEXT BLOCK */}
-        {type === "text" && !showModal && (
-          <div
-            className="text-sm"
-            style={{
-              pointerEvents: isEditing ? "auto" : "none",
-              opacity: isEditing ? 1 : 0.5,
-              cursor: isEditing ? "pointer" : "not-allowed",
-              userSelect: "none",
-              width: "100%",
-              height: "100%",
-              padding: "8px",
-              color,
-              fontFamily,
-              fontSize,
-              fontWeight,
-            }}
-            onClick={handleClick}
-            dangerouslySetInnerHTML={{ __html: content }}
-          />
-        )}
+      {type === "text" && !showTextModal && (
+        <div
+          className="text-sm"
+          style={{
+            pointerEvents: isEditing ? "auto" : "none",
+            opacity: isEditing ? 1 : 0.5,
+            cursor: isEditing ? "pointer" : "not-allowed",
+            userSelect: "none",
+            width: "100%",
+            height: "100%",
+            padding: "8px",
+            color,
+            fontFamily,
+            fontSize,
+            fontWeight,
+            transform: "none",
+          }}
+          onClick={handleClick}
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
+      )}
 
-        {/* IMAGE EDITOR MODAL */}
-        {showImageModal && selectedElement && isEditing && (
+      {showImageModal &&
+        selectedElement?.originalIndex === index.original &&
+        isEditing && (
           <ImageEditor
             onHide={closeModals}
             setElements={setElements}
@@ -261,12 +284,13 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
             elements={elements}
             selectedElement={selectedElement}
             cardIndex={index}
-            onDelete={handleDelete}
+            onDelete={() => onDelete(index.original)}
           />
         )}
 
-        {/* TEXT EDITOR MODAL */}
-        {showModal && selectedElement && isEditing && (
+      {showTextModal &&
+        selectedElement?.originalIndex === index.original &&
+        isEditing && (
           <TextEditor
             onHide={closeModals}
             setElements={setElements}
@@ -274,11 +298,10 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
             elements={elements}
             selectedElement={selectedElement}
             cardIndex={index}
-             Xposition={selectedElement?.x||""}
-          Yposition={selectedElement?.y||""}
+            Xposition={selectedElement?.x || 0}
+            Yposition={selectedElement?.y || 0}
           />
         )}
-      </Rnd>
-    </>
+    </Rnd>
   );
 };

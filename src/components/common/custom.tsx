@@ -26,10 +26,10 @@ import { FaChevronRight, FaChevronLeft } from "react-icons/fa6";
 import "quill-emoji/dist/quill-emoji.css";
 import { Quill } from "react-quill";
 import "quill-emoji";
-import { toast } from "react-toastify";
 import TextEditor from "../editor/components/TextEditor";
 import { DraggableElement } from "./DraggableElement";
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 interface UserInfo {
   name: string;
   email: string;
@@ -535,6 +535,8 @@ const Custom: React.FC = () => {
 console.log(selectedElement?.x,selectedElement?.y,"piopipi");
 
   return (
+
+    <><ToastContainer/>
     <div className="card-carousel-container select-none" id="main-carousle">
       <div className="editor_option" style={{ marginBottom: "15px" }}>
         <div>
@@ -735,7 +737,7 @@ console.log(selectedElement?.x,selectedElement?.y,"piopipi");
                           elements={elements}
                           initialX={el.x || 0}
                           initialY={el.y || 0}
-                          width={ 320}
+                          width={320}
                           height={ 200}
                           isDraggable={true}
                           color={el.color}
@@ -750,6 +752,7 @@ console.log(selectedElement?.x,selectedElement?.y,"piopipi");
                           setSelectedElement={setSelectedElement}
                           onImageClick={handleImageClick}
                           onDelete={handleDeleteElement}
+                          toast={toast}
                         />
                       ))}
                 </div>
@@ -851,6 +854,8 @@ console.log(selectedElement?.x,selectedElement?.y,"piopipi");
         </button>
       </Modal>
     </div>
+
+    </>
   );
 };
 

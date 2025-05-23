@@ -52,6 +52,7 @@ interface DraggableElementProps {
   setSelectedElement: (element: any) => void;
   onImageClick: (element: Element, index: number) => void;
   onDelete: (index: number) => void;
+  toast: (element: any) => void;
 }
 
 // DraggableElement Component
@@ -78,6 +79,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   setSelectedElement,
   onImageClick,
   onDelete,
+  toast
 }) => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [position, setPosition] = useState({ x: initialX, y: initialY });
@@ -183,47 +185,46 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     setShowImageModal(false);
     setSelectedElement(null);
   };
-  console.log(selectedElement, "selectedElement");
+  console.log(content, "selectedElement");
 
   const isImageModalOpenForThisElement =
     showImageModal && selectedElement?.originalIndex === index.original;
-console.log(size, "size");
+  console.log(content, selectedElement,size,position    , "size here to set");
   return (
-    <Rnd
-      bounds="parent"
-      position={position}
-
-      size={type === "text" ? undefined : size}
-
-
-      onDragStop={(_, d) => {
-        setPosition({ x: d.x, y: d.y });
-        updateElement(d.x, d.y);
-      }}
-      onResizeStop={(_, __, ref, ___, pos) => {
-        if (type !== "text" && isImageModalOpenForThisElement) {
-          const newWidth = parseInt(ref.style.width);
-          const newHeight = parseInt(ref.style.height);
-          setSize({ width: newWidth, height: newHeight });
-          setPosition(pos);
-          updateElement(pos.x, pos.y, newWidth, newHeight);
-        }
-      }}
-      disableDragging={!isDraggable}
-      enableResizing={
-        isDraggable &&
-        (type === "image" || type === "gif") &&
-        isImageModalOpenForThisElement
-      }
-      style={{
-        width: "100%",
-        height: "100%",
-        opacity: isEditing ? 1 : 0.5,
-        pointerEvents: "auto",
-        cursor: isDraggable ? "move" : "default",
-        transform: "none", // Explicitly remove transform
-      }}
-    >
+         <Rnd
+className={`${type === "text" ? "editor-react-drag" : ""} ${showTextModal ? "editor-transform" : ""}`.trim()}
+          id={showTextModal ? "editor-transform" :""}
+            bounds="parent"
+            position={position}
+            size={type === "text" ? undefined : size}
+            onDragStop={(_, d) => {
+              setPosition({ x: d.x, y: d.y });
+              updateElement(d.x, d.y);
+            }}
+            onResizeStop={(_, __, ref, ___, pos) => {
+              if (type !== "text" && isImageModalOpenForThisElement) {
+                const newWidth = parseInt(ref.style.width);
+                const newHeight = parseInt(ref.style.height);
+                setSize({ width: newWidth, height: newHeight });
+                setPosition(pos);
+                updateElement(pos.x, pos.y, newWidth, newHeight);
+              }
+            }}
+            disableDragging={!isDraggable}
+            enableResizing={
+              isDraggable &&
+              (type === "image" || type === "gif") &&
+              isImageModalOpenForThisElement
+            }
+            style={{
+              width: "100%",
+              height: "100%",
+              opacity: isEditing ? 1 : 0.5,
+              pointerEvents: "auto",
+              cursor: isDraggable ? "move" : "default",
+              transform: "none", // Explicitly remove transform
+            }}
+          >
       {(type === "image" || type === "gif") &&
         !isImageModalOpenForThisElement && (
           <div onClick={handleImageClick}>
@@ -255,26 +256,29 @@ console.log(size, "size");
         )}
 
       {type === "text" && !showTextModal && (
-        <div
-          className="text-sm"
-          style={{
-            pointerEvents: isEditing ? "auto" : "none",
-            opacity: isEditing ? 1 : 0.5,
-            cursor: isEditing ? "pointer" : "not-allowed",
-            userSelect: "none",
-            width: "100%",
-            height: "100%",
-            padding: "8px",
-            color,
-            fontFamily,
-            fontSize,
-            fontWeight,
-            transform: "none",
-          }}
-          onClick={handleClick}
-          dangerouslySetInnerHTML={{ __html: content }}
-        />
-      )}
+  <div
+    className="text-sm"
+    style={{
+      pointerEvents: isEditing ? "auto" : "none",
+      opacity: isEditing ? 1 : 0.5,
+      cursor: isEditing ? "pointer" : "not-allowed",
+      userSelect: "none",
+      width: "100%",
+      height: "100%",
+      padding: "8px",
+      color,
+      fontFamily,
+      fontSize,
+      fontWeight,
+      transform: "none",
+    }}
+    onClick={handleClick}
+  >
+    <div className="p-2" dangerouslySetInnerHTML={{ __html: content?.split('\n')[0] || "" }} />
+    <div className="p-2 text-base font-normal">{content?.split('\n')[1] || ""}</div>
+  </div>
+)}
+
 
       {showImageModal &&
         selectedElement?.originalIndex === index.original &&

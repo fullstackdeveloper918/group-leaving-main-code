@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useEditorPosition } from "../hooks/useEditorPosition";
 import { FaTrash } from "react-icons/fa";
 import ImageResizableContainer from "./ImageResizableContainer";
+import { toast } from "react-toastify";
 
 interface ImageEditorProps {
   onHide: () => void;
@@ -29,6 +30,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
     selectedElement?.x || 0,
     // selectedElement?.y || 0
   );
+const [loading,setLoading] = useState(false)
 
   useEffect(() => {
     if (selectedElement) {
@@ -74,6 +76,8 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
 };
 
   const handleSave = () => {
+setLoading(true)
+
     const imageUrl = content || selectedElement?.content || "";
     if (!imageUrl) {
       console.warn("No image URL provided");
@@ -104,7 +108,11 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
       setElements((prev:any) => [...prev, newElement]);
     }
 
-    onHide();
+    toast.success("Saved Changes"); // ✅ Trigger immediately
+setTimeout(() => {
+  setLoading(false);
+  onHide(); // Close modal after toast shows
+}, 2000); // 1 second is usually enough
   };
 
   const handleDelete = () => {
@@ -141,7 +149,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
                 onClick={handleSave}
                 className="px-4 py-2 bg-[#061178] text-white rounded hover:bg-indigo-800 transition"
               >
-                Save
+                    {loading ? "Saving..." :"Save"}
               </button>
               <button
                 onClick={handleDelete}

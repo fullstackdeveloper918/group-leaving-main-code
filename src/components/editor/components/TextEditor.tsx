@@ -3,6 +3,7 @@ import { FaTrash } from "react-icons/fa";
 import { useEditorPosition } from "../hooks/useEditorPosition";
 import Toolbar from "./Toolbar";
 import ResizableContainer from "./ResizableContainer";
+import { toast } from "react-toastify";
 
 // Interfaces
 interface Element {
@@ -21,6 +22,8 @@ interface Element {
 }
 
 interface EditorState {
+  message: string;
+  name: string;
   content: string;
   fontSize: string;
   fontFamily: string;
@@ -44,7 +47,6 @@ interface TextEditorProps {
   Yposition: number;
 }
 
-// TextEditor Component
 const TextEditor: React.FC<TextEditorProps> = ({
   onHide,
   setElements,
@@ -55,30 +57,35 @@ const TextEditor: React.FC<TextEditorProps> = ({
   Xposition,
   Yposition,
 }) => {
-  const [editorState, setEditorState] = useState<EditorState>({
-    content: content || (selectedElement ? selectedElement.content : ""),
-    fontSize: selectedElement?.fontSize || "20px",
-    fontFamily: selectedElement?.fontFamily || "Arial",
-    fontWeight: selectedElement?.fontWeight || "600",
-    color: selectedElement?.color || "#37CAEC",
-    isEditing: true,
-    showEmailForm: true,
+  const [editorState, setEditorState] = useState<EditorState>(() => {
+    const content = selectedElement?.content || "";
+    const [message = "", name = ""] = content.split("\n");
+
+    return {
+      message,
+      name,
+      content,
+      fontSize: selectedElement?.fontSize || "20px",
+      fontFamily: selectedElement?.fontFamily || "Arial",
+      fontWeight: selectedElement?.fontWeight || "600",
+      color: selectedElement?.color || "#37CAEC",
+      isEditing: true,
+      showEmailForm: true,
+    };
   });
 
-  console.log(selectedElement, "selectedElementlalala");
+  const [loading, setLoading] = useState(false);
   const editorRef = useRef<HTMLTextAreaElement>(null);
-  const slideRef = useRef<HTMLDivElement>(null); // Reference to slide container
+  const slideRef = useRef<HTMLDivElement>(null);
 
-  // Initialize useEditorPosition with slide dimensions
-  const { position, setPosition, isDragging, startDragging } =
-    useEditorPosition({
-      initialX: selectedElement?.x ?? Xposition,
-      initialY: selectedElement?.y ?? Yposition,
-      slideWidth: 500,
-      slideHeight: 650,
-      editorWidth: selectedElement?.width ?? 375,
-      editorHeight: selectedElement?.height ?? 75,
-    });
+  const { position, setPosition, isDragging, startDragging } = useEditorPosition({
+    initialX: selectedElement?.x ?? Xposition,
+    initialY: selectedElement?.y ?? Yposition,
+    slideWidth: 500,
+    slideHeight: 650,
+    editorWidth: selectedElement?.width ?? 375,
+    editorHeight: selectedElement?.height ?? 100,
+  });
 
   // Sync editor state and position
   useEffect(() => {
@@ -135,7 +142,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
     };
 
     const handleMouseUp = () => {
-      // setIsDragging(false);
+      // setIsDragging(false); // Uncomment if needed
     };
 
     document.addEventListener("mousemove", handleMouseMove);
@@ -155,33 +162,49 @@ const TextEditor: React.FC<TextEditorProps> = ({
 
   // Save the edited or new element
   const handleSave = () => {
-    if (editorRef.current) {
-      const newElement: Element = {
-        type: "text",
-        content: editorRef.current.value,
-        slideIndex: cardIndex.activeSlide,
-        x: position.x,
-        y: position.y,
-        fontSize: editorState.fontSize,
-        fontFamily: editorState.fontFamily,
-        fontWeight: editorState.fontWeight,
-        color: editorState.color,
-      };
+    setLoading(true);
 
-      if (selectedElement && cardIndex.original !== undefined) {
-        // Update existing element
-        setElements((prev) =>
-          prev.map((element, idx) =>
-            idx === cardIndex.original ? { ...element, ...newElement } : element
-          )
-        );
-      } else {
-        // Add new element
-        setElements((prev) => [...prev, newElement]);
-      }
+    const combinedContent = `${editorState.message}\n${editorState.name}`;
 
-      onHide(); // Close modal
+    const newElement: Element = {
+      type: "text",
+      content: combinedContent,
+      slideIndex: cardIndex.activeSlide,
+      x: position.x, // Ensure current position is used
+      y: position.y,
+      width: position.width,
+      height: position.height,
+      fontSize: editorState.fontSize,
+      fontFamily: editorState.fontFamily,
+      fontWeight: editorState.fontWeight,
+      color: editorState.color,
+    };
+
+    // Save to React state
+    if (selectedElement && cardIndex.original !== undefined) {
+      setElements((prev) =>
+        prev.map((element, idx) =>
+          idx === cardIndex.original ? { ...element, ...newElement } : element
+        )
+      );
+    } else {
+      setElements((prev) => [...prev, newElement]);
     }
+
+    localStorage.setItem(
+      "textEditorData",
+      JSON.stringify({
+        message: editorState.message,
+        name: editorState.name,
+      })
+    );
+
+    toast.success("Saved Changes");
+
+    setTimeout(() => {
+      setLoading(false);
+      onHide();
+    }, 2000);
   };
 
   // Delete the selected element
@@ -191,7 +214,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
         prev.filter((_, idx) => idx !== cardIndex.original)
       );
     }
-    onHide(); // Close modal
+    onHide();
   };
 
   // Execute document commands for formatting
@@ -245,13 +268,13 @@ const TextEditor: React.FC<TextEditorProps> = ({
         top: `${position.y}px`,
         left: `${position.x}px`,
         zIndex: 1000,
-        // width: "79.5%"
+        // Removed transform: none !important
       }}
     >
       <div
         style={{
           position: "absolute",
-          top: "-50px", // Adjust height above the editor as needed
+          top: "-50px",
           left: 0,
           width: "100%",
           zIndex: 1010,
@@ -267,62 +290,76 @@ const TextEditor: React.FC<TextEditorProps> = ({
         />
       </div>
       <ResizableContainer
-        // position={position}
-        // setPosition={setPosition}
         isDragging={isDragging}
         startDragging={startDragging}
-        onResize={handleResize} // Pass resize callback
+        onResize={handleResize}
         width={position.width}
-        height={position.height}>
-        <div className="flex flex-col w-full rounded-md shadow-md ">
-          <textarea
-            ref={editorRef}
-            placeholder="Type your text here..."
-            value={editorState.content}
-            onChange={handleContentChange}
-            className=" focus:outline-none m-0 px-1 bg-transparent rounded-mdwhitespace-pre-wrap "
-            style={{
-              fontFamily: editorState.fontFamily,
-              color: editorState.color,
-              fontSize: editorState.fontSize,
-              fontWeight: editorState.fontWeight,
-              cursor: isDragging ? "move" : "text",
-              // border: "2px solid #061178",
-            }}
-          /> 
-    </div>
-     </ResizableContainer>
-          <div className="px-2 pb-2 bg-white">
-            <div className="border-t bg-white pt-2 px-4">
-              <input
-                type="email"
-                placeholder="Your email (optional)"
-                className="w-full px-0 bg-transparent py-2 pt-4 border-bottom border-gray-200 focus:outline-none focus:border-blue-400 transition-colors"
-              />
-              <div className="flex justify-center bg-white gap-2 py-2">
-                <button
-                  onClick={onHide}
-                  className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition editor-cancel"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSave}
-                  className="px-4 py-2 bg-[#061178] text-white rounded flex items-center gap-1 hover:bg-indigo-800 transition editor-save"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={handleDelete}
-                  className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition editor-delete"
-                >
-                  <FaTrash />
-                </button>
-              </div>
-            </div>
+        height={position.height}
+      >
+        <div className="flex flex-col w-full rounded-md shadow-md">
+          <div className="flex flex-col gap-2 p-2">
+            <input
+              placeholder="Enter your message here"
+              value={editorState.message}
+              onChange={(e) =>
+                setEditorState((prev) => ({ ...prev, message: e.target.value }))
+              }
+              className="resize-none outline-none placeholder-pink-400"
+              style={{
+                fontFamily: editorState.fontFamily,
+                fontSize: editorState.fontSize,
+                fontWeight: editorState.fontWeight,
+                color: editorState.color,
+              }}
+            />
+            <input
+              type="text"
+              placeholder="Your name"
+              value={editorState.name}
+              onChange={(e) =>
+                setEditorState((prev) => ({ ...prev, name: e.target.value }))
+              }
+              className="outline-none placeholder-pink-400"
+              style={{
+                fontFamily: editorState.fontFamily,
+                fontSize: "16px",
+                fontWeight: "normal",
+                color: editorState.color,
+              }}
+            />
           </div>
         </div>
-
+      </ResizableContainer>
+      <div className="px-2 pb-2 bg-white">
+        <div className="border-t bg-white pt-2 px-4">
+          <input
+            type="email"
+            placeholder="Your email (optional)"
+            className="w-full px-0 bg-transparent py-2 pt-4 border-bottom border-gray-200 focus:outline-none focus:border-blue-400 transition-colors"
+          />
+          <div className="flex justify-center bg-white gap-2 py-2">
+            <button
+              onClick={onHide}
+              className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition editor-cancel"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSave}
+              className="px-4 py-2 bg-[#061178] text-white rounded flex items-center gap-1 hover:bg-indigo-800 transition editor-save"
+            >
+              {loading ? "Saving..." : "Save"}
+            </button>
+            <button
+              onClick={handleDelete}
+              className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition editor-delete"
+            >
+              <FaTrash />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
