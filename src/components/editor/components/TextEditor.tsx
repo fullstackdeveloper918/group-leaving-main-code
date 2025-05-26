@@ -65,10 +65,10 @@ const TextEditor: React.FC<TextEditorProps> = ({
       message,
       name,
       content,
-      fontSize: selectedElement?.fontSize || "20px",
-      fontFamily: selectedElement?.fontFamily || "Arial",
-      fontWeight: selectedElement?.fontWeight || "600",
-      color: selectedElement?.color || "#37CAEC",
+      fontSize: selectedElement?.fontSize || "22px",
+      fontFamily: selectedElement?.fontFamily || "Boogaloo",
+      fontWeight: selectedElement?.fontWeight || "500",
+      color: selectedElement?.color || "#FF8A00",
       isEditing: true,
       showEmailForm: true,
     };
@@ -79,8 +79,8 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const slideRef = useRef<HTMLDivElement>(null);
 
   const { position, setPosition, isDragging, startDragging } = useEditorPosition({
-    initialX: selectedElement?.x ?? Xposition,
-    initialY: selectedElement?.y ?? Yposition,
+    initialX: 0,
+    initialY: 0 ,
     slideWidth: 500,
     slideHeight: 650,
     editorWidth: selectedElement?.width ?? 375,
@@ -88,71 +88,71 @@ const TextEditor: React.FC<TextEditorProps> = ({
   });
 
   // Sync editor state and position
-  useEffect(() => {
-    setEditorState((prevState) => ({
-      ...prevState,
-      content: content || (selectedElement ? selectedElement.content : ""),
-      fontSize: selectedElement?.fontSize || prevState.fontSize,
-      fontFamily: selectedElement?.fontFamily || prevState.fontFamily,
-      fontWeight: selectedElement?.fontWeight || prevState.fontWeight,
-      color: selectedElement?.color || prevState.color,
-    }));
+  // useEffect(() => {
+  //   setEditorState((prevState) => ({
+  //     ...prevState,
+  //     content: content || (selectedElement ? selectedElement.content : ""),
+  //     fontSize: selectedElement?.fontSize || prevState.fontSize,
+  //     fontFamily: selectedElement?.fontFamily || prevState.fontFamily,
+  //     fontWeight: selectedElement?.fontWeight || prevState.fontWeight,
+  //     color: selectedElement?.color || prevState.color,
+  //   }));
 
-    setPosition((prev) => ({
-      ...prev,
-      x: Math.max(
-        0,
-        Math.min(Xposition, 500 - (selectedElement?.width || prev.width))
-      ),
-      y: Math.max(
-        0,
-        Math.min(Yposition, 650 - (selectedElement?.height || prev.height))
-      ),
-      width: selectedElement?.width || prev.width,
-      height: selectedElement?.height || prev.height,
-    }));
-  }, [content, selectedElement, Xposition, Yposition, setPosition]);
+  //   setPosition((prev) => ({
+  //     ...prev,
+  //     x: Math.max(
+  //       0,
+  //       Math.min(Xposition, 500 - (selectedElement?.width || prev.width))
+  //     ),
+  //     y: Math.max(
+  //       0,
+  //       Math.min(Yposition, 650 - (selectedElement?.height || prev.height))
+  //     ),
+  //     width: selectedElement?.width || prev.width,
+  //     height: selectedElement?.height || prev.height,
+  //   }));
+  // }, [content, selectedElement, Xposition, Yposition, setPosition]);
 
   // Adjust drag coordinates to be relative to the slide
-  useEffect(() => {
-    if (!isDragging || !slideRef.current) return;
+  // useEffect(() => {
+  //   if (!isDragging || !slideRef.current) return;
 
-    const slideRect = slideRef.current.getBoundingClientRect();
-    const handleMouseMove = (e: MouseEvent) => {
-      const newX = Math.max(
-        0,
-        Math.min(
-          e.clientX - slideRect.left - position.width / 2,
-          500 - position.width
-        )
-      );
-      const newY = Math.max(
-        0,
-        Math.min(
-          e.clientY - slideRect.top - position.height / 2,
-          650 - position.height
-        )
-      );
+  //   const slideRect = slideRef.current.getBoundingClientRect();
+  //   const handleMouseMove = (e: MouseEvent) => {
+  //     const newX = Math.max(
+  //       0,
+  //       Math.min(
+  //         e.clientX - slideRect.left - position.width / 2,
+  //         500 - position.width
+  //       )
+  //     );
+  //     const newY = Math.max(
+  //       0,
+  //       Math.min(
+  //         e.clientY - slideRect.top - position.height / 2,
+  //         650 - position.height
+  //       )
+  //     );
 
-      setPosition((prev) => ({
-        ...prev,
-        x: newX,
-        y: newY,
-      }));
-    };
+  //     setPosition((prev) => ({
+  //       ...prev,
+  //       x: newX,
+  //       y: newY,
+  //     }));
+  //   };
 
-    const handleMouseUp = () => {
-      // setIsDragging(false); // Uncomment if needed
-    };
+  //   const handleMouseUp = () => {
+  //     // setIsDragging(false); // Uncomment if needed
+  //   };
 
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
+  //   document.addEventListener("mousemove", handleMouseMove);
+  //   document.addEventListener("mouseup", handleMouseUp);
 
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [isDragging, position.width, position.height, setPosition]);
+  //   return () => {
+  //     document.removeEventListener("mousemove", handleMouseMove);
+  //     document.removeEventListener("mouseup", handleMouseUp);
+  //   };
+  // }, [isDragging, position.width, position.height, setPosition]);
 
   // Handle text content changes
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -163,6 +163,14 @@ const TextEditor: React.FC<TextEditorProps> = ({
   // Save the edited or new element
   const handleSave = () => {
     setLoading(true);
+    if(!editorState.message){
+      setLoading(false)
+      return toast.error("Please add your message")
+    }
+    if(!editorState.name){
+      setLoading(false)
+      return toast.error("Please add your name")
+    }
 
     const combinedContent = `${editorState.message}\n${editorState.name}`;
 
@@ -297,34 +305,37 @@ const TextEditor: React.FC<TextEditorProps> = ({
         height={position.height}
       >
         <div className="flex flex-col w-full rounded-md shadow-md">
-          <div className="flex flex-col gap-2 p-2">
+          <div className="flex flex-col gap-1 p-2">
             <input
               placeholder="Enter your message here"
               value={editorState.message}
               onChange={(e) =>
                 setEditorState((prev) => ({ ...prev, message: e.target.value }))
               }
-              className="resize-none outline-none placeholder-pink-400"
+              className="resize-none outline-none text-editor-place"
               style={{
                 fontFamily: editorState.fontFamily,
                 fontSize: editorState.fontSize,
                 fontWeight: editorState.fontWeight,
                 color: editorState.color,
+                background:"transparent"
               }}
             />
             <input
+            
               type="text"
               placeholder="Your name"
               value={editorState.name}
               onChange={(e) =>
                 setEditorState((prev) => ({ ...prev, name: e.target.value }))
               }
-              className="outline-none placeholder-pink-400"
+              className={`outline-none text-editor-place `}
               style={{
                 fontFamily: editorState.fontFamily,
-                fontSize: "16px",
+                fontSize: "18px",
                 fontWeight: "normal",
                 color: editorState.color,
+                background:"transparent"
               }}
             />
           </div>
@@ -339,7 +350,10 @@ const TextEditor: React.FC<TextEditorProps> = ({
           />
           <div className="flex justify-center bg-white gap-2 py-2">
             <button
-              onClick={onHide}
+             onClick={(e) => {
+    e.preventDefault();
+    onHide();
+  }}
               className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition editor-cancel"
             >
               Cancel

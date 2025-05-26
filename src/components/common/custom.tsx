@@ -252,13 +252,16 @@ const Custom: React.FC = () => {
       card_img: SlideImg_5,
     };
 
-    setSlides((prevSlides: any[]) => [...prevSlides, newSlide]);
-    const newSlideIndex = slides.length;
-    setActiveSlideIndex(newSlideIndex);
+      const lastSlideIndex = slides.length - 1;
+
+
+    // setSlides((prevSlides: any[]) => [...prevSlides, newSlide]);
+    // const newSlideIndex = slides.length;
+    setActiveSlideIndex(lastSlideIndex);
     setShowModal(true);
 
     if (sliderRef.current) {
-      sliderRef.current.value = newSlideIndex.toString();
+      sliderRef.current.value = lastSlideIndex.toString();
     }
   };
 
@@ -283,49 +286,58 @@ const Custom: React.FC = () => {
   };
 
   // Handle image upload
-  const handleImageUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+const handleImageUpload = async (
+  event: React.ChangeEvent<HTMLInputElement>
+) => {
+  const file = event.target.files?.[0];
+  if (!file) return;
 
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      const response = await fetch(
-        "https://dating.goaideme.com/card/update-editor-messages",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-      if (!response.ok) throw new Error("Failed to upload image");
-      const data = await response.json();
-      if (data?.file) {
-        const imageUrl = data.file;
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          if (activeSlideIndex !== null) {
-            const newImage = {
-              type: "image",
-              content: `https://dating.goaideme.com/${imageUrl}`,
-              slideIndex: activeSlideIndex,
-              x: 0,
-              y: 0,
-              width: 320,
-              height: 200,
-              user_uuid: userInfo?.uuid,
-            };
-            setElements((prevElements) => [...prevElements, newImage]);
-            sendEditorData();
-          }
-        };
-        reader.readAsDataURL(file);
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await fetch(
+      "https://dating.goaideme.com/card/update-editor-messages",
+      {
+        method: "POST",
+        body: formData,
       }
-    } catch (error) {
-      console.error("Error uploading image:", error);
+    );
+    if (!response.ok) throw new Error("Failed to upload image");
+
+    const data = await response.json();
+  if (data?.file) {
+  const imageUrl = data.file;
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    if (activeSlideIndex !== null) {
+      const newImage = {
+        type: "image",
+        content: `https://dating.goaideme.com/${imageUrl}`,
+        slideIndex: activeSlideIndex === 0 ? slides.length - 1 : activeSlideIndex,
+        x: 0,
+        y: 0,
+        width: 320,
+        height: 200,
+        user_uuid: userInfo?.uuid,
+      };
+
+      setElements((prevElements) => [...prevElements, newImage]);
+
+      // ✅ If activeSlideIndex is 0, switch to the last slide
+      if (activeSlideIndex === 0) {
+        setActiveSlideIndex(slides.length - 1);
+      }
+
+      sendEditorData();
     }
   };
+  reader.readAsDataURL(file);
+}
+
+  } catch (error) {
+    console.error("Error uploading image:", error);
+  }
+};
 
   // Fetch GIFs or stickers
   const fetchGifs = async (term: string, type: "GIF" | "Sticker" = "GIF") => {
@@ -350,6 +362,9 @@ const Custom: React.FC = () => {
             result.media_formats?.gif?.url
           : result.media_formats.gif.url
       );
+         if (activeSlideIndex === 0) {
+        setActiveSlideIndex(slides.length - 1);
+      }
       setGifs(gifUrls);
       setOpenDropdown(false);
     } catch (error) {
@@ -532,7 +547,7 @@ const Custom: React.FC = () => {
     sendEditorData();
     router.push(`/envelop/${id}`);
   };
-console.log(selectedElement?.x,selectedElement?.y,"piopipi");
+console.log(activeSlideIndex,"piopipi");
 
   return (
 
@@ -543,7 +558,7 @@ console.log(selectedElement?.x,selectedElement?.y,"piopipi");
           <button
             className="add_btn"
             onClick={handleAddMessageClick}
-            disabled={showModal}
+            disabled={showModal }
             style={{ padding: "10px", borderRadius: "50px" }}
           >
             Add Message
@@ -554,7 +569,7 @@ console.log(selectedElement?.x,selectedElement?.y,"piopipi");
             type="file"
             accept="image/*"
             onChange={handleImageUpload}
-            disabled={showModal}
+            disabled={showModal }
           />
           <div className={`upload_svg ${showModal ? "disabled" : ""}`}>
             <svg
@@ -571,7 +586,7 @@ console.log(selectedElement?.x,selectedElement?.y,"piopipi");
         <div className="search_input">
           <button
             onClick={() => openModal("GIF")}
-            disabled={showModal}
+            disabled={showModal }
             style={{
               all: "unset",
               cursor: showModal ? "not-allowed" : "pointer",
@@ -593,6 +608,7 @@ console.log(selectedElement?.x,selectedElement?.y,"piopipi");
         <div className="search_input" style={{ position: "relative" }}>
           <button
             onClick={toggleDropdown}
+            disabled={showModal }
             style={{
               all: "unset",
               cursor: showModal ? "not-allowed" : "pointer",

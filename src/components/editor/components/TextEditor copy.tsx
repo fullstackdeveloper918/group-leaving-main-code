@@ -1,13 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
-import nookies from "nookies";
+import React, { useState, useRef, useEffect } from "react";
+import { FaTrash } from "react-icons/fa";
+import { useEditorPosition } from "../hooks/useEditorPosition";
+import Toolbar from "./Toolbar";
+import ResizableContainer from "./ResizableContainer";
 
-
-interface UserInfo {
-  name: string;
-  email: string;
-  uuid?: string;
-}
-
+// Interfaces
 interface Element {
   type: string;
   content: string;
@@ -23,201 +20,310 @@ interface Element {
   user_uuid?: string;
 }
 
-interface DraggableElementProps {
+interface EditorState {
   content: string;
-  type: string;
-  index: {
-    original: number;
-    activeSlide: number;
-  };
-  setElements: React.Dispatch<React.SetStateAction<Element[]>>;
-  elements: Element[];
-  initialX: number;
-  initialY: number;
-  width?: number;
-  height?: number;
-  isDraggable?: boolean;
-  color?: string;
-  fontFamily?: string;
-  fontSize?: string;
-  fontWeight?: string;
-  activeSlide: number;
-  setCurrentSlide?: (index: number) => void;
-  showImageModal: boolean;
-  setShowImageModal: (value: boolean) => void;
-  selectedElement: any;
-  setSelectedElement: (element: any) => void;
-  onImageClick: (element: Element, index: number) => void;
-  onDelete: (index: number) => void;
+  fontSize: string;
+  fontFamily: string;
+  fontWeight: string;
+  color: string;
+  isEditing: boolean;
+  showEmailForm: boolean;
 }
 
-export const DraggableElement: React.FC<DraggableElementProps> = ({
-  content,
-  type,
-  index,
+interface TextEditorProps {
+  onHide: () => void;
+  setElements: React.Dispatch<React.SetStateAction<Element[]>>;
+  elements: Element[];
+  selectedElement: Element | null;
+  content?: string;
+  cardIndex: {
+    original?: number;
+    activeSlide: number;
+  };
+  Xposition: number;
+  Yposition: number;
+}
+
+// TextEditor Component
+const TextEditor: React.FC<TextEditorProps> = ({
+  onHide,
   setElements,
   elements,
-  initialX,
-  initialY,
-  width = 220,
-  height = 200,
-  isDraggable = true,
-  color = "#000",
-  fontFamily = "Arial",
-  fontSize = "16px",
-  fontWeight = "normal",
-  activeSlide,
-  setCurrentSlide,
-  showImageModal,
-  setShowImageModal,
   selectedElement,
-  setSelectedElement,
-  onImageClick,
-  onDelete,
+  content,
+  cardIndex,
+  Xposition,
+  Yposition,
 }) => {
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-  const [position, setPosition] = useState({ x: initialX, y: initialY });
-  const [size, setSize] = useState({ width, height });
-  const [showTextModal, setShowTextModal] = useState(false);
-  const isEditing = activeSlide === index.activeSlide;
-  const elementRef = useRef<HTMLDivElement>(null);
+  const [editorState, setEditorState] = useState<EditorState>({
+    content: content || (selectedElement ? selectedElement.content : ""),
+    fontSize: selectedElement?.fontSize || "20px",
+    fontFamily: selectedElement?.fontFamily || "Arial",
+    fontWeight: selectedElement?.fontWeight || "600",
+    color: selectedElement?.color || "#37CAEC",
+    isEditing: true,
+    showEmailForm: true,
+  });
 
+  console.log(selectedElement, "selectedElementlalala");
+  const editorRef = useRef<HTMLTextAreaElement>(null);
+  const slideRef = useRef<HTMLDivElement>(null); // Reference to slide container
+
+  // Initialize useEditorPosition with slide dimensions
+  const { position, setPosition, isDragging, startDragging } =
+    useEditorPosition({
+      initialX: selectedElement?.x ?? Xposition,
+      initialY: selectedElement?.y ?? Yposition,
+      slideWidth: 500,
+      slideHeight: 650,
+      editorWidth: selectedElement?.width ?? 375,
+      editorHeight: selectedElement?.height ?? 75,
+    });
+
+  // Sync editor state and position
   useEffect(() => {
-    const cookies = nookies.get();
-    const userInfoFromCookie: UserInfo | null = cookies.userInfo
-      ? JSON.parse(cookies.userInfo)
-      : null;
-    setUserInfo(userInfoFromCookie);
-  }, []);
+    setEditorState((prevState) => ({
+      ...prevState,
+      content: content || (selectedElement ? selectedElement.content : ""),
+      fontSize: selectedElement?.fontSize || prevState.fontSize,
+      fontFamily: selectedElement?.fontFamily || prevState.fontFamily,
+      fontWeight: selectedElement?.fontWeight || prevState.fontWeight,
+      color: selectedElement?.color || prevState.color,
+    }));
 
+    setPosition((prev) => ({
+      ...prev,
+      x: Math.max(
+        0,
+        Math.min(Xposition, 500 - (selectedElement?.width || prev.width))
+      ),
+      y: Math.max(
+        0,
+        Math.min(Yposition, 650 - (selectedElement?.height || prev.height))
+      ),
+      width: selectedElement?.width || prev.width,
+      height: selectedElement?.height || prev.height,
+    }));
+  }, [content, selectedElement, Xposition, Yposition, setPosition]);
+
+  // Adjust drag coordinates to be relative to the slide
   useEffect(() => {
-    const element = elements[index.original];
-    if (element) {
-      setPosition({ x: element.x || 0, y: element.y || 0 });
-      if (type === "image" || type === "gif") {
-        setSize({
-          width: element.width || width,
-          height: element.height || height,
-        });
-      }
-    }
-  }, [elements, index.original, type, width, height]);
+    if (!isDragging || !slideRef.current) return;
 
-  const updateElement = (
-    newX: number,
-    newY: number,
-    newWidth?: number,
-    newHeight?: number
-  ) => {
-    setElements((prev) => {
-      const updated = [...prev];
-      updated[index.original] = {
-        ...updated[index.original],
+    const slideRect = slideRef.current.getBoundingClientRect();
+    const handleMouseMove = (e: MouseEvent) => {
+      const newX = Math.max(
+        0,
+        Math.min(
+          e.clientX - slideRect.left - position.width / 2,
+          500 - position.width
+        )
+      );
+      const newY = Math.max(
+        0,
+        Math.min(
+          e.clientY - slideRect.top - position.height / 2,
+          650 - position.height
+        )
+      );
+
+      setPosition((prev) => ({
+        ...prev,
         x: newX,
         y: newY,
-        width: newWidth ?? updated[index.original].width,
-        height: newHeight ?? updated[index.original].height,
-        user_uuid: userInfo?.uuid,
-        color,
-        fontFamily,
-        fontSize,
-        fontWeight,
-      };
-      localStorage.setItem("slideElements", JSON.stringify(updated));
-      return updated;
-    });
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!isDraggable || !isEditing) return;
-    const startX = e.clientX;
-    const startY = e.clientY;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const deltaX = e.clientX - startX;
-      const deltaY = e.clientY - startY;
-      setPosition((prev) => {
-        const newX = prev.x + deltaX;
-        const newY = prev.y + deltaY;
-        updateElement(newX, newY);
-        return { x: newX, y: newY };
-      });
+      }));
     };
 
     const handleMouseUp = () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
+      // setIsDragging(false);
     };
 
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging, position.width, position.height, setPosition]);
+
+  // Handle text content changes
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const content = e.target.value;
+    setEditorState((prev) => ({ ...prev, content }));
   };
 
-  const handleClick = () => {
-    if (type === "text" && !showTextModal && !showImageModal && isEditing) {
-      setSelectedElement({
-        ...elements[index.original],
-        originalIndex: index.original,
-      });
-      setShowTextModal(true);
-      setShowImageModal(false);
-      setCurrentSlide?.(activeSlide);
+  // Save the edited or new element
+  const handleSave = () => {
+    if (editorRef.current) {
+      const newElement: Element = {
+        type: "text",
+        content: editorRef.current.value,
+        slideIndex: cardIndex.activeSlide,
+        x: position.x,
+        y: position.y,
+        fontSize: editorState.fontSize,
+        fontFamily: editorState.fontFamily,
+        fontWeight: editorState.fontWeight,
+        color: editorState.color,
+      };
+
+      if (selectedElement && cardIndex.original !== undefined) {
+        // Update existing element
+        setElements((prev) =>
+          prev.map((element, idx) =>
+            idx === cardIndex.original ? { ...element, ...newElement } : element
+          )
+        );
+      } else {
+        // Add new element
+        setElements((prev) => [...prev, newElement]);
+      }
+
+      onHide(); // Close modal
     }
   };
 
-  const handleImageClick = () => {
-    if (
-      (type === "image" || type === "gif") &&
-      !showImageModal &&
-      !showTextModal &&
-      isEditing
-    ) {
-      onImageClick(elements[index.original], index.original);
-      setShowTextModal(false);
-      setCurrentSlide?.(activeSlide);
+  // Delete the selected element
+  const handleDelete = () => {
+    if (selectedElement && cardIndex.original !== undefined) {
+      setElements((prev) =>
+        prev.filter((_, idx) => idx !== cardIndex.original)
+      );
+    }
+    onHide(); // Close modal
+  };
+
+  // Execute document commands for formatting
+  const handleCommand = (command: string, value?: string) => {
+    document.execCommand(command, false, value);
+    if (editorRef.current) {
+      editorRef.current.focus();
     }
   };
 
-  const isImageModalOpenForThisElement =
-    showImageModal && selectedElement?.originalIndex === index.original;
+  const handleResize = (newWidth: number, newHeight: number) => {
+    const SLIDE_WIDTH = 500;
+    const SLIDE_HEIGHT = 650;
+
+    const clampedWidth = Math.min(Math.max(newWidth, 50), SLIDE_WIDTH);
+    const clampedHeight = Math.min(Math.max(newHeight, 50), SLIDE_HEIGHT);
+
+    const updatedPosition = {
+      ...position,
+      width: clampedWidth,
+      height: clampedHeight,
+      x: Math.min(position.x, SLIDE_WIDTH - clampedWidth),
+      y: Math.min(position.y, SLIDE_HEIGHT - clampedHeight),
+    };
+
+    setPosition(updatedPosition);
+
+    if (selectedElement && typeof cardIndex.original === "number") {
+      setElements((prev) =>
+        prev.map((el, i) =>
+          i === cardIndex.original
+            ? {
+                ...el,
+                width: clampedWidth,
+                height: clampedHeight,
+                x: updatedPosition.x,
+                y: updatedPosition.y,
+              }
+            : el
+        )
+      );
+    }
+  };
 
   return (
     <div
-      ref={elementRef}
-      onMouseDown={handleMouseDown}
-      onClick={type === "text" ? handleClick : handleImageClick}
+      ref={slideRef}
+      className="flex flex-col w-full max-w-2xl editor-design"
       style={{
         position: "absolute",
-        left: position.x,
-        top: position.y,
-        width: type === "text" ? "auto" : size.width,
-        height: type === "text" ? "auto" : size.height,
-        cursor: isDraggable ? "move" : "default",
-        opacity: isEditing ? 1 : 0.5,
-        color,
-        fontFamily,
-        fontSize,
-        fontWeight,
-        userSelect: "none",
-        zIndex: selectedElement?.originalIndex === index.original ? 1000 : 1,
+        top: `${position.y}px`,
+        left: `${position.x}px`,
+        zIndex: 1000,
+        // width: "79.5%"
       }}
-      className={type === "text" ? "editor-react-drag" : ""}
     >
-      {type === "text" ? (
-        <div>{content}</div>
-      ) : (
-        <img
-          src={content || "/placeholder.svg"}
-          alt={content ? "User uploaded" : "Placeholder"}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-            borderRadius: "6px",
-            pointerEvents: "none",
-          }}
+      <div
+        style={{
+          position: "absolute",
+          top: "-50px", // Adjust height above the editor as needed
+          left: 0,
+          width: "100%",
+          zIndex: 1010,
+          backgroundColor: "white",
+        }}
+      >
+        <Toolbar
+          editorState={editorState}
+          updateEditorStyle={(style) =>
+            setEditorState((prev) => ({ ...prev, ...style }))
+          }
+          handleCommand={handleCommand}
         />
-      )}
+      </div>
+      <ResizableContainer
+        // position={position}
+        // setPosition={setPosition}
+        isDragging={isDragging}
+        startDragging={startDragging}
+        onResize={handleResize} // Pass resize callback
+        width={position.width}
+        height={position.height}>
+        <div className="flex flex-col w-full rounded-md shadow-md ">
+          <textarea
+            ref={editorRef}
+            placeholder="Type your text here..."
+            value={editorState.content}
+            onChange={handleContentChange}
+            className=" focus:outline-none m-0 px-1 bg-transparent rounded-mdwhitespace-pre-wrap "
+            style={{
+              fontFamily: editorState.fontFamily,
+              color: editorState.color,
+              fontSize: editorState.fontSize,
+              fontWeight: editorState.fontWeight,
+              cursor: isDragging ? "move" : "text",
+              // border: "2px solid #061178",
+            }}
+          /> 
     </div>
+     </ResizableContainer>
+          <div className="px-2 pb-2 bg-white">
+            <div className="border-t bg-white pt-2 px-4">
+              <input
+                type="email"
+                placeholder="Your email (optional)"
+                className="w-full px-0 bg-transparent py-2 pt-4 border-bottom border-gray-200 focus:outline-none focus:border-blue-400 transition-colors"
+              />
+              <div className="flex justify-center bg-white gap-2 py-2">
+                <button
+                  onClick={onHide}
+                  className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition editor-cancel"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSave}
+                  className="px-4 py-2 bg-[#061178] text-white rounded flex items-center gap-1 hover:bg-indigo-800 transition editor-save"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition editor-delete"
+                >
+                  <FaTrash />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
   );
 };
+
+export default TextEditor;

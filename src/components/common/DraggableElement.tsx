@@ -79,7 +79,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   setSelectedElement,
   onImageClick,
   onDelete,
-  toast
+  toast,
 }) => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [position, setPosition] = useState({ x: initialX, y: initialY });
@@ -113,6 +113,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     }
   }, [elements, index.original, type, width, height]);
 
+  console.log(selectedElement,elements ,"checking data fetching")
   // Update position and size when selectedElement changes
   useEffect(() => {
     if (selectedElement && selectedElement.originalIndex === index.original) {
@@ -152,7 +153,6 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
 
   // Handle text element click
   const handleClick = () => {
-    // Only open text modal if no modal is open and editing is allowed
     if (type === "text" && !showTextModal && !showImageModal && isEditing) {
       setSelectedElement({
         ...elements[index.original],
@@ -164,9 +164,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     }
   };
 
-  // Handle image/GIF element click
   const handleImageClick = () => {
-    // Only open image modal if no modal is open and editing is allowed
     if (
       (type === "image" || type === "gif") &&
       !showImageModal &&
@@ -185,46 +183,47 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     setShowImageModal(false);
     setSelectedElement(null);
   };
-  console.log(content, "selectedElement");
+  console.log(selectedElement,size, "selectedElement");
 
   const isImageModalOpenForThisElement =
     showImageModal && selectedElement?.originalIndex === index.original;
-  console.log(content, selectedElement,size,position    , "size here to set");
+  console.log(content, selectedElement, size, position, "size here to set");
   return (
-         <Rnd
-className={`${type === "text" ? "editor-react-drag" : ""} ${showTextModal ? "editor-transform" : ""}`.trim()}
-          id={showTextModal ? "editor-transform" :""}
-            bounds="parent"
-            position={position}
-            size={type === "text" ? undefined : size}
-            onDragStop={(_, d) => {
-              setPosition({ x: d.x, y: d.y });
-              updateElement(d.x, d.y);
-            }}
-            onResizeStop={(_, __, ref, ___, pos) => {
-              if (type !== "text" && isImageModalOpenForThisElement) {
-                const newWidth = parseInt(ref.style.width);
-                const newHeight = parseInt(ref.style.height);
-                setSize({ width: newWidth, height: newHeight });
-                setPosition(pos);
-                updateElement(pos.x, pos.y, newWidth, newHeight);
-              }
-            }}
-            disableDragging={!isDraggable}
-            enableResizing={
-              isDraggable &&
-              (type === "image" || type === "gif") &&
-              isImageModalOpenForThisElement
-            }
-            style={{
-              width: "100%",
-              height: "100%",
-              opacity: isEditing ? 1 : 0.5,
-              pointerEvents: "auto",
-              cursor: isDraggable ? "move" : "default",
-              transform: "none", // Explicitly remove transform
-            }}
-          >
+    <Rnd
+      className={`${type === "text" ? "editor-react-drag" : ""} ${
+        showTextModal && "editor-transform"
+      }`.trim()}
+      bounds="parent"
+      position={position}
+      size={type === "text" ? undefined : size}
+      onDragStop={(_, d) => {
+        setPosition({ x: d.x, y: d.y });
+        updateElement(d.x, d.y);
+      }}
+      onResizeStop={(_, __, ref, ___, pos) => {
+        if (type !== "text" && isImageModalOpenForThisElement) {
+          const newWidth = parseInt(ref.style.width);
+          const newHeight = parseInt(ref.style.height);
+          setSize({ width: newWidth, height: newHeight });
+          setPosition(pos);
+          updateElement(pos.x, pos.y, newWidth, newHeight);
+        }
+      }}
+      disableDragging={!isDraggable}
+      enableResizing={
+        isDraggable &&
+        (type === "image" || type === "gif") &&
+        isImageModalOpenForThisElement
+      }
+      style={{
+        width: "100%",
+        height: "100%",
+        opacity: isEditing ? 1 : 0.5,
+        pointerEvents: "auto",
+        cursor: isDraggable ? "move" : "default",
+        transform: "none", // Explicitly remove transform
+      }}
+    >
       {(type === "image" || type === "gif") &&
         !isImageModalOpenForThisElement && (
           <div onClick={handleImageClick}>
@@ -256,29 +255,33 @@ className={`${type === "text" ? "editor-react-drag" : ""} ${showTextModal ? "edi
         )}
 
       {type === "text" && !showTextModal && (
-  <div
-    className="text-sm"
-    style={{
-      pointerEvents: isEditing ? "auto" : "none",
-      opacity: isEditing ? 1 : 0.5,
-      cursor: isEditing ? "pointer" : "not-allowed",
-      userSelect: "none",
-      width: "100%",
-      height: "100%",
-      padding: "8px",
-      color,
-      fontFamily,
-      fontSize,
-      fontWeight,
-      transform: "none",
-    }}
-    onClick={handleClick}
-  >
-    <div className="p-2" dangerouslySetInnerHTML={{ __html: content?.split('\n')[0] || "" }} />
-    <div className="p-2 text-base font-normal">{content?.split('\n')[1] || ""}</div>
-  </div>
-)}
-
+        <div
+          className="text-sm"
+          style={{
+            pointerEvents: isEditing ? "auto" : "none",
+            opacity: isEditing ? 1 : 0.5,
+            cursor: isEditing ? "pointer" : "not-allowed",
+            userSelect: "none",
+            width: "100%",
+            height: "100%",
+            padding: "8px",
+            color,
+            fontFamily,
+            fontSize,
+            fontWeight,
+            transform: "none",
+          }}
+          onClick={handleClick}
+        >
+          <div
+            className="p-2"
+            dangerouslySetInnerHTML={{ __html: content?.split("\n")[0] || "" }}
+          />
+          <div className="p-2 text-base font-normal">
+            {content?.split("\n")[1] || ""}
+          </div>
+        </div>
+      )}
 
       {showImageModal &&
         selectedElement?.originalIndex === index.original &&
