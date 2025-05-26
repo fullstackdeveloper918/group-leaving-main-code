@@ -336,7 +336,7 @@ const Checkout = ({ data }: any) => {
                 />
                 <span className="text-lg">Group Card</span>
                 <span className="ml-auto text-gray-500">
-                  ${groupCardPrice} USD
+                  ₹{groupCardPrice} INR
                 </span>
               </label>
               <label className="flex items-center">
@@ -350,7 +350,7 @@ const Checkout = ({ data }: any) => {
                 />
                 <span className="text-lg">Individual Card</span>
                 <span className="ml-auto text-gray-500">
-                  ${individualCardprice} USD
+                  ₹{individualCardprice} INR
                 </span>
               </label>
             </div>
@@ -372,7 +372,7 @@ const Checkout = ({ data }: any) => {
                     />
                     <span className="text-lg">Single Card</span>
                     <span className="ml-auto text-gray-500">
-                      ${bundleSingleCard} USD
+                      ₹{bundleSingleCard} INR
                     </span>
                   </label>
                   <label className="flex items-center">
@@ -387,7 +387,7 @@ const Checkout = ({ data }: any) => {
                     />
                     <span className="text-lg">Card Bundle</span>
                     <span className="ml-auto text-green-500">
-                      From ${data?.data[0].sale_price} USD
+                      From ₹{data?.data[0].sale_price} INR
                       {/* From $22.45 USD */}
                     </span>
                   </label>
@@ -418,9 +418,9 @@ const Checkout = ({ data }: any) => {
                             key={count.number_of_cards}
                             value={count.number_of_cards}
                           >
-                            {count?.number_of_cards} Cards — $
-                            {count.sale_price.toFixed(2)} USD ($
-                            {count.per_card.toFixed(2)} USD/card) -{" "}
+                            {count?.number_of_cards} Cards — ₹
+                            {count.sale_price.toFixed(2)} INR (₹
+                            {count.per_card.toFixed(2)} INR/card) -{" "}
                             {count.discount} off
                           </option>
                         ))}
@@ -506,13 +506,13 @@ const Checkout = ({ data }: any) => {
                         voucher1
                       } USD`
                     : `$${AmountCondition - voucher1} USD`} */}
-                  {`$${exact - voucherDiscount} USD`}
+                  {`₹${exact - voucherDiscount} INR`}
                 </span>
               </div>
               <div className="flex justify-between mt-2">
                 <span>Total</span>
                 <span className="font-bold text-xl">
-                  {`$${TotalAmount} USD`}
+                  {`₹${TotalAmount} INR`}
                   {/* {bundleOption === "bundle"
                     ? `$${
                         parseFloat(cardPrices[numCards].price.toFixed(2)) -

@@ -27,7 +27,7 @@ const CreateBoard = ({ data }: any) => {
   const [userInfo, setUserInfo] = useState<any>(null);
   const [uuid, setUuid] = useState<string | null>(null);
   console.log(uuid, "uuid");
-  const [loading1, setLoading1] = useState(false);
+const [loading1, setLoading1] = useState<any>(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [state,setState]=useState<any>("")
   // const openModal = () => setIsModalOpen(true);
@@ -78,8 +78,10 @@ const CreateBoard = ({ data }: any) => {
         setIsModalOpen(true);
         // toast.success("Added Successfully", {autoClose:2000});
       } catch (error) {
-        setLoading1(false)
-      }
+        // setLoading1(false)
+      }finally {
+      setLoading1(false);
+    }
     }
   const closeModal = () => {
     setIsModalOpen(false);
@@ -322,7 +324,11 @@ const CreateBoard = ({ data }: any) => {
                   // onClick={() => setFormData({ ...formData, selectedGift: 'gift card' })} // Update the selected gift here
                   onClick={openModal}
                 >
-                  <span className="text-2xl mr-2">+</span>Select gift card
+                 {loading1 ? (
+                    <span className="">Loading...</span>
+                  ) : (
+                    <span className="text-2xl mr-2">+ Select gift card</span>
+                  )}
                 </button>
               </div>
             ) : (
@@ -346,7 +352,7 @@ const CreateBoard = ({ data }: any) => {
           {/* <Link href={`/share/1`}> */}
           {accessToken ? (
             <button
-              //   disabled={setLoading}
+            disabled={loading}
               type="submit"
               className="w-full bg-blueBg text-white py-2 px-4  rounded-md hover:bg-blue-700 transition duration-300"
             >

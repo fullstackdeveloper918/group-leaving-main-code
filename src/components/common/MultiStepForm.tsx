@@ -158,7 +158,7 @@ const MultiStepForm = ({ params }: any) => {
       let item = {
         user_uuid: uuid,
         card_uuid: params,
-        currency_type: "USD",
+        currency_type: "INR",
         recipient_name: recipientName,
         recipient_email: recipientEmail,
         sender_name: senderName,

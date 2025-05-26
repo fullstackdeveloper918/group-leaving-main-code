@@ -15,11 +15,11 @@ const AccountContribution = () => {
           <div className="flex items-center justify-center space-x-2 mb-2">
             <select className="px-3 py-2 rounded-lg bg-white border border-gray-300 focus:ring-2 focus:ring-blue-500">
               <option value="GBP">GBP</option>
-              <option value="USD">USD</option>
+              <option value="INR">INR</option>
               <option value="EUR">EUR</option>
             </select>
           </div>
-            <span className="text-3xl font-semibold">£0.00</span>
+            <span className="text-3xl font-semibold">₹0.00</span>
           <div className="flex justify-center mt-4 mb-2">
             <button className="text-blue-600 text-black  hover:underline">Transaction History</button>
             <button className="px-4 py-2 bg-blue-600 text-black border-2 rounded-lg hover:bg-blue-700">Top Up</button>
