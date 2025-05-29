@@ -79,8 +79,8 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const slideRef = useRef<HTMLDivElement>(null);
 
   const { position, setPosition, isDragging, startDragging } = useEditorPosition({
-    initialX: 0,
-    initialY: 0 ,
+    initialX:selectedElement?.content ? 0: 60,
+    initialY:  selectedElement?.content ? 0 : 200 ,
     slideWidth: 500,
     slideHeight: 650,
     editorWidth: selectedElement?.width ?? 375,

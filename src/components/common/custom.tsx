@@ -10,7 +10,7 @@ import SlideImg_2 from "../../assets/images/slide2.png";
 import SlideImg_3 from "../../assets/images/slide3.png";
 import SlideImg_4 from "../../assets/images/slide4.png";
 import SlideImg_5 from "../../../public/paper_grid.png";
-import SlideImg_6 from "../../../public/fafafa.png";
+import SlideImg_6 from "../../../public/paper_grid.png";
 import Modal from "react-modal";
 import axios from "axios";
 import { Rnd } from "react-rnd";
@@ -108,7 +108,7 @@ const Custom: React.FC = () => {
   const sliderRef = useRef<HTMLInputElement>(null);
   const [type, setType] = useState<string>("");
   const [slides, setSlides] = useState<any[]>([]);
-
+console.log(slides,"sldessss")
   const pathname = usePathname();
   const isEditorPath = /^\/share\/editor\/[^/]+$/.test(pathname);
 
@@ -127,43 +127,119 @@ const Custom: React.FC = () => {
   }, []);
 
   // Load elements from API and initialize slides
+  // useEffect(() => {
+  //   const getEditorData = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         "https://dating.goaideme.com/card/edit-messages-by-unique-id/fwzDVjvbQ_X",
+  //         {
+  //           method: "GET",
+  //           headers: { "Content-Type": "application/json" },
+  //         }
+  //       );
+  //       if (!response.ok) throw new Error("Failed to fetch data");
+  //       const data = await response.json();
+
+  //       console.log(data,"data is here for check")
+  //       const apiElements = data?.data[0]?.editor_messages || [];
+  //       setElements(apiElements);
+
+
+  //       console.log(apiElements,"apiElements")
+  //       // Determine the maximum slideIndex from API elements
+  //       const maxIndex =
+  //         apiElements.length > 0
+  //           ? Math.max(...apiElements.map((el: any) => el.slideIndex), 0) : 0;
+
+
+  //           console.log(maxIndex,"filledSlide length max")
+  //       // Initialize slides based on path and max slideIndex
+  //       let filledSlides = isEditorPath
+  //         ? [
+  //             {
+  //               id: "slide-1",
+  //               title: "Development",
+  //               subtitle: "SCSS Only Slider",
+  //               text: "Learn to create a SCSS-only responsive slider.",
+  //               link: "https://blog.significa.pt/css-only-slider-71727effff0b",
+  //               card_img: SlideImg_0,
+  //             },
+  //           ]
+  //         : [...initialSlides];
+  //           console.log("filledSlide length", filledSlides.length)
+  //       // Add additional slides up to maxIndex
+  //       for (let i = filledSlides.length; i <= maxIndex; i++) {
+  //         filledSlides.push({
+  //           id: `slide-${i + 1}`,
+  //           title: "New Slide",
+  //           subtitle: "New Subtitle",
+  //           text: "This is a dynamically generated slide.",
+  //           link: "https://example.com",
+  //           card_img: SlideImg_5,
+  //         });
+  //       }
+
+  //       console.log(filledSlides.length,"filledSlide length")
+
+  //       setSlides(filledSlides);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //       setElements([]);
+  //       setSlides(isEditorPath ? [initialSlides[0]] : initialSlides);
+  //     }
+  //   };
+
+  //   getEditorData();
+  // }, []);
+
   useEffect(() => {
-    const getEditorData = async () => {
-      try {
-        const response = await fetch(
-          "https://dating.goaideme.com/card/edit-messages-by-unique-id/fwzDVjvbQ_X",
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        if (!response.ok) throw new Error("Failed to fetch data");
-        const data = await response.json();
-        const apiElements = data?.data[0]?.editor_messages || [];
-        setElements(apiElements);
+  const fetchEditorData = async () => {
+    try {
+      const response = await fetch(
+        "https://dating.goaideme.com/card/edit-messages-by-unique-id/fwzDVjvbQ_X",
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
-        // Determine the maximum slideIndex from API elements
-        const maxIndex =
-          apiElements.length > 0
-            ? Math.max(...apiElements.map((el: any) => el.slideIndex), 0)
-            : 0;
+      if (!response.ok) throw new Error("Failed to fetch data");
 
-        // Initialize slides based on path and max slideIndex
-        let filledSlides = isEditorPath
-          ? [
-              {
-                id: "slide-1",
-                title: "Development",
-                subtitle: "SCSS Only Slider",
-                text: "Learn to create a SCSS-only responsive slider.",
-                link: "https://blog.significa.pt/css-only-slider-71727effff0b",
-                card_img: SlideImg_0,
-              },
-            ]
-          : [...initialSlides];
+      const data = await response.json();
+      console.log("Fetched data:", data);
 
-        // Add additional slides up to maxIndex
-        for (let i = filledSlides.length; i <= maxIndex; i++) {
+      const apiElements = data?.data?.[0]?.editor_messages || [];
+      setElements(apiElements);
+      console.log("API Elements:", apiElements);
+
+  // const getitingNewSlide = apiElements?.map(e)=> e.filter(slides?.lastIndex.slideIndex == e?.slideIndex return true)
+      
+  console.log(slides,"ddddddd")
+      // Get max slide index from API data
+      const maxIndex = apiElements.length >= 0
+        ? Math.max(...apiElements.map((el: any) => el.slideIndex || 0))
+        : 0;
+      console.log("Max Slide Index from API:", maxIndex);
+
+      // Initialize slides based on path
+      let filledSlides = isEditorPath
+        ? [
+            {
+              id: "slide-1",
+              title: "Development",
+              subtitle: "SCSS Only Slider",
+              text: "Learn to create a SCSS-only responsive slider.",
+              link: "https://blog.significa.pt/css-only-slider-71727effff0b",
+              card_img: SlideImg_0,
+            },
+          ]
+        : [...initialSlides];
+
+      console.log("Initial filledSlides length:", maxIndex);
+
+      // Only add new slides if maxIndex requires it
+      if (maxIndex + 1 > filledSlides.length) {
+        for (let i = filledSlides.length + 1; i >= maxIndex; i--) {
           filledSlides.push({
             id: `slide-${i + 1}`,
             title: "New Slide",
@@ -173,17 +249,54 @@ const Custom: React.FC = () => {
             card_img: SlideImg_5,
           });
         }
-
-        setSlides(filledSlides);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setElements([]);
-        setSlides(isEditorPath ? [initialSlides[0]] : initialSlides);
       }
+
+      console.log("Updated filledSlides length1:", slides);
+      setSlides(filledSlides);
+    } catch (error) {
+      console.error("Error fetching editor data:", error);
+      setElements([]);
+      setSlides(isEditorPath ? [initialSlides[0]] : initialSlides);
+    }
+  };
+
+  fetchEditorData();
+}, []);
+
+  console.log(elements?.length,"new element hree")
+
+useEffect(() => {
+
+
+  if(elements?.length == 0){
+  setSlides([...initialSlides])
+}
+  const lastSlide = slides?.[slides.length - 1];
+  console.log("lastSlide:", lastSlide);
+  const isLastSlideInElements = elements?.some(
+    (e) => `slide-${e?.slideIndex + 1}` === lastSlide?.id
+  );
+
+  console.log(isLastSlideInElements,"isLastSlideInElements")
+  if (isLastSlideInElements) {
+    const newSlideIndex = slides.length; // e.g., 3 if you already have 3 slides
+    const newSlide = {
+      id: `slide-${newSlideIndex + 1}`,
+      title: "New Slide",
+      subtitle: "New Subtitle",
+      text: "This is a dynamically generated slide.",
+      link: "https://example.com",
+      card_img: SlideImg_5,
     };
 
-    getEditorData();
-  }, []);
+    setSlides((prevSlides) => [...prevSlides, newSlide]);
+  }
+
+
+
+}, [elements]);
+
+  console.log(slides,"elements new")
 
   // Save elements to localStorage and update server
   useEffect(() => {
@@ -200,6 +313,7 @@ const Custom: React.FC = () => {
       user_uuid: userInfo?.uuid,
       messages_unique_id: id,
     };
+    // return
     try {
       const response = await fetch(
         "https://dating.goaideme.com/card/add-editor-messages",
@@ -217,13 +331,18 @@ const Custom: React.FC = () => {
     }
   };
 
+  console.log(userInfo,"oiuiuy");
+  
   // Update editor data on server
   const updateEditorData = async () => {
     const item = {
       editor_messages: elements,
-      user_uuid: userInfo?.uuid,
+      user_uuid: userInfo? userInfo?.uuid:"",
       messages_unique_id: id,
     };
+    // console.log(item,"opiuiouio");
+    
+    // return
     try {
       const response = await fetch(
         "https://dating.goaideme.com/card/add-editor-messages",
