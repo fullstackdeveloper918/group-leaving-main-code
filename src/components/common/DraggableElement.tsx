@@ -113,7 +113,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     }
   }, [elements, index.original, type, width, height]);
 
-  console.log(selectedElement,elements ,"checking data fetching")
+  console.log(selectedElement, elements, "checking data fetching");
   // Update position and size when selectedElement changes
   useEffect(() => {
     if (selectedElement && selectedElement.originalIndex === index.original) {
@@ -183,7 +183,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     setShowImageModal(false);
     setSelectedElement(null);
   };
-  console.log(selectedElement,size, "selectedElement");
+  console.log(selectedElement, size, "selectedElement");
 
   const isImageModalOpenForThisElement =
     showImageModal && selectedElement?.originalIndex === index.original;
@@ -194,12 +194,23 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
         showTextModal && "editor-transform"
       }`.trim()}
       bounds="parent"
-      position={position}
+      position={showTextModal ? { x: 0, y: 0 } : position}
       size={type === "text" ? undefined : size}
-      onDragStop={(_, d) => {
-        setPosition({ x: d.x, y: d.y });
-        updateElement(d.x, d.y);
-      }}
+      onDrag={
+        showTextModal
+          ? (_, d) => {
+              if (d.x < 200) return false;
+            }
+          : undefined
+      }
+      onDragStop={
+        !showTextModal
+          ? (_, d) => {
+              setPosition({ x: d.x, y: d.y });
+              updateElement(d.x, d.y);
+            }
+          : undefined
+      }
       onResizeStop={(_, __, ref, ___, pos) => {
         if (type !== "text" && isImageModalOpenForThisElement) {
           const newWidth = parseInt(ref.style.width);
@@ -220,7 +231,8 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
         height: "100%",
         opacity: isEditing ? 1 : 0.5,
         pointerEvents: "auto",
-        cursor: isDraggable ? "move" : "default",
+        cursor: "default",
+        // cursor: isDraggable ? "move" : "default",
         transform: "none", // Explicitly remove transform
       }}
     >

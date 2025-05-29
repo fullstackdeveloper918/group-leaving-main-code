@@ -97,7 +97,7 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
         width,
         height,
         // transform: `translate(${position.x}px, ${position.y}px)`,
-        cursor: isDragging ? "grabbing" : "grab",
+        cursor: isDragging ?  "move" : "move",
         border: "3px solid #44AAFF",
       }}
       onMouseDown={startDragging}
@@ -135,6 +135,9 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
         onMouseDown={(e) => handleResize(e, "right")}
       />
       {children}
+
+      {/* <img   ref={containerRef}
+ className="move-cursor-img" src="/move.png" alt="move cursor"/> */}
     </div>
   );
 };

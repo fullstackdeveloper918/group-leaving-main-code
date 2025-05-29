@@ -1881,7 +1881,7 @@ left: unset !important;
   color: red;
   position: absolute;
   top: 0;
-  right: -38px;
+  right: -50%;
 
   padding: 7px !important;
   border-radius: 100% !important;
@@ -2020,4 +2020,13 @@ left: unset !important;
   border-radius: 4px;
   font-weight: bold;
   cursor: pointer;
+}
+
+
+.move-cursor-img{
+    position: relative;
+    right: 5%;
+    height: 22px;
+    width: 22px;
+    bottom: 2%;
 }

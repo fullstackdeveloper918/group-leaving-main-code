@@ -30,8 +30,9 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
     selectedElement?.x || 0,
     // selectedElement?.y || 0
   );
-const [loading,setLoading] = useState(false)
-
+  const [loading,setLoading] = useState(false)
+  
+  console.log(selectedElement.height,"ssssssssssssss")
   useEffect(() => {
     if (selectedElement) {
       const squareSize = Math.max(selectedElement.width || 320, selectedElement.height || 200);
@@ -132,10 +133,13 @@ setTimeout(() => {
         <img
           src={content || selectedElement?.content || "/placeholder.svg"}
           alt="uploaded"
-          className="w-full h-full object-contain pointer-events-none select-none"
+          className="w-auto h-auto object-contain pointer-events-none select-none"
           draggable={false}
         />
-        <div className="px-2 pb-2">
+    
+         
+      </ImageResizableContainer>
+       <div className="px-2 pb-2">
           <div className="bg-white mt-2 px-4">
             <div className="flex justify-center gap-2 py-2">
               <button
@@ -160,7 +164,6 @@ setTimeout(() => {
             </div>
           </div>
         </div>
-      </ImageResizableContainer>
     </div>
   );
 };

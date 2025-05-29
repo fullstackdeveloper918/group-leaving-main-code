@@ -79,8 +79,8 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const slideRef = useRef<HTMLDivElement>(null);
 
   const { position, setPosition, isDragging, startDragging } = useEditorPosition({
-    initialX:selectedElement?.content ? 0: 60,
-    initialY:  selectedElement?.content ? 0 : 200 ,
+    initialX:selectedElement?.content ?  selectedElement?.x : 60,
+    initialY:  selectedElement?.content ?  selectedElement?.y : 200 ,
     slideWidth: 500,
     slideHeight: 650,
     editorWidth: selectedElement?.width ?? 375,
@@ -160,6 +160,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
     setEditorState((prev) => ({ ...prev, content }));
   };
 
+  console.log(position,"xy positioning")
   // Save the edited or new element
   const handleSave = () => {
     setLoading(true);
@@ -341,7 +342,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
           </div>
         </div>
       </ResizableContainer>
-      <div className="px-2 pb-2 bg-white">
+      <div className="px-2 pb-2 mt-1">
         <div className="border-t bg-white pt-2 px-4">
           <input
             type="email"
