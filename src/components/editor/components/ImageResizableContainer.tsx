@@ -89,7 +89,7 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseUp);
   };
-
+console.log(height,width,)
   return (
     <div
       ref={containerRef}

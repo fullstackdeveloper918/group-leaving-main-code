@@ -32,15 +32,17 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
   );
   const [loading,setLoading] = useState(false)
   
-  console.log(selectedElement.height,"ssssssssssssss")
+  console.log(selectedElement.height,selectedElement.width,"ssssssssssssss")
   useEffect(() => {
     if (selectedElement) {
-      const squareSize = Math.max(selectedElement.width || 320, selectedElement.height || 200);
+const width = selectedElement.width || 320;
+const height = selectedElement.height || 200;
+   
       setPosition({
         x: Math.max(0, selectedElement.x || 0),
         y: Math.max(0, selectedElement.y || 0),
-        width: squareSize,
-        height: squareSize,
+        width: width,
+        height: height,
       });
     }
   }, [selectedElement, setPosition]);
@@ -120,8 +122,10 @@ setTimeout(() => {
     onDelete();
   };
 
+
+  console.log(position.width,"wwwwwwwwwwwwwwwwwww")
   return (
-    <div className="flex flex-col w-full max-w-2xl editor-design">
+    <div className="flex flex-col w-full max-w-2xl editor-design-image">
       <ImageResizableContainer
         // position={position}
         // setPosition={setPosition}

@@ -1640,6 +1640,11 @@ html {
   z-index: 10000;
   /* top: unset !important; */
   width: 75% !important;
+
+}
+.editor-design-image{
+  height: 100% !important;
+  width: 100% !important;
 }
 /* .editor-react-drag{
   transform: unset !important;
