@@ -3,21 +3,21 @@ import { Position } from "../types/editor";
 
 interface ResizableContainerProps {
   children: ReactNode;
-  // position: Position;
+  position: Position;
   width: number;
   height: number;
   onResize?: (newWidth: number, newHeight: number) => void;
-  // setPosition: (position: Position) => void;
+  setPosition: (position: Position) => void;
   isDragging: boolean;
   startDragging: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
   children,
-  // position,
+  position,
   width,
   height,
-  // setPosition,
+  setPosition,
   isDragging,
   startDragging,
   onResize,
@@ -89,14 +89,14 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseUp);
   };
-console.log(height,width,)
+console.log(isDragging,"isDragging")
   return (
     <div
-      ref={containerRef}
+      // ref={containerRef}
       className="relative"
       style={{
         width,
-        height,
+       height :"",
         // transform: `translate(${position.x}px, ${position.y}px)`,
         cursor: isDragging ? "grabbing" : "grab",
         border: "3px solid #44AAFF",

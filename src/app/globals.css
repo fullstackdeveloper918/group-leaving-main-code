@@ -1639,7 +1639,7 @@ html {
   position: absolute;
   z-index: 10000;
   /* top: unset !important; */
-  width: 75% !important;
+  width: 61% !important;
 
 }
 .editor-design-image{
@@ -1668,7 +1668,7 @@ left: unset !important;
 .carousel-wrapper {
   position: relative;
   width: 100%;
-  height: 650px;
+  height: 750px;
   margin: 0 auto;
 }
 
@@ -1682,8 +1682,8 @@ left: unset !important;
 
 .carousel-slide {
   position: absolute;
-  width: 500px;
-  height: 650px;
+  width: 600px;
+  height: 750px;
   top: 0;
   left: 50%;
   transform-origin: center center;
@@ -1740,7 +1740,7 @@ left: unset !important;
 }
 
 .slide-prev {
-  transform: translateX(-70%) translateZ(-100px) rotateY(0deg);
+  transform: translateX(-65%) translateZ(-100px) rotateY(0deg);
   z-index: 4;
   opacity: 95%;
 }
@@ -1751,7 +1751,7 @@ left: unset !important;
 }
 
 .slide-next {
-  transform: translateX(-30%) translateZ(-100px) rotateY(0deg);
+  transform: translateX(-35%) translateZ(-100px) rotateY(0deg);
   z-index: 4;
   opacity: 95%;
 }
@@ -1884,16 +1884,25 @@ left: unset !important;
 
 .delete-red-btn {
   color: red;
-  position: absolute;
-  top: 0;
-  right: -50%;
-
+  /* position: absolute;
+    top: -200%;
+    right: -25%; */
+    margin-left: 5px;
   padding: 7px !important;
   border-radius: 100% !important;
 }
 .delete-red-btn:hover {
   background: red;
   color: white;
+}
+
+.image-resize-btn{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  /* bottom: -75%;
+  left: -15px; */
 }
 .page-indicator {
   text-align: center;

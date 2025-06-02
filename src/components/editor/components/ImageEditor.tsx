@@ -123,12 +123,11 @@ setTimeout(() => {
   };
 
 
-  console.log(position.width,"wwwwwwwwwwwwwwwwwww")
   return (
     <div className="flex flex-col w-full max-w-2xl editor-design-image">
       <ImageResizableContainer
-        // position={position}
-        // setPosition={setPosition}
+        position={position}
+        setPosition={setPosition}
         isDragging={isDragging}
         startDragging={startDragging}
         width={position.width }
