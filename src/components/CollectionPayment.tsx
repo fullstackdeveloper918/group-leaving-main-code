@@ -193,7 +193,7 @@ const CollectionPayment = ({
         disabled={isProcessing}
         className="mt-6 bg-blue-600 text-blueText w-full py-2 rounded-xl border-2 border-[blueText] hover:bg-blue-700"
       >
-        {isProcessing ? "Processing..." : `Pay Now: ${amount} INR`}
+        {isProcessing ? "Processing..." : `Pay Now: ${amount.toFixed(2)} INR`}
       </button>
     </>
   );

@@ -78,14 +78,15 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const editorRef = useRef<HTMLTextAreaElement>(null);
   const slideRef = useRef<HTMLDivElement>(null);
 
-  const { position, setPosition, isDragging, startDragging } = useEditorPosition({
-    initialX:selectedElement?.content ?  selectedElement?.x : 60,
-    initialY:  selectedElement?.content ?  selectedElement?.y : 200 ,
-    slideWidth: 500,
-    slideHeight: 650,
-    editorWidth: selectedElement?.width ?? 375,
-    editorHeight: selectedElement?.height ?? 100,
-  });
+  const { position, setPosition, isDragging, startDragging } =
+    useEditorPosition({
+      initialX: selectedElement?.content ? selectedElement?.x : 60,
+      initialY: selectedElement?.content ? selectedElement?.y : 200,
+      slideWidth: 500,
+      slideHeight: 650,
+      editorWidth: selectedElement?.width ?? 375,
+      editorHeight: selectedElement?.height ?? 100,
+    });
 
   // Sync editor state and position
   // useEffect(() => {
@@ -160,17 +161,17 @@ const TextEditor: React.FC<TextEditorProps> = ({
     setEditorState((prev) => ({ ...prev, content }));
   };
 
-  console.log(position,"xy positioning")
+  console.log(position, "xy positioning");
   // Save the edited or new element
   const handleSave = () => {
     setLoading(true);
-    if(!editorState.message){
-      setLoading(false)
-      return toast.error("Please add your message")
+    if (!editorState.message) {
+      setLoading(false);
+      return toast.error("Please add your message");
     }
-    if(!editorState.name){
-      setLoading(false)
-      return toast.error("Please add your name")
+    if (!editorState.name) {
+      setLoading(false);
+      return toast.error("Please add your name");
     }
 
     const combinedContent = `${editorState.message}\n${editorState.name}`;
@@ -319,11 +320,10 @@ const TextEditor: React.FC<TextEditorProps> = ({
                 fontSize: editorState.fontSize,
                 fontWeight: editorState.fontWeight,
                 color: editorState.color,
-                background:"transparent"
+                background: "transparent",
               }}
             />
             <input
-            
               type="text"
               placeholder="Your name"
               value={editorState.name}
@@ -336,7 +336,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
                 fontSize: "18px",
                 fontWeight: "normal",
                 color: editorState.color,
-                background:"transparent"
+                background: "transparent",
               }}
             />
           </div>
@@ -351,10 +351,10 @@ const TextEditor: React.FC<TextEditorProps> = ({
           />
           <div className="flex justify-center bg-white gap-2 py-2">
             <button
-             onClick={(e) => {
-    e.preventDefault();
-    onHide();
-  }}
+              onClick={(e) => {
+                e.preventDefault();
+                onHide();
+              }}
               className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition editor-cancel"
             >
               Cancel

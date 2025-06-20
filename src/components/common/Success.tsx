@@ -11,7 +11,7 @@ const Success = ({unique_Id}:any) => {
 
   const handleCopy = () => {
     if (unique_Id) {
-      navigator.clipboard.writeText(`https://group-leaving-new.vercel.app/share/editor/${unique_Id}`)
+      navigator.clipboard.writeText(`https://groupwish.in/share/editor/${unique_Id}`)
         .then(() => {
           toast.success("Link copied successfully");
         })
@@ -46,7 +46,7 @@ const Success = ({unique_Id}:any) => {
           <CheckCircleIcon className="success-icon" />
           <h1 className="success-title">Success!</h1>
           <p className="success-description">
-            Thanks for your payment, we’ve created your card and it’s ready to be signed
+            Thanks for your payment, we've created your card and it's ready to be signed
           </p>
         </div>
 
@@ -59,7 +59,7 @@ const Success = ({unique_Id}:any) => {
             <input
               type="text"
               readOnly
-              value={unique_Id ? `https://group-leaving-new.vercel.app/share/editor/${unique_Id}` : ""}
+              value={unique_Id ? `https://groupwish.in/share/editor/${unique_Id}` : ""}
               className="shareable-input"
             />
             <button onClick={handleCopy} className="copy-button">
@@ -70,7 +70,11 @@ const Success = ({unique_Id}:any) => {
 
         {/* Buttons */}
         <div className="button-container">
-          <button className="view-receipt-button">View Receipt</button>
+          {unique_Id && (
+            <Link href={`/successfull/receipt/${unique_Id}`}>
+              <button className="view-receipt-button">View Receipt</button>
+            </Link>
+          )}
           {unique_Id && (
             <Link href={`/share/editor/${unique_Id}`}>
               <button className="sign-card-button">Sign Card</button>

@@ -93,6 +93,7 @@ export default function RootLayout({
           strategy="beforeInteractive" // This ensures it loads before the page is interactive
         />
         <Script async src="https://pay.google.com/gp/p/js/pay.js"></Script>
+        {/* <link rel="icon" href="/favicon.ico" /> */}
       </head>
       <body className={quicksand.className}>
         {/* <AntdRegistry> */}

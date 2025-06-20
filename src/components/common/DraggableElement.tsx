@@ -215,7 +215,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
         if (type !== "text" && isImageModalOpenForThisElement) {
           const newWidth = parseInt(ref.style.width);
           const newHeight = parseInt(ref.style.height);
-          setSize({ width: newWidth, height: newHeight });
+          // setSize({ width: newWidth, height: newHeight });
           setPosition(pos);
           updateElement(pos.x, pos.y, newWidth, newHeight);
         }

@@ -4,11 +4,11 @@ import { useState, useEffect, useRef } from "react";
 // import { useDrag } from "@use-gFuel/react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import SlideImg_0 from "../../assets/images/slide0.png";
-import SlideImg_1 from "../../assets/images/slide1.png";
-import SlideImg_2 from "../../assets/images/slide2.png";
-import SlideImg_3 from "../../assets/images/slide3.png";
-import SlideImg_4 from "../../assets/images/slide4.png";
+import SlideImg_0 from "../../assets/images/slide-new0.jpg";
+import SlideImg_1 from "../../assets/images/slide-new1.jpg";
+import SlideImg_2 from "../../assets/images/slide-new2.jpg";
+import SlideImg_3 from "../../assets/images/slide-new3.jpg";
+import SlideImg_4 from "../../assets/images/slide-new4.jpg";
 import SlideImg_5 from "../../../public/paper_grid.png";
 import SlideImg_6 from "../../../public/paper_grid.png";
 import Modal from "react-modal";
@@ -30,6 +30,7 @@ import TextEditor from "../editor/components/TextEditor";
 import { DraggableElement } from "./DraggableElement";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { fetchFromServer } from "@/app/actions/fetchFromServer";
 interface UserInfo {
   name: string;
   email: string;
@@ -114,9 +115,11 @@ console.log(slides,"sldessss")
 
   // Initialize params.id
   useEffect(() => {
+    console.log(params,"id here to fix lalala")
     if (params.id) setId(params.id);
   }, [params]);
 
+  console.log(id,"id here to fix")
   // Initialize userInfo from cookies
   useEffect(() => {
     const cookies = nookies.get();
@@ -192,11 +195,17 @@ console.log(slides,"sldessss")
   //   getEditorData();
   // }, []);
 
+
+  
   useEffect(() => {
+
+
   const fetchEditorData = async () => {
     try {
+
+      
       const response = await fetch(
-        "https://dating.goaideme.com/card/edit-messages-by-unique-id/fwzDVjvbQ_X",
+        `https://dating.goaideme.com/card/edit-messages-by-unique-id/${id}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -271,6 +280,8 @@ useEffect(() => {
   if(elements?.length == 0){
   setSlides([...initialSlides])
 }
+
+console.log(elements,slides,"here to matched data")
   const lastSlide = slides?.[slides.length - 1];
   console.log("lastSlide:", lastSlide);
   const isLastSlideInElements = elements?.some(

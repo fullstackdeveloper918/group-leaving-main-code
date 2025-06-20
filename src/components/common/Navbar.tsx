@@ -42,7 +42,7 @@ const Navbar = () => {
   }
     const storedToken = Cookies.get("auth_token");
     if (token && !storedToken) {
-      Cookies.set("auth_token", token);
+      // Cookies.set("auth_token", token);
       router.replace("/")
       // Cookies.set("user_info",userData)
       // setIsNewLogin(true);
@@ -178,7 +178,7 @@ const Navbar = () => {
           Our back-to-school sale is here!{" "}
           <span className="font-bold">Save 15%</span> on Coins for all your fall
           invitations with code BACKTOFALL. Ends 9/3. 
-          <Link href="#" className="underline text-white font-medium">
+          <Link href="/create" className="underline text-white font-medium">
             Shop Now.
           </Link>
         </p>

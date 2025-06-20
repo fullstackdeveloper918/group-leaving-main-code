@@ -43,16 +43,16 @@ const Footer: React.FC = () => {
           </Title>
           <ul className="p-0">
             <li className="block  py-2  no-underline text-black  transition-all ease-in  hover:text-blueBg hover:px-2 ">
-              About
+              <a href="/about" className="text-black hover:text-blueBg">About</a>
             </li>
             <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2  ">
-              Office
+              <a href="/office" className="text-black hover:text-blueBg">Office</a>
             </li>
             <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2  ">
-              License Verification{" "}
+              <a href="/license-verification" className="text-black hover:text-blueBg">License Verification</a>
             </li>
             <li className="block  py-2  no-underline text-black  transition-all ease-in  hover:text-blueBg hover:px-2 ">
-              Spay & Neuter
+              <a href="/spay-neuter" className="text-black hover:text-blueBg">Spay & Neuter</a>
             </li>
           </ul>
         </Col>
@@ -89,7 +89,7 @@ const Footer: React.FC = () => {
             </li>
             <li className="block">
               <a
-                href="/#"
+                href="/terms"
                 className="block  py-2  no-underline text-black  transition-all ease-in  hover:text-blueBg hover:px-2 inline-block "
               >
                 Terms & Conditions{" "}
@@ -97,7 +97,7 @@ const Footer: React.FC = () => {
             </li>
             <li className="block">
               <a
-                href="/#"
+                href="/privacy"
                 className="block  py-2  no-underline text-black  transition-all ease-in  hover:text-blueBg hover:px-2 inline-block "
               >
                 Privacy Policy{" "}
@@ -112,16 +112,16 @@ const Footer: React.FC = () => {
           </Title>
           <ul className="p-0">
             <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2   hover:text-blueBg hover:px-2">
-              Free eBooks
+              <a href="/free-ebooks" className="text-black hover:text-blueBg">Free eBooks</a>
             </li>
             <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2  ">
-              Development Tutorial
+              <a href="/development-tutorial" className="text-black hover:text-blueBg">Development Tutorial</a>
             </li>
             <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2  ">
-              How to - Blog
+              <a href="/how-to-blog" className="text-black hover:text-blueBg">How to - Blog</a>
             </li>
             <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2  ">
-              Youtube Playlist
+              <a href="/youtube-playlist" className="text-black hover:text-blueBg">Youtube Playlist</a>
             </li>
           </ul>
         </Col>

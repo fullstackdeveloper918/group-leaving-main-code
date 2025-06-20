@@ -383,7 +383,7 @@ const [loading1, setLoading1] = useState<any>(false);
       {isModalOpen && (
         <>
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-            <div className="bg-white p-6 rounded-md shadow-lg max-w-lg w-full relative">
+            <div className="bg-white p-6 rounded-md shadow-lg max-w-lg w-full relative overflow-auto">
               {/* Top-left Cancel Button */}
               <h2 className="text-lg font-semibold mb-2 text-center">
                 Select a Gift Card

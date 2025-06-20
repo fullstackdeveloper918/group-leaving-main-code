@@ -94,8 +94,8 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
       ref={containerRef}
       className="relative"
       style={{
-        width,
-        height,
+        // width,
+        // height,
         // transform: `translate(${position.x}px, ${position.y}px)`,
         cursor: isDragging ?  "move" : "move",
         border: "3px solid #44AAFF",
