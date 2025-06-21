@@ -314,7 +314,7 @@ const [loading1, setLoading1] = useState<any>(false);
                   Collect cash for a gift card
                 </h2>
                 <p className="text-gray-600 mb-2">
-                  Make this card extra special. Start a gift card collection pot
+                  Make this card extra special. Start a Shared Gift Fund
                   that anyone can contribute to.
                 </p>
                 <button

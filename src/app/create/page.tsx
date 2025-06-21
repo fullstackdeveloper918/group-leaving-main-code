@@ -8,7 +8,7 @@ const page = () => {
     <div className="bg-lightBg py-12">
       <div className="container-fluid ">
         <h1 className="xl:text-4xl md:text-xl sm:text-md font-semibold text-center">
-          Create
+          Start a Card
         </h1>
         <h2 className="xl:text-2xl md:text-lg sm:text-sm font-semibold text-center mb-4">
           What would you like to create?

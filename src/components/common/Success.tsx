@@ -1,17 +1,15 @@
-// components/common/Success.tsx
 "use client";  // Ensure this is at the top for client-side rendering
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { CheckCircleIcon, ClipboardIcon } from "@heroicons/react/24/solid";
-import { useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import Link from "next/link";
 
-const Success = ({unique_Id}:any) => {
-
+const Success = ({ unique_Id }: any) => {
   const handleCopy = () => {
     if (unique_Id) {
-      navigator.clipboard.writeText(`https://groupwish.in/share/editor/${unique_Id}`)
+      navigator.clipboard
+        .writeText(`https://groupwish.in/share/editor/${unique_Id}`)
         .then(() => {
           toast.success("Link copied successfully");
         })
@@ -46,7 +44,7 @@ const Success = ({unique_Id}:any) => {
           <CheckCircleIcon className="success-icon" />
           <h1 className="success-title">Success!</h1>
           <p className="success-description">
-            Thanks for your payment, we've created your card and it's ready to be signed
+            Thanks for your payment, we&apos;ve created your card and it&apos;s ready to be signed.
           </p>
         </div>
 
@@ -59,7 +57,9 @@ const Success = ({unique_Id}:any) => {
             <input
               type="text"
               readOnly
-              value={unique_Id ? `https://groupwish.in/share/editor/${unique_Id}` : ""}
+              value={
+                unique_Id ? `https://groupwish.in/share/editor/${unique_Id}` : ""
+              }
               className="shareable-input"
             />
             <button onClick={handleCopy} className="copy-button">

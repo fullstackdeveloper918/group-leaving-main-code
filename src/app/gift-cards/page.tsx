@@ -29,7 +29,7 @@ const page = async() => {
         <section className="bg-lightBg common_padding">
           <div className=" text-center container-fluid">
             <h2 className="mt-2 text-2xl  xl:text-3xl font-bold text-center text-gray-900">
-              Gift Card Collection Pots
+              Shared Gift Funds
             </h2>
             <p className="text-center text-[#4b5563] mb-10 md:text-xl  text-md 2xl:max-w-[60%] mx-auto font-medium ">
               Add a group collection pot to all our group cards to pool money

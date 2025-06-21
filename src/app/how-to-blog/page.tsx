@@ -8,10 +8,10 @@ const HowToBlogPage = () => (
     <p className="mb-4">We feature stories from our community, showcasing how users have used Goodluckcards to connect, celebrate, and share special moments. These real-life examples offer valuable insights and inspiration for your own projects.</p>
     <p className="mb-4">Our team of writers and contributors are passionate about helping you express yourself in meaningful ways. We provide tips on writing heartfelt messages, choosing the perfect design, and organizing group contributions.</p>
     <p className="mb-4">Stay up to date with the latest trends in digital greetings and group celebrations. Our blog is your go-to resource for fresh ideas and expert guidance.</p>
-    <p className="mb-4">We encourage our readers to share their experiences and contribute to our blog. If you have a story or tip to share, we'd love to hear from you!</p>
+    <p className="mb-4">We encourage our readers to share their experiences and contribute to our blog. If you have a story or tip to share, we&apos;d love to hear from you!</p>
     <p className="mb-4">Thank you for visiting the How to - Blog. We hope you find inspiration and practical advice to make every card you create truly special.</p>
-    <p className="mb-4">Explore our articles and discover new ways to celebrate life's moments with Goodluckcards.</p>
+    <p className="mb-4">Explore our articles and discover new ways to celebrate life&apos;s moments with Goodluckcards.</p>
   </div>
 );
 
-export default HowToBlogPage; 
+export default HowToBlogPage;

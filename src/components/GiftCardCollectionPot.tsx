@@ -111,7 +111,7 @@ const handleProceed = () => {
         
         <>
         <h2 className="text-lg font-semibold mb-4 text-center">
-        Gift Card Collection Pot
+        Shared Gift Fund
       </h2>
       <div className="flex justify-center mb-4">
         <img

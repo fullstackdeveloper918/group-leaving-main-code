@@ -39,6 +39,7 @@ const Home: React.FC<HomeProps> = async ({ searchParams }) => {
     url: "https://dating.goaideme.com/card/collection-listing",
     method: "GET",
   };
+  
   const data2: ApiResponse<any> = await fetchFromServer(api2);
   console.log("Collection Listing Response:", data2.data);
   let user = await fetch('https://dating.goaideme.com/user/profile', {
@@ -58,9 +59,9 @@ const Home: React.FC<HomeProps> = async ({ searchParams }) => {
         <div className="mt-50">
           <Hero {...cardData} token={token} userData={userData.data} />
         </div>
-        <div className="section_space_50">
+        {/* <div className="section_space_50">
           <PartnerCompanies />
-        </div>
+        </div> */}
         <HomeCategorySection searchParams={searchParams} />
         {/* Section 4 */}
         <Image_text_Card />

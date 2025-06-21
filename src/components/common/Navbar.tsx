@@ -232,7 +232,7 @@ const Navbar = () => {
                 href="/create"
                 className="text-md btnPrimary text-blackText hidden md:block text-blackText no-underline font-medium hover:text-blueText "
               >
-                Get Started
+                Start a Card
               </Link>
               {/* <a
                 href="/card/farewell"
@@ -264,7 +264,7 @@ const Navbar = () => {
                     href="/account/cards"
                     className="text-md text-blackText hidden md:block text-blackText no-underline font-medium hover:text-blueText "
                   >
-                    My Account
+                    Dashboard
                   </Link>
                   <div className="dropdown">
                     <img
@@ -299,7 +299,7 @@ const Navbar = () => {
                               ?.classList.remove("show");
                           }}
                         >
-                          Cards
+                          Browse Cards
                         </Link>
                       </li>
                       <li>
@@ -313,7 +313,7 @@ const Navbar = () => {
                               ?.classList.remove("show");
                           }}
                         >
-                          Pricing
+                          Our Plans
                         </Link>
                       </li>
                       <li>
@@ -321,7 +321,7 @@ const Navbar = () => {
                           className="dropdown-item"
                           onClick={() => setIsModalOpen(true)}
                         >
-                          <span className="text-[#970119] font-semibold">Logout</span>
+                          <span className="text-[#970119] font-semibold">Sign Out</span>
                         </button>
                       </li>
                     </ul>
@@ -333,12 +333,12 @@ const Navbar = () => {
                     href="/login"
                     className="text-md text-blackText hidden md:block text-blackText no-underline font-medium hover:text-blueText "
                   >
-                    Login
+                    Sign In
                   </Link>
 
                   <Link href={`/register`}>
                     <button className="text-white px-3 py-2  ml-2 rounded-md bg-blueBg d-hide-btn">
-                      Register
+                      Join Now
                     </button>
                     <img
                       src={register.src}

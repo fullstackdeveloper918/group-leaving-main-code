@@ -155,7 +155,7 @@ const AccountCards = ({ data }: any) => {
                       ) : (
                         // /share/${data?.data?.uuid}?brandKey=${brandKeys}
                         <Link href={`/share/${card?.uuid}`}>
-                        <button className="bg-[#001160] text-white border border-gray-300 px-3 h-10 rounded-2xl hover:bg-[#132DAD]">
+                        <button className="bg-[#558ec9] text-white border border-gray-300 px-3 h-10 rounded-2xl hover:bg-[#132DAD]">
                           View Gift
                         </button>
                         </Link>
@@ -167,10 +167,10 @@ const AccountCards = ({ data }: any) => {
                     <div className="flex justify-between w-full">
                       <div className="">
                         <p className="text-gray-500 text-sm">
-                          CREATED: {formattedCreateDate}
+                          Created At: {formattedCreateDate}
                         </p>
                         <p className="text-gray-500 text-sm">
-                          STATUS:{" "}
+                          Status:{" "}
                           <span
                             className={
                               card.paymentStatus === "captured"
@@ -185,10 +185,10 @@ const AccountCards = ({ data }: any) => {
                       <div className="text-right">
                         {/* Formatted Delivery Date */}
                         <p className="text-gray-500 text-sm">
-                          DELIVERY DATE: {formattedDeliveryDate}
+                          Delivery Date: {formattedDeliveryDate}
                         </p>
                         <p className="text-gray-500 text-sm">
-                          SIGNATURES: {card.signatures} signatures
+                          Signatures: {card.signatures ? card.signatures :"-"} 
                         </p>
                       </div>
                     </div>

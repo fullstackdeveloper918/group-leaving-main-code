@@ -5,7 +5,7 @@ const OfficePage = () => (
     <h1 className="text-3xl font-bold mb-4">Our Office</h1>
     <p className="mb-4">Goodluckcards operates from a vibrant and collaborative office environment where creativity and innovation thrive. Our workspace is designed to inspire our team and foster a culture of teamwork and excellence.</p>
     <p className="mb-4">Located in the heart of the city, our office is easily accessible and equipped with state-of-the-art facilities. We believe that a comfortable and dynamic workspace is essential for productivity and employee satisfaction.</p>
-    <p className="mb-4">Our office is more than just a place to work; it's a hub for brainstorming, problem-solving, and building lasting relationships. We encourage open communication and value the diverse perspectives each team member brings.</p>
+    <p className="mb-4">Our office is more than just a place to work; it&apos;s a hub for brainstorming, problem-solving, and building lasting relationships. We encourage open communication and value the diverse perspectives each team member brings.</p>
     <p className="mb-4">We prioritize the well-being of our employees by providing a healthy work-life balance, flexible schedules, and opportunities for professional growth. Our office culture is inclusive, supportive, and driven by a shared passion for our mission.</p>
     <p className="mb-4">Regular team-building activities and social events help strengthen our bonds and create a positive atmosphere. We celebrate achievements together and support each other through challenges, making Goodluckcards a great place to work.</p>
     <p className="mb-4">Our leadership team is committed to transparency and open-door policies, ensuring that every voice is heard and valued. We believe that great ideas can come from anyone, and we empower our team to take initiative and innovate.</p>
@@ -15,4 +15,4 @@ const OfficePage = () => (
   </div>
 );
 
-export default OfficePage; 
+export default OfficePage;

@@ -5,7 +5,7 @@ import DemoViewCard from './DemoViewCard'
 import OptionCard from "@/components/OptionCard";
 import Images from "../../constants/images";
 import html2canvas from 'html2canvas'
-import userIcon from "../../assets/icons/ab.png"
+import userIcon from "../../assets/icons/abj.png"
 import Image from 'next/image';
 const DemoBoard = () => {
      const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,7 +75,7 @@ const DemoBoard = () => {
     <div className=" w-full md:mt-0 mt-5" style={{paddingLeft:"624px"}} id='excludeDiv'>
       <div className="bg-white shadow-lg rounded-lg p-10 w-full max-w-lg">
         <h3 className="text-center text-md font-normal">
-          Gift Card Collection Pot
+          Shared Gift Fund
         </h3>
         <button className='text-center text-md font-normal' onClick={() => setIsModalOpen(true)}>
           <span className="">
@@ -90,7 +90,7 @@ const DemoBoard = () => {
         />
         <h4 className="font-bold text-center ">£0</h4>
         <button className="bg-greyBorder text-blackText rounded-lg w-100 text-sm p-2.5">
-          Contribute to Hagrid Gift Card
+          Chip in for Hagrid&apos;s Gift
         </button>
       </div>
       

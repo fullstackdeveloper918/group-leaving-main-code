@@ -8,11 +8,11 @@ const AboutPage = () => (
     <p className="mb-4">Our platform is designed to be user-friendly, allowing anyone to start a card, invite friends and colleagues, and collect messages, images, and signatures in one beautiful digital card. We are committed to making the process enjoyable and accessible for everyone.</p>
     <p className="mb-4">At Goodluckcards, we value privacy and security. Your data is protected with industry-standard encryption, and we never share your information without your consent. We are dedicated to maintaining a safe and trustworthy environment for all our users.</p>
     <p className="mb-4">Our team is passionate about innovation and constantly works to introduce new features and designs. We listen to our community and strive to exceed expectations with every update. Your feedback is invaluable in helping us grow and improve.</p>
-    <p className="mb-4">We are proud to support a diverse range of occasions and cultures. Whether it's a joyful celebration or a heartfelt farewell, Goodluckcards is here to help you connect and share your emotions in a meaningful way.</p>
-    <p className="mb-4">Our customer support team is always ready to assist you. If you have any questions or need help, don't hesitate to reach out. We are here to ensure your experience is smooth and enjoyable from start to finish.</p>
-    <p className="mb-4">Thank you for choosing Goodluckcards. Together, let's make every moment special and every card unforgettable.</p>
+    <p className="mb-4">We are proud to support a diverse range of occasions and cultures. Whether it&apos;s a joyful celebration or a heartfelt farewell, Goodluckcards is here to help you connect and share your emotions in a meaningful way.</p>
+    <p className="mb-4">Our customer support team is always ready to assist you. If you have any questions or need help, don&apos;t hesitate to reach out. We are here to ensure your experience is smooth and enjoyable from start to finish.</p>
+    <p className="mb-4">Thank you for choosing Goodluckcards. Together, let&apos;s make every moment special and every card unforgettable.</p>
     <p className="mb-4">Join our growing community and discover the joy of group celebrations, made easy and memorable with Goodluckcards.</p>
   </div>
 );
 
-export default AboutPage; 
+export default AboutPage;

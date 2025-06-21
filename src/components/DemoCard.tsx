@@ -10,7 +10,7 @@ import { Button, Input, Modal, QRCode, Space, Typography } from "antd";
 import { toast, ToastContainer } from "react-toastify";
 import DemoViewCard from "./common/DemoViewCard";
 import DemoBoard from "./common/DemoBoard";
-import userIcon from "../assets/icons/ab.png";
+import userIcon from "../assets/icons/abj.png";
 import Image from "next/image";
 import Custom from "./common/custom";
 import Customcraousal from "./common/Customcraousal";
@@ -20,6 +20,7 @@ import EnvelopCard from "./common/EnvelopCard";
 import { useRouter } from "next/navigation";
 import CustomEditior from "./common/CustomEditior";
 const { Paragraph, Text } = Typography;
+import  AMZ from "../assets/icons/amz.jpeg"
 const DemoCard = ({ params }: any) => {
 
   const router= useRouter()
@@ -148,7 +149,7 @@ const DemoCard = ({ params }: any) => {
                 <MySignatures/>
                   <div className="bg-white shadow-lg rounded-lg p-10 w-full max-w-lg flex flex-col gap-2 items-center">
                     <h3 className="text-center text-md font-normal ">
-                      Gift Card Collection Pot
+                      Shared Gift Fund
                     </h3>
                     <button
                       className="text-center text-md font-normal relative"
@@ -159,14 +160,15 @@ const DemoCard = ({ params }: any) => {
                         <Image src={userIcon} alt="user" />
                       </span>
                     </button>
-                    <img
-                      src="https://gift.wegift.io/static/product_assets/AMZ-GB/AMZ-GB-card.png"
-                      alt="Amazon"
+                    <Image
+                      src={AMZ}
+                      // src="https://gift.wegift.io/static/product_assets/AMZ-GB/AMZ-GB-card.png"
+alt="Amazon"
                       className="voucher_img mx-auto rounded"
                     />
-                    <h4 className="font-bold text-center ">£360</h4>
+                    <h4 className="font-bold text-center ">INR360</h4>
                     <button className="bg-greyBorder text-blackText rounded-lg  w-100 text-sm p-2.5">
-                      Contribute to Hagrid Gift Card
+                      Chip in for Hagrid&apos;s Gift
                     </button>
                   </div>
                   <div className="w-full" style={{ width: "73%" }}>

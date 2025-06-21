@@ -37,7 +37,7 @@ const AccountContribution = () => {
           </p>
         </div>
         <p className="mt-4 text-sm text-gray-500">
-          Looks like you haven’t contributed to any gift card collection pots yet.
+          Looks like you haven’t contributed to any Shared Gift Funds yet.
         </p>
       </div>
 
