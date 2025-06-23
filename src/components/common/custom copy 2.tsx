@@ -15,12 +15,12 @@ import Modal from "react-modal";
 import axios from "axios";
 import nookies from "nookies";
 import jsPDF from "jspdf";
-import Moveable from 'react-moveable';
+import Moveable from "react-moveable";
 import Draggable from "react-draggable";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { Editor } from 'react-draft-wysiwyg';
-import { EditorState } from 'draft-js';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { Editor } from "react-draft-wysiwyg";
+import { EditorState } from "draft-js";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "react-quill/dist/quill.snow.css";
 
 // Emoji support
@@ -98,7 +98,7 @@ const Custom: React.FC = () => {
   const [elements, setElements] = useState<any[]>([]);
   const [editorContent, setEditorContent] = useState("");
   const sliderRef = useRef<HTMLInputElement>(null);
-console.log(id,"popo");
+  console.log(id, "popo");
 
   useEffect(() => {
     if (params.id) {
@@ -126,99 +126,97 @@ console.log(id,"popo");
       localStorage.setItem("slideElements", JSON.stringify(elements));
     }
   }, [elements]);
-console.log(elements,"wertyui");
+  console.log(elements, "wertyui");
 
-const [slides, setSlides] = useState<any>([]);
-const pathname = usePathname();
-console.log(pathname,"pathname");
-const isEditorPath = /^\/share\/editor\/[^/]+$/.test(pathname);
-console.log(isEditorPath,"isEditorPath");
+  const [slides, setSlides] = useState<any>([]);
+  const pathname = usePathname();
+  console.log(pathname, "pathname");
+  const isEditorPath = /^\/share\/editor\/[^/]+$/.test(pathname);
+  console.log(isEditorPath, "isEditorPath");
 
-useEffect(() => {
-  const storedElements = localStorage.getItem("slideElements");
+  useEffect(() => {
+    const storedElements = localStorage.getItem("slideElements");
 
-  if (storedElements) {
-    const parsed = JSON.parse(storedElements);
-    // setParsedElements(parsed); // assuming you use this elsewhere
+    if (storedElements) {
+      const parsed = JSON.parse(storedElements);
+      // setParsedElements(parsed); // assuming you use this elsewhere
 
-    // Get max slideIndex from parsed elements
-    const maxIndex = Math.max(...parsed.map((el: any) => el.slideIndex));
+      // Get max slideIndex from parsed elements
+      const maxIndex = Math.max(...parsed.map((el: any) => el.slideIndex));
 
-    // Define initial slides (your default slides)
-    const initialSlides = isEditorPath
-    ?  [
-        {
-          id: "slide-1",
-          title: "Development",
-          subtitle: "SCSS Only Slider",
-          text: "Learn to create a SCSS-only responsive slider.",
-          link: "https://blog.significa.pt/css-only-slider-71727effff0b",
-          card_img: SlideImg_0,
-        },
-    ]:
-      [
-        {
-          id: "slide-1",
-          title: "Development",
-          subtitle: "SCSS Only Slider",
-          text: "Learn to create a SCSS-only responsive slider.",
-          link: "https://blog.significa.pt/css-only-slider-71727effff0b",
-          card_img: SlideImg_0,
-        },
-        {
-          id: "slide-2",
-          title: "Web Design",
-          subtitle: "Creative Animations",
-          text: "Explore modern web design techniques.",
-          link: "https://medium.com/web-design",
-          card_img: SlideImg_1,
-        },
-        {
-          id: "slide-3",
-          title: "JavaScript",
-          subtitle: "Advanced ES6 Features",
-          text: "Master JavaScript ES6+ features in depth.",
-          link: "https://javascript.info/",
-          card_img: SlideImg_2,
-        },
-        {
-          id: "slide-4",
-          title: "React",
-          subtitle: "State Management",
-          text: "A guide to managing state effectively in React.",
-          link: "https://reactjs.org/docs/hooks-intro.html",
-          card_img: SlideImg_3,
-        },
-        {
-          id: "slide-5",
-          title: "Next.js",
-          subtitle: "Optimizing Performance",
-          text: "Learn Next.js best practices for fast web apps.",
-          link: "https://nextjs.org/docs/advanced-features",
-          card_img: SlideImg_4,
-        },
-      ] as any;
+      // Define initial slides (your default slides)
+      const initialSlides = isEditorPath
+        ? [
+            {
+              id: "slide-1",
+              title: "Development",
+              subtitle: "SCSS Only Slider",
+              text: "Learn to create a SCSS-only responsive slider.",
+              link: "https://blog.significa.pt/css-only-slider-71727effff0b",
+              card_img: SlideImg_0,
+            },
+          ]
+        : ([
+            {
+              id: "slide-1",
+              title: "Development",
+              subtitle: "SCSS Only Slider",
+              text: "Learn to create a SCSS-only responsive slider.",
+              link: "https://blog.significa.pt/css-only-slider-71727effff0b",
+              card_img: SlideImg_0,
+            },
+            {
+              id: "slide-2",
+              title: "Web Design",
+              subtitle: "Creative Animations",
+              text: "Explore modern web design techniques.",
+              link: "https://medium.com/web-design",
+              card_img: SlideImg_1,
+            },
+            {
+              id: "slide-3",
+              title: "JavaScript",
+              subtitle: "Advanced ES6 Features",
+              text: "Master JavaScript ES6+ features in depth.",
+              link: "https://javascript.info/",
+              card_img: SlideImg_2,
+            },
+            {
+              id: "slide-4",
+              title: "React",
+              subtitle: "State Management",
+              text: "A guide to managing state effectively in React.",
+              link: "https://reactjs.org/docs/hooks-intro.html",
+              card_img: SlideImg_3,
+            },
+            {
+              id: "slide-5",
+              title: "Next.js",
+              subtitle: "Optimizing Performance",
+              text: "Learn Next.js best practices for fast web apps.",
+              link: "https://nextjs.org/docs/advanced-features",
+              card_img: SlideImg_4,
+            },
+          ] as any);
 
-    // Create a new array of slides that includes placeholders if needed
-    const filledSlides = [...initialSlides];
+      // Create a new array of slides that includes placeholders if needed
+      const filledSlides = [...initialSlides];
 
-    for (let i = initialSlides.length; i <= maxIndex; i++) {
-      filledSlides.push({
-        id: `slide-${i + 1}`,
-        title: `Slide ${i + 1}`,
-        subtitle: "Placeholder Subtitle",
-        text: "This is a dynamically generated slide.",
-        link: "#",
-        card_img: `https://via.placeholder.com/300x200?text=Slide+${i + 1}`,
-      });
+      for (let i = initialSlides.length; i <= maxIndex; i++) {
+        filledSlides.push({
+          id: `slide-${i + 1}`,
+          title: `Slide ${i + 1}`,
+          subtitle: "Placeholder Subtitle",
+          text: "This is a dynamically generated slide.",
+          link: "#",
+          card_img: `https://via.placeholder.com/300x200?text=Slide+${i + 1}`,
+        });
+      }
+
+      // Update state with the new full list of slides
+      setSlides(filledSlides);
     }
-
-    // Update state with the new full list of slides
-    setSlides(filledSlides);
-  }
-}, []);
-
-
+  }, []);
 
   const sendEditorData = async () => {
     const item = {
@@ -473,7 +471,7 @@ useEffect(() => {
     }
 
     // Force re-render of slides to update their positions
-    setSlides((prevSlides:any) => [...prevSlides]);
+    setSlides((prevSlides: any) => [...prevSlides]);
   };
 
   const handlePrevSlide = () => {
@@ -500,14 +498,12 @@ useEffect(() => {
     router.push(`/envelop/${id}`);
   };
 
-  console.log(slides,"slides");
-  
+  console.log(slides, "slides");
 
   return (
     <>
       <div className="card-carousel-container" id="main-carousle">
-        
-      <div className="editor_option" style={{ marginBottom: "15px" }} >
+        <div className="editor_option" style={{ marginBottom: "15px" }}>
           <div>
             <button
               className="add_btn"
@@ -517,15 +513,11 @@ useEffect(() => {
                 borderRadius: "50px",
               }}
             >
-              Add Message
+              Add Your Message
             </button>
           </div>
           <div className="search_input">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-            />
+            <input type="file" accept="image/*" onChange={handleImageUpload} />
             <div className="upload_svg">
               <svg
                 className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium mus-vubbuv"
@@ -540,7 +532,13 @@ useEffect(() => {
           </div>
           <div className="search_input" onClick={openModal}>
             <div className="upload_svg">
-              <svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium mus-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="GifIcon">
+              <svg
+                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium mus-vubbuv"
+                focusable="false"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                data-testid="GifIcon"
+              >
                 <path d="M11.5 9H13v6h-1.5zM9 9H6c-.6 0-1 .5-1 1v4c0 .5.4 1 1 1h3c.6 0 1-.5 1-1v-2H8.5v1.5h-2v-3H10V10c0-.5-.4-1-1-1m10 1.5V9h-4.5v6H16v-2h2v-1.5h-2v-1z"></path>
               </svg>
             </div>
@@ -549,18 +547,23 @@ useEffect(() => {
             <button
               onClick={handleAddPage}
               className="px-4 py-2 add_btn border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition"
-              style={{ color: "white", marginLeft: "40px", borderRadius: "70px" }}
+              style={{
+                color: "white",
+                marginLeft: "40px",
+                borderRadius: "70px",
+              }}
             >
               +
             </button>
           </div>
-          {id=="fwzDVjvbQ_X" ?"":(
-
-          <div style={{ textAlign: "center" }}>
-          <button className="add-btn" onClick={openEnvelop}>
-            Preview
-          </button>
-        </div>
+          {id == "fwzDVjvbQ_X" ? (
+            ""
+          ) : (
+            <div style={{ textAlign: "center" }}>
+              <button className="add-btn" onClick={openEnvelop}>
+                Preview
+              </button>
+            </div>
           )}
           {/* <div style={{ textAlign: "center" }}>
             <button style={{
@@ -580,13 +583,12 @@ useEffect(() => {
         </div>
 
         <div className="card-carousel">
-       
           <div className="carousel-wrapper">
             <div className="carousel-slides">
-              {slides.map((slide:any, index:any) => {
+              {slides.map((slide: any, index: any) => {
                 // Calculate position classes
-                console.log(slide,"jlgfj");
-                
+                console.log(slide, "jlgfj");
+
                 let positionClass = "slide-hidden";
 
                 if (index === activeSlideIndex) {
@@ -607,15 +609,19 @@ useEffect(() => {
                     className={`carousel-slide ${positionClass}`}
                     onClick={() => handleSlideChange(index)}
                   >
-                    {slide?.card_img &&
-                    <div className="slide-content">
-                      <img
-                        src={typeof slide.card_img === 'string' ? slide.card_img : slide.card_img?.src}
-                        alt={`slide-${index + 1}`}
-                        className="slide-image"
-                      />
-                    </div>
-              }
+                    {slide?.card_img && (
+                      <div className="slide-content">
+                        <img
+                          src={
+                            typeof slide.card_img === "string"
+                              ? slide.card_img
+                              : slide.card_img?.src
+                          }
+                          alt={`slide-${index + 1}`}
+                          className="slide-image"
+                        />
+                      </div>
+                    )}
                     {/* Only render draggable elements for the active slide */}
                     {index === activeSlideIndex &&
                       elements
@@ -636,84 +642,83 @@ useEffect(() => {
                 );
               })}
 
-
-{showModal && (
-            <Draggable axis="both" handle=".drag-handle">
-              <div
-                className="modal-container"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div
-                  className="drag-handle"
-                  style={{
-                    cursor: "move",
-                    marginBottom: "10px",
-                    textAlign: "center",
-                    fontWeight: "bold",  }}
-                >
-                  Add Message
-                </div>
-                <ReactQuill
-                  theme="snow"
-                  value={editorContent}
-                  onChange={setEditorContent}
-                    placeholder="Enter your message"
-                  style={{
-                    height: "auto",
-                    marginBottom: "20px",
-                    paddingBottom: "0px",
-                  }}
-                  // modules={{
-                  //   toolbar: [
-                  //     [{ header: "1" }, { header: "2" }, { font: [] }],
-                  //     // [{ list: "ordered" }, { list: "bullet" }],
-                  //     // [{ script: "sub" }, { script: "super" }],
-                  //     // [{ indent: "-1" }, { indent: "+1" }],
-                  //     [{ align: [] }],
-                  //     ["bold", "italic", "underline", "strike"],
-                  //     [{ color: [] }, { background: [] }],
-                  //     // [{ font: [] }],
-                  //     // [{ size: [] }],
-                  //     ["link", "image", "video"],
-                  //     // ["blockquote", "code-block"],
-                  //     // ["clean"],
-                  //   ],
-                  // }}
-                  modules={{
-                    toolbar: [
-                      
-                      [{ header: "1" }, { header: "2" }, { font: [] }],
-                      [{ align: [] }],
-                      ["bold", "italic", "underline", "strike"],
-                      [{ color: [] }, { background: [] }],
-                    ],
-                  }}
-               />
-                <div className="flex gap-4 mt-0 items-center justify-center">
-                  <button
-                    onClick={() => setShowModal(false)}
-                    style={{
-                      padding: "10px 20px",
-                      backgroundColor: "#f0f0f0",
-                      borderRadius: "4px",
-                    }}
+              {showModal && (
+                <Draggable axis="both" handle=".drag-handle">
+                  <div
+                    className="modal-container"
+                    onClick={(e) => e.stopPropagation()}
                   >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleSaveMessage}
-                    style={{
-                      padding: "10px 20px",
-                      backgroundColor: "#007BFF",
-                      color: "#fff",
-                      borderRadius: "4px",
-                    }}
-                  >
-                    Save
-                  </button>
-                </div>
-              </div>
-              {/* <div className="editor-container">
+                    <div
+                      className="drag-handle"
+                      style={{
+                        cursor: "move",
+                        marginBottom: "10px",
+                        textAlign: "center",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Add Your Message
+                    </div>
+                    <ReactQuill
+                      theme="snow"
+                      value={editorContent}
+                      onChange={setEditorContent}
+                      placeholder="Enter your message"
+                      style={{
+                        height: "auto",
+                        marginBottom: "20px",
+                        paddingBottom: "0px",
+                      }}
+                      // modules={{
+                      //   toolbar: [
+                      //     [{ header: "1" }, { header: "2" }, { font: [] }],
+                      //     // [{ list: "ordered" }, { list: "bullet" }],
+                      //     // [{ script: "sub" }, { script: "super" }],
+                      //     // [{ indent: "-1" }, { indent: "+1" }],
+                      //     [{ align: [] }],
+                      //     ["bold", "italic", "underline", "strike"],
+                      //     [{ color: [] }, { background: [] }],
+                      //     // [{ font: [] }],
+                      //     // [{ size: [] }],
+                      //     ["link", "image", "video"],
+                      //     // ["blockquote", "code-block"],
+                      //     // ["clean"],
+                      //   ],
+                      // }}
+                      modules={{
+                        toolbar: [
+                          [{ header: "1" }, { header: "2" }, { font: [] }],
+                          [{ align: [] }],
+                          ["bold", "italic", "underline", "strike"],
+                          [{ color: [] }, { background: [] }],
+                        ],
+                      }}
+                    />
+                    <div className="flex gap-4 mt-0 items-center justify-center">
+                      <button
+                        onClick={() => setShowModal(false)}
+                        style={{
+                          padding: "10px 20px",
+                          backgroundColor: "#f0f0f0",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleSaveMessage}
+                        style={{
+                          padding: "10px 20px",
+                          backgroundColor: "#007BFF",
+                          color: "#fff",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                  {/* <div className="editor-container">
       <Editor
         editorState={editorState}
         onEditorStateChange={setEditorState}
@@ -735,9 +740,8 @@ useEffect(() => {
         <button className="save-btn">Save</button>
       </div>
     </div> */}
-            </Draggable>
-          )}
-
+                </Draggable>
+              )}
             </div>
 
             <div className="carousel-controls">
@@ -910,7 +914,7 @@ const DraggableElement = ({
       }}
       {...bind()}
     >
-     {type === "image" || type === "gif" ? (
+      {type === "image" || type === "gif" ? (
         <div>
           <div
             ref={targetRef}
@@ -918,11 +922,11 @@ const DraggableElement = ({
               width: `${frame.width}px`,
               height: `${frame.height}px`,
               transform: `translate(${frame.translate[0]}px, ${frame.translate[1]}px) rotate(${frame.rotate}deg)`,
-              transformOrigin: 'top left',
+              transformOrigin: "top left",
               backgroundImage: `url(${content || "/placeholder.svg"})`,
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
             }}
           />
           <Moveable
@@ -935,10 +939,10 @@ const DraggableElement = ({
             throttleRotate={0}
             origin={false}
             onDrag={({ beforeTranslate }) => {
-              setFrame(prev => ({ ...prev, translate: beforeTranslate }));
+              setFrame((prev) => ({ ...prev, translate: beforeTranslate }));
             }}
             onResize={({ width, height, drag }) => {
-              setFrame(prev => ({
+              setFrame((prev) => ({
                 ...prev,
                 width,
                 height,
@@ -946,7 +950,7 @@ const DraggableElement = ({
               }));
             }}
             onRotate={({ beforeRotate }) => {
-              setFrame(prev => ({ ...prev, rotate: beforeRotate }));
+              setFrame((prev) => ({ ...prev, rotate: beforeRotate }));
             }}
           />
         </div>

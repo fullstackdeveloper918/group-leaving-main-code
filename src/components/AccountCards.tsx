@@ -37,10 +37,10 @@ type Card = {
 // ];
 
 const AccountCards = ({ data }: any) => {
-  console.log(data,"uouwerouwe");
-  
-// const AccountCards = () => {
-  const router = useRouter(); 
+  console.log(data, "uouwerouwe");
+
+  // const AccountCards = () => {
+  const router = useRouter();
 
   // const [data,setData] = useState<any>([])
   // console.log(data, "cshjksd");
@@ -55,7 +55,7 @@ const AccountCards = ({ data }: any) => {
   //                 // window.location.reload();
   //     }
   // },[data])
-// const gettoken = Cookies.get("auth_token"); 
+  // const gettoken = Cookies.get("auth_token");
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -65,11 +65,11 @@ const AccountCards = ({ data }: any) => {
   //           'Authorization': `Bearer ${gettoken}`,
   //         },
   //       });
-  
+
   //       const posts = await data.json();
   //       setData(posts)
   //       console.log("postssssssssssssss",posts)
-  
+
   //       if (posts?.statusCode === 401) {
   //         Cookies.remove("auth_token"); // This won't work on the client side
   //         toast.error("Session expired. Please log in again.");
@@ -80,10 +80,9 @@ const AccountCards = ({ data }: any) => {
   //       toast.error("Error fetching profile data:");
   //     }
   //   };
-  
+
   //   fetchData();
   // }, []);
-  
 
   const deliveryDate = "2024-11-28T00:00:00.000Z";
   const dateObject = new Date(deliveryDate);
@@ -98,7 +97,7 @@ const AccountCards = ({ data }: any) => {
       <h1 className="text-2xl font-bold mb-6">My Cards</h1>
 
       <div className="w-full max-w-4xl">
-        {(!data?.listing || data?.listing.length === 0) ? (
+        {!data?.listing || data?.listing.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10">
             <p className="mb-4 text-gray-500">No data found.</p>
           </div>
@@ -155,22 +154,21 @@ const AccountCards = ({ data }: any) => {
                       ) : (
                         // /share/${data?.data?.uuid}?brandKey=${brandKeys}
                         <Link href={`/share/${card?.uuid}`}>
-                        <button className="bg-[#558ec9] text-white border border-gray-300 px-3 h-10 rounded-2xl hover:bg-[#132DAD]">
-                          View Gift
-                        </button>
+                          <button className="bg-[#558ec9] text-white border border-gray-300 px-3 h-10 rounded-2xl hover:bg-[#132DAD]">
+                            See Gift
+                          </button>
                         </Link>
                       )}
-                      
                     </div>
                     <hr />
 
                     <div className="flex justify-between w-full">
                       <div className="">
                         <p className="text-gray-500 text-sm">
-                          Created At: {formattedCreateDate}
+                          Created On: {formattedCreateDate}
                         </p>
                         <p className="text-gray-500 text-sm">
-                          Status:{" "}
+                          Current Status:{" "}
                           <span
                             className={
                               card.paymentStatus === "captured"
@@ -178,17 +176,19 @@ const AccountCards = ({ data }: any) => {
                                 : "text-[#CB6E17]"
                             }
                           >
-                            {card.paymentStatus === "captured" ? "Active" : "Unpaid"}
+                            {card.paymentStatus === "captured"
+                              ? "Active"
+                              : "Unpaid"}
                           </span>
                         </p>
                       </div>
                       <div className="text-right">
                         {/* Formatted Delivery Date */}
                         <p className="text-gray-500 text-sm">
-                          Delivery Date: {formattedDeliveryDate}
+                          Scheduled Delivery: {formattedDeliveryDate}
                         </p>
                         <p className="text-gray-500 text-sm">
-                          Signatures: {card.signatures ? card.signatures :"-"} 
+                          Messages: {card.signatures ? card.signatures : "-"}
                         </p>
                       </div>
                     </div>

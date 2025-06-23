@@ -288,22 +288,22 @@ const CreateGroup = ({ data }: any) => {
       <ToastContainer />
 
       <div className="flex flex-col items-center justify-center min-h-screen bg-white">
-        <h1 className="text-4xl font-bold mb-8">
-          Create a Group Gift Collection
-        </h1>
+        <h2 className="text-4xl font-bold mb-8">
+          Start a Group Gift Collection
+        </h2>
         <form
           onSubmit={handleSubmit}
           className="bg-white p-8 rounded-lg shadow-md w-full max-w-md"
         >
           <label className="block mb-6">
             <span className="text-gray-700 text-sm">
-              What is the collection for?
+              What is the purpose of this collection?
             </span>
             <input
               type="text"
               value={collectionTitle}
               onChange={handleCollectionTitleChange}
-              placeholder="Collection Title *"
+              placeholder="Collection Name*"
               className="mt-2 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
@@ -311,22 +311,19 @@ const CreateGroup = ({ data }: any) => {
           <div className="mb-6">
             {addSelectedImage === null ? (
               <div className="flex flex-col gap-1">
-                <h2 className="text-lg font-semibold mb-2">Select a gift</h2>
+                <h2 className="text-lg font-semibold mb-2">Choose a gift</h2>
                 <p className="text-gray-600 mb-4">
-                  Pick the gift that you want to collect cash for. Anyone will
-                  be able to contribute to it.
+                  Select the gift you want to fund. Everyone can contribute.
                 </p>
                 <button
                   type="button"
                   className="flex items-center justify-center border border-dashed border-blue-500 bg-blue-50 rounded-md p-4 text-blue-600 font-medium transition duration-300 hover:bg-blue-100"
-                  // onClick={() => setFormData({ ...formData, selectedGift: 'gift card' })} // Update the selected gift here
                   onClick={openModal}
-                  // disabled={loading1}addSelectedImage
                 >
                   {loading1 ? (
                     <span className="">Loading...</span>
                   ) : (
-                    <span className="text-2xl mr-2">+ Select gift card</span>
+                    <span className="text-2xl mr-2">+ Choose gift card</span>
                   )}
                 </button>
 
@@ -340,8 +337,7 @@ const CreateGroup = ({ data }: any) => {
                 <h2 className="text-center font-bold">Gift Card</h2>
                 <img src={addSelectedImage} alt="" className="" />
                 <p className="text-center">
-                  Everyone will be able to contribute after you finish creating
-                  the card.
+                  Once your card is created, anyone can add their contribution.
                 </p>
                 <button
                   className="text-[#FF0000] hover:text-red-800 font-medium"
@@ -364,11 +360,11 @@ const CreateGroup = ({ data }: any) => {
                 disabled={!brandKeys}
                 className="w-full bg-blue-600 cursor-not-allowed text-black border-2 border-blue-700 py-3 rounded-md hover:bg-blue-700 transition duration-300"
               >
-                Continue
+                Next
               </button>
               {!brandKeys && (
                 <span className="text-center ml-24">
-                  **Please select gift card**
+                  **Please choose a gift card**
                 </span>
               )}
             </>
@@ -394,27 +390,27 @@ const CreateGroup = ({ data }: any) => {
             <div className="bg-white p-6 rounded-md shadow-lg max-w-lg w-full relative overflow-auto">
               {/* Top-left Cancel Button */}
               <h2 className="text-lg font-semibold mb-4 text-center">
-                Select a Gift Card
+                Choose a Gift Card
               </h2>
 
               <button
                 className="absolute top-4 right-4 bg-gray-200 text-gray-700 px-2 py-1 rounded-md hover:bg-gray-300"
                 onClick={closeModal}
               >
-                X
+                Close
               </button>
 
               {/* How Collection Pots Work */}
               <div className="bg-blue-100 p-4 rounded-md mb-2">
                 <h3 className="text-sm font-semibold">
-                  How do collection pots work?
+                  How does a group fund work?
                 </h3>
                 <ul className="text-sm text-gray-600 mt-2">
-                  <li>1. Add a gift card of choice to the card.</li>
-                  <li>2. Anyone can contribute towards the gift card value.</li>
+                  <li>1. Pick a gift card to add to your collection.</li>
+                  <li>2. Friends and colleagues can chip in.</li>
                   <li>
-                    3. The recipient instantly claims it when viewing their
-                    card.
+                    3. The recipient gets the gift card instantly when they open
+                    their collection.
                   </li>
                 </ul>
               </div>
@@ -424,7 +420,7 @@ const CreateGroup = ({ data }: any) => {
                 <div className="flex flex-col items-center">
                   <div className="">
                     <button className="text-black" onClick={handleBackClick}>
-                      Back
+                      Return
                     </button>
                   </div>
                   <div className="">
@@ -437,13 +433,13 @@ const CreateGroup = ({ data }: any) => {
                     {selectedImage.brandName}
                   </h2>
                   <p className="text-sm text-gray-500">
-                    Country: <span className="font-bold">IND</span>
+                    Nation: <span className="font-bold">IND</span>
                   </p>
                   <p className="text-sm text-gray-500">
-                    Currency: <span className="font-bold">INR</span>
+                    Money: <span className="font-bold">INR</span>
                   </p>
                   <p className="text-sm text-gray-500">
-                    Price:{" "}
+                    Amount:{" "}
                     <span className="font-bold">
                       {selectedImage?.senderFee}
                     </span>
@@ -455,20 +451,20 @@ const CreateGroup = ({ data }: any) => {
               Contribution Fees: <span className="font-bold">{selectedImage.contributionFees}</span>
             </p> */}
                   <p className="text-xs text-gray-400 mt-1 text-center">
-                    (We automatically create multiple gift cards if you go over
-                    the max)
+                    (If your total exceeds the limit, we'll split it into
+                    multiple gift cards)
                   </p>
                   <Link
                     href="#"
                     className="text-sm text-blue-600 hover:underline mt-2"
                   >
-                    Terms and conditions
+                    View terms
                   </Link>
                   <button
                     className="bg-blue-600 text-black px-4 py-2 rounded mt-2 hover:bg-blue-700"
                     onClick={AddGiftCard}
                   >
-                    Add Gift Card
+                    Add this Gift Card
                   </button>
                 </div>
               ) : (
@@ -512,7 +508,7 @@ const CreateGroup = ({ data }: any) => {
 
               {/* Modal Footer */}
               <p className="text-sm text-gray-500 mt-4 text-center">
-                You’ll be taken to our payment provider Stripe to complete the
+                You'll be taken to our payment provider Stripe to complete the
                 payment.
               </p>
             </div>

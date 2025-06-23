@@ -4,7 +4,15 @@ import Draggable from "react-draggable";
 
 const EditorCarousel = () => {
   const [messages, setMessages] = useState<
-    { id: number; text: string; x: number; y: number; slide: number; name: string; zIndex: number }[]
+    {
+      id: number;
+      text: string;
+      x: number;
+      y: number;
+      slide: number;
+      name: string;
+      zIndex: number;
+    }[]
   >([]);
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -57,7 +65,10 @@ const EditorCarousel = () => {
   };
 
   return (
-    <div className="slider-container mt-3" style={{ width: "85%", padding: "0px 30px" }}>
+    <div
+      className="slider-container mt-3"
+      style={{ width: "85%", padding: "0px 30px" }}
+    >
       {/* Add Message Button */}
       <div className="editor_option mb-3">
         <button
@@ -71,7 +82,7 @@ const EditorCarousel = () => {
             color: "#fff",
           }}
         >
-          Add Message
+          Add Your Message
         </button>
       </div>
 
@@ -122,103 +133,123 @@ const EditorCarousel = () => {
           .filter((message) => message.slide === currentSlide)
           .map((message) => (
             <Draggable
-  key={message.id}
-  defaultPosition={{ x: message.x, y: message.y }}
-  onStop={(e, data) => {
-    const updatedMessages = messages.map((msg) =>
-      msg.id === message.id ? { ...msg, x: data.x, y: data.y } : msg
-    );
-    setMessages(updatedMessages);
+              key={message.id}
+              defaultPosition={{ x: message.x, y: message.y }}
+              onStop={(e, data) => {
+                const updatedMessages = messages.map((msg) =>
+                  msg.id === message.id ? { ...msg, x: data.x, y: data.y } : msg
+                );
+                setMessages(updatedMessages);
 
-    // Save updated messages to localStorage
-    localStorage.setItem("messages", JSON.stringify(updatedMessages));
-  }}
-  onStart={() => {
-    // When dragging starts, ensure the message is on top of the carousel
-    const updatedMessages = messages.map((msg) =>
-      msg.id === message.id ? { ...msg, zIndex: 10000 } : msg
-    );
-    setMessages(updatedMessages);
-  }}
->
-  <div
-    style={{
-      position: "absolute",
-      padding: "10px",
-      backgroundColor: "rgba(255, 255, 255, 0.1)", // Transparent white background
-      border: "1px solid #ddd",
-      borderRadius: "5px",
-      cursor: "move",
-      zIndex: message.zIndex, // Ensure high zIndex during drag
-      width: "250px",
-    }}
-  >
-    {/* Message Form */}
-    <div>
-      <label style={{ fontWeight: "bold", display: "block",  backgroundColor: "rgba(255, 255, 255, 0.1)", }}>
-        Name:
-      </label>
-      <input
-        type="text"
-        value={message.name}
-        // style={{}}
-        onChange={(e) =>
-          setMessages((prev) =>
-            prev.map((msg) =>
-              msg.id === message.id ? { ...msg, name: e.target.value } : msg
-            )
-          )
-        }
-        style={{
-          width: "100%",
-          marginBottom: "10px",
-          padding: "5px",
-          border: "1px solid #ccc",
-          borderRadius: "5px",
-          backgroundColor: "rgba(255, 255, 255, 0.1)"
-        }}
-      />
-    </div>
-    <div>
-      <label style={{ fontWeight: "bold", display: "block",backgroundColor: "rgba(255, 255, 255, 0.1)" }}>
-        Message:
-      </label>
-      <textarea
-        value={message.text}
-        onChange={(e) =>
-          setMessages((prev) =>
-            prev.map((msg) =>
-              msg.id === message.id ? { ...msg, text: e.target.value } : msg
-            )
-          )
-        }
-        style={{
-          width: "100%",
-          height: "50px",
-          marginBottom: "10px",
-          padding: "5px",
-          border: "1px solid #ccc",
-          borderRadius: "5px",
-          backgroundColor: "rgba(255, 255, 255, 0.1)"
-        }}
-      />
-    </div>
-    <button
-      onClick={() => saveMessage(message.id, message.name, message.text)}
-      style={{
-        padding: "5px 10px",
-        backgroundColor: "#28a745",
-        color: "white",
-        border: "none",
-        borderRadius: "5px",
-        cursor: "pointer",
-      }}
-    >
-      Save Message
-    </button>
-  </div>
-</Draggable>
-
+                // Save updated messages to localStorage
+                localStorage.setItem(
+                  "messages",
+                  JSON.stringify(updatedMessages)
+                );
+              }}
+              onStart={() => {
+                // When dragging starts, ensure the message is on top of the carousel
+                const updatedMessages = messages.map((msg) =>
+                  msg.id === message.id ? { ...msg, zIndex: 10000 } : msg
+                );
+                setMessages(updatedMessages);
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  padding: "10px",
+                  backgroundColor: "rgba(255, 255, 255, 0.1)", // Transparent white background
+                  border: "1px solid #ddd",
+                  borderRadius: "5px",
+                  cursor: "move",
+                  zIndex: message.zIndex, // Ensure high zIndex during drag
+                  width: "250px",
+                }}
+              >
+                {/* Message Form */}
+                <div>
+                  <label
+                    style={{
+                      fontWeight: "bold",
+                      display: "block",
+                      backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    }}
+                  >
+                    Name:
+                  </label>
+                  <input
+                    type="text"
+                    value={message.name}
+                    // style={{}}
+                    onChange={(e) =>
+                      setMessages((prev) =>
+                        prev.map((msg) =>
+                          msg.id === message.id
+                            ? { ...msg, name: e.target.value }
+                            : msg
+                        )
+                      )
+                    }
+                    style={{
+                      width: "100%",
+                      marginBottom: "10px",
+                      padding: "5px",
+                      border: "1px solid #ccc",
+                      borderRadius: "5px",
+                      backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    }}
+                  />
+                </div>
+                <div>
+                  <label
+                    style={{
+                      fontWeight: "bold",
+                      display: "block",
+                      backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    }}
+                  >
+                    Message:
+                  </label>
+                  <textarea
+                    value={message.text}
+                    onChange={(e) =>
+                      setMessages((prev) =>
+                        prev.map((msg) =>
+                          msg.id === message.id
+                            ? { ...msg, text: e.target.value }
+                            : msg
+                        )
+                      )
+                    }
+                    style={{
+                      width: "100%",
+                      height: "50px",
+                      marginBottom: "10px",
+                      padding: "5px",
+                      border: "1px solid #ccc",
+                      borderRadius: "5px",
+                      backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    }}
+                  />
+                </div>
+                <button
+                  onClick={() =>
+                    saveMessage(message.id, message.name, message.text)
+                  }
+                  style={{
+                    padding: "5px 10px",
+                    backgroundColor: "#28a745",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Save Message
+                </button>
+              </div>
+            </Draggable>
           ))}
       </div>
     </div>

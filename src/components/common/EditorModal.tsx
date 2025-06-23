@@ -6,7 +6,7 @@ import {
   Image as KonvaImage,
   Transformer,
   Text as KonvaText,
-  Image ,
+  Image,
   Rect,
 } from "react-konva";
 // import { useNavigate } from "react-router-dom";
@@ -116,7 +116,7 @@ const ImageComponent: React.FC<{
   );
 };
 
-const EditorModal = ({showCard}:any) => {
+const EditorModal = ({ showCard }: any) => {
   const [images, setImages] = useState<ImageProps[]>([]);
   const [thumbnails, setThumbnails] = useState<{ id: string; src: string }[]>(
     []
@@ -133,8 +133,8 @@ const EditorModal = ({showCard}:any) => {
       fill: string;
     }[]
   >([]);
-  console.log(texts,"texts");
-  
+  console.log(texts, "texts");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [gifs, setGifs] = useState<string[]>([]); // State to store GIF URLs
   const [stickers, setStickers] = useState<string[]>([]); // State to store Sticker URLs
@@ -189,7 +189,6 @@ const EditorModal = ({showCard}:any) => {
     }
   };
 
-
   // Handle adding text to the canvas
   const handleAddText = () => {
     const newText = {
@@ -204,9 +203,8 @@ const EditorModal = ({showCard}:any) => {
     setTexts((prevTexts) => [...prevTexts, newText]);
     setCurrentText(""); // Clear the input field
     setIsAddingText(false); // Exit text adding mode
-    closeModal()
+    closeModal();
   };
-
 
   const handleFontSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const size = parseInt(e.target.value);
@@ -231,9 +229,9 @@ const EditorModal = ({showCard}:any) => {
   };
   const [imageBlob, setImageBlob] = useState<any>(null);
   const stageRef = useRef<any>(null);
-  console.log(imageBlob,"imageBlob");
-  console.log(stageRef,"stageRef");
-  
+  console.log(imageBlob, "imageBlob");
+  console.log(stageRef, "stageRef");
+
   const handleDownloadClick = () => {
     if (stageRef.current) {
       // Capture the current stage as a base64-encoded PNG image
@@ -245,10 +243,10 @@ const EditorModal = ({showCard}:any) => {
         .then((blob) => {
           // Create a Blob URL
           const blobUrl = URL.createObjectURL(blob);
-          console.log(blobUrl,"blobUrl");
+          console.log(blobUrl, "blobUrl");
           const newBlobUrl = URL.createObjectURL(blob);
-          localStorage.setItem('imageBlobUrl', newBlobUrl);
-          console.log(newBlobUrl,"newBlobUrl");
+          localStorage.setItem("imageBlobUrl", newBlobUrl);
+          console.log(newBlobUrl, "newBlobUrl");
           // Store the Blob URL in state
           setImageBlob(blobUrl);
 
@@ -271,10 +269,10 @@ const EditorModal = ({showCard}:any) => {
   // const [selectedGif, setSelectedGif] = useState<string>(''); // State to hold selected GIF URL
   const [selectedGif, setSelectedGif] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false); // Loading state
-  const [searchTerm1, setSearchTerm1] = useState<string>(''); // Default search term
+  const [searchTerm1, setSearchTerm1] = useState<string>(""); // Default search term
   const [modalOpen, setModalOpen] = useState<boolean>(false); // Modal visibility state
-  const [error, setError] = useState<string>(''); // State to handle errors
-console.log(selectedGif,"selectedGif");
+  const [error, setError] = useState<string>(""); // State to handle errors
+  console.log(selectedGif, "selectedGif");
 
   // Function to handle search input change
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -284,7 +282,7 @@ console.log(selectedGif,"selectedGif");
   // Function to fetch GIFs based on search term
   const fetchGifs = async () => {
     setLoading(true); // Start loading
-    setError(''); // Reset error state
+    setError(""); // Reset error state
     setGifUrls([]); // Clear previous GIFs
     try {
       const response = await fetch(
@@ -294,11 +292,11 @@ console.log(selectedGif,"selectedGif");
       if (data.data.length > 0) {
         setGifUrls(data.data.map((gif: any) => gif.images.original.url)); // Set URLs of 10 GIFs
       } else {
-        setError('No GIFs found for your search.'); // Handle no results
+        setError("No GIFs found for your search."); // Handle no results
       }
     } catch (error) {
-      console.error('Error fetching GIFs', error);
-      setError('Failed to fetch GIFs. Please try again later.'); // Handle fetch error
+      console.error("Error fetching GIFs", error);
+      setError("Failed to fetch GIFs. Please try again later."); // Handle fetch error
     } finally {
       setLoading(false); // Stop loading
     }
@@ -322,11 +320,11 @@ console.log(selectedGif,"selectedGif");
   // Function to handle GIF selection
   const handleGifSelect = (gifUrl: string) => {
     // setSelectedGif(gifUrl); // Save the selected GIF to the state
-    setSelectedGif(prevSelectedGifs => [...prevSelectedGifs, gifUrl]);
+    setSelectedGif((prevSelectedGifs) => [...prevSelectedGifs, gifUrl]);
     closeModal1(); // Close the modal after selection
   };
   const [gifImages, setGifImages] = useState<any>([]);
-console.log(gifImages,"gifImages");
+  console.log(gifImages, "gifImages");
 
   // Load GIFs as Konva Image nodes (HTMLImageElement objects)
   useEffect(() => {
@@ -346,25 +344,24 @@ console.log(gifImages,"gifImages");
         const loadedImages = await Promise.all(selectedGif.map(loadImage));
         setGifImages(loadedImages);
       } catch (error) {
-        console.error('Error loading GIFs:', error);
+        console.error("Error loading GIFs:", error);
       }
     };
 
     loadGifImages();
-  }, [selectedGif]); 
+  }, [selectedGif]);
 
+  console.log(images, "images");
 
-  console.log(images,"images");
-  
   return (
     <div className="editor_app">
       {/* Left Section (Editor Canvas) */}
 
       {/* Right Section (Options and Thumbnails) */}
       <div className="editor_option">
-      <div>
+        <div>
           <button
-          className="add_btn"
+            className="add_btn"
             onClick={handleButtonClick}
             style={{
               padding: "10px",
@@ -374,10 +371,8 @@ console.log(gifImages,"gifImages");
               borderRadius: "50px",
             }}
           >
-            Add Message
+            Add Your Message
           </button>
-
-        
         </div>
         {/* Image Upload */}
         <div className="search_input">
@@ -407,12 +402,18 @@ console.log(gifImages,"gifImages");
             multiple
           />
           <div className="upload_svg">
-          <svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium mus-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="GifIcon"><path d="M11.5 9H13v6h-1.5zM9 9H6c-.6 0-1 .5-1 1v4c0 .5.4 1 1 1h3c.6 0 1-.5 1-1v-2H8.5v1.5h-2v-3H10V10c0-.5-.4-1-1-1m10 1.5V9h-4.5v6H16v-2h2v-1.5h-2v-1z"></path></svg>
+            <svg
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium mus-vubbuv"
+              focusable="false"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              data-testid="GifIcon"
+            >
+              <path d="M11.5 9H13v6h-1.5zM9 9H6c-.6 0-1 .5-1 1v4c0 .5.4 1 1 1h3c.6 0 1-.5 1-1v-2H8.5v1.5h-2v-3H10V10c0-.5-.4-1-1-1m10 1.5V9h-4.5v6H16v-2h2v-1.5h-2v-1z"></path>
+            </svg>
           </div>
         </div>
-        <div>
-    
-    </div>
+        <div></div>
         {/* GIFs and Stickers Search */}
         {/* <div className="text_design">
          
@@ -430,8 +431,6 @@ console.log(gifImages,"gifImages");
   
 
         </div> */}
-
-       
 
         {/* Add Text Section */}
         {/* <div>
@@ -452,13 +451,12 @@ console.log(gifImages,"gifImages");
         </div> */}
 
         {/* Add to Cart Button */}
-      
+
         <div style={{ textAlign: "center" }}>
           <button
             onClick={handleDownloadClick}
             className="add_btn"
-
-              style={{
+            style={{
               // padding: "10px 20px",
               // backgroundColor: "#007bff",
               // color: "white",
@@ -466,23 +464,22 @@ console.log(gifImages,"gifImages");
               borderRadius: "40px",
             }}
           >
-           Download
+            Download
           </button>
         </div>
         <div style={{ textAlign: "center" }}>
           <button
             onClick={showCard}
             className="add_btn"
-
-              style={{
-                // padding: "10px 20px",
-                // backgroundColor: "#007bff",
-                // color: "white",
-                // border: "none",
-                borderRadius: "40px",
-              }}
+            style={{
+              // padding: "10px 20px",
+              // backgroundColor: "#007bff",
+              // color: "white",
+              // border: "none",
+              borderRadius: "40px",
+            }}
           >
-           Show Card
+            Show Card
           </button>
         </div>
       </div>
@@ -526,7 +523,7 @@ console.log(gifImages,"gifImages");
                 }}
               />
             ))}
-  {/* {gifImages.map((image:any) => (
+            {/* {gifImages.map((image:any) => (
               <ImageComponent
                 key={image.id}
                 shapeProps={image}
@@ -551,7 +548,6 @@ console.log(gifImages,"gifImages");
               height={100}
             />
           ))} */}
-            
           </Layer>
         </Stage>
       </div>
@@ -630,7 +626,6 @@ console.log(gifImages,"gifImages");
                 />
               </div>
               <div className="modal-btn">
-
                 <button
                   onClick={handleAddText}
                   className="bg-green-500 text-white bg-blueBg d-hide-btn px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none"
@@ -638,7 +633,6 @@ console.log(gifImages,"gifImages");
                   Add Text
                 </button>
               </div>
-
             </div>
           </div>
         </div>
@@ -652,38 +646,38 @@ console.log(gifImages,"gifImages");
       {modalOpen && (
         <div
           style={{
-            position: 'fixed',
+            position: "fixed",
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
             zIndex: 1000,
           }}
         >
           <div
             style={{
-              backgroundColor: 'white',
-              padding: '20px',
-              borderRadius: '8px',
-              maxWidth: '80%',
-              maxHeight: '80%',
-              overflowY: 'scroll',
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "8px",
+              maxWidth: "80%",
+              maxHeight: "80%",
+              overflowY: "scroll",
             }}
           >
             <button
               onClick={closeModal1}
               style={{
-                marginBottom: '20px',
-                padding: '8px 16px',
-                backgroundColor: '#ff6347',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
+                marginBottom: "20px",
+                padding: "8px 16px",
+                backgroundColor: "#ff6347",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
               }}
             >
               Close
@@ -694,9 +688,9 @@ console.log(gifImages,"gifImages");
             ) : (
               <div
                 style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
-                  gap: '10px',
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))",
+                  gap: "10px",
                 }}
               >
                 {gifUrls.map((gifUrl, index) => (
@@ -704,17 +698,17 @@ console.log(gifImages,"gifImages");
                     key={index}
                     onClick={() => handleGifSelect(gifUrl)}
                     style={{
-                      cursor: 'pointer',
-                      borderRadius: '8px',
-                      overflow: 'hidden',
+                      cursor: "pointer",
+                      borderRadius: "8px",
+                      overflow: "hidden",
                     }}
                   >
                     <img
                       src={gifUrl}
                       alt={`GIF ${index}`}
                       style={{
-                        width: '100%',
-                        borderRadius: '8px',
+                        width: "100%",
+                        borderRadius: "8px",
                       }}
                     />
                   </div>
@@ -724,10 +718,7 @@ console.log(gifImages,"gifImages");
           </div>
         </div>
       )}
-
-      
     </div>
-    
   );
 };
 

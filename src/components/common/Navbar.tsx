@@ -13,47 +13,44 @@ import register from "../../assets/images/register.png";
 import { useAccessToken } from "@/app/context/AccessTokenContext";
 import Cookies from "js-cookie";
 
-
 const Navbar = () => {
   const router = useRouter();
-  const param = useParams()
+  const param = useParams();
 
-  console.log("paramsss",param)
+  console.log("paramsss", param);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   // const accessToken3 = useAccessToken();
   // console.log(accessToken3, "accessToken3");
   // const { accessToken, setAccessToken } = useAccessToken();
-  const [ accessToken, setAccessToken ] = useState<string | null>(null); 
+  const [accessToken, setAccessToken] = useState<string | null>(null);
 
-  
-
-  console.log("accessTokenn",accessToken)
+  console.log("accessTokenn", accessToken);
 
   useEffect(() => {
     let token = "";
-  if (typeof param.auth === "string") {
-    // Extract token after 'token%3D'
-    token = param.auth.split("token%3D")[1] || param.auth;
-  } else if (Array.isArray(param.auth)) {
-    // If param.auth is an array, take the first element
-    token = param.auth[0]?.split("token%3D")[1] || param.auth[0];
-  }
+    if (typeof param.auth === "string") {
+      // Extract token after 'token%3D'
+      token = param.auth.split("token%3D")[1] || param.auth;
+    } else if (Array.isArray(param.auth)) {
+      // If param.auth is an array, take the first element
+      token = param.auth[0]?.split("token%3D")[1] || param.auth[0];
+    }
     const storedToken = Cookies.get("auth_token");
     if (token && !storedToken) {
       // Cookies.set("auth_token", token);
-      router.replace("/")
+      router.replace("/");
       // Cookies.set("user_info",userData)
       // setIsNewLogin(true);
     }
-    console.log("tokenbyme",token)
+    console.log("tokenbyme", token);
   }, []);
 
-  useEffect(()=>{
-    const token :any = Cookies.get("auth_token");
-    setAccessToken(token)
-  },[param])
+  useEffect(() => {
+    const token: any = Cookies.get("auth_token");
+    setAccessToken(token);
+  }, [param]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -303,7 +300,7 @@ const Navbar = () => {
                         </Link>
                       </li>
                       <li>
-                      <Link
+                        <Link
                           href="/pricing"
                           className="dropdown-item"
                           onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -321,7 +318,9 @@ const Navbar = () => {
                           className="dropdown-item"
                           onClick={() => setIsModalOpen(true)}
                         >
-                          <span className="text-[#970119] font-semibold">Sign Out</span>
+                          <span className="text-[#970119] font-semibold">
+                            Sign Out
+                          </span>
                         </button>
                       </li>
                     </ul>

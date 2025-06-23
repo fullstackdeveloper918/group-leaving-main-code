@@ -20,10 +20,9 @@ import EnvelopCard from "./common/EnvelopCard";
 import { useRouter } from "next/navigation";
 import CustomEditior from "./common/CustomEditior";
 const { Paragraph, Text } = Typography;
-import  AMZ from "../assets/icons/amz.jpeg"
+import AMZ from "../assets/icons/amz.jpeg";
 const DemoCard = ({ params }: any) => {
-
-  const router= useRouter()
+  const router = useRouter();
   const [show, setShow] = useState<any>(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -71,38 +70,39 @@ const DemoCard = ({ params }: any) => {
       setElements(JSON.parse(storedElements));
     }
   }, []);
-  
-    // useEffect(() => {
-    //   if (elements.length > 0) {
-    //     localStorage.setItem("slideElements", JSON.stringify(elements));
-    //   }
-    // }, [elements]);
-    console.log(elements,"sdasdqweqw");
-    const openEnvelop=()=>{
-      router.push("/envelop")
-    }
+
+  // useEffect(() => {
+  //   if (elements.length > 0) {
+  //     localStorage.setItem("slideElements", JSON.stringify(elements));
+  //   }
+  // }, [elements]);
+  console.log(elements, "sdasdqweqw");
+  const openEnvelop = () => {
+    router.push("/envelop");
+  };
   return (
     <>
       {params === "fwzDVjvbQ_X" ? (
         <>
           <section className="bg-demo_banner text-center demo_section common_padding bg-cover bg-no-repeat">
-            <ToastContainer/>
+            <ToastContainer />
             <div className="container-fluid">
               <h1 className="text-md tracking-tight demo_heading">
-                This is our demo card
+                Welcome to Your Interactive Demo
               </h1>
               <p className="demo_paragraph text-grey ">
-                You can test it out by adding messages, images and GIFs to see
-                how it works. When you create a real card you will see more
-                options to manage and customise your card.
+                Experience the card creation process firsthand! Add your own
+                messages, upload images, and insert GIFs to explore all the
+                features. When you create your own card, you&apos;ll unlock even
+                more customization options and management tools.
               </p>
               <p>
-                <b>Like what you see?</b> Create your own card to start
-                collecting unlimited messages and pages all at a fixed cost.
+                <b>Ready to make it yours?</b> Start your own card now and enjoy
+                unlimited messages and pages for one simple price.
               </p>
               <div className="demo_button_wrapper">
                 <Link href={`/create`}>
-                  <button className=" btnPrimary">Create a Card</button>
+                  <button className=" btnPrimary">Create Your Card</button>
                 </Link>
                 {/* 0cVkV16gHzX */}
                 <Link href={`/demo/0cVkV16gHzX`}>
@@ -146,7 +146,7 @@ const DemoCard = ({ params }: any) => {
                   {/* <EditorModal/> */}
                 </div>
                 <div className="md:w-1/2 w-full md:mt-0 mt-5  flex items-center justify-start flex-col">
-                <MySignatures/>
+                  <MySignatures />
                   <div className="bg-white shadow-lg rounded-lg p-10 w-full max-w-lg flex flex-col gap-2 items-center">
                     <h3 className="text-center text-md font-normal ">
                       Shared Gift Fund
@@ -155,15 +155,19 @@ const DemoCard = ({ params }: any) => {
                       className="text-center text-md font-normal relative"
                       onClick={() => setIsModalOpen(true)}
                     >
-                      <span className="absolute bottom-3 bg-[#061178] text-white rounded-full px-2 text-center">{contributors.length}</span>
+                      <span className="absolute bottom-3 bg-[#061178] text-white rounded-full px-2 text-center">
+                        {contributors.length}
+                      </span>
                       <span className="">
                         <Image src={userIcon} alt="user" />
                       </span>
                     </button>
                     <Image
-                      src={AMZ}
-                      // src="https://gift.wegift.io/static/product_assets/AMZ-GB/AMZ-GB-card.png"
-alt="Amazon"
+                      // src={AMZ}
+                      src="https://gift.wegift.io/static/product_assets/AMZ-GB/AMZ-GB-card.png"
+                      width={200}
+                      height={200}
+                      alt="Amazon"
                       className="voucher_img mx-auto rounded"
                     />
                     <h4 className="font-bold text-center ">INR360</h4>
@@ -176,7 +180,7 @@ alt="Amazon"
                       className=" btnPrimary text-center w-100 mt-3 rounded-md"
                       onClick={handleShare}
                     >
-                      Share Card
+                      Share Your Card
                     </button>
                   </div>
                 </div>
@@ -193,7 +197,7 @@ alt="Amazon"
               bodyStyle={{ padding: "24px" }}
             >
               {/* Title */}
-              <Typography.Title level={3}>Share Card</Typography.Title>
+              <Typography.Title level={3}>Share Your Card</Typography.Title>
 
               {/* Instructions */}
               <Paragraph>

@@ -1,29 +1,29 @@
 {
-    "general":[
-        {
-            "id":1,
-          "question": "Do you have to register for an account to sign a card?",
-          "answer": "No, you do not need to register for an account to sign a card."
-        },
-        {
-            "id":2,
-          "question": "How much does a card cost?",
-          "answer": "The cost of a card depends on the card type and design."
-        },
-        {
-            "id":3,
-          "question": "How many pages and signatures can I add?",
-          "answer": "You can add up to 5 pages and unlimited signatures."
-        },
-        {
-            "id":4,
-          "question": "Is there a limit to the number of people who can sign a card?",
-          "answer": "There is no limit on the number of signers."
-        },
-        {
-            "id":5,
-          "question": "How long is the card available?",
-          "answer": "The card is available for 30 days from the creation date."
-        }
-      ]
+  "general": [
+    {
+      "id": 1,
+      "question": "Do you have to register for an account to sign a card?",
+      "answer": "No, you do not need to register for an account to sign a card."
+    },
+    {
+      "id": 2,
+      "question": "How much does a card cost?",
+      "answer": "The cost of a card depends on the card type and design."
+    },
+    {
+      "id": 3,
+      "question": "How many pages and signatures can I add?",
+      "answer": "You can add up to 5 pages and there's no limit on signatures."
+    },
+    {
+      "id": 4,
+      "question": "Is there a limit to the number of people who can sign a card?",
+      "answer": "There's no limit on the number of people who can sign."
+    },
+    {
+      "id": 5,
+      "question": "How long is the card available?",
+      "answer": "The card is available for 30 days from the creation date."
+    }
+  ]
 }

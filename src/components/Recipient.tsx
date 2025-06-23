@@ -160,10 +160,16 @@ const array = [
   { id: 95, image: Images.congratulations9, type: "congratulations" },
   { id: 96, image: Images.congratulations10, type: "congratulations" },
 ];
-const Recipient = async ({searchParams, params,}: {searchParams: any;params: any;}) => {
+const Recipient = async ({
+  searchParams,
+  params,
+}: {
+  searchParams: any;
+  params: any;
+}) => {
   console.log(params?.id, "check");
   console.log(searchParams?.category);
- 
+
   const api: Api = {
     url: `https://dating.goaideme.com/card/edit-card/${params?.id}`,
     method: "GET",
@@ -187,10 +193,10 @@ const Recipient = async ({searchParams, params,}: {searchParams: any;params: any
       <div className="md:w-1/2 flex-wrap w-2/2  bg-blue-50 flex items-center justify-center md:order-none order_1 bg-blueBg px-3 choose_card-wrapper">
         <div className="text-center">
           <h1 className="text-2xl font-semibold mb-1 text-white">
-            Create a Group Card
+            Start a Group Card
           </h1>
           <p className="text-[#d9d9d9] mb-6">
-            Watering can {searchParams?.category} card
+            Watering can {searchParams?.category} Greeting
           </p>
 
           {/* Card Image */}
@@ -229,7 +235,7 @@ const Recipient = async ({searchParams, params,}: {searchParams: any;params: any
             className="text-red-500 no-underline"
           >
             <p className="mt-6 text-red-500 text-md  text-white hover:underline">
-              Choose another design
+              Select a Different Template
             </p>
           </a>
         </div>

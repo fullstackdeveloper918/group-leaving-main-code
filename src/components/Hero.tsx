@@ -127,7 +127,7 @@ const Hero = ({
                       className="btnSecondary ml-3"
                     >
                       {" "}
-                      Try Our Demo Card
+                      Explore our Demo Card
                     </Link>
                   </div>
                 </div>

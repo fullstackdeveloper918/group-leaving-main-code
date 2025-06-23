@@ -62,19 +62,19 @@ const AccountBunddles = ({ userInfo, data }: any) => {
             <thead className="bg-gray-100">
               <tr>
                 <th className="py-2 px-4 text-left font-medium text-gray-600">
-                  Card
+                  Greeting
                 </th>
                 <th className="py-2 px-4 text-left font-medium text-gray-600">
-                  Number of cards
+                  Quantity
                 </th>
                 <th className="py-2 px-4 text-left font-medium text-gray-600">
-                  Sale Price
+                  Price
                 </th>
                 <th className="py-2 px-4 text-left font-medium text-gray-600">
-                  Discount (%)
+                  Discount Rate
                 </th>
                 <th className="py-2 px-4 text-left font-medium text-gray-600">
-                  Currency type
+                  Currency
                 </th>
               </tr>
             </thead>
@@ -115,7 +115,7 @@ const AccountBunddles = ({ userInfo, data }: any) => {
       </div>
       {/* Message */}
       <p className="text-gray-500 text-center mb-6">
-        Looks like you haven’t got any card bundles yet. Get started by
+        Looks like you haven't got any card bundles yet. Get started by
         selecting a bundle that works for you.
       </p>
 

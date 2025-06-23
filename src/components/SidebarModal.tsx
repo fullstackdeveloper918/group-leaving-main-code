@@ -1,71 +1,83 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
-import nookies from 'nookies';
+import nookies from "nookies";
 import Cookies from "js-cookie";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { toast, ToastContainer } from "react-toastify";
 interface SidebarModalProps {
   isOpen: boolean;
   onClose: () => void;
-  data:any,
-  setClose:any,
-  isClose:any,
-  createlinkuserId:any
+  data: any;
+  setClose: any;
+  isClose: any;
+  createlinkuserId: any;
   // setEditCollection:any
 }
 
-const SidebarModal: React.FC<SidebarModalProps> = ({ isOpen, onClose,data,setClose,isClose,createlinkuserId }) => {
-console.log("databysidebarmodel",data?.collection_title)
-console.log("databysidebarmodel",data)
+const SidebarModal: React.FC<SidebarModalProps> = ({
+  isOpen,
+  onClose,
+  data,
+  setClose,
+  isClose,
+  createlinkuserId,
+}) => {
+  console.log("databysidebarmodel", data?.collection_title);
+  console.log("databysidebarmodel", data);
   const [deliveryOption, setDeliveryOption] = useState("later");
-  const [collectionTitle, setCollectionTitle] = useState(data?.collection_title);
+  const [collectionTitle, setCollectionTitle] = useState(
+    data?.collection_title
+  );
   const [senderName, setSenderName] = useState(data?.sender_name);
   const [recipientEmail, setRecipientEmail] = useState(data?.recipient_email);
   const [deliveryDate, setDeliveryDate] = useState(data?.start_date);
   const [deliveryTime, setDeliveryTime] = useState(data?.end_date);
   const [cookieValue, setCookieValue] = useState<string | null>(null);
-// console.log(cookieValue,"cookieValue");
+  // console.log(cookieValue,"cookieValue");
 
-const gettoken = Cookies.get("auth_token");
+  const gettoken = Cookies.get("auth_token");
 
   useEffect(() => {
     // Get cookies on the client side
     const cookies = nookies.get(); // retrieves cookies from document.cookie
     const userData = cookies.user_info ? JSON.parse(cookies.user_info) : null;
 
-    setCookieValue(userData?.uuid  || null);
+    setCookieValue(userData?.uuid || null);
   }, []);
 
-console.log("cookie value",cookieValue)
+  console.log("cookie value", cookieValue);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Collect form data
     const formData = {
-      edit_by:createlinkuserId,
-      brandKey:data?.brandKey,
-      linkUuid:data?.uuid,
+      edit_by: createlinkuserId,
+      brandKey: data?.brandKey,
+      linkUuid: data?.uuid,
       collection_title: collectionTitle,
-      sender_name:senderName,
-      recipient_email:recipientEmail,
-      delivery_option:deliveryOption,
-      start_date:deliveryDate,
+      sender_name: senderName,
+      recipient_email: recipientEmail,
+      delivery_option: deliveryOption,
+      start_date: deliveryDate,
       end_date: deliveryTime,
     };
 
     try {
       // Send form data to the API (replace with your API endpoint)
-      const response = await fetch("https://dating.goaideme.com/razorpay/update-link", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': `Bearer ${gettoken}`
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "https://dating.goaideme.com/razorpay/update-link",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${gettoken}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (response.ok) {
-        toast.success("Data saved successfully", {  autoClose: 1000, });
+        toast.success("Data saved successfully", { autoClose: 1000 });
         // alert("Data saved successfully");
         setClose(!isClose);
         // console.log("respoSidemodel",formData)
@@ -76,17 +88,19 @@ console.log("cookie value",cookieValue)
         // }));
         onClose(); // Close the modal after successful submission
       } else {
-        toast.error("Failed to save data", {autoClose:2000})
+        toast.error("Failed to save data", { autoClose: 2000 });
         // alert("Failed to save data");
       }
     } catch (error) {
-      toast.error("An error occurred while saving the data.", {autoClose:2000});
+      toast.error("An error occurred while saving the data.", {
+        autoClose: 2000,
+      });
       console.error("Error submitting form:", error);
       // alert("An error occurred while saving the data.");
     }
   };
 
-  console.log("collectionTitle",data)
+  console.log("collectionTitle", data);
 
   return (
     <div
@@ -102,7 +116,7 @@ console.log("cookie value",cookieValue)
         onClick={(e) => e.stopPropagation()}
       >
         <div className="p-4 border-b flex justify-between items-center">
-          <h2 className="text-xl font-bold">Settings</h2>
+          <h2 className="text-xl font-bold">Preferences</h2>
           <button
             className="text-gray-500 hover:text-gray-700"
             onClick={onClose}
@@ -113,37 +127,55 @@ console.log("cookie value",cookieValue)
         <form onSubmit={handleSubmit}>
           <div className="p-4 space-y-4">
             <label className="block">
-              <span className="text-gray-700">What is the title of your collection?</span>
+              <span className="text-gray-700">
+                Enter a title for your collection:
+              </span>
               <input
                 type="text"
-                value={collectionTitle !== undefined ? collectionTitle : data?.collection_title || ""}
+                value={
+                  collectionTitle !== undefined
+                    ? collectionTitle
+                    : data?.collection_title || ""
+                }
                 onChange={(e) => setCollectionTitle(e.target.value)}
-                placeholder="Collection Title"
+                placeholder="Collection Name"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded"
               />
             </label>
             <label className="block">
-              <span className="text-gray-700">Who is the collection from? (optional)</span>
+              <span className="text-gray-700">
+                Who is sending this collection? (optional)
+              </span>
               <input
                 type="text"
-                value={senderName !== undefined ? senderName : data?.sender_name || ""}
+                value={
+                  senderName !== undefined
+                    ? senderName
+                    : data?.sender_name || ""
+                }
                 onChange={(e) => setSenderName(e.target.value)}
-                placeholder="Sender Name"
+                placeholder="Your Name"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded"
               />
             </label>
             <label className="block">
-              <span className="text-gray-700">Recipient Email</span>
+              <span className="text-gray-700">Recipient's Email</span>
               <input
                 type="email"
-                value={recipientEmail !== undefined ? recipientEmail : data?.recipient_email || ""}
+                value={
+                  recipientEmail !== undefined
+                    ? recipientEmail
+                    : data?.recipient_email || ""
+                }
                 onChange={(e) => setRecipientEmail(e.target.value)}
-                placeholder="Recipient Email"
+                placeholder="Recipient's Email"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded"
               />
             </label>
             <div>
-              <span className="text-gray-700">When should we email the gift to the recipient?</span>
+              <span className="text-gray-700">
+                When should we deliver the gift to the recipient?
+              </span>
               <div className="mt-2">
                 <label className="flex items-center space-x-2">
                   <input
@@ -154,7 +186,7 @@ console.log("cookie value",cookieValue)
                     checked={deliveryOption === "set-date"}
                     onChange={(e) => setDeliveryOption(e.target.value)}
                   />
-                  <span>Set delivery date</span>
+                  <span>Choose delivery date</span>
                 </label>
                 <label className="flex items-center space-x-2 mt-1">
                   <input
@@ -165,10 +197,10 @@ console.log("cookie value",cookieValue)
                     checked={deliveryOption === "later"}
                     onChange={(e) => setDeliveryOption(e.target.value)}
                   />
-                  <span>Do this later</span>
+                  <span>Set this later</span>
                 </label>
                 <p className="mt-2 text-sm text-gray-500">
-                  This is based on the timezone your computer is set to.
+                  The delivery time is based on your computer's timezone.
                 </p>
                 {deliveryOption === "set-date" && (
                   <div className="mt-4 grid grid-cols-2 gap-4">
@@ -199,7 +231,7 @@ console.log("cookie value",cookieValue)
               type="submit"
               className="w-full bg-blue-500 text-black border-2 py-2 px-4 rounded hover:bg-blue-600"
             >
-              Save
+              Save Changes
             </button>
           </div>
         </form>

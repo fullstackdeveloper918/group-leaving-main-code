@@ -9,7 +9,7 @@ const AccountEmailprefrence = ({ userInfo, data }: any) => {
   const router = useRouter();
   console.log(data, "datadatadata");
   const gettoken = Cookies.get("auth_token");
-  // const gettoken:any = cookiesList.get('auth_token'); 
+  // const gettoken:any = cookiesList.get('auth_token');
 
   const [cardReminders, setCardReminders] = useState<boolean>(
     data?.data?.card_remainders
@@ -50,27 +50,26 @@ const AccountEmailprefrence = ({ userInfo, data }: any) => {
       // Parse the response JSON
       let posts = await res.json();
       // console.log(posts.message, "sds");
-      if(posts?.status === 200){
+      if (posts?.status === 200) {
         // console.log(posts.status, "sds");
-        toast.success(posts?.message, {autoClose:2000});
+        toast.success(posts?.message, { autoClose: 2000 });
         // toast.success("Preferences Updated Successfully");
-      }else if(posts?.statusCode === 401 && posts?.message === "Token is expire"){
+      } else if (
+        posts?.statusCode === 401 &&
+        posts?.message === "Token is expire"
+      ) {
         Cookies.remove("auth_token");
         Cookies.remove("COOKIES_USER_ACCESS_TOKEN");
         router.replace("/login");
         window.location.reload();
       }
-    } catch (error) {
-         
-    }
+    } catch (error) {}
   };
   return (
     <>
-      <ToastContainer/>
+      <ToastContainer />
       <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-center mb-4">
-          Email Preferences
-        </h2>
+        <h2 className="text-2xl font-bold text-center mb-4">Email Settings</h2>
         <div className="space-y-4">
           {/* Card Reminders */}
           <div className="form-check form-switch items-center justify-between">
@@ -82,22 +81,18 @@ const AccountEmailprefrence = ({ userInfo, data }: any) => {
               className="form-check-input"
             />
             <label htmlFor="card-reminders" className="text-sm font-medium">
-              Card Reminders
+              Greeting Reminders
             </label>
-            {/* <div className="form-check form-switch"> */}
-            {/* <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked"  />
-  <label htmlFor="card-reminders" className="text-sm font-medium">Card Reminders</label> */}
-            {/* </div> */}
           </div>
           <p className="text-xs text-gray-500 pl-4">
-            Receive specific emails about the cards you’ve created, e.g., a
-            reminder to finish a started card
+            Get reminders about greetings you've started, such as a prompt to
+            finish a greeting you began.
           </p>
 
           {/* Event Reminders */}
           <div className="form-check form-switch items-center justify-between">
             <label htmlFor="event-reminders" className="text-sm font-medium">
-              Event Reminders
+              Event Notifications
             </label>
             <input
               type="checkbox"
@@ -108,13 +103,13 @@ const AccountEmailprefrence = ({ userInfo, data }: any) => {
             />
           </div>
           <p className="text-xs text-gray-500 pl-4">
-            Event reminder emails that you create on our reminders page
+            Receive notifications for events you set up on our reminders page.
           </p>
 
           {/* Paid Card Updates */}
           <div className="form-check form-switch items-center justify-between">
             <label htmlFor="paid-updates" className="text-sm font-medium">
-              Paid Card Updates
+              Paid Greeting Updates
             </label>
             <input
               type="checkbox"
@@ -125,14 +120,14 @@ const AccountEmailprefrence = ({ userInfo, data }: any) => {
             />
           </div>
           <p className="text-xs text-gray-500 pl-4">
-            Updates about your paid cards, e.g., a warning when it is about to
-            be sent
+            Get updates about your paid greetings, like a notice before they are
+            sent.
           </p>
 
           {/* Marketing Emails */}
           <div className="form-check form-switch items-center justify-between">
             <label htmlFor="marketing-emails" className="text-sm font-medium">
-              Marketing Emails and Discounts
+              Product News & Offers
             </label>
             <input
               type="checkbox"
@@ -143,17 +138,17 @@ const AccountEmailprefrence = ({ userInfo, data }: any) => {
             />
           </div>
           <p className="text-xs text-gray-500 pl-4">
-            Occasionally receive emails about our product updates, relevant
-            events, and discounts
+            Occasionally receive updates about new features, special events, and
+            exclusive discounts.
           </p>
         </div>
 
         {/* Informational Section */}
         <div className="bg-blue-100 p-3 mt-4 rounded-md text-sm text-blue-700">
           <p>
-            We will always send you transactional emails related to your
-            purchases, e.g., a receipt, an email when your card is sent, thank
-            you emails received from the recipient.
+            We'll always send you important emails about your purchases, such as
+            receipts, notifications when your greeting is sent, and thank you
+            notes from recipients.
           </p>
         </div>
 
@@ -162,7 +157,7 @@ const AccountEmailprefrence = ({ userInfo, data }: any) => {
           onClick={submit}
           className="w-full mt-6 bg-blue-600 text-black border-2 py-2 rounded-lg hover:bg-blue-700 transition duration-300"
         >
-          Update
+          Save Preferences
         </button>
       </div>
     </>

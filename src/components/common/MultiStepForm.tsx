@@ -78,7 +78,7 @@ const MultiStepForm = ({ params }: any) => {
   const [selectedDate, setSelectedDate] = useState(""); // to store date value
   const [selectedTime, setSelectedTime] = useState(""); // to store time value
   const handleLogin = () => {
-    toast.error("Please login")
+    toast.error("Please login");
     router.push("/login");
   };
   const handleNext = () => {
@@ -132,7 +132,7 @@ const MultiStepForm = ({ params }: any) => {
     setEmailError("");
     setStep((prev) => prev + 1);
     if (!senderName) {
-      setSenderError("Sender name is required.");
+      setSenderError("Please enter your name.");
       return; // Stop submission if validation fails
     }
   };
@@ -229,21 +229,26 @@ const MultiStepForm = ({ params }: any) => {
       <div className="flex space-x-8 mb-8 absolute top-10">
         <ToastContainer />
 
-
         {/* count steps  */}
         <div className="text-center after_line disabled">
           <div className={step >= 1 ? "step_count" : "step_count1"}>1</div>
-          <p className="md:text-md text-sm font-medium mb-0">Pick a Design</p>
+          <p className="md:text-md text-sm font-medium mb-0">
+            Choose a Template
+          </p>
         </div>
 
         <div className="text-center  before_line">
           <div className={step >= 2 ? "step_count" : "step_count1"}>2</div>
-          <p className="md:text-md text-sm font-medium mb-0">Enter Details</p>
+          <p className="md:text-md text-sm font-medium mb-0">
+            Fill in the Details
+          </p>
         </div>
 
         <div className={step > 3 ? "text-center before_line" : ""}>
           <div className={step >= 3 ? "step_count" : "step_count1"}>3</div>
-          <p className="md:text-md text-sm font-medium mb-0">Pay and Share</p>
+          <p className="md:text-md text-sm font-medium mb-0">
+            Complete Payment & Share
+          </p>
         </div>
         {step > 3 ? (
           <div className="text-center">
@@ -260,12 +265,12 @@ const MultiStepForm = ({ params }: any) => {
       <div className="bg-white shadow-lg rounded-lg p-10 w-full max-w-lg">
         <h2 className="text-2xl font-semibold mb-6">
           {step === 1
-            ? "Who is the card for?"
+            ? "Who will receive this card?"
             : step === 2
-            ? "When should we email the card to the recipient?"
+            ? "When would you like us to send the card to the recipient?"
             : step === 3
-            ? "Want to collect funds for a gift card?"
-            : "Who is the card from?"}
+            ? "Would you like to gather contributions for a gift card?"
+            : "Who is sending this card?"}
         </h2>
         <form
           // loading={loading}
@@ -280,7 +285,7 @@ const MultiStepForm = ({ params }: any) => {
                   htmlFor="recipientName"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Recipient Name <span className="text-red-500">*</span>
+                  Recipient’s Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="recipientName"
@@ -305,7 +310,7 @@ const MultiStepForm = ({ params }: any) => {
                   htmlFor="recipientEmail"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Recipient Email
+                  Recipient’s Email Address
                 </label>
                 <input
                   id="recipientEmail"
@@ -330,7 +335,7 @@ const MultiStepForm = ({ params }: any) => {
                 onClick={!accessToken ? handleLogin : handleNext}
                 className="w-full bg-blueBg text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700"
               >
-                Next
+                Continue
               </button>
             </>
           )}
@@ -347,7 +352,7 @@ const MultiStepForm = ({ params }: any) => {
                     onChange={() => setCardType("date")}
                     className="mr-2"
                   />
-                  <span className="text-lg">Set delivery date</span>
+                  <span className="text-lg">Choose a delivery date</span>
                 </label>
                 <label className="flex items-center">
                   <input
@@ -358,7 +363,7 @@ const MultiStepForm = ({ params }: any) => {
                     onChange={() => setCardType("later")}
                     className="mr-2"
                   />
-                  <span className="text-lg">Do this later</span>
+                  <span className="text-lg">I’ll decide later</span>
                 </label>
 
                 {cardType === "date" && (
@@ -400,7 +405,7 @@ const MultiStepForm = ({ params }: any) => {
                 onClick={handleNext}
                 className="w-full bg-blue-600 text-black py-2 px-4 rounded-md shadow-sm hover:bg-blue-700"
               >
-                Next
+                → Continue
               </button>
             </>
           )}
@@ -412,7 +417,8 @@ const MultiStepForm = ({ params }: any) => {
                   htmlFor="selectOption"
                   className="block text-sm font-medium text-gray-700 mt-4"
                 >
-                  Select an option <span className="text-red-500">*</span>
+                  Please choose an option{" "}
+                  <span className="text-red-500">*</span>
                 </label>
                 <select
                   id="selectOption"
@@ -420,7 +426,7 @@ const MultiStepForm = ({ params }: any) => {
                   onChange={handleSelectChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 >
-                  <option value="">Disable Collection</option>
+                  <option value="">Don’t collect contributions</option>
                   <option value="inr">INR</option>
                   <option value="gbp">GBP</option>
                   <option value="usd">USD</option>
@@ -454,7 +460,7 @@ const MultiStepForm = ({ params }: any) => {
                   id="senderName"
                   type="text"
                   value={senderName}
-                  placeholder="Sender Name"
+                  placeholder="Your Name"
                   onChange={(e) => setSenderName(e.target.value)}
                   required
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
@@ -479,7 +485,7 @@ const MultiStepForm = ({ params }: any) => {
                   className="form-check-label"
                   htmlFor="flexSwitchCheckChecked"
                 >
-                  Add confetti to this card
+                  Include confetti in this card
                 </label>
               </div>
 
@@ -493,7 +499,7 @@ const MultiStepForm = ({ params }: any) => {
                   className="form-check-label"
                   htmlFor="flexSwitchCheckChecked"
                 >
-                  Allow private/hidden message
+                  Allow private messages
                 </label>
               </div>
 

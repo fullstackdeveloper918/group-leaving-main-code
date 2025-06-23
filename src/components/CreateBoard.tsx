@@ -27,62 +27,62 @@ const CreateBoard = ({ data }: any) => {
   const [userInfo, setUserInfo] = useState<any>(null);
   const [uuid, setUuid] = useState<string | null>(null);
   console.log(uuid, "uuid");
-const [loading1, setLoading1] = useState<any>(false);
+  const [loading1, setLoading1] = useState<any>(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [state,setState]=useState<any>("")
+  const [state, setState] = useState<any>("");
   // const openModal = () => setIsModalOpen(true);
-   const openModal = async()=>{
-      try {
-        setLoading1(true)
-        const response = await fetch(
-          "https://dating.goaideme.com/order/create-token",
-          {
-            // replace '/api/cart' with the correct endpoint
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              // 'Authorization': `Bearer ${gettoken}`
-            },
-            body: "",
-          }
-        );
-  
-        // Check if the request was successful
-        if (!response.ok) {
-          throw new Error("Failed to add item to cart");
+  const openModal = async () => {
+    try {
+      setLoading1(true);
+      const response = await fetch(
+        "https://dating.goaideme.com/order/create-token",
+        {
+          // replace '/api/cart' with the correct endpoint
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // 'Authorization': `Bearer ${gettoken}`
+          },
+          body: "",
         }
-  
-        const data = await response.json(); // Assuming the response returns JSON
-        console.log(data,"sdfghjkl;");
-        const response1 = await fetch(
-          " https://dating.goaideme.com/order/get-products",
-          {
-            // replace '/api/cart' with the correct endpoint
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              'Authorization': `Bearer ${data?.data?.access_token}`
-            },
-            body: "",
-          }
-        );
-  
-        // Check if the request was successful
-        if (!response1.ok) {
-          throw new Error("Failed to add item to cart");
+      );
+
+      // Check if the request was successful
+      if (!response.ok) {
+        throw new Error("Failed to add item to cart");
+      }
+
+      const data = await response.json(); // Assuming the response returns JSON
+      console.log(data, "sdfghjkl;");
+      const response1 = await fetch(
+        " https://dating.goaideme.com/order/get-products",
+        {
+          // replace '/api/cart' with the correct endpoint
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${data?.data?.access_token}`,
+          },
+          body: "",
         }
-  
-        const data1 = await response1.json();
-        console.log(data1,"data1");
-        setState(data1)
-        setIsModalOpen(true);
-        // toast.success("Added Successfully", {autoClose:2000});
-      } catch (error) {
-        // setLoading1(false)
-      }finally {
+      );
+
+      // Check if the request was successful
+      if (!response1.ok) {
+        throw new Error("Failed to add item to cart");
+      }
+
+      const data1 = await response1.json();
+      console.log(data1, "data1");
+      setState(data1);
+      setIsModalOpen(true);
+      // toast.success("Added Successfully", {autoClose:2000});
+    } catch (error) {
+      // setLoading1(false)
+    } finally {
       setLoading1(false);
     }
-    }
+  };
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedImage(null);
@@ -90,20 +90,18 @@ const [loading1, setLoading1] = useState<any>(false);
   useEffect(() => {
     const cookies = document.cookie.split("; ");
     console.log(cookies, "asdasdasd");
-  
+
     // Finding the 'Auth' cookie
-    const authCookie = cookies.find((cookie) =>
-      cookie.startsWith("Auth=")
-    );
-  
+    const authCookie = cookies.find((cookie) => cookie.startsWith("Auth="));
+
     if (authCookie) {
       const cookieValue = authCookie.split("=")[1];
       console.log(cookieValue, "cookieValue");
-  
+
       try {
         const parsedAuthInfo = JSON.parse(decodeURIComponent(cookieValue));
         console.log(parsedAuthInfo, "parsedAuthInfo");
-  
+
         // Extracting the 'uid' from the Auth cookie
         if (parsedAuthInfo && parsedAuthInfo.uid) {
           setUuid(parsedAuthInfo.uid); // Setting the UUID
@@ -113,20 +111,20 @@ const [loading1, setLoading1] = useState<any>(false);
         console.error("Error parsing Auth cookie", error);
       }
     }
-  
+
     // Optionally, you can also extract 'userInfo' cookie if needed
     const userInfoCookie = cookies.find((cookie) =>
       cookie.startsWith("userInfo=")
     );
-  
+
     if (userInfoCookie) {
       const cookieValue = userInfoCookie.split("=")[1];
       console.log(cookieValue, "userInfo cookieValue");
-  
+
       try {
         const parsedUserInfo = JSON.parse(decodeURIComponent(cookieValue));
         setUserInfo(parsedUserInfo);
-  
+
         if (parsedUserInfo && parsedUserInfo.uuid) {
           console.log(parsedUserInfo, "parsedUserInfo");
           setUuid(parsedUserInfo.uuid);
@@ -137,7 +135,7 @@ const [loading1, setLoading1] = useState<any>(false);
       }
     }
   }, []);
-  
+
   const [collectionTitle, setCollectionTitle] = useState("");
   const [recipientName, setRecipientName] = useState("");
   const [loading, setLoading] = useState<any>(false);
@@ -147,8 +145,8 @@ const [loading1, setLoading1] = useState<any>(false);
     selectedGift: "",
   });
   const [brandKeys, setBrandKeys] = useState("");
-  console.log(brandKeys,"brandKeys");
-  
+  console.log(brandKeys, "brandKeys");
+
   // Handle collection title change
   const handleCollectionTitleChange = (e: any) => {
     setCollectionTitle(e.target.value);
@@ -201,7 +199,7 @@ const [loading1, setLoading1] = useState<any>(false);
       // gift_card_id:addCard,
       // brandKey:brandKeys,
       // board_name: string
-      brand_key: brandKeys
+      brand_key: brandKeys,
       // user_uuid : string
     };
     console.log(item, "item");
@@ -210,19 +208,19 @@ const [loading1, setLoading1] = useState<any>(false);
     // return
     try {
       setLoading(true);
-        const response = await fetch(
-          "https://dating.goaideme.com/groupboard/add-groupboard",
-          {
-            // replace '/api/cart' with the correct endpoint
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json", // Indicates that you're sending JSON
-              Authorization: `Bearer ${gettoken}`,
-              "Cache-Control": "no-cache",
-            },
-            body: JSON.stringify(item),
-          }
-        );
+      const response = await fetch(
+        "https://dating.goaideme.com/groupboard/add-groupboard",
+        {
+          // replace '/api/cart' with the correct endpoint
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", // Indicates that you're sending JSON
+            Authorization: `Bearer ${gettoken}`,
+            "Cache-Control": "no-cache",
+          },
+          body: JSON.stringify(item),
+        }
+      );
 
       // Check if the request was successful
       if (!response.ok) {
@@ -231,7 +229,7 @@ const [loading1, setLoading1] = useState<any>(false);
 
       const data = await response.json(); // Assumin    g the response returns JSON
       if (data.status === 200) {
-        toast.success("Added Successfully", {autoClose:2000});
+        toast.success("Added Successfully", { autoClose: 2000 });
         router.replace(`/card/boardpay/${data?.data?.uuid}`);
       }
 
@@ -269,7 +267,7 @@ const [loading1, setLoading1] = useState<any>(false);
   } else {
     console.log("No valid face values found.");
   }
-  const selectGiftImage = selectedImage?.logoUrls[0]
+  const selectGiftImage = selectedImage?.logoUrls[0];
   console.log(selectGiftImage, "selectGiftImage");
   const handleLogin = () => {
     router.push("/login");
@@ -278,31 +276,33 @@ const [loading1, setLoading1] = useState<any>(false);
     <div>
       <ToastContainer />
       <div className="flex flex-col items-center justify-center min-h-screen border border-[#e5e7eb bg-lightBg">
-        <h1 className="text-4xl font-bold mb-8">Create a Group Board</h1>
+        <h1 className="text-4xl font-bold mb-8">Start a Group Board</h1>
         <form
           onSubmit={handleSubmit}
           className="bg-white p-8 rounded-lg shadow-md w-full max-w-md"
         >
           <label className="block mb-6">
-            <span className="text-gray-700 text-sm">Who is the board for?</span>
+            <span className="text-gray-700 text-sm">
+              Who will receive this board?
+            </span>
             <input
               type="text"
               value={recipientName}
               onChange={handleRecipientNameChange}
-              placeholder="Recipient Name*"
+              placeholder="Recipient's Name*"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               required
             />
           </label>
           <label className="block mb-6">
             <span className="text-gray-700 text-sm">
-              What is the title of your board?
+              Give your board a title
             </span>
             <input
               type="text"
               value={collectionTitle}
               onChange={handleCollectionTitleChange}
-              placeholder="Board Title *"
+              placeholder="Board Name*"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               required
             />
@@ -311,23 +311,23 @@ const [loading1, setLoading1] = useState<any>(false);
             {addSelectedImage === null ? (
               <div className="">
                 <h2 className="text-lg font-semibold mb-2">
-                  Collect cash for a gift card
+                  Gather contributions for a gift card
                 </h2>
                 <p className="text-gray-600 mb-2">
-                  Make this card extra special. Start a Shared Gift Fund
-                  that anyone can contribute to.
+                  Make your card even more memorable. Launch a Shared Gift Fund
+                  for group contributions.
                 </p>
                 <button
                   type="button"
-                  disabled={loading} 
+                  disabled={loading}
                   className="flex items-center justify-center border border-dashed border-blue-500 bg-blue-50 rounded-md px-4 text-blue-600 font-medium transition duration-300 hover:bg-blue-100"
                   // onClick={() => setFormData({ ...formData, selectedGift: 'gift card' })} // Update the selected gift here
                   onClick={openModal}
                 >
-                 {loading1 ? (
+                  {loading1 ? (
                     <span className="">Loading...</span>
                   ) : (
-                    <span className="text-2xl mr-2">+ Select gift card</span>
+                    <span className="text-2xl mr-2">+ Choose a gift card</span>
                   )}
                 </button>
               </div>
@@ -337,8 +337,7 @@ const [loading1, setLoading1] = useState<any>(false);
                 <h2 className="text-center font-bold">Gift Card</h2>
                 <img src={addSelectedImage} alt="" className="" />
                 <p className="text-center">
-                  Everyone will be able to contribute after you finish creating
-                  the card.
+                  Once your card is created, anyone can add their contribution.
                 </p>
                 <button
                   className="text-[#FF0000] hover:text-red-800 font-medium"
@@ -352,11 +351,11 @@ const [loading1, setLoading1] = useState<any>(false);
           {/* <Link href={`/share/1`}> */}
           {accessToken ? (
             <button
-            disabled={loading}
+              disabled={loading}
               type="submit"
               className="w-full bg-blueBg text-white py-2 px-4  rounded-md hover:bg-blue-700 transition duration-300"
             >
-              Continue
+              Next
             </button>
           ) : (
             <Link href={`/login`}>
@@ -365,7 +364,7 @@ const [loading1, setLoading1] = useState<any>(false);
                 type="submit"
                 className="w-full bg-blueBg text-white py-2 px-4  rounded-md hover:bg-blue-700 transition duration-300"
               >
-                Continue
+                Next
               </button>
             </Link>
           )}
@@ -386,90 +385,107 @@ const [loading1, setLoading1] = useState<any>(false);
             <div className="bg-white p-6 rounded-md shadow-lg max-w-lg w-full relative overflow-auto">
               {/* Top-left Cancel Button */}
               <h2 className="text-lg font-semibold mb-2 text-center">
-                Select a Gift Card
+                Choose a Gift Card
               </h2>
 
               <button
                 className="absolute top-4 right-4 bg-gray-200 text-gray-700 px-2 py-1 rounded-md hover:bg-gray-300"
                 onClick={closeModal}
               >
-                X
+                Close
               </button>
 
               {/* How Collection Pots Work */}
               <div className="bg-blue-100 p-4 rounded-md mb-2">
                 <h3 className="text-sm font-semibold">
-                  How do collection pots work?
+                  How does a group fund work?
                 </h3>
                 <ul className="text-sm text-gray-600 mt-2">
-                  <li>1. Add a gift card of choice to the card.</li>
-                  <li>2. Anyone can contribute towards the gift card value.</li>
+                  <li>1. Pick a gift card to add to your board.</li>
+                  <li>2. Friends and colleagues can chip in.</li>
                   <li>
-                    3. The recipient instantly claims it when viewing their
-                    card.
+                    3. The recipient gets the gift card instantly when they open
+                    their board.
                   </li>
                 </ul>
               </div>
 
               {/* Conditionally render based on whether an image is selected */}
               {selectedImage ? (
-          <div className="flex flex-col items-center">
-            <div className="">
-              <button className="text-black" onClick={handleBackClick}>Back</button>
-            </div>
-            <div className="">
-              <img src={selectGiftImage} alt="" className="" />
-            </div>
-            {/* <div className="w-20 h-12 bg-black text-white flex items-center justify-center rounded mb-4">
+                <div className="flex flex-col items-center">
+                  <div className="">
+                    <button className="text-black" onClick={handleBackClick}>
+                      Return
+                    </button>
+                  </div>
+                  <div className="">
+                    <img src={selectGiftImage} alt="" className="" />
+                  </div>
+                  {/* <div className="w-20 h-12 bg-black text-white flex items-center justify-center rounded mb-4">
               {selectedImage.brandName}
             </div> */}
-            <h2 className="text-xl font-bold ">{selectedImage.brandName}</h2>
-            <p className="text-sm text-gray-500">Country: <span className="font-bold">IND</span></p>
-            <p className="text-sm text-gray-500">Currency: <span className="font-bold">INR</span></p>
-            <p className="text-sm text-gray-500">Price: <span className="font-bold">{selectedImage?.senderFee}</span></p>
+                  <h2 className="text-xl font-bold ">
+                    {selectedImage.brandName}
+                  </h2>
+                  <p className="text-sm text-gray-500">
+                    Nation: <span className="font-bold">IND</span>
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Money: <span className="font-bold">INR</span>
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Amount:{" "}
+                    <span className="font-bold">
+                      {selectedImage?.senderFee}
+                    </span>
+                  </p>
 
-            {/* <p className="text-sm text-gray-500">Min Value: <span className="font-bold">{minFaceValue}</span></p>
+                  {/* <p className="text-sm text-gray-500">Min Value: <span className="font-bold">{minFaceValue}</span></p>
             <p className="text-sm text-gray-500">Max Value:<span className="font-bold">{maxFaceValue}</span></p> */}
-            {/* <p className="text-sm text-gray-500 text-center mt-2">
+                  {/* <p className="text-sm text-gray-500 text-center mt-2">
               Contribution Fees: <span className="font-bold">{selectedImage.contributionFees}</span>
             </p> */}
-            <p className="text-xs text-gray-400 mt-1 text-center">
-              (We automatically create multiple gift cards if you go over the max)
-            </p>
-            <Link
-              href="#"
-              className="text-sm text-blue-600 hover:underline mt-2"
-            >
-              Terms and conditions
-            </Link>
-            <button className="bg-blue-600 text-black px-4 py-2 rounded mt-2 hover:bg-blue-700" onClick={AddGiftCard}>
-              Add Gift Card
-            </button>
-          </div>
-        ) : (
+                  <p className="text-xs text-gray-400 mt-1 text-center">
+                    (If your total exceeds the limit, we'll split it into
+                    multiple gift cards)
+                  </p>
+                  <Link
+                    href="#"
+                    className="text-sm text-blue-600 hover:underline mt-2"
+                  >
+                    View terms
+                  </Link>
+                  <button
+                    className="bg-blue-600 text-black px-4 py-2 rounded mt-2 hover:bg-blue-700"
+                    onClick={AddGiftCard}
+                  >
+                    Add this Gift Card
+                  </button>
+                </div>
+              ) : (
                 <div className="relative">
                   {/* Image Grid */}
                   <div className="grid grid-cols-2 gap-4 max-h-80 overflow-y-auto">
-                  {state?.data?.content.map((res: any, index: number) => {
-                const imageUrl = res.logoUrls[0]; // You can change this key to any other size if needed
+                    {state?.data?.content.map((res: any, index: number) => {
+                      const imageUrl = res.logoUrls[0]; // You can change this key to any other size if needed
 
-                return (
-                  <div
-                    key={index}
-                    className="border rounded-lg overflow-hidden"
-                    onClick={() => handleImageClick(res)}
-                  >
-                    <img
-                      src={imageUrl}
-                      alt={res?.brand?.brandName} // Assuming there's a 'brandName' field in your data
-                      className="w-full h-auto object-cover"
-                    />
-                    <p className="text-center p-2 font-medium">
-                      {res?.brand?.brandName}
-                    </p>
-                  </div>
-                );
-              })}
+                      return (
+                        <div
+                          key={index}
+                          className="border rounded-lg overflow-hidden"
+                          onClick={() => handleImageClick(res)}
+                        >
+                          <img
+                            src={imageUrl}
+                            alt={res?.brand?.brandName} // Assuming there's a 'brandName' field in your data
+                            className="w-full h-auto object-cover"
+                          />
+                          <p className="text-center p-2 font-medium">
+                            {res?.brand?.brandName}
+                          </p>
+                        </div>
+                      );
+                    })}
                   </div>
 
                   {/* Optional modal button */}
@@ -487,8 +503,7 @@ const [loading1, setLoading1] = useState<any>(false);
 
               {/* Modal Footer */}
               <p className="text-sm text-gray-500 mt-2 text-center">
-                You’ll be taken to our payment provider Stripe to complete the
-                payment.
+                You'll be redirected to Stripe to finish your payment.
               </p>
             </div>
           </div>

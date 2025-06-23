@@ -6,15 +6,15 @@ interface EditorProps {
   onSaveMessage: (message: string) => void;
 }
 
-const RichTextEditor = ({ onSaveMessage }:any) => {
-    const [message, setMessage] = useState("");
+const RichTextEditor = ({ onSaveMessage }: any) => {
+  const [message, setMessage] = useState("");
 
-    const handleSave = () => {
-      if (message) {
-        onSaveMessage(message);
-        setMessage(""); // Reset the editor
-      }
-    };
+  const handleSave = () => {
+    if (message) {
+      onSaveMessage(message);
+      setMessage(""); // Reset the editor
+    }
+  };
 
   return (
     <div>
@@ -28,7 +28,7 @@ const RichTextEditor = ({ onSaveMessage }:any) => {
         onClick={handleSave}
         style={{ padding: "10px", backgroundColor: "#007bff", color: "#fff" }}
       >
-        Add Message
+        Add Your Message
       </button>
     </div>
   );

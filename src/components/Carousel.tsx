@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 // import * as htmlToImage from 'html-to-image';
 
 interface Message {
@@ -32,17 +32,17 @@ const Carousel = () => {
     setCurrentIndex(messages.length);
   };
 
-//   const downloadImage = () => {
-//     const node = document.getElementById('carousel-page');
-//     if (node) {
-//       htmlToImage.toPng(node).then((dataUrl:any) => {
-//         const link = document.createElement('a');
-//         link.download = 'carousel-page.png';
-//         link.href = dataUrl;
-//         link.click();
-//       });
-//     }
-//   };
+  //   const downloadImage = () => {
+  //     const node = document.getElementById('carousel-page');
+  //     if (node) {
+  //       htmlToImage.toPng(node).then((dataUrl:any) => {
+  //         const link = document.createElement('a');
+  //         link.download = 'carousel-page.png';
+  //         link.href = dataUrl;
+  //         link.click();
+  //       });
+  //     }
+  //   };
 
   return (
     <div className="relative w-full max-w-2xl mx-auto">
@@ -80,11 +80,11 @@ const Carousel = () => {
           className="bg-green-500 text-black border px-4 py-2 rounded"
           onClick={() => setIsModalOpen(true)}
         >
-          Add Message
+          Add Your Message
         </button>
         <button
           className="bg-yellow-500 text-black border px-4 py-2 rounded"
-        //   onClick={downloadImage}
+          //   onClick={downloadImage}
         >
           Download
         </button>
@@ -105,8 +105,8 @@ interface ModalProps {
 }
 
 const MessageModal: React.FC<ModalProps> = ({ onClose, onAdd }) => {
-  const [text, setText] = useState('');
-  const [sender, setSender] = useState('');
+  const [text, setText] = useState("");
+  const [sender, setSender] = useState("");
   const [image, setImage] = useState<any | null>(null);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,7 +126,7 @@ const MessageModal: React.FC<ModalProps> = ({ onClose, onAdd }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded shadow-lg w-96">
-        <h2 className="text-xl font-bold mb-4">Add a Message</h2>
+        <h2 className="text-xl font-bold mb-4">Add Your Message</h2>
         <textarea
           className="w-full border rounded p-2 mb-4"
           placeholder="Write your message here..."
