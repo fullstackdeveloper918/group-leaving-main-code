@@ -271,8 +271,8 @@ const GiftCardCollectionPot = ({ brandKey, groupId }: any) => {
             </div>
 
             <p className="text-sm text-gray-500 mt-4 text-center">
-              You'll be taken to our payment provider Stripe to complete the
-              payment.
+              You&apos;ll be taken to our payment provider Stripe to complete
+              the payment.
             </p>
           </div>
         </div>

@@ -115,7 +115,7 @@ const AccountBunddles = ({ userInfo, data }: any) => {
       </div>
       {/* Message */}
       <p className="text-gray-500 text-center mb-6">
-        Looks like you haven't got any card bundles yet. Get started by
+        Looks like you haven&apos;t got any card bundles yet. Get started by
         selecting a bundle that works for you.
       </p>
 

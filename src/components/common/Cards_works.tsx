@@ -19,8 +19,8 @@ const Cards_works = () => {
         </div>
         <h3 className="text-xl font-semibold mb-2">Select a template</h3>
         <p className="text-gray-600 max-w-xs">
-          Choose from our collection, personalize it with your friend's name and
-          email, and set a delivery date.
+          Choose from our collection, personalize it with your friend&apos;s
+          name and email, and set a delivery date.
         </p>
       </div>
       {/* Rectangle_303 */}
@@ -53,9 +53,11 @@ const Cards_works = () => {
             style={{ width: "100%", height: "100%" }}
           />
         </div>
-        <h3 className="text-xl font-semibold mb-2">We'll deliver your card</h3>
+        <h3 className="text-xl font-semibold mb-2">
+          We&apos;ll deliver your card
+        </h3>
         <p className="text-gray-600 max-w-xs">
-          We'll email your group card on the date you choose, or you can
+          We&apos;ll email your group card on the date you choose, or you can
           download it as a PDF to print.
         </p>
       </div>

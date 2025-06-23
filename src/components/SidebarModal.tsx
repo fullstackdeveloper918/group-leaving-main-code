@@ -159,7 +159,7 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
               />
             </label>
             <label className="block">
-              <span className="text-gray-700">Recipient's Email</span>
+              <span className="text-gray-700">Recipient&apos;s Email</span>
               <input
                 type="email"
                 value={
@@ -200,7 +200,7 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
                   <span>Set this later</span>
                 </label>
                 <p className="mt-2 text-sm text-gray-500">
-                  The delivery time is based on your computer's timezone.
+                  The delivery time is based on your computer&apos;s timezone.
                 </p>
                 {deliveryOption === "set-date" && (
                   <div className="mt-4 grid grid-cols-2 gap-4">

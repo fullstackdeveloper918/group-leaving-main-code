@@ -85,8 +85,8 @@ const AccountEmailprefrence = ({ userInfo, data }: any) => {
             </label>
           </div>
           <p className="text-xs text-gray-500 pl-4">
-            Get reminders about greetings you've started, such as a prompt to
-            finish a greeting you began.
+            Get reminders about greetings you&apos;ve started, such as a prompt
+            to finish a greeting you began.
           </p>
 
           {/* Event Reminders */}
@@ -146,7 +146,7 @@ const AccountEmailprefrence = ({ userInfo, data }: any) => {
         {/* Informational Section */}
         <div className="bg-blue-100 p-3 mt-4 rounded-md text-sm text-blue-700">
           <p>
-            We'll always send you important emails about your purchases, such as
+            We&apos;ll always send you important emails about your purchases, such as
             receipts, notifications when your greeting is sent, and thank you
             notes from recipients.
           </p>

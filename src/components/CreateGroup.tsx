@@ -451,7 +451,7 @@ const CreateGroup = ({ data }: any) => {
               Contribution Fees: <span className="font-bold">{selectedImage.contributionFees}</span>
             </p> */}
                   <p className="text-xs text-gray-400 mt-1 text-center">
-                    (If your total exceeds the limit, we'll split it into
+                    (If your total exceeds the limit, we&apos;ll split it into
                     multiple gift cards)
                   </p>
                   <Link
@@ -508,8 +508,8 @@ const CreateGroup = ({ data }: any) => {
 
               {/* Modal Footer */}
               <p className="text-sm text-gray-500 mt-4 text-center">
-                You'll be taken to our payment provider Stripe to complete the
-                payment.
+                You&apos;ll be taken to our payment provider Stripe to complete
+                the payment.
               </p>
             </div>
           </div>

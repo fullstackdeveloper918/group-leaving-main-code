@@ -446,7 +446,7 @@ const CreateBoard = ({ data }: any) => {
               Contribution Fees: <span className="font-bold">{selectedImage.contributionFees}</span>
             </p> */}
                   <p className="text-xs text-gray-400 mt-1 text-center">
-                    (If your total exceeds the limit, we'll split it into
+                    (If your total exceeds the limit, we&apos;ll split it into
                     multiple gift cards)
                   </p>
                   <Link
@@ -503,7 +503,7 @@ const CreateBoard = ({ data }: any) => {
 
               {/* Modal Footer */}
               <p className="text-sm text-gray-500 mt-2 text-center">
-                You'll be redirected to Stripe to finish your payment.
+                You&apos;ll be redirected to Stripe to finish your payment.
               </p>
             </div>
           </div>
