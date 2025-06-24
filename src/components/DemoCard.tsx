@@ -34,7 +34,7 @@ const DemoCard = ({ params }: any) => {
   const handleShare = () => {
     setIsModalVisible(true);
   };
-  const shareableLink = "https://groupwish.in//demo/fwzDVjvbQ_X";
+  const shareableLink = "https://groupwish.in/demo/fwzDVjvbQ_X";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(shareableLink);
