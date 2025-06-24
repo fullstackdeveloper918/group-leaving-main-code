@@ -66,7 +66,7 @@ const Checkout = ({ data }: any) => {
   // Handle selection change
   console.log(selectBundle?.uuid, "selectBundle");
   const handleChange = (e: any) => {
-    console.log(e, "lklkl");
+    // console.log(e, "lklkl");
     handleApplyBundleId();
     const selectedCount = data?.data.find(
       (count: any) => count.number_of_cards === Number(e.target.value)
