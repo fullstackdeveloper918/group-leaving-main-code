@@ -2,28 +2,28 @@
   "general": [
     {
       "id": 1,
-      "question": "Do you have to register for an account to sign a card?",
-      "answer": "No, you do not need to register for an account to sign a card."
+      "question": "Is account registration required to sign a card?",
+      "answer": "No, signing a card does not require you to create an account."
     },
     {
       "id": 2,
-      "question": "How much does a card cost?",
-      "answer": "The cost of a card depends on the card type and design."
+      "question": "What is the price of a card?",
+      "answer": "Card pricing varies based on the type and design you select."
     },
     {
       "id": 3,
-      "question": "How many pages and signatures can I add?",
-      "answer": "You can add up to 5 pages and there's no limit on signatures."
+      "question": "How many pages and signatures are allowed?",
+      "answer": "You can include up to 5 pages, and there is no restriction on the number of signatures."
     },
     {
       "id": 4,
-      "question": "Is there a limit to the number of people who can sign a card?",
-      "answer": "There's no limit on the number of people who can sign."
+      "question": "Can an unlimited number of people sign a card?",
+      "answer": "Yes, there is no cap on how many people can add their signature."
     },
     {
       "id": 5,
-      "question": "How long is the card available?",
-      "answer": "The card is available for 30 days from the creation date."
+      "question": "For how long will the card remain accessible?",
+      "answer": "Cards remain accessible for 30 days after they are created."
     }
   ]
 }

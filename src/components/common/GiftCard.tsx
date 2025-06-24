@@ -1,14 +1,13 @@
-"use client"
-import React, { useState } from 'react'
+"use client";
+import React, { useState } from "react";
 
-const GiftCard = ({data}:any) => {
-
- const [isModalOpen, setIsModalOpen] = useState(false);
+const GiftCard = ({ data }: any) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [addCard, setAddCard] = useState<any>("");
-   const [brandKeys, setBrandKeys] = useState("");
+  const [brandKeys, setBrandKeys] = useState("");
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-const [selectedImage, setSelectedImage] = useState<any | null>(null);
+  const [selectedImage, setSelectedImage] = useState<any | null>(null);
   const handleBackClick = () => {
     setSelectedImage(null); // Reset the selected image to show the image grid again
   };
@@ -24,87 +23,100 @@ const [selectedImage, setSelectedImage] = useState<any | null>(null);
   };
   const selectGiftImage = selectedImage?.imageUrls["278w-326ppi"];
   const faceValues = selectedImage?.items
-  .map((item: any) => item.faceValue) // Extract faceValue
-  .filter((value: any) => value !== undefined && value !== null); // Filter out undefined or null values
+    .map((item: any) => item.faceValue) // Extract faceValue
+    .filter((value: any) => value !== undefined && value !== null); // Filter out undefined or null values
 
-let minFaceValue: number | undefined;
-let maxFaceValue: number | undefined;
+  let minFaceValue: number | undefined;
+  let maxFaceValue: number | undefined;
 
-if (faceValues?.length > 0) {
-  minFaceValue = Math.min(...faceValues);
-  maxFaceValue = Math.max(...faceValues);
+  if (faceValues?.length > 0) {
+    minFaceValue = Math.min(...faceValues);
+    maxFaceValue = Math.max(...faceValues);
 
-  console.log(`Minimum Face Value: ₹${minFaceValue}`);
-  console.log(`Maximum Face Value: ₹${maxFaceValue}`);
-} else {
-  console.log("No valid face values found.");
-}
+    console.log(`Minimum Face Value: ₹${minFaceValue}`);
+    console.log(`Maximum Face Value: ₹${maxFaceValue}`);
+  } else {
+    console.log("No valid face values found.");
+  }
+
+  console.log(data, "data herer");
   return (
     <>
-    <section className="text-center  section_space_50 view_card_section">
-            <div className="container-fluid">
-            <h2 className="mt-2 text-2xl  xl:text-3xl font-bold text-center text-gray-900">
-              View Gift Card Selection
-            </h2>
-            <div className="grid grid-cols-3 gap-4 mb-6 mt-4">
-              <img
-                src="https://gift.wegift.io/static/product_assets/NAKED-GB/NAKED-GB-card.png"
-                alt="Naked Wines"
-                className="w-30 mx-auto rounded"
-              />
-              <img
-                src="https://gift.wegift.io/static/product_assets/JLSEG-GB/JLSEG-GB-card.png"
-                alt="John Lewis"
-                className="w-30 mx-auto rounded"
-              />
-              <img src="https://gift.wegift.io/static/product_assets/AMZ-GB/AMZ-GB-card.png" alt="Amazon" className="w-30 mx-auto rounded" />
-              <img
-                src="https://gift.wegift.io/static/product_assets/VRGNEXP-GB/VRGNEXP-GB-card.png"
-                alt="Virgin Experience"
-                className="w-30 mx-auto rounded"
-              />
-              <img src="https://gift.wegift.io/static/product_assets/AIRBNB-US/AIRBNB-US-card.png" alt="Airbnb" className="w-30 mx-auto" />
-              <img
-                src="https://gift.wegift.io/static/product_assets/DDASH-US/DDASH-US-card.png"
-                alt="Doordash"
-                className="w-30 mx-auto rounded"
-              />
-            </div>
-            <button    onClick={openModal} className="xl:mt-5 md:mt-3 px-5 text-white bg-blueText  py-2  rounded-xl border-1 border-[blueText] hover:bg-blue-700">
-              View All Gift Cards
-            </button>
-            </div>
-          </section>
+      <section className="text-center  section_space_50 view_card_section">
+        <div className="container-fluid">
+          <h2 className="mt-2 text-2xl  xl:text-3xl font-bold text-center text-gray-900">
+            Browse Gift Card Options
+          </h2>
+          <div className="grid grid-cols-3 gap-4 mb-6 mt-4">
+            <img
+              src="/newimage/apple.png"
+              alt="Naked Wines"
+              className="w-30 mx-auto rounded"
+            />
+            <img
+              src="/newimage/amazon.png"
+              alt="John Lewis"
+              className="w-30 mx-auto rounded"
+            />
+            <img
+              src="/newimage/apple.png"
+              alt="Amazon"
+              className="w-30 mx-auto rounded"
+            />
+            <img
+              src="/newimage/image3.png"
+              alt="Virgin Experience"
+              className="w-30 mx-auto rounded"
+            />
+            <img
+              src="/newimage/addidas.jpeg"
+              alt="Airbnb"
+              className="w-30 mx-auto"
+            />
+            <img
+              src="/newimage/aboutu.png"
+              alt="Doordash"
+              className="w-30 mx-auto rounded"
+            />
+          </div>
+          <button
+            onClick={openModal}
+            className="xl:mt-5 md:mt-3 px-5 text-white bg-blueText  py-2  rounded-xl border-1 border-[blueText] hover:bg-blue-700"
+          >
+            View All Gift Cards
+          </button>
+        </div>
+      </section>
 
-
-
-          {isModalOpen && (
+      {isModalOpen && (
         <>
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
             <div className="bg-white p-6 rounded-md shadow-lg max-w-lg w-full relative overflow-auto">
               {/* Top-left Cancel Button */}
               <h2 className="text-lg font-semibold mb-4 text-center">
-                Select a Gift Card
+                Choose a Gift Card
               </h2>
 
               <button
                 className="absolute top-4 right-4 bg-gray-200 text-gray-700 px-2 py-1 rounded-md hover:bg-gray-300"
                 onClick={closeModal}
               >
-                X
+                Close
               </button>
 
               {/* How Collection Pots Work */}
               <div className="bg-blue-100 p-4 rounded-md mb-4">
                 <h3 className="text-sm font-semibold">
-                  How do collection pots work?
+                  How does a collection pot function?
                 </h3>
                 <ul className="text-sm text-gray-600 mt-2">
-                  <li>1. Add a gift card of choice to the card.</li>
-                  <li>2. Anyone can contribute towards the gift card value.</li>
+                  <li>1. Select a gift card to add to your card.</li>
                   <li>
-                    3. The recipient instantly claims it when viewing their
-                    card.
+                    2. Everyone can chip in to increase the gift card amount.
+                  </li>
+                  <li>
+                    3. The recipient can claim the gift card as soon as they
+                    view their card.
                   </li>
                 </ul>
               </div>
@@ -165,7 +177,7 @@ if (faceValues?.length > 0) {
                 <div className="relative">
                   {/* Image Grid */}
                   <div className="grid grid-cols-2 gap-4 max-h-80 overflow-y-auto">
-                    {data?.data.map((res: any, index: number) => {
+                    {data?.data?.map((res: any, index: number) => {
                       const imageUrl = res.imageUrls["200w-326ppi"]; // You can change this key to any other size if needed
 
                       return (
@@ -202,15 +214,15 @@ if (faceValues?.length > 0) {
 
               {/* Modal Footer */}
               <p className="text-sm text-gray-500 mt-4 text-center">
-                You’ll be taken to our payment provider Stripe to complete the
-                payment.
+                You will be redirected to Stripe, our payment provider, to
+                finish your payment.
               </p>
             </div>
           </div>
         </>
       )}
     </>
-  )
-}
+  );
+};
 
-export default GiftCard
+export default GiftCard;

@@ -393,7 +393,7 @@ const Checkout = ({ data }: any) => {
                   </label>
                 </div>
 
-                {bundleOption === "bundle" && (
+                {bundleOption === "bundle" ? (
                   <div className="mt-4 p-4 bg-gray-50 rounded-md border">
                     <ul className="text-green-600 mb-4 space-y-1">
                       <li>💰 Save up to 40% by buying a bundle</li>
@@ -401,19 +401,15 @@ const Checkout = ({ data }: any) => {
                       <li>🕑 No Expiry. No Subscription.</li>
                       <li>🧾 File a single expense claim</li>
                     </ul>
-
                     <div className="flex flex-col space-y-2">
                       <label className="font-bold text-gray-700">
                         Select number of cards:
                       </label>
                       <select
-                        // value={numCards}
                         onChange={handleChange}
                         className="border border-gray-300 p-2 rounded-lg w-full"
                       >
                         {data?.data.map((count: any) => (
-                          // console.log(count,"count")
-
                           <option
                             key={count.number_of_cards}
                             value={count.number_of_cards}
@@ -426,12 +422,13 @@ const Checkout = ({ data }: any) => {
                         ))}
                       </select>
                       <p className="text-gray-600 text-sm mt-2">
-                        After buying this bundle and card, you will have{" "}
-                        {numCards - 1} cards left to use any time.
+                        Card bundles require a single payment and won&apos;t
+                        renew automatically. They&apos;re valid for all designs
+                        and categories, and never expire.
                       </p>
                     </div>
                   </div>
-                )}
+                ) : null}
               </div>
             </>
           ) : (
@@ -442,16 +439,13 @@ const Checkout = ({ data }: any) => {
           <div className="space-y-4">
             {/* <a href="/card/checkout/1">
             </a> */}
-            <>
-            {console.log(bundleOption,"qweqweqw")}
-            </>
+            <>{console.log(bundleOption, "qweqweqw")}</>
             {quantity === 0 ? (
               <>
                 <RazorPay
                   amount={TotalAmount}
                   cart_id={query.cart_uuid}
                   type={bundleOption}
-                  
                   bundleId={selectBundle?.uuid}
                 />
                 {/* {console.log(bundleOption,"123123rwe")} */}

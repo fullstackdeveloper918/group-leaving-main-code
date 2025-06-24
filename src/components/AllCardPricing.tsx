@@ -89,7 +89,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
                     </svg>
                     <span className="ml-2 text-md">
                       {" "}
-                      Images, GIFs, and Stickers
+                      Photos, GIFs, and Stickers
                     </span>
                   </li>
                   <li className="flex ">
@@ -121,7 +121,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
                       />
                     </svg>
                     <span className="ml-2 text-md">
-                      Several fonts, colors, sizes
+                      Multiple font options, colors, and sizes
                     </span>
                   </li>
                   <li className="flex ">
@@ -137,7 +137,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
                         fill="#558EC9"
                       />
                     </svg>
-                    <span className="ml-2 text-md"> PDF Download</span>
+                    <span className="ml-2 text-md"> Download as PDF</span>
                   </li>
                   <li className="flex ">
                     <svg
@@ -154,7 +154,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
                     </svg>
                     <span className="ml-2 text-md">
                       {" "}
-                      Schedule Delivery or Send Manually
+                      Schedule delivery or send immediately
                     </span>
                   </li>
                   <li className="flex ">
@@ -172,7 +172,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
                     </svg>
                     <span className="ml-2 text-md">
                       {" "}
-                      Group Gift Cards Collection Pots
+                      Group gift card collection pools
                     </span>
                   </li> */}
                   </ul>
@@ -212,7 +212,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
                     </svg>
                     <span className="ml-2 text-md">
                       {" "}
-                      Unlimited Pages & Signatures
+                      No Limit on Pages or Signatures
                     </span>
                   </li>
                   <li className="flex ">
@@ -230,7 +230,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
                     </svg>
                     <span className="ml-2 text-md">
                       {" "}
-                      Images, GIFs, and Stickers
+                      Photos, GIFs, and Stickers
                     </span>
                   </li>
                   <li className="flex ">
@@ -262,7 +262,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
                       />
                     </svg>
                     <span className="ml-2 text-md">
-                      Several fonts, colors, sizes
+                      Multiple font options, colors, and sizes
                     </span>
                   </li>
                   <li className="flex ">
@@ -278,7 +278,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
                         fill="#558EC9"
                       />
                     </svg>
-                    <span className="ml-2 text-md"> PDF Download</span>
+                    <span className="ml-2 text-md"> Download as PDF</span>
                   </li>
                   <li className="flex ">
                     <svg
@@ -295,7 +295,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
                     </svg>
                     <span className="ml-2 text-md">
                       {" "}
-                      Schedule Delivery or Send Manually
+                      Schedule delivery or send immediately
                     </span>
                   </li>
                   <li className="flex ">
@@ -360,7 +360,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
                       />
                     </svg>
                     <span className="ml-2 text-md">
-                      No limit on pages or signatures
+                      No restrictions on pages or signatures
                     </span>
                   </li>
                   <li className="flex ">
@@ -377,7 +377,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
                       />
                     </svg>
                     <span className="ml-2 text-md">
-                      Add images, GIFs, and stickers
+                      Photos, GIFs, and stickers
                     </span>
                   </li>
                   <li className="flex ">
@@ -411,7 +411,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
                       />
                     </svg>
                     <span className="ml-2 text-md">
-                      Customize fonts, colors, and text sizes
+                      Multiple font, color, and size options
                     </span>
                   </li>
                   <li className="flex ">
@@ -443,7 +443,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
                       />
                     </svg>
                     <span className="ml-2 text-md">
-                      Schedule delivery or send whenever you like
+                      Schedule delivery or send it yourself
                     </span>
                   </li>
                   <li className="flex ">
@@ -460,7 +460,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
                       />
                     </svg>
                     <span className="ml-2 text-md">
-                      Group gift card collection pots
+                      Group gift card collection pools
                     </span>
                   </li>
                 </ul>
@@ -634,8 +634,9 @@ const AllCardPricing = ({ data, data2 }: any) => {
 
         {/* Card Bundle Disclaimer */}
         <p className="text-center text-gray-500 mt-6 text-md font-semibold max-w-[60%]:">
-          Card bundles are a one-time payment and do not automatically renew.
-          You can use them on all designs and categories and they do not expire.
+          Card bundles require a single payment and won&apos;t renew
+          automatically. They&apos;re valid for all designs and categories, and
+          never expire.
         </p>
       </div>
 
