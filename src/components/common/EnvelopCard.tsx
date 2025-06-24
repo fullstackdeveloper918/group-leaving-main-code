@@ -1,7 +1,9 @@
 "use client";
+import { fetchFromServer } from "@/app/actions/fetchFromServer";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import HTMLFlipBook from "react-pageflip";
+import Cookies from "js-cookie";
 
 // PageCover Component
 const PageCover = React.forwardRef((props: any, ref: any) => {
@@ -13,7 +15,7 @@ const PageCover = React.forwardRef((props: any, ref: any) => {
     </div>
   );
 });
-PageCover.displayName = 'PageCover';
+PageCover.displayName = "PageCover";
 // Page Component
 const Page = React.forwardRef((props: any, ref: any) => {
   return (
@@ -22,12 +24,59 @@ const Page = React.forwardRef((props: any, ref: any) => {
     </div>
   );
 });
-Page.displayName = 'Page';
-const EnvelopCard = ({getdata}:any) => {
-  const { id } = useParams(); 
+Page.displayName = "Page";
+const EnvelopCard = ({ getdata }: any) => {
+  const { id } = useParams();
   const [responseData, setResponseData] = useState<any>(null);
-console.log(getdata,"getdata");
-console.log(responseData,"responseData");
+  const [shareImageData, setShareImageData] = useState<any>(null);
+  console.log(getdata, "getdata");
+  console.log(responseData, "responseData");
+
+  const gettoken = Cookies.get("auth_token");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://dating.goaideme.com/card/users-cards",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${gettoken}`,
+            },
+          }
+        );
+
+        const data = await response.json();
+        setShareImageData(data); // Store response data in state
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+  console.log(shareImageData, "shareImageData here");
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         "https://dating.goaideme.com/card/users-cards",
+  //         { method: "GET", headers: { "Content-Type": "application/json" } }
+  //       );
+  //       const data = await response.json();
+
+  //       // Get the last element
+  //       const lastCard = data.at?.(-1) ?? data[data.length - 1];
+  //       setShareImageData(lastCard);
+  //     } catch (err) {
+  //       console.error("Error fetching data:", err);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
   // Fetch data when id changes
   useEffect(() => {
@@ -55,14 +104,34 @@ console.log(responseData,"responseData");
     }
   }, [id]);
 
+  console.log(responseData, "responsose data herer");
+
   // Handle the case when data is still being fetched
-  if (!responseData || !responseData?.data || !Array.isArray(responseData?.data[0]?.editor_messages)) {
+  if (
+    !responseData ||
+    !responseData?.data ||
+    !Array.isArray(responseData?.data[0]?.editor_messages)
+  ) {
     return <div>Loading...</div>; // Show loading while data is being fetched
   }
 
+  // const api2: any = {
+  //   url: `https://dating.goaideme.com/card/users-cards`,
+  //   method: "GET",
+  // };
+  // const data2 = await fetchFromServer(api2);
+
+  console.log("shareImageData", shareImageData);
+
+  const cardShareData = shareImageData?.listing?.find(
+    (item: any) => item.message_unique_id === id
+  );
+
+  console.log("cardShareData", cardShareData);
+
   return (
     <>
-    <style>
+      <style>
         {`
           .album-web {
             background: rgb(255, 251, 251);
@@ -148,39 +217,51 @@ console.log(responseData,"responseData");
         >
           <PageCover>
             <img
-              src={"https://groupleavingcards.com/assets/design/617318f94c962c605abdeabb.jpg"}
+              src={
+                // "https://groupleavingcards.com/assets/design/617318f94c962c605abdeabb.jpg"
+                `https://dating.goaideme.com/${cardShareData?.images?.[0]?.card_images?.[0]}`
+              }
               alt="content"
             />
           </PageCover>
 
           {/* Loop through the editor messages from responseData */}
-          {responseData?.data?.[0]?.editor_messages?.map((item: any, index: any) => (
-            <Page key={`${item.slideIndex}-${index}`} number={item.slideIndex}>
-              {item && (
-                <div
-                  style={{
-                    position: "absolute",
-                    left: item.x,
-                    top: item.y,
-                  }}
-                >
-                  {item.type === "text" && (
-                    <div dangerouslySetInnerHTML={{ __html: item.content }} />
-                  )}
-                  {item.type === "image" && <img src={item.content} alt="content" />}
-                  {item.type === "gif" && (
-                    <img src={item.content} alt="content" style={{ maxWidth: "50%", maxHeight: "40%" }} />
-                  )}
-                </div>
-              )}
-            </Page>
-          ))}
+          {responseData?.data?.[0]?.editor_messages?.map(
+            (item: any, index: any) => (
+              <Page
+                key={`${item.slideIndex}-${index}`}
+                number={item.slideIndex}
+              >
+                {item && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: item.x,
+                      top: item.y,
+                    }}
+                  >
+                    {item.type === "text" && (
+                      <div dangerouslySetInnerHTML={{ __html: item.content }} />
+                    )}
+                    {item.type === "image" && (
+                      <img src={item.content} alt="content" />
+                    )}
+                    {item.type === "gif" && (
+                      <img
+                        src={item.content}
+                        alt="content"
+                        style={{ maxWidth: "50%", maxHeight: "40%" }}
+                      />
+                    )}
+                  </div>
+                )}
+              </Page>
+            )
+          )}
 
           <PageCover>
-            <div className="mt-5">
-            Back Cover
-            </div>
-            </PageCover>
+            <div className="mt-5">Back Cover</div>
+          </PageCover>
         </HTMLFlipBook>
       </div>
     </>

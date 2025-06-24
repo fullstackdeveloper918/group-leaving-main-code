@@ -31,6 +31,8 @@ import { DraggableElement } from "./DraggableElement";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchFromServer } from "@/app/actions/fetchFromServer";
+import Cookies from "js-cookie";
+// import { useParams } from "next/navigation";
 interface UserInfo {
   name: string;
   email: string;
@@ -109,9 +111,15 @@ const Custom: React.FC = () => {
   const sliderRef = useRef<HTMLInputElement>(null);
   const [type, setType] = useState<string>("");
   const [slides, setSlides] = useState<any[]>([]);
+  const [shareImageData, setShareImageData] = useState<any>(null);
   console.log(slides, "sldessss");
   const pathname = usePathname();
   const isEditorPath = /^\/share\/editor\/[^/]+$/.test(pathname);
+
+  const [first, second] = pathname.split("/").slice(1, 3);
+  const basePath = `/${first}/${second}`;
+
+  console.log(pathname, "isEditorPath");
 
   // Initialize params.id
   useEffect(() => {
@@ -128,6 +136,58 @@ const Custom: React.FC = () => {
       : null;
     setUserInfo(userInfoFromCookie);
   }, []);
+
+  //new ravi
+
+  const gettoken = Cookies.get("auth_token");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://dating.goaideme.com/card/users-cards",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${gettoken}`,
+            },
+          }
+        );
+
+        const data = await response.json();
+        setShareImageData(data); // Store response data in state
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [gettoken]);
+  console.log(shareImageData, "shareImageData here");
+
+  // if (basePath === "/share/editor") {
+  console.log(params, "params here to fix");
+  const cardShareData = shareImageData?.listing?.find(
+    (item: any) => item?.message_unique_id === params.id
+  );
+
+  useEffect(() => {
+    if (basePath === "/share/editor" && cardShareData) {
+      setSlides([
+        {
+          id: "slide-1",
+          title: "Development",
+          subtitle: "SCSS Only Slider",
+          text: "Learn to create a SCSS-only responsive slider.",
+          link: "...",
+          card_img: `https://dating.goaideme.com/${cardShareData.images?.[0]?.card_images?.[0]}`,
+        },
+      ]);
+    }
+  }, [basePath, cardShareData]);
+  console.log("cardShareData", cardShareData);
+  // }
 
   // Load elements from API and initialize slides
   // useEffect(() => {
@@ -207,7 +267,7 @@ const Custom: React.FC = () => {
         if (!response.ok) throw new Error("Failed to fetch data");
 
         const data = await response.json();
-        console.log("Fetched data:", data);
+        console.log("Fetched data here:", data);
 
         const apiElements = data?.data?.[0]?.editor_messages || [];
         setElements(apiElements);
