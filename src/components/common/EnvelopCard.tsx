@@ -9,9 +9,9 @@ import Cookies from "js-cookie";
 const PageCover = React.forwardRef((props: any, ref: any) => {
   return (
     <div className="cover" ref={ref} data-density="hard">
-      <div>
-        <h2>{props.children}</h2>
-      </div>
+    
+        {props.children}
+      
     </div>
   );
 });
@@ -122,9 +122,10 @@ const EnvelopCard = ({ getdata }: any) => {
   // const data2 = await fetchFromServer(api2);
 
   console.log("shareImageData", shareImageData);
+  console.log("shareImageData id", id);
 
   const cardShareData = shareImageData?.listing?.find(
-    (item: any) => item.message_unique_id === id
+    (item: any) => item?.message_unique_id === id
   );
 
   console.log("cardShareData", cardShareData);
@@ -217,6 +218,7 @@ const EnvelopCard = ({ getdata }: any) => {
         >
           <PageCover>
             <img
+            style={{height:"100%"}}
               src={
                 // "https://groupleavingcards.com/assets/design/617318f94c962c605abdeabb.jpg"
                 `https://dating.goaideme.com/${cardShareData?.images?.[0]?.card_images?.[0]}`

@@ -4,7 +4,7 @@ import EscrowPayment from "./EscrowPayment";
 import axios from "axios";
 import CollectionPayment from "./CollectionPayment";
 
-const GiftCardCollectionPot = ({ brandKey, groupId }: any) => {
+const GiftCardCollectionPot = ({ brandKey, groupId,cardShareData }: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState(20); // Default selected amount
@@ -108,18 +108,28 @@ const GiftCardCollectionPot = ({ brandKey, groupId }: any) => {
             Group Gift Fund
           </h2>
           <div className="flex justify-center mb-4">
-            <img
+            {
+              brandKey ?  
+              <img
               src={selectGiftImage} // Replace with your gift card image
               alt="E-Gift Card"
               className="w-32 h-20 object-contain"
             />
+            :
+            <img
+            src={ `https://dating.goaideme.com/${cardShareData?.images?.[0]?.card_images?.[0]}`} // Replace with your gift card image
+            alt="E-Gift Card"
+            className="w-32 h-20 object-contain"
+          />
+            }
+           
           </div>
           {/* <div className="text-center mb-4 justify-center">
 <p className="text-2xl font-bold">£0</p>
 </div> */}
           {/* <EscrowPayment /> */}
           <div className="text-center mb-4 justify-center">
-            <p className="text-2xl font-bold">INR {giftCard.data?.senderFee}</p>
+            {brandKey ? <p className="text-2xl font-bold">INR {giftCard.data?.senderFee}</p> : <p className="text-2xl font-bold">INR {cardShareData?.price}</p>}
             <button
               onClick={openModal}
               className="bg-blue-600 text-black  border-2 border-blue-700 px-4 py-2  rounded-md hover:bg-blue-700 transition"
@@ -199,10 +209,11 @@ const GiftCardCollectionPot = ({ brandKey, groupId }: any) => {
             )}
 
             <p className="mb-4 text-sm text-gray-600">
-              Service fee: ₹{serviceFee.toFixed(2)}
+              {brandKey ? `Service fee: ₹${serviceFee.toFixed(2)}` : `Service fee: ₹${cardShareData?.price}`}
             </p>
             <p className="mb-4 text-lg font-semibold">
-              Total: ₹{totalAmount.toFixed(2)}
+              {/* Total: ₹{totalAmount.toFixed(2)} */}
+              {brandKey ? `Total: ₹${totalAmount.toFixed(2)}` : `Total: ₹${cardShareData?.price}`}
             </p>
 
             <input
@@ -263,7 +274,7 @@ const GiftCardCollectionPot = ({ brandKey, groupId }: any) => {
                 name={name}
                 brandKey={brandKey}
                 groupId={groupId}
-                amount={totalAmount}
+                amount={brandKey ? totalAmount : cardShareData?.price}
                 setIsCustomAmount={setIsModalOpen}
                 cart_id={groupId}
                 type={"greeting"}

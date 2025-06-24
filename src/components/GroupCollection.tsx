@@ -9,6 +9,7 @@ import { capFirst } from "../utils/validation";
 import nookies from "nookies";
 import SendGiftModal from "./common/SendGiftModal";
 import Cookies from "js-cookie";
+import { useParams } from "next/navigation";
 
 const GroupCollection = ({
   params,
@@ -19,6 +20,7 @@ const GroupCollection = ({
 }: any) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   console.log(data, "jdkhdur");
+  const { id } = useParams();
   const [cookieValue, setCookieValue] = useState<string | null>(null);
   console.log(cookieValue, "cookieValue");
   const [isLocked, setIsLocked] = useState(false); // State to track the lock/unlock state
@@ -26,10 +28,46 @@ const GroupCollection = ({
   const [organiser, setOrganiser] = useState("");
   console.log(organiser, "organiser");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [shareImageData, setShareImageData] = useState<any>(null);
+
+
+  const gettoken = Cookies.get("auth_token");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://dating.goaideme.com/card/users-cards",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${gettoken}`,
+            },
+          }
+        );
+
+        const data = await response.json();
+        setShareImageData(data); // Store response data in state
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+  console.log(shareImageData, "shareImageData here");
+
+
+  const cardShareData = shareImageData?.listing?.find(
+    (item: any) => item.uuid === id
+  );
+
+  console.log("cardShareData heree", cardShareData);
 
   // const [editCollection, setEditCollection] = useState(data);
 
-  const gettoken = Cookies.get("auth_token");
+  // const gettoken = Cookies.get("auth_token");
   useEffect(() => {
     // Get cookies on the client side
     const cookies = nookies.get(); // retrieves cookies from document.cookie
@@ -122,9 +160,16 @@ const GroupCollection = ({
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="bg-white shadow-lg rounded-lg p-6 mb-6 text-center">
-        <h1 className="text-3xl font-bold mb-4">
+        {
+          searchParams?.brandKey ? 
+          <h1 className="text-3xl font-bold mb-4">
           {capFirst(data?.data?.collection_title)}
         </h1>
+        :
+        <h1 className="text-3xl font-bold mb-4">
+          {cardShareData?.title}
+        </h1>
+        }
         <div className="flex gap-5 mb-4 items-center justify-center">
           <button
             className="bg-blue-600 border-2 border-blue-700 text-black px-4 py-2 rounded-md hover:bg-blue-700 transition"
@@ -184,6 +229,7 @@ const GroupCollection = ({
           <GiftCardCollectionPot
             brandKey={searchParams?.brandKey}
             groupId={params.id}
+            cardShareData={cardShareData}
           />
         </div>
       </div>

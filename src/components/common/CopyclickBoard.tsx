@@ -14,7 +14,7 @@ const CopyclickBoard = () => {
   const handleClick = () => {
     setShowCopyBoard((prev) => !prev);
   };
-  const [value, setValue] = useState(`https://groupwish.in/${url}`);
+  const [value, setValue] = useState(`https://groupwish.in${url}`);
   let currentToastPromise: Promise<void> | null = null;
   const handleCopy = () => {
     navigator.clipboard

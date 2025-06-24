@@ -5,7 +5,8 @@ import CustomEditior from './CustomEditior'
 
 const CardEditor = () => {
   return (
-    <div>
+    <div style={{float:"left", width:"100%", display:"flex", flexDirection:"column"}
+    }>
     {/* <EditorModal /> */}
      <Custom />
      {/* <CustomEditior /> */}
