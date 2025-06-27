@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Script from "next/script";
 import nookies from "nookies";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { toast } from "react-toastify";
+import ContributorsModal from "./ContributorsModal";
 
 declare global {
   interface Window {
@@ -21,7 +23,6 @@ const CollectionPayment = ({
   type,
   closeModal,
   brandKey,
-  groupId,
   paymentAmount,
   name,
   setIsCustomAmount,
@@ -80,6 +81,11 @@ const CollectionPayment = ({
     fetchGiftCard();
   }, []);
   const handlePayment = async () => {
+      if(!name){
+        toast.error("Please add your name first.")
+        return;
+      }
+
     setIsProcessing(true);
     try {
       const response = await fetch("/api1/create", { method: "POST" });
@@ -101,7 +107,7 @@ const CollectionPayment = ({
         // order_id: data.orderId, // Use the order ID from the backend respo7nse
         key: "rzp_test_NPDqhJnbXJi072", // Ensure this is set in .env.local
         // key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Ensure this is set in .env.local
-        amount: paymentAmount * 100, // Razorpay requires the amount in paise
+        amount: Math.round(paymentAmount * 100), // Razorpay requires the amount in paise
         currency: "INR",
         name: name || "Anonymous",
         description: "Test Transaction",
@@ -126,8 +132,7 @@ const CollectionPayment = ({
                 body: JSON.stringify({
                   product_id: brandKey,
                   quantity: 1,
-                  unit_price: 10,
-
+                  unit_price: paymentAmount,
                   sender_name: name,
                   customIdentifier: "obucks158",
                   productAdditionalRequirements: { userId: "13" },
@@ -185,6 +190,7 @@ const CollectionPayment = ({
     }
   };
 
+  console.log(paymentAmount,"paymentAmount")
   return (
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
@@ -195,6 +201,8 @@ const CollectionPayment = ({
       >
         {isProcessing ? "Processing..." : `Pay Now: ${amount.toFixed(2)} INR`}
       </button>
+     
+     
     </>
   );
 };

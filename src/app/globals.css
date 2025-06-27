@@ -2044,3 +2044,33 @@ left: unset !important;
     width: 22px;
     bottom: 2%;
 }
+
+
+#flex-orgainisier{
+  display: flex;
+  gap: 20px;
+}
+#flex-orgainisier p{
+  font-size: 13px;
+}
+.mui-gfmqku {
+  position: relative;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  font-weight: 600;
+  height: 40px;
+  font-family: Quicksand, "Quicksand Fallback", sans-serif;
+  font-size: 1.25rem;
+  line-height: 1;
+  overflow: hidden;
+  user-select: none;
+  border-radius: 4px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(189, 189, 189);
+}
+

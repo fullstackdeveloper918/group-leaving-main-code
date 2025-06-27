@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import EscrowPayment from "./EscrowPayment";
 import axios from "axios";
 import CollectionPayment from "./CollectionPayment";
+import ContributorsModal from "./ContributorsModal";
 
 const GiftCardCollectionPot = ({ brandKey, groupId,cardShareData }: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,6 +14,10 @@ const GiftCardCollectionPot = ({ brandKey, groupId,cardShareData }: any) => {
   const [name, setName] = useState("");
   const [showWarning, setShowWarning] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
+  const [showContributors, setShowContributors] = useState(false);
+
+
+  console.log(showContributors,"showContributors")
   const handleProceed = () => {
     if (name.trim() === "") {
       setShowWarning(true);
@@ -74,11 +79,13 @@ const GiftCardCollectionPot = ({ brandKey, groupId,cardShareData }: any) => {
   }, []);
   console.log(giftCard, "giftCard");
 
-  const serviceFee = 1.3;
-  const totalAmount = isCustomAmount
-    ? parseFloat(customAmount) + serviceFee
-    : selectedAmount + serviceFee + giftCard.data?.senderFee;
+  // Calculate base amount, service fee (5%), and total
+  const baseAmount = isCustomAmount ? parseFloat(customAmount) : selectedAmount;
+  const serviceFee = +(baseAmount * 0.05).toFixed(2);
+  const totalAmount = +(baseAmount + serviceFee).toFixed(2);
 
+
+  console.log(totalAmount,"totalAmount")
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -100,8 +107,8 @@ const GiftCardCollectionPot = ({ brandKey, groupId,cardShareData }: any) => {
 
   console.log(selectGiftImage, "selectGiftImage");
 
-  return (
-    <div className="bg-white shadow-md rounded-lg p-6">
+  return (<>
+    <div className="bg-white shadow-lg rounded-lg p-6">
       {
         <>
           <h2 className="text-lg font-semibold mb-4 text-center">
@@ -136,6 +143,10 @@ const GiftCardCollectionPot = ({ brandKey, groupId,cardShareData }: any) => {
             >
               Add to Gift Card
             </button>
+
+            <button onClick={() => setShowContributors(true)} className="bg-[#558ec9] text-white px-4 py-2 rounded">
+        View Contributors
+      </button>
             <div className="text-center mb-2 justify-center">
               <button className="text-black-600 hover:underline">Remove</button>
             </div>
@@ -208,12 +219,15 @@ const GiftCardCollectionPot = ({ brandKey, groupId,cardShareData }: any) => {
               </div>
             )}
 
-            <p className="mb-4 text-sm text-gray-600">
-              {brandKey ? `Service fee: ₹${serviceFee.toFixed(2)}` : `Service fee: ₹${cardShareData?.price}`}
+            {/* Show amount, service fee, and total */}
+            <p className="mb-2 text-sm text-gray-600">
+              Amount: ₹{baseAmount.toFixed(2)}
+            </p>
+            <p className="mb-2 text-sm text-gray-600">
+              Service fee (5%): ₹{serviceFee.toFixed(2)}
             </p>
             <p className="mb-4 text-lg font-semibold">
-              {/* Total: ₹{totalAmount.toFixed(2)} */}
-              {brandKey ? `Total: ₹${totalAmount.toFixed(2)}` : `Total: ₹${cardShareData?.price}`}
+              Total: ₹{totalAmount.toFixed(2)}
             </p>
 
             <input
@@ -274,12 +288,14 @@ const GiftCardCollectionPot = ({ brandKey, groupId,cardShareData }: any) => {
                 name={name}
                 brandKey={brandKey}
                 groupId={groupId}
-                amount={brandKey ? totalAmount : cardShareData?.price}
+                amount={totalAmount}
                 setIsCustomAmount={setIsModalOpen}
                 cart_id={groupId}
                 type={"greeting"}
               />
+
             </div>
+
 
             <p className="text-sm text-gray-500 mt-4 text-center">
               You&apos;ll be taken to our payment provider Stripe to complete
@@ -288,7 +304,14 @@ const GiftCardCollectionPot = ({ brandKey, groupId,cardShareData }: any) => {
           </div>
         </div>
       )}
+      
     </div>
+
+<ContributorsModal
+isOpen={showContributors}
+onClose={() => setShowContributors(false)}
+groupId={groupId}
+/></>
   );
 };
 

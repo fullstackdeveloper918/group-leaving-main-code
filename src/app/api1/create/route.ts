@@ -8,12 +8,22 @@ const razorpay = new Razorpay({
 
 export async function POST(request:NextRequest){
     try {
-const order =await razorpay.orders.create({
-    amount:100*100,
-    currency:"INR",
-    receipt:"receipt_" + Math.random().toString(36).substring(7),
-});
-return NextResponse.json({orderId:order.id}, {status:200});
+        const body = await request.json();
+        const { amount } = body; // amount in paise
+
+        if (!amount || isNaN(amount) || amount < 100) {
+            return NextResponse.json(
+                { error: "Invalid or missing amount" },
+                { status: 400 }
+            );
+        }
+
+        const order =await razorpay.orders.create({
+            amount: amount, // use dynamic amount from frontend
+            currency:"INR",
+            receipt:"receipt_" + Math.random().toString(36).substring(7),
+        });
+        return NextResponse.json({orderId:order.id}, {status:200});
     } catch (error) {
         console.log(error,"Error creating order");
         return NextResponse.json(

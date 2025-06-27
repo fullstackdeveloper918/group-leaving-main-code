@@ -196,13 +196,17 @@ const GroupCollection = ({
           Send Immediately
         </button>
       </div>
-      <div className="flex items-center justify-center ">
+      <div className="flex  items-center justify-center ">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-6xl">
-          <div className="bg-white shadow-md rounded-lg p-6 ">
-            <h2 className="text-lg font-semibold mb-2">
+          <div className="bg-white shadow-lg  rounded-lg p-6 " >
+          <div className="texts-sections" id="flex-orgainisier">
+            <div className="MuiAvatar-root MuiAvatar-rounded MuiAvatar-colorDefault mui-gfmqku" aria-label="recipe" style={{backgroundColor: "rgb(230, 101, 129)"}}>F</div>
+            <div>
+            <h2 className="text-lg font-semibold mb-0">
               {capFirst(organiser)}
             </h2>
-            <p className="text-gray-500 mb-4">Coordinator</p>
+            <p className="text-gray-500 mb-4">Coordinator</p></div>
+            </div>
             <div className="flex">
               <button className="text-blue-600 hover:underline mb-2">
                 Post a note for your team

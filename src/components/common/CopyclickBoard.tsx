@@ -55,7 +55,7 @@ const CopyclickBoard = () => {
       <ToastContainer />
       <button
         onClick={handleClick}
-        className="bg-blue-600 text-black border-2 border-blue-700 px-4 py-2 rounded-md hover:bg-blue-700 transition"
+        className="bg-blue-600 cursor-grab text-black border-2 border-blue-700 px-4 py-2 rounded-md hover:bg-blue-700 transition"
       >
         Share collection
       </button>
