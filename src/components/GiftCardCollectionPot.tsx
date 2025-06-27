@@ -135,21 +135,24 @@ const GiftCardCollectionPot = ({ brandKey, groupId,cardShareData }: any) => {
 <p className="text-2xl font-bold">£0</p>
 </div> */}
           {/* <EscrowPayment /> */}
-          <div className="text-center mb-4 justify-center">
+          <div className="text-center mb-4 justify-center   flex-col">
             {brandKey ? <p className="text-2xl font-bold">INR {giftCard.data?.senderFee}</p> : <p className="text-2xl font-bold">INR {cardShareData?.price}</p>}
-            <button
+           
+            <div className="text-center mb-2 gap-2 items-center justify-center flex flex-col">
+            <button onClick={() => setShowContributors(true)} className="w-[40%] bg-blue-600 text-[14px] text-black border-2 border-blue-700 px-2 py-2 rounded">
+        View Contributors
+      </button>
+
+      <button
               onClick={openModal}
-              className="bg-blue-600 text-black  border-2 border-blue-700 px-4 py-2  rounded-md hover:bg-blue-700 transition"
+              className=" w-[60%] bg-[#558ec9]  text-white  px-4 py-2  rounded-md hover:bg-blue-700 transition"
             >
               Add to Gift Card
             </button>
-
-            <button onClick={() => setShowContributors(true)} className="bg-[#558ec9] text-white px-4 py-2 rounded">
-        View Contributors
-      </button>
-            <div className="text-center mb-2 justify-center">
-              <button className="text-black-600 hover:underline">Remove</button>
             </div>
+            {/* <div className="text-center mb-2 justify-center">
+              <button className="text-black-600 hover:underline">Remove</button>
+            </div> */}
           </div>
         </>
       }
