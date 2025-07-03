@@ -82,7 +82,7 @@ export default function MySignatures() {
           <IoIosArrowForward className="text-gray-600" />
         )}
       </div>
-      {open && (
+      {open && elements.length > 0 && (
         <div className="mt-1 space-y-2 p-2 messagebox border border-gray-500 rounded mb-4">
           {elements.map((item, index) => (
             <div
