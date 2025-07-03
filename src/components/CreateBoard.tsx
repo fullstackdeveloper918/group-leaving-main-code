@@ -275,14 +275,14 @@ const CreateBoard = ({ data }: any) => {
   return (
     <div>
       <ToastContainer />
-      <div className="flex flex-col items-center justify-center min-h-screen border border-[#e5e7eb bg-lightBg">
-        <h1 className="text-4xl font-bold mb-8">Start a Group Board</h1>
+      <div className="flex flex-col items-center justify-center border border-[#e5e7eb bg-lightBg grp-broad">
+        <h1 className="text-4xl font-bold mb-8 text-center">Start a Group Board</h1>
         <form
           onSubmit={handleSubmit}
-          className="bg-white p-8 rounded-lg shadow-md w-full max-w-md"
+          className="bg-white p-8 rounded-lg shadow-md w-full broad-form"
         >
           <label className="block mb-6">
-            <span className="text-gray-700 text-sm">
+            <span className="text-gray-700 fw-semibold mb-1 inline-block broad-label-txt">
               Who will receive this board?
             </span>
             <input
@@ -290,12 +290,12 @@ const CreateBoard = ({ data }: any) => {
               value={recipientName}
               onChange={handleRecipientNameChange}
               placeholder="Recipient's Name*"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm broad-input"
               required
             />
           </label>
           <label className="block mb-6">
-            <span className="text-gray-700 text-sm">
+            <span className="text-gray-700 fw-semibold mb-1 inline-block broad-label-txt">
               Give your board a title
             </span>
             <input
@@ -303,31 +303,31 @@ const CreateBoard = ({ data }: any) => {
               value={collectionTitle}
               onChange={handleCollectionTitleChange}
               placeholder="Board Name*"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm broad-input"
               required
             />
           </label>
           <div className="mb-6">
             {addSelectedImage === null ? (
               <div className="">
-                <h2 className="text-lg font-semibold mb-2">
+                <h2 className="font-semibold mb-1 broad-label-txt">
                   Gather contributions for a gift card
                 </h2>
-                <p className="text-gray-600 mb-2">
+                <p className="text-gray-600 mb-3 fw-medium broad-label-txt-para">
                   Make your card even more memorable. Launch a Shared Gift Fund
                   for group contributions.
                 </p>
                 <button
                   type="button"
                   disabled={loading}
-                  className="flex items-center justify-center border border-dashed border-blue-500 bg-blue-50 rounded-md px-4 text-blue-600 font-medium transition duration-300 hover:bg-blue-100"
+                  className="flex items-center justify-center rounded-md font-medium transition duration-300 gift-card-add"
                   // onClick={() => setFormData({ ...formData, selectedGift: 'gift card' })} // Update the selected gift here
                   onClick={openModal}
                 >
                   {loading1 ? (
                     <span className="">Loading...</span>
                   ) : (
-                    <span className="text-2xl mr-2">+ Choose a gift card</span>
+                    <span className="mr-2">+ Choose a gift card</span>
                   )}
                 </button>
               </div>
@@ -353,7 +353,7 @@ const CreateBoard = ({ data }: any) => {
             <button
               disabled={loading}
               type="submit"
-              className="w-full bg-blueBg text-white py-2 px-4  rounded-md hover:bg-blue-700 transition duration-300"
+              className="w-full bg-blueBg text-white rounded-pill hover:bg-blue-700 transition duration-300 broad-subbtn"
             >
               Next
             </button>
@@ -382,25 +382,25 @@ const CreateBoard = ({ data }: any) => {
       {isModalOpen && (
         <>
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-            <div className="bg-white p-6 rounded-md shadow-lg max-w-lg w-full relative overflow-auto">
+            <div className="bg-white shadow-lg max-w-lg w-full relative overflow-auto broad-model-box">
               {/* Top-left Cancel Button */}
-              <h2 className="text-lg font-semibold mb-2 text-center">
+              <h2 className="model-head-broad font-semibold mb-2 text-center">
                 Choose a Gift Card
               </h2>
 
               <button
-                className="absolute top-4 right-4 bg-gray-200 text-gray-700 px-2 py-1 rounded-md hover:bg-gray-300"
+                className="absolute top-3 right-2 bg-gray-200 text-gray-700 px-2 py-1 rounded-md hover:bg-gray-300 fw-semibold close-broad-modelbtn"
                 onClick={closeModal}
               >
                 Close
               </button>
 
               {/* How Collection Pots Work */}
-              <div className="bg-blue-100 p-4 rounded-md mb-2">
-                <h3 className="text-sm font-semibold">
+              <div className="bg-blue-100 p-4 ps-0 rounded-md mb-2">
+                <h3 className="text-lg font-semibold">
                   How does a group fund work?
                 </h3>
-                <ul className="text-sm text-gray-600 mt-2">
+                <ul className="text-md text-gray-600 mt-2 ps-0">
                   <li>1. Pick a gift card to add to your board.</li>
                   <li>2. Friends and colleagues can chip in.</li>
                   <li>

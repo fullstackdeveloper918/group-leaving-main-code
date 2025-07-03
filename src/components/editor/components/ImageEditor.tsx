@@ -144,17 +144,17 @@ setTimeout(() => {
       </ImageResizableContainer>
        <div className="px-2 pb-2">
           <div className="bg-white mt-2 px-4">
-            <div className="flex justify-center gap-2 py-2">
+            <div className="flex justify-center align-items-center gap-2 py-2">
               <button
                 onClick={onHide}
-                className="px-4 py-2 text-red-500 hover:bg-red-50 rounded transition"
+                className="transition cancel-editBtn"
                 style={{ color: "red" }}
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
-                className="px-4 py-2 bg-[#061178] text-white rounded hover:bg-indigo-800 transition"
+                className="text-white transition image-saveBtn"
               >
                     {loading ? "Saving..." :"Save"}
               </button>

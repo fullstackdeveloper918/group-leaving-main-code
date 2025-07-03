@@ -94,9 +94,9 @@ const AccountCards = ({ data }: any) => {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
       <ToastContainer />
-      <h1 className="text-2xl font-bold mb-6">My Cards</h1>
+      <h1 className="font-bold mb-5 my-card-head">My Cards</h1>
 
-      <div className="w-full max-w-4xl">
+      <div className="w-full account-card-box">
         {!data?.listing || data?.listing.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10">
             <p className="mb-4 text-gray-500">No data found.</p>
@@ -119,26 +119,27 @@ const AccountCards = ({ data }: any) => {
             return (
               <div
                 key={card.id}
-                className="bg-white shadow rounded-lg p-6 mb-4 flex justify-between items-center"
+                className="rounded-lg p-6 mb-4 flex justify-between items-center account-inner-card"
               >
-                <div className="flex items-center w-full">
+                <div className="flex w-full card-full-cover-box gap-4">
                   {/* Image */}
+                  <div className="cd-img-inn">
                   <img
                     // src={"https://groupleavingcards.com/images/gift/collection_pot.png"}
                     src={`https://dating.goaideme.com/${card?.images[0]?.card_images[0]}`}
                     alt={card.title}
-                    className="w-40 h-40 object-cover rounded-lg mr-4"
+                    className="w-full h-full object-cover rounded-lg"
                   />
-
+                  </div>
                   {/* Card Details */}
-                  <div className="w-full">
-                    <div className="flex justify-between h-12">
+                  <div className="outer-card-box-ac">
+                    <div className="flex justify-between card-cont-para">
                       <div className="">
-                        <h2 className="text-lg font-semibold">
+                        <h2 className="text-xl font-bold text-black">
                           {" "}
                           Card for {card.cartDetail[0]?.recipient_name}
                         </h2>
-                        <p>
+                        <p className="mb-0 mail-box-wrap">
                           {card.cartDetail[0]?.recipient_email
                             ? card.cartDetail[0]?.recipient_email
                             : "Set email"}
@@ -154,20 +155,20 @@ const AccountCards = ({ data }: any) => {
                       ) : (
                         // /share/${data?.data?.uuid}?brandKey=${brandKeys}
                         <Link href={`/share/${card?.uuid}`}>
-                          <button className="bg-[#558ec9] text-white border border-gray-300 px-3 h-10 rounded-2xl hover:bg-[#132DAD]">
+                          <button className="px-3 h-10 rounded-pill seeGiftbtn">
                             See Gift
                           </button>
                         </Link>
                       )}
                     </div>
-                    <hr />
+                    {/* <hr /> */}
 
                     <div className="flex justify-between w-full">
                       <div className="">
                         <p className="text-gray-500 text-sm">
                           Created On: {formattedCreateDate}
                         </p>
-                        <p className="text-gray-500 text-sm">
+                        <p className="text-gray-500 text-sm mb-0 fw-semibold">
                           Current Status:{" "}
                           <span
                             className={

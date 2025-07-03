@@ -111,9 +111,9 @@ const DemoCard = ({ params }: any) => {
             </div>
           </section>
           <section className="greeting_card_sign common_padding">
-            <div className="containers">
-              <div className=" md:flex block">
-                <div className="md:w-1/2  w-full">
+            <div className="containers 2xl:max-w-[1200px] max-w-[1080px] mx-auto ">
+              <div className=" lg:flex flex-col lg:flex-row ">
+                <div className="2xl:w-1/2 w-full lg:max-w-[600px] max-w-full">
                   <div
                     className="flex space-x-2 mb-2 "
                     style={{ paddingLeft: "110px" }}
@@ -144,9 +144,9 @@ const DemoCard = ({ params }: any) => {
                   {/* <Carousel /> */}
                   {/* <EditorModal/> */}
                 </div>
-                <div className="md:w-1/2 w-full md:mt-0 mt-5  flex items-center justify-start flex-col">
+                <div className="2xl:w-1/2 w-full md:mt-0 mt-5  flex items-center justify-start flex-col 2xl:max-w-full lg:max-w-[400px] max-w-full mx-auto px-4 ">
                   <MySignatures />
-                  <div className="bg-white shadow-lg rounded-lg p-10 w-full max-w-lg flex flex-col gap-2 items-center">
+                  <div className="bg-white shadow-lg rounded-lg md:p-10 py-8 px-6 w-full max-w-lg flex flex-col gap-2 items-center">
                     <h3 className="text-center text-md font-normal ">
                       Shared Gift Fund
                     </h3>
@@ -154,7 +154,7 @@ const DemoCard = ({ params }: any) => {
                       className="text-center text-md font-normal relative"
                       onClick={() => setIsModalOpen(true)}
                     >
-                      <span className="absolute bottom-3 bg-[#061178] text-white rounded-full px-2 text-center">
+                      <span className="absolute bottom-3 text-white rounded-full px-2 text-center usercount">
                         {contributors.length}
                       </span>
                       <span className="">
@@ -174,7 +174,7 @@ const DemoCard = ({ params }: any) => {
                       Chip in for Hagrid&apos;s Gift
                     </button>
                   </div>
-                  <div className="w-full" style={{ width: "73%" }}>
+                  <div className="w-full md:max-w-[500px] max-w-full" >
                     <button
                       className=" btnPrimary text-center w-100 mt-3 rounded-md"
                       onClick={handleShare}
@@ -241,11 +241,11 @@ const DemoCard = ({ params }: any) => {
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
           style={{ zIndex: 2 }}
         >
-          <div className="relative bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
+          <div className="relative bg-white rounded-lg shadow-lg p-6 w-full max-w-lg table-model-open-demo">
             {/* Close Button */}
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-2 right-2 text-gray-600 hover:text-gray-800 focus:outline-none"
+              className="absolute top-4 right-5 focus:outline-none model-cross-btn"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -262,10 +262,10 @@ const DemoCard = ({ params }: any) => {
                 />
               </svg>
             </button>
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">
+            <h2 className="font-semibold mb-4 contribute-head mb-4">
               Contributors
             </h2>
-            <ul>
+            <ul className="p-0">
               {contributors.map((contributor, index) => (
                 <li
                   key={index}

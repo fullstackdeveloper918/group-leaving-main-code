@@ -160,7 +160,7 @@ const DemoBoard = () => {
                 />
               </svg>
             </button>
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">
+            <h2 className="font-semibold mb-4 contribute-head">
               Contributors
             </h2>
             <div className="flex gap-2 items-center mt-4  text-gray-800">

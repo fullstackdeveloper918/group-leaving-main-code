@@ -5,12 +5,12 @@ import Images from "../../constants/images";
 
 const page = () => {
   return (
-    <div className="bg-lightBg py-12">
+    <div className="bg-lightBg" id="StartCardSection">
       <div className="container-fluid ">
-        <h1 className="xl:text-4xl md:text-xl sm:text-md font-semibold text-center">
+        <h1 className="font-bold text-center sCardhead">
           Start a Card
         </h1>
-        <h2 className="xl:text-2xl md:text-lg sm:text-sm font-semibold text-center mb-4">
+        <h2 className="font-semibold text-center sCardpara">
           What would you like to create?
         </h2>
         <div className="grid md:grid-cols-3 sm:grid-cols-1   lg:grid-cols-3 md:gap-8 gap-4 lg:mt-5 justify-center">

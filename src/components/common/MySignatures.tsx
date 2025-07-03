@@ -62,13 +62,13 @@ export default function MySignatures() {
   };
 
   return (
-    <div className="w-80 bg-white shadow-md rounded-lg ">
+    <div className="w-full max-w-[500px] bg-white shadow-md  border-b border-[#ddd] mb-4">
       <div
-        className="flex items-center justify-between p-4 "
+        className="flex items-center justify-between py-4  cursor-pointer"
         onClick={() => setOpen(!open)}
       >
         <div className="flex items-center space-x-2">
-          <div className="relative">
+          <div className="relative messgae-icon">
             <FaComment className="text-gray-600" />
             <span className="absolute -top-2 -left-2 bg-blue-600 text-white bg-[#061178] text-xs font-semibold px-1.5 py-0.5 rounded-full">
               {elements.length}
@@ -83,11 +83,11 @@ export default function MySignatures() {
         )}
       </div>
       {open && (
-        <div className="mt-1 space-y-2 p-2">
+        <div className="mt-1 space-y-2 p-2 messagebox border border-gray-500 rounded mb-4">
           {elements.map((item, index) => (
             <div
               key={index}
-              className={`flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-100 ${
+              className={`flex items-center rounded-lg cursor-pointer hover:bg-gray-100 ${
                 selected === index ? "bg-gray-200" : ""
               }`}
               onClick={() => setSelected(index)}
@@ -96,7 +96,7 @@ export default function MySignatures() {
                 <img
                   src={item.content}
                   alt={item.type}
-                  className="w-8 h-8 rounded"
+                  className="w-8 h-8 rounded border border-gray-500"
                 />
               ) : (
                 <FaComment className="text-gray-600" />
@@ -104,7 +104,7 @@ export default function MySignatures() {
               <div className="ml-3 flex-1">
                 {item.type === "text" ? (
                   <p
-                    className="font-medium text-sm"
+                    className="font-medium text-sm mb-0 pb-0"
                     dangerouslySetInnerHTML={{ __html: item.content }}
                   ></p>
                 ) : (
@@ -117,7 +117,7 @@ export default function MySignatures() {
                 <p className="text-xs text-gray-500">Page {item.slideIndex}</p>
               </div>
               <FaTrash
-                className="text-gray-500 hover:text-red-500 cursor-pointer"
+                className="text-red cursor-pointer"
                 onClick={() => handleDelete(index)}
               />
             </div>

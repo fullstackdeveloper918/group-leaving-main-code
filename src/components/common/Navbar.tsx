@@ -224,7 +224,7 @@ const Navbar = () => {
             </div> */}
 
             {/* Auth and Button */}
-            <div className="flex items-center lg:space-x-6 sm:space-x-4">
+            <div className="flex items-center lg:space-x-6 sm:space-x-4 gap-2">
               <Link
                 href="/create"
                 className="text-md btnPrimary text-blackText hidden md:block text-blackText no-underline font-medium hover:text-blueText "

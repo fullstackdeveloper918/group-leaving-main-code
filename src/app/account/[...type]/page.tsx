@@ -105,8 +105,8 @@ const page = async ({ params }: any) => {
   return (
     <div className=" bg-lightbg flex justify-center items-center">
       <ToastContainer />
-      <div className="w-full max-w-[70%] bg-white shadow-md rounded-lg p-8">
-        <h1 className="text-3xl font-bold text-center mb-6">Account</h1>
+      <div className="w-full max-w-[70%] bg-white shadow-md rounded-lg account-sec-main">
+        <h1 className="font-bold text-center text-md-start mb-6 account-main-head">Account</h1>
         <AccountSlider type={type} />
         {type === "profile" && (
           <AccountProfile data={posts} userInfo={gettoken?.value} />

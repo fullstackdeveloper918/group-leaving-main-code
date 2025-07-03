@@ -59,7 +59,7 @@ const Cart = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
       <ToastContainer />
-      <h1 className="text-2xl font-bold mb-6">My Carts</h1>
+      <h1 className="font-bold mb-5 my-card-head">My Carts</h1>
       <div className="w-full max-w-4xl">
         {(!data?.data || data?.data.length === 0) ? (
           <div className="flex flex-col items-center justify-center py-10">
@@ -80,7 +80,7 @@ const Cart = () => {
             return (
               <div
                 key={card.id}
-                className="bg-white shadow rounded-lg p-6 mb-4 flex justify-between items-center"
+                className="rounded-lg p-6 mb-4 flex justify-between items-center my-cart-cardbox"
               >
                 <div className="flex items-center w-full">
                   <img
@@ -91,7 +91,7 @@ const Cart = () => {
                   <div className="w-full">
                     <div className="flex justify-between h-12">
                       <div className="">
-                        <h2 className="text-lg font-semibold">
+                        <h2 className="text-xl font-bold text-black">
                           {" "}
                           Card for {card?.recipient_name}
                         </h2>
@@ -106,7 +106,7 @@ const Cart = () => {
                         <Link
                           href={`/card/pay/${card.card_uuid}?cart_uuid=${card.cart_uuid}`}
                         >
-                          <button className="bg-[#ecc94b] text-black border border-gray-300 px-3 h-10 rounded-2xl hover:bg-[#CB6E17] hover:text-white">
+                          <button className="bg-[#ecc94b] text-black border border-gray-300 px-3 h-10 rounded-pill fw-semibold payCart-btn">
                             Pay now
                           </button>
                         </Link>
@@ -123,7 +123,7 @@ const Cart = () => {
                         <p className="text-gray-500 text-sm">
                           CREATED: {formattedCreateDate}
                         </p>
-                        <p className="text-gray-500 text-sm">
+                        <p className="text-gray-500 text-sm fw-bold">
                           STATUS:{" "}
                           <span
                             className={

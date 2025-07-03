@@ -804,7 +804,7 @@ const Custom: React.FC = () => {
               </div>
             </button>
             {openDropdown && (
-              <div className="absolute right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+              <div className="absolute mt-2 bg-white border border-gray-200 rounded-md shadow-lg z-50 click-model">
                 <div
                   className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                   style={{ whiteSpace: "nowrap" }}
@@ -815,7 +815,7 @@ const Custom: React.FC = () => {
                     onChange={handleImageUpload}
                     disabled={showModal}
                   />
-                  <div className={`upload_svg ${showModal ? "disabled" : ""}`}>
+                  <div className={`upload_svg bg-transparent ${showModal ? "disabled" : ""}`}>
                     Add HandWriting
                   </div>
                 </div>
