@@ -68,8 +68,8 @@ const AccountEmailprefrence = ({ userInfo, data }: any) => {
   return (
     <>
       <ToastContainer />
-      <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-center mb-4">Email Settings</h2>
+      <div className="max-w-xl mx-auto rounded-lg email-form-outer-box mt-5">
+        <h2 className="text-2xl font-bold text-center e-pref-head">Email Settings</h2>
         <div className="space-y-4">
           {/* Card Reminders */}
           <div className="form-check form-switch items-center justify-between">
@@ -80,18 +80,18 @@ const AccountEmailprefrence = ({ userInfo, data }: any) => {
               onChange={() => setCardReminders(!cardReminders)}
               className="form-check-input"
             />
-            <label htmlFor="card-reminders" className="text-sm font-medium">
+            <label htmlFor="card-reminders" className="text-lg font-semibold">
               Greeting Reminders
             </label>
           </div>
-          <p className="text-xs text-gray-500 pl-4">
+          <p className="text-sm fw-medium mb-4 text-gray-500 pl-4 e-pref-para">
             Get reminders about greetings you&apos;ve started, such as a prompt
             to finish a greeting you began.
           </p>
 
           {/* Event Reminders */}
           <div className="form-check form-switch items-center justify-between">
-            <label htmlFor="event-reminders" className="text-sm font-medium">
+            <label htmlFor="event-reminders" className="text-lg font-semibold">
               Event Notifications
             </label>
             <input
@@ -102,13 +102,13 @@ const AccountEmailprefrence = ({ userInfo, data }: any) => {
               className="form-check-input"
             />
           </div>
-          <p className="text-xs text-gray-500 pl-4">
+          <p className="text-sm fw-medium mb-4 text-gray-500 pl-4">
             Receive notifications for events you set up on our reminders page.
           </p>
 
           {/* Paid Card Updates */}
           <div className="form-check form-switch items-center justify-between">
-            <label htmlFor="paid-updates" className="text-sm font-medium">
+            <label htmlFor="paid-updates" className="text-lg font-semibold">
               Paid Greeting Updates
             </label>
             <input
@@ -119,14 +119,14 @@ const AccountEmailprefrence = ({ userInfo, data }: any) => {
               className="form-check-input"
             />
           </div>
-          <p className="text-xs text-gray-500 pl-4">
+          <p className="text-sm fw-medium mb-4 text-gray-500 pl-4">
             Get updates about your paid greetings, like a notice before they are
             sent.
           </p>
 
           {/* Marketing Emails */}
           <div className="form-check form-switch items-center justify-between">
-            <label htmlFor="marketing-emails" className="text-sm font-medium">
+            <label htmlFor="marketing-emails" className="text-lg font-semibold">
               Product News & Offers
             </label>
             <input
@@ -137,15 +137,15 @@ const AccountEmailprefrence = ({ userInfo, data }: any) => {
               className="form-check-input"
             />
           </div>
-          <p className="text-xs text-gray-500 pl-4">
+          <p className="text-sm fw-medium mb-4 text-gray-500 pl-4">
             Occasionally receive updates about new features, special events, and
             exclusive discounts.
           </p>
         </div>
 
         {/* Informational Section */}
-        <div className="bg-blue-100 p-3 mt-4 rounded-md text-sm text-blue-700">
-          <p>
+        <div className="bg-blue-100 mt-4 rounded-md text-sm text-blue-700">
+          <p className="e-sent-para mb-0">
             We&apos;ll always send you important emails about your purchases, such as
             receipts, notifications when your greeting is sent, and thank you
             notes from recipients.
@@ -155,7 +155,7 @@ const AccountEmailprefrence = ({ userInfo, data }: any) => {
         {/* Update Button */}
         <button
           onClick={submit}
-          className="w-full mt-6 bg-blue-600 text-black border-2 py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+          className="w-full mt-6 rounded-pill transition duration-300 save-prefBtn"
         >
           Save Preferences
         </button>

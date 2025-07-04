@@ -51,29 +51,29 @@ const AccountBunddles = ({ userInfo, data }: any) => {
     router.push("/pricing");
   };
   return (
-    <div className=" flex flex-col justify-center items-center bg-gray-100">
+    <div className=" flex flex-col justify-center items-center bg-gray-100 w-full">
       {/* Page Title */}
       <ToastContainer />
-      <h1 className="text-2xl font-bold text-center mb-4">My Bundles</h1>
-      <div className="bg-white shadow rounded-lg min-w-full bg-white rounded-lg p-6">
+      <h1 className="font-bold text-center bundle-head">My Bundles</h1>
+      <div className="rounded-lg w-full overflow-x-auto bg-white rounded-lg border border-grey mb-4">
         {/* <h2 className="text-xl font-semibold mb-4">Signed Cards</h2> */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto inline-block min-w-full align-middle rounded-lg">
           <table className="min-w-full bg-white border rounded-lg">
             <thead className="bg-gray-100">
               <tr>
-                <th className="py-2 px-4 text-left font-medium text-gray-600">
+                <th className="py-3 px-4 text-left font-medium text-gray-600 fw-semibold bg-[#dfeaf5a8]">
                   Greeting
                 </th>
-                <th className="py-2 px-4 text-left font-medium text-gray-600">
+                <th className="py-3 px-4 text-left font-medium text-gray-600 fw-semibold bg-[#dfeaf5a8]">
                   Quantity
                 </th>
-                <th className="py-2 px-4 text-left font-medium text-gray-600">
+                <th className="py-3 px-4 text-left font-medium text-gray-600 fw-semibold bg-[#dfeaf5a8]">
                   Price
                 </th>
-                <th className="py-2 px-4 text-left font-medium text-gray-600">
+                <th className="py-3 px-4 text-left font-medium text-gray-600 fw-semibold bg-[#dfeaf5a8]">
                   Discount Rate
                 </th>
-                <th className="py-2 px-4 text-left font-medium text-gray-600">
+                <th className="py-3 px-4 text-left font-medium text-gray-600 fw-semibold bg-[#dfeaf5a8]">
                   Currency
                 </th>
               </tr>
@@ -88,16 +88,16 @@ const AccountBunddles = ({ userInfo, data }: any) => {
                         className="w-20 h-20 object-cover rounded-lg mr-4"
                       />
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 fw-medium">
                       {item?.bundle?.number_of_cards || "N/A"}
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 fw-medium">
                       {item?.bundle?.sale_price || "N/A"}
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 fw-medium">
                       {item?.bundle?.discount || "N/A"}
                     </td>
-                    <td className="py-3 px-4 text-blue-600">
+                    <td className="py-3 px-4 fw-medium text-blue-600">
                       {item?.bundle?.currency_type}
                     </td>
                   </tr>
@@ -114,7 +114,7 @@ const AccountBunddles = ({ userInfo, data }: any) => {
         </div>
       </div>
       {/* Message */}
-      <p className="text-gray-500 text-center mb-6">
+      <p className="text-gray-500 text-center mb-4 mt-4 fw-semibold">
         Looks like you haven&apos;t got any card bundles yet. Get started by
         selecting a bundle that works for you.
       </p>
@@ -122,7 +122,7 @@ const AccountBunddles = ({ userInfo, data }: any) => {
       {/* Action Button */}
       <button
         onClick={handlePickBundle}
-        className="bg-[#538AC4] text-white border-2 py-2 px-6 rounded-xl hover:bg-[#3b8cdd]"
+        className="bg-[#538AC4] text-white border-2 rounded-pill hover:bg-[#3b8cdd] pickbundle-Btn fw-semibold"
       >
         Pick a Bundle
       </button>

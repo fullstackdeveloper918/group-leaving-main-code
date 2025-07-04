@@ -57,10 +57,10 @@ const Cart = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8 py-md-10">
       <ToastContainer />
-      <h1 className="font-bold mb-5 my-card-head">My Carts</h1>
-      <div className="w-full max-w-4xl">
+      <h1 className="font-bold mb-4 mb-md-5 my-card-head">My Carts</h1>
+      <div className="w-full account-cart-box">
         {(!data?.data || data?.data.length === 0) ? (
           <div className="flex flex-col items-center justify-center py-10">
             <p className="mb-4 text-gray-500">No carts found.</p>
@@ -82,20 +82,22 @@ const Cart = () => {
                 key={card.id}
                 className="rounded-lg p-6 mb-4 flex justify-between items-center my-cart-cardbox"
               >
-                <div className="flex items-center w-full">
+                <div className="flex items-center w-full gap-4 flex-column flex-lg-row">
+                  <div className="cd-img-inn">
                   <img
                     src={`https://dating.goaideme.com/${card?.images[0]?.card_images[0]}`}
                     alt={card.title}
-                    className="w-40 h-40 object-cover rounded-lg mr-4"
-                  />
+                    className="w-full h-full object-cover rounded-lg"
+                    />
+                  </div>
                   <div className="w-full">
-                    <div className="flex justify-between h-12">
+                    <div className="flex justify-between cart-cont-para">
                       <div className="">
                         <h2 className="text-xl font-bold text-black">
                           {" "}
                           Card for {card?.recipient_name}
                         </h2>
-                        <p>
+                        <p className="mb-0 mail-box-wrap">
                           {card?.recipient_email
                             ? card?.recipient_email
                             : "Set email"}
@@ -116,14 +118,14 @@ const Cart = () => {
                         </button>
                       )}
                     </div>
-                    <hr />
+                    {/* <hr /> */}
 
                     <div className="flex justify-between w-full">
                       <div className="">
                         <p className="text-gray-500 text-sm">
                           CREATED: {formattedCreateDate}
                         </p>
-                        <p className="text-gray-500 text-sm fw-bold">
+                        <p className="text-gray-500 text-sm fw-bold mb-0">
                           STATUS:{" "}
                           <span
                             className={
@@ -141,7 +143,7 @@ const Cart = () => {
                         <p className="text-gray-500 text-sm">
                           DELIVERY DATE: {formattedDeliveryDate}
                         </p>
-                        <p className="text-gray-500 text-sm">
+                        <p className="text-gray-500 text-sm mb-0">
                           SIGNATURES: {card.signatures} signatures
                         </p>
                       </div>

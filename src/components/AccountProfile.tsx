@@ -87,7 +87,7 @@ const AccountProfile = ({ userInfo, data }: any) => {
     <div>
       <div className="mb-8">
         <ToastContainer />
-        <h2 className="font-bold mb-4 my-card-head my-ac-profile">My Account</h2>
+        <h2 className="font-bold mb-4 my-card-head my-ac-profile mt-5 text-center text-md-start">My Account</h2>
         <div className="space-y-4 profile-field-grp">
           <div>
             <label className="block text-lg font-semibold text-gray-700 mb-2">
@@ -128,7 +128,7 @@ const AccountProfile = ({ userInfo, data }: any) => {
         </div>
       </div>
 
-      <div className="flex justify-between items-center flex-column-reverse flex-sm-row gap-3 mt-5 mt-sm-0">
+      <div className="flex justify-between items-center flex-column-reverse flex-sm-row gap-2 gap-md-3 mt-4 mt-sm-0">
         <button
           className="prof-saveBtn"
           onClick={handleUpdate}
