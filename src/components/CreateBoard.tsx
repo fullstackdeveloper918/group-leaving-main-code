@@ -73,7 +73,7 @@ const CreateBoard = ({ data }: any) => {
       }
 
       const data1 = await response1.json();
-      console.log(data1, "data1");
+      console.log(data1, "data1 here1");
       setState(data1);
       setIsModalOpen(true);
       // toast.success("Added Successfully", {autoClose:2000});
@@ -276,7 +276,9 @@ const CreateBoard = ({ data }: any) => {
     <div>
       <ToastContainer />
       <div className="flex flex-col items-center justify-center border border-[#e5e7eb bg-lightBg grp-broad">
-        <h1 className="text-4xl font-bold mb-8 text-center">Start a Group Board</h1>
+        <h1 className="text-4xl font-bold mb-8 text-center">
+          Start a Group Board
+        </h1>
         <form
           onSubmit={handleSubmit}
           className="bg-white p-8 rounded-lg shadow-md w-full broad-form"

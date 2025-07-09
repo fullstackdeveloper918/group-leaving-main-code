@@ -26,10 +26,14 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
   console.log("databysidebarmodel", data);
   const [deliveryOption, setDeliveryOption] = useState("later");
   const [collectionTitle, setCollectionTitle] = useState(
-    data?.collection_title
+    data?.cartDetail?.[0]?.recipient_name
   );
-  const [senderName, setSenderName] = useState(data?.sender_name);
-  const [recipientEmail, setRecipientEmail] = useState(data?.recipient_email);
+  const [senderName, setSenderName] = useState(
+    data?.cartDetail?.[0]?.sender_name
+  );
+  const [recipientEmail, setRecipientEmail] = useState(
+    data?.cartDetail?.[0]?.recipient_email
+  );
   const [deliveryDate, setDeliveryDate] = useState(data?.start_date);
   const [deliveryTime, setDeliveryTime] = useState(data?.end_date);
   const [cookieValue, setCookieValue] = useState<string | null>(null);
@@ -53,7 +57,7 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
     const formData = {
       edit_by: createlinkuserId,
       brandKey: data?.brandKey,
-      linkUuid: data?.uuid,
+      linkUuid: data?.cartDetail?.[0]?.cart_uuid,
       collection_title: collectionTitle,
       sender_name: senderName,
       recipient_email: recipientEmail,
@@ -135,7 +139,7 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
                 value={
                   collectionTitle !== undefined
                     ? collectionTitle
-                    : data?.collection_title || ""
+                    : data?.cartDetail?.[0]?.recipient_name || ""
                 }
                 onChange={(e) => setCollectionTitle(e.target.value)}
                 placeholder="Collection Name"
@@ -151,7 +155,7 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
                 value={
                   senderName !== undefined
                     ? senderName
-                    : data?.sender_name || ""
+                    : data?.cartDetail?.[0]?.sender_name || ""
                 }
                 onChange={(e) => setSenderName(e.target.value)}
                 placeholder="Your Name"
@@ -165,7 +169,7 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
                 value={
                   recipientEmail !== undefined
                     ? recipientEmail
-                    : data?.recipient_email || ""
+                    : data?.cartDetail?.[0]?.recipient_email || ""
                 }
                 onChange={(e) => setRecipientEmail(e.target.value)}
                 placeholder="Recipient's Email"

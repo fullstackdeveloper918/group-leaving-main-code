@@ -815,7 +815,11 @@ const Custom: React.FC = () => {
                     onChange={handleImageUpload}
                     disabled={showModal}
                   />
-                  <div className={`upload_svg bg-transparent ${showModal ? "disabled" : ""}`}>
+                  <div
+                    className={`upload_svg bg-transparent ${
+                      showModal ? "disabled" : ""
+                    }`}
+                  >
                     Add HandWriting
                   </div>
                 </div>

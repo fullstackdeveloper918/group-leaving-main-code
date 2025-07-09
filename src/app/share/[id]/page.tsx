@@ -89,12 +89,16 @@ const Page: React.FC<PageProps> = ({ params, searchParams }) => {
             alt="Card"
             className="w-40 h-40 object-cover rounded-lg mx-auto mb-4"
           />
-          <p className="text-lg font-semibold mb-2">Amount: ₹{contributeData?.amount || "-"}</p>
+          <p className="text-lg font-semibold mb-2">
+            Amount: ₹{contributeData?.amount || "-"}
+          </p>
           <form
             onSubmit={(e) => {
               e.preventDefault();
               // handle contribute logic here
-              alert(`Contributed by: ${contributeName}, Amount: ${contributeAmount}`);
+              alert(
+                `Contributed by: ${contributeName}, Amount: ${contributeAmount}`
+              );
             }}
             className="flex flex-col gap-2 items-center"
           >
@@ -123,7 +127,13 @@ const Page: React.FC<PageProps> = ({ params, searchParams }) => {
           </form>
         </div>
       )}
-      <GroupCollection params={params} searchParams={searchParams} data={data} setClose={setClose} isClose={isClose} />
+      <GroupCollection
+        params={params}
+        searchParams={searchParams}
+        data={data}
+        setClose={setClose}
+        isClose={isClose}
+      />
     </>
   );
 };

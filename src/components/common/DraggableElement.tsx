@@ -212,10 +212,12 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
           : undefined
       }
       onResizeStop={(_, __, ref, ___, pos) => {
-        if (type !== "text" && isImageModalOpenForThisElement) {
+        if (
+          (type === "image" || type === "gif") &&
+          isImageModalOpenForThisElement
+        ) {
           const newWidth = parseInt(ref.style.width);
           const newHeight = parseInt(ref.style.height);
-          // setSize({ width: newWidth, height: newHeight });
           setPosition(pos);
           updateElement(pos.x, pos.y, newWidth, newHeight);
         }
@@ -301,28 +303,30 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
           <ImageEditor
             onHide={closeModals}
             setElements={setElements}
-            content={content}
             elements={elements}
             selectedElement={selectedElement}
-            cardIndex={index}
+            content={content}
+            cardIndex={{ original: index.original, activeSlide }}
             onDelete={() => onDelete(index.original)}
+            slides={elements.map((e) => e)}
+            activeSlideIndex={activeSlide}
           />
         )}
 
-      {showTextModal &&
-        selectedElement?.originalIndex === index.original &&
-        isEditing && (
-          <TextEditor
-            onHide={closeModals}
-            setElements={setElements}
-            content={content}
-            elements={elements}
-            selectedElement={selectedElement}
-            cardIndex={index}
-            Xposition={selectedElement?.x || 0}
-            Yposition={selectedElement?.y || 0}
-          />
-        )}
+      {showTextModal && (
+        <TextEditor
+          onHide={closeModals}
+          setElements={setElements}
+          elements={elements}
+          selectedElement={selectedElement}
+          content={content}
+          cardIndex={{ original: index.original, activeSlide }}
+          Xposition={position.x}
+          Yposition={position.y}
+          slides={elements.map((e) => e)}
+          activeSlideIndex={activeSlide}
+        />
+      )}
     </Rnd>
   );
 };

@@ -45,6 +45,8 @@ interface TextEditorProps {
   };
   Xposition: number;
   Yposition: number;
+  slides: any[];
+  activeSlideIndex: number;
 }
 
 const TextEditor: React.FC<TextEditorProps> = ({
@@ -56,6 +58,8 @@ const TextEditor: React.FC<TextEditorProps> = ({
   cardIndex,
   Xposition,
   Yposition,
+  slides,
+  activeSlideIndex,
 }) => {
   const [editorState, setEditorState] = useState<EditorState>(() => {
     const content = selectedElement?.content || "";
@@ -162,6 +166,23 @@ const TextEditor: React.FC<TextEditorProps> = ({
   };
 
   console.log(position, "xy positioning");
+  // Slide selection for moving element
+  // const [targetSlide, setTargetSlide] = useState<number>(cardIndex.activeSlide);
+
+  // When activeSlideIndex changes and editor is open, move the element to the new slide
+  useEffect(() => {
+    if (selectedElement && selectedElement.slideIndex !== activeSlideIndex) {
+      setElements((prev: any[]) =>
+        prev.map((el, i) =>
+          i === cardIndex.original
+            ? { ...el, slideIndex: activeSlideIndex }
+            : el
+        )
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeSlideIndex]);
+
   // Save the edited or new element
   const handleSave = () => {
     setLoading(true);
@@ -179,7 +200,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
     const newElement: Element = {
       type: "text",
       content: combinedContent,
-      slideIndex: cardIndex.activeSlide,
+      slideIndex: activeSlideIndex, // Ensure current slide is used
       x: position.x, // Ensure current position is used
       y: position.y,
       width: position.width,

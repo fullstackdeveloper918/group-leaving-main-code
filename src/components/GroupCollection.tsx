@@ -30,8 +30,9 @@ const GroupCollection = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [shareImageData, setShareImageData] = useState<any>(null);
 
-
   const gettoken = Cookies.get("auth_token");
+
+  console.log("searchParams here", searchParams.brandKey);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,7 +58,6 @@ const GroupCollection = ({
     fetchData();
   }, []);
   console.log(shareImageData, "shareImageData here");
-
 
   const cardShareData = shareImageData?.listing?.find(
     (item: any) => item.uuid === id
@@ -160,16 +160,15 @@ const GroupCollection = ({
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="bg-white shadow-lg rounded-lg p-6 mb-6 text-center">
-        {
-          searchParams?.brandKey ? 
+        {searchParams?.brandKey ? (
           <h1 className="text-3xl font-bold mb-4">
-          {capFirst(data?.data?.collection_title)}
-        </h1>
-        :
-        <h1 className="text-3xl font-bold mb-4">
-          {cardShareData?.title}
-        </h1>
-        }
+            {capFirst(data?.data?.collection_title)}
+          </h1>
+        ) : (
+          <h1 className="text-3xl font-bold mb-4">
+            {cardShareData?.cartDetail?.[0]?.recipient_name}
+          </h1>
+        )}
         <div className="flex gap-5 mb-4 items-center justify-center">
           <button
             className="bg-blue-600 border-2 border-blue-700 text-black px-4 py-2 rounded-md hover:bg-blue-700 transition"
@@ -198,14 +197,21 @@ const GroupCollection = ({
       </div>
       <div className="flex  items-center justify-center ">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-6xl">
-          <div className="bg-white shadow-lg  rounded-lg p-6 " >
-          <div className="texts-sections" id="flex-orgainisier">
-            <div className="MuiAvatar-root MuiAvatar-rounded MuiAvatar-colorDefault mui-gfmqku" aria-label="recipe" style={{backgroundColor: "rgb(230, 101, 129)"}}>F</div>
-            <div>
-            <h2 className="text-lg font-semibold mb-0">
-              {capFirst(organiser)}
-            </h2>
-            <p className="text-gray-500 mb-4">Coordinator</p></div>
+          <div className="bg-white shadow-lg  rounded-lg p-6 ">
+            <div className="texts-sections" id="flex-orgainisier">
+              <div
+                className="MuiAvatar-root MuiAvatar-rounded MuiAvatar-colorDefault mui-gfmqku"
+                aria-label="recipe"
+                style={{ backgroundColor: "rgb(230, 101, 129)" }}
+              >
+                F
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold mb-0">
+                  {capFirst(organiser)}
+                </h2>
+                <p className="text-gray-500 mb-4">Coordinator</p>
+              </div>
             </div>
             <div className="flex">
               <button className="text-blue-600 hover:underline mb-2">
@@ -243,7 +249,7 @@ const GroupCollection = ({
         setClose={setClose}
         isClose={isClose}
         onClose={() => setIsSidebarOpen(false)}
-        data={data?.data}
+        data={cardShareData}
         createlinkuserId={cookieValue}
       />
       <SendGiftModal
