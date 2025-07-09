@@ -287,16 +287,16 @@ const CreateGroup = ({ data }: any) => {
     <div>
       <ToastContainer />
 
-      <div className="flex flex-col items-center justify-center min-h-screen bg-white">
-        <h2 className="text-4xl font-bold mb-8">
+      <div className="flex flex-col items-center justify-center border border-[#e5e7eb bg-lightBg gift-collec">
+        <h2 className="text-4xl font-bold mb-8 text-center">
           Start a Group Gift Collection
         </h2>
         <form
           onSubmit={handleSubmit}
-          className="bg-white p-8 rounded-lg shadow-md w-full max-w-md"
+          className="p-8 rounded-lg shadow-md w-full gift-collec-form-box"
         >
           <label className="block mb-6">
-            <span className="text-gray-700 text-sm">
+            <span className="text-gray-700 fw-semibold inline-block">
               What is the purpose of this collection?
             </span>
             <input
@@ -311,19 +311,19 @@ const CreateGroup = ({ data }: any) => {
           <div className="mb-6">
             {addSelectedImage === null ? (
               <div className="flex flex-col gap-1">
-                <h2 className="text-lg font-semibold mb-2">Choose a gift</h2>
-                <p className="text-gray-600 mb-4">
+                <h4 className="font-semibold mb-0 choose-gift-head">Choose a gift</h4>
+                <p className="text-gray-600 mb-2">
                   Select the gift you want to fund. Everyone can contribute.
                 </p>
                 <button
                   type="button"
-                  className="flex items-center justify-center border border-dashed border-blue-500 bg-blue-50 rounded-md p-4 text-blue-600 font-medium transition duration-300 hover:bg-blue-100"
+                  className="choose-gift-btn flex items-center justify-center rounded-md font-medium"
                   onClick={openModal}
                 >
                   {loading1 ? (
                     <span className="">Loading...</span>
                   ) : (
-                    <span className="text-2xl mr-2">+ Choose gift card</span>
+                    <span className="choose-txt-in">+ Choose gift card</span>
                   )}
                 </button>
 
@@ -358,12 +358,12 @@ const CreateGroup = ({ data }: any) => {
                 // disabled={setLoading}
                 type="submit"
                 disabled={!brandKeys}
-                className="w-full bg-blue-600 cursor-not-allowed text-black border-2 border-blue-700 py-3 rounded-md hover:bg-blue-700 transition duration-300"
+                className="gift-collec-submitBtn w-full rounded-full"
               >
                 Next
               </button>
               {!brandKeys && (
-                <span className="text-center ml-24">
+                <span className="text-center w-full d-block mt-2 font-medium">
                   **Please choose a gift card**
                 </span>
               )}

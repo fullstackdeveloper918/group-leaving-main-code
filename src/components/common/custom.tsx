@@ -843,7 +843,7 @@ const Custom: React.FC = () => {
             {openDropdown && (
               <div className="absolute mt-2 bg-white border border-gray-200 rounded-md shadow-lg z-50 click-model">
                 <div
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer txt-ed-field"
                   style={{ whiteSpace: "nowrap" }}
                 >
                   <input
@@ -861,7 +861,7 @@ const Custom: React.FC = () => {
                   </div>
                 </div>
                 <div
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer txt-ed-field"
                   style={{ whiteSpace: "nowrap" }}
                   onClick={() => openModal("Sticker")}
                 >

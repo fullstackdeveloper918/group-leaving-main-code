@@ -1018,6 +1018,9 @@ button.cancel-editBtn:hover{
   }
 }
 @media (max-width: 1440px) {
+  .gift-collec-form-box {
+    max-width: 50% !important;
+  }
   .bannerHeaderH1 {
     font-size: 50px;
     max-width: 80%;
@@ -1157,8 +1160,20 @@ button.cancel-editBtn:hover{
   .cardBox {
     padding: 35px 15px;
   }
+   .editor_option {
+     justify-content: center !important;
+  }
 }
 @media screen and (max-width: 991px) {
+  .gift-collec {
+    padding: 60px 0 !important;
+  }
+  .gift-collec h2 {
+    font-size: 34px !important;
+  }
+ .gift-collec-form-box {
+    max-width: 90% !important;
+  }
   .card-full-cover-box{
     flex-direction: column;
   }
@@ -1214,9 +1229,22 @@ button.cancel-editBtn:hover{
   }
 }
 @media screen and (max-width: 768px) {
+  .gift-collec h2 {
+    font-size: 32px !important;
+    margin-bottom: 30px !important;
+  }
+  .gift-collec-submitBtn {
+    padding: 10px 20px !important;
+    font-size: 16px !important;
+  }
   .my-cart-cardbox {
     flex: 0 0 100%;
   }
+  .click-model {
+    right: 0;
+    left: -130px;
+    top: 40px;
+}
   .new-grp-btn{
     font-size: 14px;
     padding: 12px 24px !important;
@@ -1481,6 +1509,10 @@ button.cancel-editBtn:hover{
   }
 }
 @media (max-width: 575px) {
+  .gift-collec-form-box {
+    max-width: 93% !important;
+    padding: 35px 25px !important;
+  }
   .prof-saveBtn {
     width: 100%;
 }
@@ -1753,7 +1785,7 @@ button.cancel-editBtn:hover{
   gap: 7px;
   max-width: 60rem;
   margin: 0px auto;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
 }
 .editor_option > div {
@@ -2160,7 +2192,7 @@ left: unset !important;
 /* Carousel styling */
 .card-carousel {
   width: 100%;
-  padding: 20px 50px;
+  padding: 20px 50px 20px 50px;
 }
 
 .carousel-wrapper {
@@ -2461,8 +2493,67 @@ left: unset !important;
   position: absolute;
   inset: 0;
   content: '';
-
 }
+
+/* Gift Collection CSS start Here */
+
+.gift-collec{
+  padding: 80px 0;
+}
+.gift-collec h2{
+    color: #558ec9;
+    font-size: 40px;
+    line-height: normal;
+    margin-bottom: 40px;
+    letter-spacing: -1px;
+}
+.gift-collec-form-box{
+  background: #558ec912 !important;
+    padding: 40px 35px;
+    max-width: 35%;
+    border: 1px solid #558ec924;
+    border-radius: 12px;
+}
+.gift-collec-form-box label span {
+    font-size: 17px;
+}
+.gift-collec-form-box label input {
+    height: 45px;
+}
+.choose-gift-head{
+  font-size: 18px;
+}
+.choose-gift-btn {
+    border: 1px solid #dee2e6;
+    background: #fff;
+    padding: 6px 20px;
+}
+.choose-gift-btn span.choose-txt-in{
+  font-size: 18px;
+}
+.gift-collec-submitBtn{
+    padding: 12px 28px;
+    font-size: 18px;
+    font-weight: 600;
+    border: 2px solid #558ec9;
+    background: #558ec9;
+    color: #fff;
+    transition: .8s all;
+}
+.gift-collec-submitBtn:hover{
+  background: transparent;
+  color: #558ec9;
+}
+
+
+/* Gift Collection CSS end Here */
+
+
+
+
+
+
+
 /* Responsive adjustments */
 @media (max-width:1336px){
   .carousel-wrapper, .carousel-slide {
@@ -2506,6 +2597,16 @@ left: unset !important;
 .card-carousel-container {
   min-height: 100%;
 }
+.demo_paragraph {
+    max-width: 100%;
+    font-size: 15px;
+    line-height: 24px;
+}
+.carousel-slide.slide-active .false.react-draggable{
+    /* transform: translateX(-66%) translateZ(0); */
+    width: 100% !important;
+    height: auto !important;
+}
 }
 
 @media (max-width: 480px) {
@@ -2526,6 +2627,34 @@ left: unset !important;
     width: 28px;
     height: 28px;
 }
+.click-model .txt-ed-field {
+    font-size: 15px;
+}
+.demo_button_wrapper a {
+    width: 100%;
+    display: inline-block;
+}
+.demo_button_wrapper a button {
+    width: 90%;
+    margin: 0px;
+    border-radius: 30px;
+    padding: 12px;
+}
+.demo_button_wrapper button.btnPrimary {
+    margin-bottom: 10px !important;
+}
+h1.demo_heading{
+    font-size: 30px;
+    letter-spacing: 0px;
+    font-weight: 600;
+}
+.carousel-slide.slide-active .false.react-draggable{
+    /* transform: translateX(-66%) translateZ(0); */
+    width: 100% !important;
+}
+/* .carousel-slide.slide-active .false.react-draggable.react-draggable-dragged{
+  transform: translateX(-66%) translateZ(0);
+} */
 }
 
 @media (max-width:380px){
@@ -2535,6 +2664,7 @@ left: unset !important;
 }
 div#main-carousle button.add_btn {
   padding: 12px 14px !important;
+  font-size: 14px;
 }
 }
 .progress-bar-container {
