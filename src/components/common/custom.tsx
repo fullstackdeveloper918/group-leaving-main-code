@@ -327,10 +327,29 @@ const Custom: React.FC = () => {
 
   console.log(elements?.length, "new element hree");
 
+  // Refined cleanup function: remove all empty slides from the end except the last one
+  function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
+    // Find the last slide with content
+    let lastWithContent = slidesArr.length - 1;
+    for (; lastWithContent >= 0; lastWithContent--) {
+      const hasContent = elementsArr.some(
+        (el: any) => el.slideIndex === lastWithContent
+      );
+      if (hasContent) break;
+    }
+    // Always keep only one empty slide at the end
+    const minSlides = 1;
+    const newLength = Math.max(lastWithContent + 2, minSlides);
+    return slidesArr.slice(0, newLength);
+  }
+
   useEffect(() => {
     if (elements?.length == 0) {
       setSlides([...initialSlides]);
     }
+
+    // Clean up extra empty slides at the end, but never remove the last one
+    setSlides((prevSlides) => cleanupSlides(prevSlides, elements));
 
     console.log(elements, slides, "here to matched data");
     const lastSlide = slides?.[slides.length - 1];
@@ -448,10 +467,14 @@ const Custom: React.FC = () => {
       alert("No active slide selected!");
       return;
     }
+    // Text can only be added to slides after the 5th (index >= 5)
+    // If trying to add to slide 0-4, add to last slide instead
+    const targetIndex =
+      activeSlideIndex <= 4 ? slides.length - 1 : activeSlideIndex;
     const newMessage = {
       type: "text",
       content: editorContent || "Default message",
-      slideIndex: activeSlideIndex,
+      slideIndex: targetIndex,
       x: 0,
       y: 0,
       user_uuid: userInfo?.uuid,
@@ -486,26 +509,27 @@ const Custom: React.FC = () => {
         const imageUrl = data.file;
         const reader = new FileReader();
         reader.onloadend = () => {
+          // For first slide (index 0), always add to last slide
+          // For slides 1-4, add to current slide
+          // For slides >=5, add to current slide
+          const targetIndex =
+            activeSlideIndex === 0 ? slides.length - 1 : activeSlideIndex;
           if (activeSlideIndex !== null) {
             const newImage = {
               type: "image",
               content: `https://dating.goaideme.com/${imageUrl}`,
-              slideIndex:
-                activeSlideIndex === 0 ? slides.length - 1 : activeSlideIndex,
+              slideIndex: targetIndex,
               x: 0,
               y: 0,
               width: 320,
               height: 200,
               user_uuid: userInfo?.uuid,
             };
-
             setElements((prevElements) => [...prevElements, newImage]);
-
-            // ✅ If activeSlideIndex is 0, switch to the last slide
+            // If redirected, also set active slide to last
             if (activeSlideIndex === 0) {
               setActiveSlideIndex(slides.length - 1);
             }
-
             sendEditorData();
           }
         };
@@ -657,6 +681,19 @@ const Custom: React.FC = () => {
     setActiveSlideIndex(index);
     if (sliderRef.current) sliderRef.current.value = index.toString();
     setSlides((prevSlides: any[]) => [...prevSlides]);
+    // If an editor is open and an element is selected, move the element to the new slide
+    if (selectedElement) {
+      setElements((prev: any[]) =>
+        prev.map((el, i) =>
+          i === selectedElement.originalIndex
+            ? { ...el, slideIndex: index }
+            : el
+        )
+      );
+      setSelectedElement((prev: any) =>
+        prev ? { ...prev, slideIndex: index } : prev
+      );
+    }
   };
 
   const handlePrevSlide = () => {
@@ -914,6 +951,8 @@ const Custom: React.FC = () => {
                           cardIndex={{ activeSlide: activeSlideIndex }}
                           Xposition={selectedElement?.x || 0}
                           Yposition={selectedElement?.y || 0}
+                          slides={slides}
+                          activeSlideIndex={activeSlideIndex}
                         />
                       )}
                     </div>
@@ -1029,7 +1068,10 @@ const Custom: React.FC = () => {
                     {
                       type: "gif",
                       content: gifUrl,
-                      slideIndex: activeSlideIndex,
+                      slideIndex:
+                        activeSlideIndex === 0
+                          ? slides.length - 1
+                          : activeSlideIndex,
                       x: 0,
                       y: 0,
                       width: 320,
@@ -1037,6 +1079,8 @@ const Custom: React.FC = () => {
                       user_uuid: userInfo?.uuid,
                     },
                   ]);
+                  if (activeSlideIndex === 0)
+                    setActiveSlideIndex(slides.length - 1);
                   closeModal();
                 }}
               />
