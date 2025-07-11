@@ -221,7 +221,7 @@ img.card_img_right {
 
 /***************** Create card page css atart *****************/
 
-#StartCardSection{
+#StartCardSection {
   padding: 80px 0;
 }
 .cardBox {
@@ -231,11 +231,11 @@ img.card_img_right {
   box-shadow: 0 0 10px #d9d9d959;
   height: 100%;
 }
-.sCardhead{
+.sCardhead {
   font-size: 40px;
   color: #558ec9;
 }
-.sCardpara{
+.sCardpara {
   font-size: 22px;
   margin-bottom: 40px;
 }
@@ -254,9 +254,9 @@ img.card_img_right {
   background-color: #ffffff;
   font-size: 16px !important;
   padding: 16px 28px;
-  transition: .8s all;
+  transition: 0.8s all;
 }
-.cardBox:hover button{
+.cardBox:hover button {
   background-color: #558ec9;
   color: #fff !important;
 }
@@ -269,7 +269,7 @@ form.broad-form {
   border: 1px solid #558ec924;
   border-radius: 12px;
 }
-.broad-label-txt{
+.broad-label-txt {
   font-size: 15px;
   line-height: normal;
 }
@@ -278,26 +278,26 @@ button.gift-card-add {
   background: #fff;
   border: 1px solid #d4d4d4;
 }
-.broad-input{
+.broad-input {
   height: 45px;
 }
-.broad-label-txt{
+.broad-label-txt {
   font-size: 17px;
 }
-.broad-label-txt-para{
+.broad-label-txt-para {
   font-size: 15px;
   line-height: normal;
 }
-button.gift-card-add span{
+button.gift-card-add span {
   font-size: 16px;
 }
-.broad-subbtn{
+.broad-subbtn {
   padding: 12px 28px;
   font-size: 18px;
   font-weight: 600;
 }
-.grp-broad{
-   padding: 80px 0;
+.grp-broad {
+  padding: 80px 0;
 }
 .grp-broad h1 {
   color: #558ec9;
@@ -714,9 +714,7 @@ body {
 }
 /* swiper end */
 
-
-
-.model-head-broad{
+.model-head-broad {
   font-size: 24px;
   font-weight: 700;
   color: #558ec9;
@@ -725,19 +723,19 @@ body {
   background: #000000;
   color: #fff;
 } */
-.broad-model-box{
+.broad-model-box {
   border-radius: 12px;
   border: 1px solid #dfdfdf;
   padding: 40px 35px;
 }
-.account-card-box{
+.account-card-box {
   display: flex;
   flex-wrap: wrap;
   max-width: 100%;
   gap: 5px 30px;
   justify-content: center;
 }
-.account-inner-card{
+.account-inner-card {
   flex: 0 0 48%;
   border: 1px solid #558ec92b;
   background: #558ec917 !important;
@@ -746,10 +744,11 @@ body {
 .account-tab-box {
   gap: 12px;
 }
-.my-card-head{
+.my-card-head {
   font-size: 28px;
 }
-.account-tab-box a.text-black.text-gray-500.hover\:text-blue-500.cursor-pointer.no-underline{
+.account-tab-box
+  a.text-black.text-gray-500.hover\:text-blue-500.cursor-pointer.no-underline {
   background: #558ec930;
   color: #000000 !important;
   padding: 6px 20px;
@@ -757,7 +756,8 @@ body {
   margin-left: 0px;
   line-height: 26px;
 }
-.account-tab-box a.text-black.text-blue-600.font-semibold.border-b-2.border-blue-600.cursor-pointer.no-underline {
+.account-tab-box
+  a.text-black.text-blue-600.font-semibold.border-b-2.border-blue-600.cursor-pointer.no-underline {
   background: #558ec9;
   color: #fff !important;
   padding: 6px 20px;
@@ -765,28 +765,28 @@ body {
   margin-left: 0px;
   line-height: 26px;
 }
-.account-main-head{
+.account-main-head {
   font-size: 36px;
 }
-.account-tab-outer{
-    border-bottom: 1px solid #e4e4e4;
-    padding-bottom: 30px;
+.account-tab-outer {
+  border-bottom: 1px solid #e4e4e4;
+  padding-bottom: 30px;
 }
 .account-sec-main {
   padding: 80px 20px;
 }
-.seeGiftbtn{
+.seeGiftbtn {
   background: transparent;
   color: #558ec9;
   border: 2px solid #558ec9;
   font-weight: 600;
-  transition: .8s all;
+  transition: 0.8s all;
 }
-.seeGiftbtn:hover{
+.seeGiftbtn:hover {
   background: #558ec9;
   color: #fff !important;
 }
-.card-cont-para a{
+.card-cont-para a {
   min-width: 102px;
 }
 .cd-img-inn {
@@ -801,19 +801,19 @@ body {
   border-bottom: 1px solid #c3c3c3;
   margin-bottom: 14px;
 }
-.mail-box-wrap{
+.mail-box-wrap {
   /* word-wrap: break-word; */
   word-break: break-word;
 }
 
 /* My Cart CSS Start Here */
 
-.my-cart-cardbox{
+.my-cart-cardbox {
   border: 1px solid #558ec92b;
   background: #558ec917 !important;
   flex: 0 0 48%;
 }
-.payCart-btn:hover{
+.payCart-btn:hover {
   background: #558ec9;
   color: #fff !important;
 }
@@ -822,10 +822,10 @@ body {
   border-bottom: 1px solid #c3c3c3;
   margin-bottom: 14px;
 }
-.cart-cont-para a{
+.cart-cont-para a {
   min-width: 105px;
 }
-.account-cart-box{
+.account-cart-box {
   display: flex;
   flex-wrap: wrap;
   max-width: 100%;
@@ -835,7 +835,6 @@ body {
 
 /* My Cart CSS Here end*/
 
-
 /* My Profile Account CSS Start Here */
 
 .profile-field-grp {
@@ -844,21 +843,21 @@ body {
   background: #558ec917 !important;
   padding: 40px 30px;
 }
-.profile-input-field{
+.profile-input-field {
   height: 40px;
   padding: 15px;
   font-size: 14px;
   margin-bottom: 20px !important;
   border: 1px solid #dddddd;
 }
-.prof-message{
+.prof-message {
   height: 100px;
   padding: 15px;
   font-size: 14px;
   margin-bottom: 20px !important;
   border: 1px solid #dddddd;
 }
-.change-passBtn{
+.change-passBtn {
   background: #000;
   color: #fff;
   display: inline-block;
@@ -868,7 +867,7 @@ body {
   font-weight: 500;
   text-decoration: none;
 }
-.prof-saveBtn{
+.prof-saveBtn {
   background: #558ec9;
   color: #fff;
   display: inline-block;
@@ -878,9 +877,9 @@ body {
   font-weight: 500;
   text-decoration: none;
   border: 1px solid #558ec9;
-  transition: .8s all;
+  transition: 0.8s all;
 }
-.prof-saveBtn:hover{
+.prof-saveBtn:hover {
   background: transparent;
   border: 1px solid #558ec9;
   color: #558ec9 !important;
@@ -888,11 +887,11 @@ body {
 
 /* My Profile Account CSS end Here */
 
-.click-model{
+.click-model {
   right: -160px;
-    left: 45px;
-    top: 10px;
-    text-align: center;
+  left: 45px;
+  top: 10px;
+  text-align: center;
 }
 .click-model input[type="file"] {
   height: auto;
@@ -915,7 +914,7 @@ div#main-carousle button.add_btn {
   align-items: center;
   justify-content: center;
 }
-.image-saveBtn{
+.image-saveBtn {
   background: #558ec9;
   color: #fff;
   display: inline-block;
@@ -925,9 +924,9 @@ div#main-carousle button.add_btn {
   font-weight: 500;
   text-decoration: none;
   border: 1px solid #558ec9;
-  transition: .8s all;
+  transition: 0.8s all;
 }
-.image-saveBtn:hover{
+.image-saveBtn:hover {
   background: transparent;
   border: 1px solid #558ec9;
   color: #558ec9 !important;
@@ -937,7 +936,7 @@ button.cancel-editBtn {
   padding: 8px 24px;
   border-radius: 30px;
 }
-button.cancel-editBtn:hover{
+button.cancel-editBtn:hover {
   background: red;
   color: #fff !important;
 }
@@ -946,17 +945,17 @@ button.cancel-editBtn:hover{
   background: #ffffff !important;
   border: 1px solid #8f8f8f;
 }
-.model-cross-btn{
+.model-cross-btn {
   background: black;
   color: #fff;
   border-radius: 30px;
   padding: 5px;
 }
-.model-cross-btn svg{
+.model-cross-btn svg {
   width: 20px;
   height: 20px;
 }
-.contribute-head{
+.contribute-head {
   font-size: 24px;
   border-bottom: 1px solid #000;
   padding-bottom: 12px;
@@ -964,11 +963,11 @@ button.cancel-editBtn:hover{
   color: #2a4764;
 }
 
-.bundle-head{
+.bundle-head {
   font-size: 28px;
   margin: 35px 0 30px 0;
 }
-.pickbundle-Btn{
+.pickbundle-Btn {
   padding: 14px 28px;
 }
 .email-form-outer-box {
@@ -979,22 +978,21 @@ button.cancel-editBtn:hover{
   padding: 35px;
   box-shadow: 1px 1px 12px 2px #558ec926;
 }
-.save-prefBtn{
+.save-prefBtn {
   border: 1px solid #558ec9;
   background: #558ec9;
   color: #fff;
   font-weight: 600;
   padding: 14px 28px;
-
 }
-.save-prefBtn:hover{
+.save-prefBtn:hover {
   border: 1px solid #558ec9;
   background: transparent;
   color: #558ec9;
   font-weight: 600;
   padding: 14px 28px;
 }
-.e-pref-head{
+.e-pref-head {
   border-bottom: 1px solid #dcdcdc;
   padding-bottom: 12px;
   margin-bottom: 35px !important;
@@ -1006,44 +1004,44 @@ button.cancel-editBtn:hover{
   line-height: 22px;
   margin-top: 40px !important;
 }
-.receive-txt-box span{
-    line-height: normal !important;
-    padding: 0px !important;
-    letter-spacing: -.5px !important;
+.receive-txt-box span {
+  line-height: normal !important;
+  padding: 0px !important;
+  letter-spacing: -0.5px !important;
 }
 
-.regform-field-box .ant-input-affix-wrapper{
+.regform-field-box .ant-input-affix-wrapper {
   padding: 10px 11px;
 }
 .regform-field-box {
-    margin-bottom: 18px !important;
+  margin-bottom: 18px !important;
 }
 .register-page-sec {
-    padding: 80px 0;
-    border-top: 1px solid #e0e0e0;
+  padding: 80px 0;
+  border-top: 1px solid #e0e0e0;
 }
-.regBtn{
-    font-size: 18px !important;
-    font-weight: 500 !important;
+.regBtn {
+  font-size: 18px !important;
+  font-weight: 500 !important;
 }
-.register-head-txt{
+.register-head-txt {
   font-size: 38px;
   color: #558ec9;
   margin-bottom: 35px;
 }
-.signIn_Btn{
-    background: #000;
-    color: #fff;
-    padding: 14px 24px;
-    border-radius: 36px;
-    margin-left: 2px !important;
-    line-height: normal;
+.signIn_Btn {
+  background: #000;
+  color: #fff;
+  padding: 14px 24px;
+  border-radius: 36px;
+  margin-left: 2px !important;
+  line-height: normal;
 }
-.joinHead_Btn{
-   padding: 14px 24px;
-   line-height: normal;
+.joinHead_Btn {
+  padding: 14px 24px;
+  line-height: normal;
 }
-.start-cardBtn{
+.start-cardBtn {
   background: transparent;
   border: 1px solid #558ec9;
   color: #558ec9;
@@ -1202,8 +1200,8 @@ button.cancel-editBtn:hover{
   .cardBox {
     padding: 35px 15px;
   }
-   .editor_option {
-     justify-content: center !important;
+  .editor_option {
+    justify-content: center !important;
   }
 }
 @media screen and (max-width: 991px) {
@@ -1213,10 +1211,10 @@ button.cancel-editBtn:hover{
   .gift-collec h2 {
     font-size: 34px !important;
   }
- .gift-collec-form-box {
+  .gift-collec-form-box {
     max-width: 90% !important;
   }
-  .card-full-cover-box{
+  .card-full-cover-box {
     flex-direction: column;
   }
   .cd-img-inn {
@@ -1224,7 +1222,7 @@ button.cancel-editBtn:hover{
     height: 200px;
     width: 100%;
   }
-  .cd-img-inn img{
+  .cd-img-inn img {
     height: 200px;
   }
   .grp-broad h1 {
@@ -1286,8 +1284,8 @@ button.cancel-editBtn:hover{
     right: 0;
     left: -130px;
     top: 40px;
-}
-  .new-grp-btn{
+  }
+  .new-grp-btn {
     font-size: 14px;
     padding: 12px 24px !important;
   }
@@ -1331,10 +1329,10 @@ button.cancel-editBtn:hover{
     flex: 0 0 29%;
     height: 300px;
     width: 100%;
-}
-.cd-img-inn img{
-  height: 300px;
-}
+  }
+  .cd-img-inn img {
+    height: 300px;
+  }
   .partner_logos img {
     max-width: 90px !important;
   }
@@ -1563,33 +1561,35 @@ button.cancel-editBtn:hover{
   }
   .prof-saveBtn {
     width: 100%;
-}
-.change-passBtn {
-  width: 100%;
-  text-align: center;
-}
-.profile-field-grp {
-  padding: 30px 25px;
-}
+  }
+  .change-passBtn {
+    width: 100%;
+    text-align: center;
+  }
+  .profile-field-grp {
+    padding: 30px 25px;
+  }
   .account-tab-box {
     gap: 8px;
   }
-  .account-tab-box a.text-black.text-gray-500.hover\:text-blue-500.cursor-pointer.no-underline {
+  .account-tab-box
+    a.text-black.text-gray-500.hover\:text-blue-500.cursor-pointer.no-underline {
     padding: 6px 16px;
     line-height: 26px;
     font-size: 14px;
   }
-  .account-tab-box a.text-black.text-blue-600.font-semibold.border-b-2.border-blue-600.cursor-pointer.no-underline {
+  .account-tab-box
+    a.text-black.text-blue-600.font-semibold.border-b-2.border-blue-600.cursor-pointer.no-underline {
     padding: 6px 16px;
     line-height: 26px;
     font-size: 14px;
   }
   .cd-img-inn {
     height: 250px;
-}
-.cd-img-inn img{
-  height: 250px;
-}
+  }
+  .cd-img-inn img {
+    height: 250px;
+  }
   .grp-broad h1 {
     font-size: 30px;
   }
@@ -1831,7 +1831,7 @@ button.cancel-editBtn:hover{
 .editor_option {
   display: flex;
   gap: 7px;
-  max-width: 60rem;
+  max-width: 21rem;
   margin: 0px auto;
   justify-content: start;
   align-items: center;
@@ -2218,10 +2218,9 @@ html {
   z-index: 10000;
   /* top: unset !important; */
   width: 61% !important;
-
 }
-.editor-design-image{
-  height: 100% !important;
+.editor-design-image {
+  /* height: 100% !important; */
   width: 100% !important;
 }
 /* .editor-react-drag{
@@ -2233,10 +2232,10 @@ html {
 top: unset !important;
 left: unset !important;
 } */
- .editor-transform{
+.editor-transform {
   /* transform: unset !important; */
   width: 100% !important;
- }
+}
 /* Carousel styling */
 .card-carousel {
   width: 100%;
@@ -2255,7 +2254,6 @@ left: unset !important;
   width: 100%;
   height: 100%;
   perspective: 1000px;
-  
 }
 
 .carousel-slide {
@@ -2275,25 +2273,24 @@ left: unset !important;
 }
 
 .text-editor-place::placeholder {
-  color: #FF8A00 !important;
+  color: #ff8a00 !important;
 }
 
 .text-editor-place::-webkit-input-placeholder {
-  color: #FF8A00 !important;
+  color: #ff8a00 !important;
 }
 
 .text-editor-place:-ms-input-placeholder {
-  color: #FF8A00 !important;
+  color: #ff8a00 !important;
 }
 
 .text-editor-place::-moz-placeholder {
-  color: #FF8A00 !important;
+  color: #ff8a00 !important;
 }
 
 .text-editor-place:-moz-placeholder {
-  color: #FF8A00 !important;
+  color: #ff8a00 !important;
 }
-
 
 .slide-content {
   width: 100%;
@@ -2479,11 +2476,11 @@ left: unset !important;
   align-items: center;
   justify-content: center;
 }
-.messagebox  p {
+.messagebox p {
   margin: 0px;
 }
 
-.messagebox  svg {
+.messagebox svg {
   color: red;
   background: #ff00003b;
   padding: 5px;
@@ -2496,7 +2493,7 @@ left: unset !important;
   /* position: absolute;
     top: -200%;
     right: -25%; */
-    margin-left: 5px;
+  margin-left: 5px;
   padding: 7px !important;
   border-radius: 100% !important;
 }
@@ -2505,7 +2502,7 @@ left: unset !important;
   color: white;
 }
 
-.image-resize-btn{
+.image-resize-btn {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -2534,127 +2531,121 @@ left: unset !important;
   justify-content: center;
   line-height: 15px;
 }
-.bg-demo_banner{
+.bg-demo_banner {
   position: relative;
 }
-.bg-demo_banner::after{
+.bg-demo_banner::after {
   position: absolute;
   inset: 0;
-  content: '';
+  content: "";
 }
 
 /* Gift Collection CSS start Here */
 
-.gift-collec{
+.gift-collec {
   padding: 80px 0;
 }
-.gift-collec h2{
-    color: #558ec9;
-    font-size: 40px;
-    line-height: normal;
-    margin-bottom: 40px;
-    letter-spacing: -1px;
+.gift-collec h2 {
+  color: #558ec9;
+  font-size: 40px;
+  line-height: normal;
+  margin-bottom: 40px;
+  letter-spacing: -1px;
 }
-.gift-collec-form-box{
+.gift-collec-form-box {
   background: #558ec912 !important;
-    padding: 40px 35px;
-    max-width: 35%;
-    border: 1px solid #558ec924;
-    border-radius: 12px;
+  padding: 40px 35px;
+  max-width: 35%;
+  border: 1px solid #558ec924;
+  border-radius: 12px;
 }
 .gift-collec-form-box label span {
-    font-size: 17px;
+  font-size: 17px;
 }
 .gift-collec-form-box label input {
-    height: 45px;
+  height: 45px;
 }
-.choose-gift-head{
+.choose-gift-head {
   font-size: 18px;
 }
 .choose-gift-btn {
-    border: 1px solid #dee2e6;
-    background: #fff;
-    padding: 6px 20px;
+  border: 1px solid #dee2e6;
+  background: #fff;
+  padding: 6px 20px;
 }
-.choose-gift-btn span.choose-txt-in{
+.choose-gift-btn span.choose-txt-in {
   font-size: 18px;
 }
-.gift-collec-submitBtn{
-    padding: 12px 28px;
-    font-size: 18px;
-    font-weight: 600;
-    border: 2px solid #558ec9;
-    background: #558ec9;
-    color: #fff;
-    transition: .8s all;
+.gift-collec-submitBtn {
+  padding: 12px 28px;
+  font-size: 18px;
+  font-weight: 600;
+  border: 2px solid #558ec9;
+  background: #558ec9;
+  color: #fff;
+  transition: 0.8s all;
 }
-.gift-collec-submitBtn:hover{
+.gift-collec-submitBtn:hover {
   background: transparent;
   color: #558ec9;
 }
 
-
 /* Gift Collection CSS end Here */
 
-
-
-
-
-
-
 /* Responsive adjustments */
-@media (max-width:1336px){
-  .carousel-wrapper, .carousel-slide {
+@media (max-width: 1336px) {
+  .carousel-wrapper,
+  .carousel-slide {
     height: 650px;
   }
 }
-@media (max-width:1024px){
+@media (max-width: 1024px) {
   .card-carousel {
     max-width: 550px;
     margin: 0px auto;
-}
+  }
 }
 @media (max-width: 768px) {
   section.bg-demo_banner {
     background-size: 2300% 270%;
-}
+  }
   .carousel-slide {
     width: 350px;
     height: 450px;
   }
   .carousel-slides {
     height: 550px;
-
-}
-.carousel-slide.slide-next .slide-button-overlay {
-  right: -7%;
-}
-.carousel-slide.slide-prev .slide-button-overlay {
-  left: -7%;
-}
-/* 
+  }
+  .carousel-slide.slide-next .slide-button-overlay {
+    right: -7%;
+  }
+  .carousel-slide.slide-prev .slide-button-overlay {
+    left: -7%;
+  }
+  /* 
   .carousel-controls {
     flex-direction: column;
   } */
-  .carousel-wrapper, .carousel-slide {
+  .carousel-wrapper,
+  .carousel-slide {
     height: 100%;
-}
-.card-carousel {
-  padding: 20px 20px;
-}
-.card-carousel-container {
-  min-height: 100%;
-}
-.demo_paragraph {
+  }
+  .card-carousel {
+    padding: 20px 20px;
+  }
+  .card-carousel-container {
+    min-height: 100%;
+  }
+  .demo_paragraph {
     max-width: 100%;
     font-size: 15px;
     line-height: 24px;
-}
-.carousel-slide.slide-active .false.react-draggable{
+  }
+  .carousel-slide.slide-active .false.react-draggable {
     /* transform: translateX(-66%) translateZ(0); */
     width: 100% !important;
     height: auto !important;
-}
+  }
 }
 
 @media (max-width: 480px) {
@@ -2664,56 +2655,55 @@ left: unset !important;
   }
   .carousel-slides {
     height: 350px;
-
-}
+  }
   .editor-options {
     flex-wrap: wrap;
     justify-content: center;
   }
-  .carousel-slide.slide-next .slide-button-overlay, .carousel-slide.slide-prev .slide-button-overlay {
+  .carousel-slide.slide-next .slide-button-overlay,
+  .carousel-slide.slide-prev .slide-button-overlay {
     font-size: 13px;
     width: 28px;
     height: 28px;
-}
-.click-model .txt-ed-field {
+  }
+  .click-model .txt-ed-field {
     font-size: 15px;
-}
-.demo_button_wrapper a {
+  }
+  .demo_button_wrapper a {
     width: 100%;
     display: inline-block;
-}
-.demo_button_wrapper a button {
+  }
+  .demo_button_wrapper a button {
     width: 90%;
     margin: 0px;
     border-radius: 30px;
     padding: 12px;
-}
-.demo_button_wrapper button.btnPrimary {
+  }
+  .demo_button_wrapper button.btnPrimary {
     margin-bottom: 10px !important;
-}
-h1.demo_heading{
+  }
+  h1.demo_heading {
     font-size: 30px;
     letter-spacing: 0px;
     font-weight: 600;
-}
-.carousel-slide.slide-active .false.react-draggable{
+  }
+  .carousel-slide.slide-active .false.react-draggable {
     /* transform: translateX(-66%) translateZ(0); */
     width: 100% !important;
-}
-/* .carousel-slide.slide-active .false.react-draggable.react-draggable-dragged{
+  }
+  /* .carousel-slide.slide-active .false.react-draggable.react-draggable-dragged{
   transform: translateX(-66%) translateZ(0);
 } */
 }
 
-@media (max-width:380px){
-
-.carousel-slide {
-  width: 240px;
-}
-div#main-carousle button.add_btn {
-  padding: 12px 14px !important;
-  font-size: 14px;
-}
+@media (max-width: 380px) {
+  .carousel-slide {
+    width: 240px;
+  }
+  div#main-carousle button.add_btn {
+    padding: 12px 14px !important;
+    font-size: 14px;
+  }
 }
 .progress-bar-container {
   position: relative;
@@ -2815,21 +2805,19 @@ div#main-carousle button.add_btn {
   cursor: pointer;
 }
 
-
-.move-cursor-img{
-    position: relative;
-    right: 5%;
-    height: 22px;
-    width: 22px;
-    bottom: 2%;
+.move-cursor-img {
+  position: relative;
+  right: 5%;
+  height: 22px;
+  width: 22px;
+  bottom: 2%;
 }
 
-
-#flex-orgainisier{
+#flex-orgainisier {
   display: flex;
   gap: 20px;
 }
-#flex-orgainisier p{
+#flex-orgainisier p {
   font-size: 13px;
 }
 .mui-gfmqku {

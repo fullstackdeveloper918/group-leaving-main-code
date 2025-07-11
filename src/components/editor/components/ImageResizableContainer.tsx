@@ -43,24 +43,20 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
     const startY = e.clientY;
     const startWidth = width;
     const startHeight = height;
-    // const startLeft = position.x;
-    // const startTop = position.y;
 
-    const onMouseMove = (moveEvent: any) => {
+    const onMouseMove = (moveEvent: MouseEvent) => {
+      moveEvent.preventDefault();
       const dx = moveEvent.clientX - startX;
       const dy = moveEvent.clientY - startY;
 
       let newWidth = startWidth;
       let newHeight = startHeight;
-      // let newLeft = startLeft;
-      // let newTop = startTop;
 
       if (direction.includes("right")) {
         newWidth = Math.max(50, startWidth + dx);
       }
       if (direction.includes("left")) {
         newWidth = Math.max(50, startWidth - dx);
-        // newLeft = startLeft + dx;
       }
 
       if (direction.includes("bottom")) {
@@ -68,17 +64,12 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
       }
       if (direction.includes("top")) {
         newHeight = Math.max(50, startHeight - dy);
-        // newTop = startTop + dy;
       }
 
-      // setPosition({
-      //   x: newLeft,
-      //   y: newTop,
-      //   width: newWidth,
-      //   height: newHeight,
-      // });
-
-      onResize?.(newWidth, newHeight);
+      // Call onResize with the new dimensions
+      if (onResize) {
+        onResize(newWidth, newHeight);
+      }
     };
 
     const onMouseUp = () => {
@@ -89,14 +80,14 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseUp);
   };
-console.log(isDragging,"isDragging")
+
   return (
     <div
       // ref={containerRef}
       className="relative"
       style={{
         width,
-       height :"",
+        height,
         // transform: `translate(${position.x}px, ${position.y}px)`,
         cursor: isDragging ? "grabbing" : "grab",
         border: "3px solid #44AAFF",
@@ -104,35 +95,43 @@ console.log(isDragging,"isDragging")
       onMouseDown={startDragging}
     >
       <div
-        className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-blue-400 cursor-nwse-resize"
+        className="absolute top-0 left-0 w-4 h-4 bg-blue-400 rounded-full cursor-nwse-resize z-10"
+        style={{ transform: "translate(-50%, -50%)" }}
         onMouseDown={(e) => handleResize(e, "top-left")}
       />
       <div
-        className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-blue-400 cursor-nesw-resize"
+        className="absolute top-0 right-0 w-4 h-4 bg-blue-400 rounded-full cursor-nesw-resize z-10"
+        style={{ transform: "translate(50%, -50%)" }}
         onMouseDown={(e) => handleResize(e, "top-right")}
       />
       <div
-        className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-blue-400 cursor-nesw-resize"
+        className="absolute bottom-0 left-0 w-4 h-4 bg-blue-400 rounded-full cursor-nesw-resize z-10"
+        style={{ transform: "translate(-50%, 50%)" }}
         onMouseDown={(e) => handleResize(e, "bottom-left")}
       />
       <div
-        className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-blue-400 cursor-nwse-resize"
+        className="absolute bottom-0 right-0 w-4 h-4 bg-blue-400 rounded-full cursor-nwse-resize z-10"
+        style={{ transform: "translate(50%, 50%)" }}
         onMouseDown={(e) => handleResize(e, "bottom-right")}
       />
       <div
-        className="absolute top-0 left-1/2 transform -translate-x-1/2 w-3 h-1 cursor-n-resize"
+        className="absolute top-0 left-1/2 transform -translate-x-1/2 w-6 h-2 bg-blue-400 rounded cursor-n-resize z-10"
+        style={{ transform: "translate(-50%, -50%)" }}
         onMouseDown={(e) => handleResize(e, "top")}
       />
       <div
-        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3 h-1 cursor-s-resize"
+        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-6 h-2 bg-blue-400 rounded cursor-s-resize z-10"
+        style={{ transform: "translate(-50%, 50%)" }}
         onMouseDown={(e) => handleResize(e, "bottom")}
       />
       <div
-        className="absolute top-1/2 left-0 transform -translate-y-1/2 h-3 w-1 cursor-w-resize"
+        className="absolute top-1/2 left-0 transform -translate-y-1/2 h-6 w-2 bg-blue-400 rounded cursor-w-resize z-10"
+        style={{ transform: "translate(-50%, -50%)" }}
         onMouseDown={(e) => handleResize(e, "left")}
       />
       <div
-        className="absolute top-1/2 right-0 transform -translate-y-1/2 h-3 w-1 cursor-e-resize"
+        className="absolute top-1/2 right-0 transform -translate-y-1/2 h-6 w-2 bg-blue-400 rounded cursor-e-resize z-10"
+        style={{ transform: "translate(50%, -50%)" }}
         onMouseDown={(e) => handleResize(e, "right")}
       />
       {children}

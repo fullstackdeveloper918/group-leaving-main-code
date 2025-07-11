@@ -10,13 +10,15 @@ interface ImageEditorProps {
   elements: any[];
   selectedElement: any;
   content?: string;
+  slides?: any;
+  activeSlideIndex?: any;
+  isFirstSlide?: any;
+  toast?: any;
   cardIndex: {
     original?: number;
     activeSlide: number;
   };
   onDelete: () => void;
-  slides: any[];
-  activeSlideIndex: number;
 }
 
 const ImageEditor: React.FC<ImageEditorProps> = ({
@@ -26,9 +28,11 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
   selectedElement,
   content,
   cardIndex,
-  onDelete,
-  slides,
   activeSlideIndex,
+  isFirstSlide,
+  toast,
+  slides,
+  onDelete,
 }) => {
   const { position, setPosition, isDragging, startDragging } =
     useEditorPosition(
@@ -37,7 +41,6 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
     );
   const [loading, setLoading] = useState(false);
 
-  console.log(selectedElement.height, selectedElement.width, "ssssssssssssss");
   useEffect(() => {
     if (selectedElement) {
       const width = selectedElement.width || 320;
@@ -51,20 +54,6 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
       });
     }
   }, [selectedElement, setPosition]);
-
-  // When activeSlideIndex changes and editor is open, move the element to the new slide
-  useEffect(() => {
-    if (selectedElement && selectedElement.slideIndex !== activeSlideIndex) {
-      setElements((prev: any[]) =>
-        prev.map((el, i) =>
-          i === cardIndex.original
-            ? { ...el, slideIndex: activeSlideIndex }
-            : el
-        )
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeSlideIndex]);
 
   const handleResize = (newWidth: number, newHeight: number) => {
     const SLIDE_WIDTH = 500;
@@ -83,9 +72,10 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
       y: Math.min(Math.max(position.y, 0), SLIDE_HEIGHT - clampedHeight),
     };
 
+    // Update position state immediately
     setPosition(updatedPosition);
-    console.log(updatedPosition, "updatedPosition");
 
+    // Update elements array
     if (selectedElement && typeof cardIndex.original === "number") {
       setElements((prev: any) =>
         prev.map((el: any, i: number) =>
@@ -103,9 +93,6 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
     }
   };
 
-  // Slide selection for moving element
-  const [targetSlide, setTargetSlide] = useState<number>(cardIndex.activeSlide);
-
   const handleSave = () => {
     setLoading(true);
 
@@ -118,7 +105,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
     const newElement = {
       type: imageUrl.includes("tenor.com") ? "gif" : "image",
       content: imageUrl,
-      slideIndex: targetSlide,
+      slideIndex: cardIndex.activeSlide,
       x: Math.max(0, position.x),
       y: Math.max(0, position.y),
       width: position.width,
@@ -151,9 +138,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
   };
 
   return (
-    <div className="flex flex-col w-full max-w-2xl editor-design-image">
-      {/* Slide selection dropdown */}
-      {/* Remove the dropdown for moving to another slide */}
+    <div className="flex flex-col items-center w-full max-w-2xl editor-design-image">
       <ImageResizableContainer
         position={position}
         setPosition={setPosition}
@@ -166,12 +151,18 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
         <img
           src={content || selectedElement?.content || "/placeholder.svg"}
           alt="uploaded"
-          className="w-auto h-auto object-contain pointer-events-none select-none"
+          className="pointer-events-none select-none"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "fill",
+            display: "block",
+          }}
           draggable={false}
         />
       </ImageResizableContainer>
       <div className="px-2 pb-2">
-        <div className="bg-white mt-2 px-4">
+        <div className="bg-white mt-2 px-4 w-fit">
           <div className="flex justify-center align-items-center gap-2 py-2">
             <button
               onClick={onHide}

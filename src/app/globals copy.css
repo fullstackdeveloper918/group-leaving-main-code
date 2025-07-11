@@ -403,9 +403,9 @@ body {
   border-color: #91100f;
 }
 .slider_two .bannerButton .btnPrimary:hover {
- color: #91100f !important;
- background-color: transparent !important; 
- border-color: #91100f !important;
+  color: #91100f !important;
+  background-color: transparent !important;
+  border-color: #91100f !important;
 }
 .banner_flower,
 .banner_flower_right {
@@ -505,9 +505,6 @@ body {
   z-index: -1;
 }
 
-
-
-
 .step_count1,
 .submit_svg {
   border: 5px #ebebeb solid;
@@ -597,7 +594,6 @@ body {
 }
 /***************** demo page css ended *****************/
 
-
 /******** card img *********/
 .card_width_img {
   width: 100%;
@@ -616,16 +612,16 @@ body {
   padding: 4px 12px;
   text-transform: uppercase;
 }
-.card_bulk_images img{
+.card_bulk_images img {
   max-width: 30px;
 }
-.card_bulk_images{
+.card_bulk_images {
   justify-content: center;
   gap: 10px;
 }
 
 /***************** demp page css started *****************/
-.demo_paragraph{
+.demo_paragraph {
   max-width: 60%;
   margin: 10px auto 10px;
 }
@@ -635,17 +631,17 @@ body {
 /***************** responsive css *****************/
 
 /* swiper */
-.swiperSlider .swiper.swiper-initialized.swiper-horizontal.swiper-backface-hidden {
+.swiperSlider
+  .swiper.swiper-initialized.swiper-horizontal.swiper-backface-hidden {
   padding: 4rem 0px;
 }
-.swiperSlider img{
+.swiperSlider img {
   object-fit: cover;
 }
 .swiperSlider .swiper-backface-hidden .swiper-slide {
   transition: transform 0.5s;
 }
 /* swiper end */
-
 
 @media (max-width: 1600px) {
   .partner_logos img {
@@ -776,10 +772,11 @@ body {
     max-width: 39%;
     line-height: 60px;
   }
-  .demo_section button, .demo_section button:hover {
+  .demo_section button,
+  .demo_section button:hover {
     padding: 8px 19px;
     font-size: 14px;
-}
+  }
 }
 @media screen and (max-width: 991px) {
   img.card_img_left,
@@ -804,7 +801,7 @@ body {
   .demo_paragraph {
     max-width: 90%;
     font-size: 14px;
-}
+  }
 }
 @media screen and (max-width: 768px) {
   .partner_logos img {
@@ -909,7 +906,7 @@ body {
     gap: 20px !important;
   }
 
-  .flex_responsive{
+  .flex_responsive {
     flex-wrap: wrap;
     gap: 20px;
     flex: 1;
@@ -922,7 +919,7 @@ body {
     text-align: center;
     margin: 0 !important;
     min-height: 170px;
-}
+  }
 
   /* banner slider css */
   .slider_two .bannerHeaderH1 {
@@ -944,17 +941,16 @@ body {
   .slider_three .bannerHeaderH1 {
     font-size: 32px;
     margin-top: 20px;
-}
+  }
 
-/****** card page css started ********/
-.margin_responsive{
-  margin-top: 10px !important;
-}
-.margin_responsive.mb-4{
-  margin-bottom: 10px !important;
-}
-/****** card page css ended ********/
-
+  /****** card page css started ********/
+  .margin_responsive {
+    margin-top: 10px !important;
+  }
+  .margin_responsive.mb-4 {
+    margin-bottom: 10px !important;
+  }
+  /****** card page css ended ********/
 }
 
 @media screen and (max-width: 767px) {
@@ -1011,7 +1007,6 @@ body {
     padding: 30px 20px 10px;
     width: 100%;
   }
-
 }
 
 @media (max-width: 765px) {
@@ -1019,7 +1014,7 @@ body {
   img.card_img_right {
     display: none !important;
   }
-  .logo_img{
+  .logo_img {
     width: 100% !important;
     min-width: 120px;
   }
@@ -1131,11 +1126,11 @@ body {
   .slider_two {
     margin-top: 1rem;
     padding-bottom: 130px;
-}
-.slider_three.heroSectionHeight {
-  background-position: bottom;
-  min-height: calc(100vh - 46.5vh);
-}
+  }
+  .slider_three.heroSectionHeight {
+    background-position: bottom;
+    min-height: calc(100vh - 46.5vh);
+  }
 }
 @media (max-width: 480px) {
   .margin100 {
@@ -1145,24 +1140,26 @@ body {
     min-height: 200px !important ;
   }
 }
-.slick-next:before, [dir=rtl] .slick-prev:before {
-  content: '→';
-  color: black !important;  
+.slick-next:before,
+[dir="rtl"] .slick-prev:before {
+  content: "→";
+  color: black !important;
 }
 .slick-prev:before {
-  content: '←';
+  content: "←";
   color: black !important;
 }
 /* editor_css */
 .editor_app {
-    /* background: #f9f9f9; */
-    padding: 0px 30px;
+  /* background: #f9f9f9; */
+  padding: 0px 30px;
 }
 /* .slick-next:before{
   color:black
 } */
-.slick-next:before, [dir=rtl] .slick-prev:before {
-  content: '→';
+.slick-next:before,
+[dir="rtl"] .slick-prev:before {
+  content: "→";
   color: black;
 }
 .editoe_tab {
@@ -1219,7 +1216,7 @@ body {
   justify-content: center;
   align-items: center;
 }
-.editor_option>div {
+.editor_option > div {
   max-width: fit-content;
   margin: unset;
 }
@@ -1239,7 +1236,7 @@ button.add_btn {
 /* editor_css end */
 
 /* Apply transition to all images */
-.demo-board-msg{
+.demo-board-msg {
   word-wrap: break-word;
 }
 
@@ -1314,7 +1311,6 @@ button.add_btn {
 .nav-btn.right {
   right: 0;
 }
-
 
 .success-container {
   display: flex;
@@ -1473,9 +1469,7 @@ button.add_btn {
 
 /* Slider section code  */
 
-
 /* https://codepen.io/stack123/pen/bNGwBqm */
-
 
 html {
   -webkit-overflow-scrolling: touch;
@@ -1501,7 +1495,9 @@ html {
 3.0 Heading 2
 --------------------------------------------------------------*/
 .main-slider-section .heading-2 {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
   font-size: 24px;
   font-weight: 500;
   line-height: 40px;
@@ -1510,7 +1506,7 @@ html {
 }
 
 .main-slider-section .heading-2--white {
-  color: #FFF;
+  color: #fff;
 }
 
 /*--------------------------------------------------------------
@@ -1521,11 +1517,11 @@ html {
   font-size: 24px;
   font-weight: 100;
   line-height: 38px;
-  color: #3E4954;
+  color: #3e4954;
 }
 
 @media (max-width: 400px) {
-  .main-slider-section  .serif {
+  .main-slider-section .serif {
     font-size: 20px;
     line-height: 32px;
   }
@@ -1537,7 +1533,7 @@ html {
   font-size: 18px;
   font-weight: 600;
   line-height: 25px;
-  color: #3E4954;
+  color: #3e4954;
   letter-spacing: 0.3px;
 }
 
@@ -1546,7 +1542,7 @@ html {
 }
 
 .main-slider-section .heading-3--white {
-  color: #FFF;
+  color: #fff;
 }
 
 .main-slider-section .heading-3--light {
@@ -1557,7 +1553,9 @@ html {
 6.0 Text
 --------------------------------------------------------------*/
 .main-slider-section .text {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
   font-size: 18px;
   font-weight: 400;
   line-height: 30px;
@@ -1566,7 +1564,7 @@ html {
 }
 
 @media (max-width: 600px) {
-  .main-slider-section  .text {
+  .main-slider-section .text {
     font-size: 16px;
     line-height: 30px;
   }
@@ -1582,7 +1580,7 @@ html {
   position: relative;
   display: inline-block;
   font-weight: 600;
-  color: #5050FF;
+  color: #5050ff;
 }
 
 .main-slider-section .link:after {
@@ -1596,7 +1594,7 @@ html {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  content: '';
+  content: "";
   transform: translateY(-50%);
   transition: all 0.2s ease;
   /* cubic-bezier(0.4, 0.0, 0.2, 1); */
@@ -1608,16 +1606,14 @@ html {
 
 .main-slider-section .slider__item {
   transition: all 0.3s ease;
-  -webkit-transition-timing-function: 
-    cubic-bezier(0.4, 0.0, 0.2, 1);
-        transition-timing-function: 
-     cubic-bezier(0.4, 0.0, 0.2, 1);
-     box-shadow: 0px 0 10px 0px rgba(0, 0, 0, 0.2);
+  -webkit-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0px 0 10px 0px rgba(0, 0, 0, 0.2);
 }
-.main-slider-section #slider-item{
+.main-slider-section #slider-item {
   background-image: url(../../public/paper_grid.png);
 }
- .main-slider-section #slide-1:checked ~ .slider__holder{
+.main-slider-section #slide-1:checked ~ .slider__holder {
   position: relative;
 }
 .main-slider-section #slide-1:checked ~ .slider__holder .slider__item--1 {
@@ -1632,7 +1628,7 @@ html {
 }
 
 @media (max-width: 768px) {
-  .main-slider-section  #slide-2:checked ~ .slider__holder .slider__item--1 {
+  .main-slider-section #slide-2:checked ~ .slider__holder .slider__item--1 {
     opacity: 0.6;
   }
 }
@@ -1668,11 +1664,11 @@ html {
   transform: translateX(100px) scale(0.85);
 }
 
-.main-slider-section  .hover-bg:hover{
-  background-color: #5E8AEE;
+.main-slider-section .hover-bg:hover {
+  background-color: #5e8aee;
   opacity: 0.2 !important;
 }
-.main-slider-section .hover-bg{
+.main-slider-section .hover-bg {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -1696,7 +1692,7 @@ html {
 
 @media (max-width: 768px) {
   .main-slider-section #slide-3:checked ~ .slider__holder .slider__item--2 {
-    opacity: 0.6.main-slider-section ;
+    opacity: 0.6.main-slider-section;
   }
 }
 #slide-4:checked ~ .slider__holder .slider__item--2 {
@@ -1869,31 +1865,32 @@ html {
 /*--------------------------------------------------------------
 3.0 Bullets
 --------------------------------------------------------------*/
-.main-slider-section .bullets__item { 
+.main-slider-section .bullets__item {
   transition: all 0.2s ease;
 }
 
 #slide-1:checked ~ .bullets .bullets__item--1 {
-  background: #FFF;
+  background: #fff;
 }
 
 .main-slider-section #slide-2:checked ~ .bullets .bullets__item--2 {
-  background: #FFF;
+  background: #fff;
 }
 
 .main-slider-section #slide-3:checked ~ .bullets .bullets__item--3 {
-  background: #FFF;
+  background: #fff;
 }
 
 .main-slider-section #slide-4:checked ~ .bullets .bullets__item--4 {
-  background: #FFF;
+  background: #fff;
 }
 
 .main-slider-section #slide-5:checked ~ .bullets .bullets__item--5 {
-  background: #FFF;
+  background: #fff;
 }
 
-/* --------------------------------------------------------------*/ */
+/* --------------------------------------------------------------*/
+*/
 /*--------------------------------------------------------------
 1.0 Card
 --------------------------------------------------------------*/
@@ -1901,7 +1898,7 @@ html {
   position: relative;
   display: block;
   border-radius: 8px;
-  background: #FFF;
+  background: #fff;
   box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.05), 0 2px 4px 0 rgba(0, 0, 0, 0.1);
 }
 
@@ -1913,9 +1910,8 @@ html {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}.main-slider-section 
-
-.slider__radio {
+}
+.main-slider-section .slider__radio {
   display: none;
 }
 
@@ -1967,10 +1963,9 @@ html {
   padding: 60px 0;
 }
 
-
 /* 4.0 Section */
-/* --------------------------------------------------------------*/ */
-.main-slider-section .section {
+/* --------------------------------------------------------------*/
+*/ .main-slider-section .section {
   position: relative;
   width: 100%;
   padding: 120px 24px;
@@ -2005,7 +2000,7 @@ html {
   padding: 12px 16px;
   font-weight: 500;
   line-height: 20px;
-  color: #FFF;
+  color: #fff;
   border-radius: 3px;
   background: rgba(0, 0, 0, 0.2);
 }
@@ -2013,18 +2008,15 @@ html {
 .main-slider-section .button:hover {
   background: rgba(0, 0, 0, 0.1);
 }
- 
 
-.main-slider-section .progress-bar{
+.main-slider-section .progress-bar {
   float: left;
   width: 100%;
 }
 
-.main-slider-section .page-no{
+.main-slider-section .page-no {
   color: white;
 }
-
-
 
 /* Progress Bar .main-slider-section Wrapper */
 .progress-bar {
@@ -2085,7 +2077,6 @@ html {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
-
 /* Page Number Styling */
 .main-slider-section .page-no {
   margin-top: 8px;
@@ -2103,12 +2094,6 @@ html {
   font-weight: bold;
 }
 
-
-
-
-
-
-
 section.main-slider-section {
   position: relative;
   float: left;
@@ -2121,7 +2106,7 @@ section.main-slider-section {
   color: #333;
 }
 
- .hover-bg {
+.hover-bg {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -2134,7 +2119,6 @@ section.main-slider-section {
 .swiper-slide-next:hover .hover-bg {
   background-color: rgba(94, 138, 238, 0.2); /* Same color with opacity */
   transform: translate(-430px, 10px);
-
 }
 
 .swiper-slide {
@@ -2147,8 +2131,6 @@ section.main-slider-section {
   transform: scale(1);
   /* Active slide is full-size */
 }
-
-
 
 .slider-container {
   position: relative;
@@ -2166,7 +2148,6 @@ section.main-slider-section {
   transform: translateY(-50%);
   cursor: pointer;
   z-index: 10;
-
 }
 
 /* Ensure slides are styled properly */
@@ -2223,7 +2204,6 @@ section.main-slider-section {
   z-index: 10;
 }
 
-
 .next-slide-click-area {
   right: 15px;
 }
@@ -2235,12 +2215,10 @@ section.main-slider-section {
 }
 
 .swiper-backface-hidden .swiper-slide-prev img {
-
   transform: translate(375px, 10px) !important;
 }
 
 .swiper-backface-hidden .swiper-slide-next img {
-
   transform: translate(-430px, 10px);
 }
 
@@ -2251,16 +2229,9 @@ section.main-slider-section {
   z-index: -1;
 }
 
-
 #margin-set {
   margin-left: -265px;
-
 }
-
-
-
-
-
 
 /* Progress Bar .main-slider-section Wrapper */
 .progress-bar {
@@ -2272,7 +2243,7 @@ section.main-slider-section {
   flex-direction: column;
 }
 
-.button-progress{
+.button-progress {
   float: left;
   width: 100%;
   display: flex;
@@ -2281,7 +2252,6 @@ section.main-slider-section {
   gap: 20px;
 }
 /* Progress Fill */
-
 
 /* Progress Wrapper */
 .main-slider-section .progress-wrapper {
@@ -2324,6 +2294,6 @@ section.main-slider-section {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
-.react-draggable{
+.react-draggable {
   z-index: 12000 !important;
 }

@@ -46,6 +46,8 @@ interface TextEditorProps {
   Xposition: number;
   Yposition: number;
   slides: any[];
+  isFirstSlide?: any;
+  toast: any;
   activeSlideIndex: number;
 }
 
@@ -59,6 +61,8 @@ const TextEditor: React.FC<TextEditorProps> = ({
   Xposition,
   Yposition,
   slides,
+  isFirstSlide,
+  toast,
   activeSlideIndex,
 }) => {
   const [editorState, setEditorState] = useState<EditorState>(() => {

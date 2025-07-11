@@ -440,25 +440,35 @@ const Custom: React.FC = () => {
 
   // Handle adding a new message (and new slide)
   const handleAddMessageClick = () => {
-    const newSlide = {
-      id: `slide-${slides.length + 1}`,
-      title: "New Slide",
-      subtitle: "New Subtitle",
-      text: "This is a new slide",
-      link: "https://example.com",
-      card_img: SlideImg_5,
-    };
+    // Only jump to last slide if on slide 0-4
+    if (activeSlideIndex <= 4) {
+      const lastSlideIndex = slides.length - 2;
+      // const lastSlideIndex = 5;
 
-    const lastSlideIndex = slides.length - 1;
+      const newSlide = {
+        id: `slide-${slides.length + 1}`,
+        title: "New Slide",
+        subtitle: "New Subtitle",
+        text: "This is a new slide",
+        link: "https://example.com",
+        card_img: SlideImg_5,
+      };
 
-    // setSlides((prevSlides: any[]) => [...prevSlides, newSlide]);
-    // const newSlideIndex = slides.length;
-    setActiveSlideIndex(lastSlideIndex);
-    setShowModal(true);
+      // const lastSlideIndex = slides.length - 1;
 
-    if (sliderRef.current) {
-      sliderRef.current.value = lastSlideIndex.toString();
+      // setSlides((prevSlides: any[]) => [...prevSlides, newSlide]);
+      // const newSlideIndex = slides.length;
+      setActiveSlideIndex(lastSlideIndex);
+      setShowModal(true);
+
+      if (sliderRef.current) {
+        sliderRef.current.value = lastSlideIndex.toString();
+      }
+      setShowModal(true);
+      return;
     }
+    // For slides 5 and above, stay on current slide
+    setShowModal(true);
   };
 
   // Save message from editor
@@ -470,11 +480,14 @@ const Custom: React.FC = () => {
     // Text can only be added to slides after the 5th (index >= 5)
     // If trying to add to slide 0-4, add to last slide instead
     const targetIndex =
-      activeSlideIndex <= 4 ? slides.length - 1 : activeSlideIndex;
+      activeSlideIndex <= 4 ? slides.length - 2 : activeSlideIndex;
+
     const newMessage = {
       type: "text",
       content: editorContent || "Default message",
       slideIndex: targetIndex,
+
+      // slideIndex: activeSlideIndex,
       x: 0,
       y: 0,
       user_uuid: userInfo?.uuid,
@@ -513,23 +526,30 @@ const Custom: React.FC = () => {
           // For slides 1-4, add to current slide
           // For slides >=5, add to current slide
           const targetIndex =
-            activeSlideIndex === 0 ? slides.length - 1 : activeSlideIndex;
+            activeSlideIndex === 0 ? slides.length - 2 : activeSlideIndex;
+
           if (activeSlideIndex !== null) {
             const newImage = {
               type: "image",
               content: `https://dating.goaideme.com/${imageUrl}`,
               slideIndex: targetIndex,
+
+              // slideIndex:
+              //   activeSlideIndex === 0 ? slides.length - 1 : activeSlideIndex,
               x: 0,
               y: 0,
               width: 320,
               height: 200,
               user_uuid: userInfo?.uuid,
             };
+
             setElements((prevElements) => [...prevElements, newImage]);
-            // If redirected, also set active slide to last
+
+            // ✅ If activeSlideIndex is 0, switch to the last slide
             if (activeSlideIndex === 0) {
-              setActiveSlideIndex(slides.length - 1);
+              setActiveSlideIndex(slides.length - 2);
             }
+
             sendEditorData();
           }
         };
@@ -564,7 +584,7 @@ const Custom: React.FC = () => {
           : result.media_formats.gif.url
       );
       if (activeSlideIndex === 0) {
-        setActiveSlideIndex(slides.length - 1);
+        setActiveSlideIndex(slides.length - 2);
       }
       setGifs(gifUrls);
       setOpenDropdown(false);
@@ -682,18 +702,18 @@ const Custom: React.FC = () => {
     if (sliderRef.current) sliderRef.current.value = index.toString();
     setSlides((prevSlides: any[]) => [...prevSlides]);
     // If an editor is open and an element is selected, move the element to the new slide
-    if (selectedElement) {
-      setElements((prev: any[]) =>
-        prev.map((el, i) =>
-          i === selectedElement.originalIndex
-            ? { ...el, slideIndex: index }
-            : el
-        )
-      );
-      setSelectedElement((prev: any) =>
-        prev ? { ...prev, slideIndex: index } : prev
-      );
-    }
+    // if (selectedElement) {
+    //   setElements((prev: any[]) =>
+    //     prev.map((el, i) =>
+    //       i === selectedElement.originalIndex
+    //         ? { ...el, slideIndex: index }
+    //         : el
+    //     )
+    //   );
+    //   setSelectedElement((prev: any) =>
+    //     prev ? { ...prev, slideIndex: index } : prev
+    //   );
+    // }
   };
 
   const handlePrevSlide = () => {
@@ -762,6 +782,26 @@ const Custom: React.FC = () => {
     router.push(`/envelop/${id}`);
   };
   console.log(activeSlideIndex, "piopipi");
+
+  // Only for TextEditor: keep modal open and update content on slide change
+  useEffect(() => {
+    if (showModal) {
+      // Find the text element for the new active slide, if any
+      const textElement = elements.find(
+        (el) => el.type === "text" && el.slideIndex === activeSlideIndex
+      );
+      setSelectedElement(textElement || null);
+    }
+  }, [activeSlideIndex, showModal, elements]);
+
+  // useEffect(() => {
+  //   if (showModal) {
+  //     setShowModal(false);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [activeSlideIndex]);
+
+  console.log("selectedElement heresss", selectedElement);
 
   return (
     <>
@@ -952,6 +992,8 @@ const Custom: React.FC = () => {
                           Xposition={selectedElement?.x || 0}
                           Yposition={selectedElement?.y || 0}
                           slides={slides}
+                          toast={toast}
+                          // isFirstSlide={isFirstSlide}
                           activeSlideIndex={activeSlideIndex}
                         />
                       )}
@@ -1068,10 +1110,12 @@ const Custom: React.FC = () => {
                     {
                       type: "gif",
                       content: gifUrl,
+                      // slideIndex: activeSlideIndex,
                       slideIndex:
                         activeSlideIndex === 0
                           ? slides.length - 1
                           : activeSlideIndex,
+
                       x: 0,
                       y: 0,
                       width: 320,
@@ -1079,8 +1123,9 @@ const Custom: React.FC = () => {
                       user_uuid: userInfo?.uuid,
                     },
                   ]);
-                  if (activeSlideIndex === 0)
-                    setActiveSlideIndex(slides.length - 1);
+                  if (activeSlideIndex === 0) {
+                    setActiveSlideIndex(slides.length - 2);
+                  }
                   closeModal();
                 }}
               />

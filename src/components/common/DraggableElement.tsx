@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Rnd } from "react-rnd";
 import nookies from "nookies";
 import TextEditor from "../editor/components/TextEditor";
 import ImageEditor from "../editor/components/ImageEditor";
+import ReactDOM from "react-dom";
+import { FaLock } from "react-icons/fa";
 
 // Interfaces
 interface UserInfo {
@@ -83,9 +85,42 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
 }) => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [position, setPosition] = useState({ x: initialX, y: initialY });
-  const [size, setSize] = useState({ width, height });
   const [showTextModal, setShowTextModal] = useState(false);
   const isEditing = activeSlide === index.activeSlide;
+  const [showOverlapPopup, setShowOverlapPopup] = useState(false);
+  const [pendingElement, setPendingElement] = useState<any>(null);
+  const [forceSave, setForceSave] = useState(false);
+  const sizeRef = useRef({ width, height });
+
+  // Lock logic for first slide only
+  const isFirstSlide = activeSlide === 0;
+
+  // Helper: Check overlap between two elements
+  function isOverlapping(a: any, b: any) {
+    if (a.slideIndex !== b.slideIndex) return false;
+    return !(
+      a.x + (a.width || 220) <= b.x ||
+      a.x >= b.x + (b.width || 220) ||
+      a.y + (a.height || 200) <= b.y ||
+      a.y >= b.y + (b.height || 200)
+    );
+  }
+
+  // Check for overlap before saving/moving
+  function checkAndHandleOverlap(newElement: any) {
+    const overlap = elements.some(
+      (el, i) =>
+        i !== index.original &&
+        el.slideIndex === newElement.slideIndex &&
+        isOverlapping(el, newElement)
+    );
+    if (overlap && !forceSave) {
+      setPendingElement(newElement);
+      setShowOverlapPopup(true);
+      return true; // Block action
+    }
+    return false; // No overlap, proceed
+  }
 
   // Initialize userInfo from cookies
   useEffect(() => {
@@ -105,23 +140,24 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
         y: element.y || 0,
       });
       if (type === "image" || type === "gif") {
-        setSize({
+        sizeRef.current = {
           width: element.width || width,
           height: element.height || height,
-        });
+        };
       }
     }
   }, [elements, index.original, type, width, height]);
 
-  console.log(selectedElement, elements, "checking data fetching");
   // Update position and size when selectedElement changes
   useEffect(() => {
     if (selectedElement && selectedElement.originalIndex === index.original) {
-      setSize({
-        width: selectedElement.width || width,
-        height: selectedElement.height || height,
-      });
       setPosition({ x: selectedElement.x, y: selectedElement.y });
+      if (type === "image" || type === "gif") {
+        sizeRef.current = {
+          width: selectedElement.width || width,
+          height: selectedElement.height || height,
+        };
+      }
     }
   }, [selectedElement, index.original, width, height]);
 
@@ -153,6 +189,10 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
 
   // Handle text element click
   const handleClick = () => {
+    if (isFirstSlide) {
+      toast("You do not have permission to add to the front cover");
+      return;
+    }
     if (type === "text" && !showTextModal && !showImageModal && isEditing) {
       setSelectedElement({
         ...elements[index.original],
@@ -164,7 +204,12 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     }
   };
 
+  // Handle image/gif click
   const handleImageClick = () => {
+    if (isFirstSlide) {
+      toast("You do not have permission to add to the front cover");
+      return;
+    }
     if (
       (type === "image" || type === "gif") &&
       !showImageModal &&
@@ -177,156 +222,247 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     }
   };
 
-  // Close all modals
-  const closeModals = () => {
-    setShowTextModal(false);
+  // Modal Management for TextEditor
+  const closeModals = (fromEditor = false) => {
+    if (fromEditor) {
+      setShowTextModal(false);
+    }
     setShowImageModal(false);
     setSelectedElement(null);
   };
-  console.log(selectedElement, size, "selectedElement");
 
   const isImageModalOpenForThisElement =
     showImageModal && selectedElement?.originalIndex === index.original;
-  console.log(content, selectedElement, size, position, "size here to set");
+
+  // Overlap popup
+  const overlapPopup = showOverlapPopup
+    ? ReactDOM.createPortal(
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-[9999]">
+          <div className="bg-white p-6 rounded shadow-lg max-w-md w-full">
+            <h2 className="text-lg font-bold mb-2">
+              Overlapping {type === "text" ? "Signature" : "Element"}
+            </h2>
+            <p className="mb-2">
+              Whoa this card is popular, it looks like your{" "}
+              {type === "text" ? "signature" : "element"} is overlapping.
+              <br />
+              Someone may have signed or added content while you were writing
+              your message.
+            </p>
+            <h3 className="font-semibold mt-4 mb-2">
+              How to move your {type === "text" ? "signature" : "element"}
+            </h3>
+            <ul className="list-disc pl-5 mb-4 text-sm text-gray-700">
+              <li>
+                Drag and drop your {type === "text" ? "signature" : "element"}{" "}
+                to a free spot
+              </li>
+              <li>Change pages by using the arrows below the card</li>
+              <li>Once done click the save button</li>
+            </ul>
+            <div className="flex justify-end gap-2 mt-4">
+              <button
+                className="text-red-500 hover:underline mr-2"
+                onClick={() => {
+                  setShowOverlapPopup(false);
+                  setForceSave(true);
+                  if (pendingElement) {
+                    updateElement(
+                      pendingElement.x,
+                      pendingElement.y,
+                      pendingElement.width,
+                      pendingElement.height
+                    );
+                    setPendingElement(null);
+                    setForceSave(false);
+                    setShowTextModal(false);
+                    setShowImageModal(false);
+                  }
+                }}
+              >
+                Save anyway
+              </button>
+              <button
+                className="bg-blue-600 text-black px-4 py-2 rounded"
+                onClick={() => {
+                  setShowOverlapPopup(false);
+                  setPendingElement(null);
+                  setForceSave(false);
+                }}
+              >
+                Move {type === "text" ? "Signature" : "Element"}
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )
+    : null;
+
   return (
-    <Rnd
-      className={`${type === "text" ? "editor-react-drag" : ""} ${
-        showTextModal && "editor-transform"
-      }`.trim()}
-      bounds="parent"
-      position={showTextModal ? { x: 0, y: 0 } : position}
-      size={type === "text" ? undefined : size}
-      onDrag={
-        showTextModal
-          ? (_, d) => {
-              if (d.x < 200) return false;
-            }
-          : undefined
-      }
-      onDragStop={
-        !showTextModal
-          ? (_, d) => {
-              setPosition({ x: d.x, y: d.y });
-              updateElement(d.x, d.y);
-            }
-          : undefined
-      }
-      onResizeStop={(_, __, ref, ___, pos) => {
-        if (
-          (type === "image" || type === "gif") &&
-          isImageModalOpenForThisElement
-        ) {
-          const newWidth = parseInt(ref.style.width);
-          const newHeight = parseInt(ref.style.height);
-          setPosition(pos);
-          updateElement(pos.x, pos.y, newWidth, newHeight);
-        }
-      }}
-      disableDragging={!isDraggable}
-      enableResizing={
-        isDraggable &&
-        (type === "image" || type === "gif") &&
-        isImageModalOpenForThisElement
-      }
-      style={{
-        width: "100%",
-        height: "100%",
-        opacity: isEditing ? 1 : 0.5,
-        pointerEvents: "auto",
-        cursor: "default",
-        // cursor: isDraggable ? "move" : "default",
-        transform: "none", // Explicitly remove transform
-      }}
-    >
-      {(type === "image" || type === "gif") &&
-        !isImageModalOpenForThisElement && (
-          <div onClick={handleImageClick}>
-            <img
-              src={content || "/placeholder.svg"}
-              alt="uploaded"
-              className="rounded-md pointer-events-none"
-              style={{
-                maxWidth: "100%",
-                maxHeight: "100%",
-                width: "100%",
-                height: "100%",
-                objectFit: "contain", // Or "cover" depending on your need
-                display: "block",
-                overflow: "hidden",
-              }}
-            />
-
-            {/* <img
-            src={content || "/placeholder.svg"}
-            alt="uploaded"
-            className="object-cover rounded-md pointer-events-none"
-            style={{
-              width: size.width,
-              height: size.height,
-            }}
-          /> */}
-          </div>
-        )}
-
-      {type === "text" && !showTextModal && (
-        <div
-          className="text-sm"
-          style={{
-            pointerEvents: isEditing ? "auto" : "none",
-            opacity: isEditing ? 1 : 0.5,
-            cursor: isEditing ? "pointer" : "not-allowed",
-            userSelect: "none",
-            width: "100%",
-            height: "100%",
-            padding: "8px",
-            color,
-            fontFamily,
-            fontSize,
-            fontWeight,
-            transform: "none",
-          }}
-          onClick={handleClick}
-        >
-          <div
-            className="p-2"
-            dangerouslySetInnerHTML={{ __html: content?.split("\n")[0] || "" }}
-          />
-          <div className="p-2 text-base font-normal">
-            {content?.split("\n")[1] || ""}
-          </div>
+    <>
+      {/* Lock icon for first slide only */}
+      {isFirstSlide && (
+        <div style={{ position: "absolute", top: 8, left: 8, zIndex: 10000 }}>
+          <FaLock size={24} color="#888" title="Front cover is locked" />
         </div>
       )}
-
-      {showImageModal &&
-        selectedElement?.originalIndex === index.original &&
-        isEditing && (
-          <ImageEditor
-            onHide={closeModals}
+      <Rnd
+        className={`${type === "text" ? "editor-react-drag" : ""} ${
+          showTextModal && "editor-transform"
+        }`.trim()}
+        bounds="parent"
+        position={showTextModal ? { x: 0, y: 0 } : position}
+        size={type === "text" ? undefined : sizeRef.current}
+        onDrag={
+          showTextModal
+            ? (_, d) => {
+                if (d.x < 200) return false;
+              }
+            : undefined
+        }
+        onDragStop={(_, d) => {
+          const newElement = { ...elements[index.original], x: d.x, y: d.y };
+          if (!checkAndHandleOverlap(newElement)) {
+            if (!isFirstSlide) setPosition({ x: d.x, y: d.y });
+            updateElement(d.x, d.y);
+          }
+        }}
+        onResize={(_, __, ref, ___, pos) => {
+          if (type === "image" || type === "gif") {
+            const newWidth = parseInt(ref.style.width);
+            const newHeight = parseInt(ref.style.height);
+            sizeRef.current = { width: newWidth, height: newHeight };
+            if (!isFirstSlide) setPosition({ x: pos.x, y: pos.y });
+            updateElement(pos.x, pos.y, newWidth, newHeight);
+          }
+        }}
+        onResizeStop={(_, __, ref, ___, pos) => {
+          if (
+            (type === "image" || type === "gif") &&
+            isImageModalOpenForThisElement
+          ) {
+            const newWidth = parseInt(ref.style.width);
+            const newHeight = parseInt(ref.style.height);
+            const newElement = {
+              ...elements[index.original],
+              x: pos.x,
+              y: pos.y,
+              width: newWidth,
+              height: newHeight,
+            };
+            if (!checkAndHandleOverlap(newElement)) {
+              if (!isFirstSlide) setPosition(pos);
+              sizeRef.current = { width: newWidth, height: newHeight };
+              updateElement(pos.x, pos.y, newWidth, newHeight);
+            }
+          }
+        }}
+        disableDragging={!isDraggable || isFirstSlide}
+        enableResizing={
+          isDraggable &&
+          (type === "image" || type === "gif") &&
+          isImageModalOpenForThisElement &&
+          !isFirstSlide
+        }
+        style={{
+          width: "100%",
+          height: "100%",
+          opacity: isEditing ? 1 : 0.5,
+          pointerEvents: "auto",
+          cursor: "default",
+          transform: "none",
+        }}
+      >
+        {(type === "image" || type === "gif") &&
+          !isImageModalOpenForThisElement && (
+            <div onClick={handleImageClick}>
+              <img
+                src={content || "/placeholder.svg"}
+                alt="uploaded"
+                className="rounded-md pointer-events-none"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "fill",
+                  display: "block",
+                }}
+              />
+            </div>
+          )}
+        {type === "text" && !showTextModal && (
+          <div
+            className="text-sm"
+            style={{
+              pointerEvents: isEditing ? "auto" : "none",
+              opacity: isEditing ? 1 : 0.5,
+              cursor: isEditing ? "pointer" : "not-allowed",
+              userSelect: "none",
+              width: "100%",
+              height: "100%",
+              padding: "8px",
+              color,
+              fontFamily,
+              fontSize,
+              fontWeight,
+              transform: "none",
+            }}
+            onClick={handleClick}
+          >
+            <div
+              className="p-2"
+              dangerouslySetInnerHTML={{
+                __html: content?.split("\n")[0] || "",
+              }}
+            />
+            <div className="p-2 text-base font-normal">
+              {content?.split("\n")[1] || ""}
+            </div>
+          </div>
+        )}
+        {showImageModal &&
+          selectedElement?.originalIndex === index.original &&
+          isEditing && (
+            <ImageEditor
+              onHide={closeModals}
+              setElements={setElements}
+              elements={elements}
+              selectedElement={selectedElement}
+              content={content}
+              cardIndex={{ original: index.original, activeSlide }}
+              onDelete={() => onDelete(index.original)}
+              slides={elements.map((e) => e)}
+              activeSlideIndex={activeSlide}
+              isFirstSlide={isFirstSlide}
+              toast={toast}
+            />
+          )}
+        {showTextModal && (
+          <TextEditor
+            onHide={() => closeModals(true)}
             setElements={setElements}
             elements={elements}
             selectedElement={selectedElement}
             content={content}
             cardIndex={{ original: index.original, activeSlide }}
-            onDelete={() => onDelete(index.original)}
+            Xposition={position.x}
+            Yposition={position.y}
             slides={elements.map((e) => e)}
             activeSlideIndex={activeSlide}
+            toast={toast}
+            isFirstSlide={isFirstSlide}
           />
         )}
-
-      {showTextModal && (
-        <TextEditor
-          onHide={closeModals}
-          setElements={setElements}
-          elements={elements}
-          selectedElement={selectedElement}
-          content={content}
-          cardIndex={{ original: index.original, activeSlide }}
-          Xposition={position.x}
-          Yposition={position.y}
-          slides={elements.map((e) => e)}
-          activeSlideIndex={activeSlide}
-        />
-      )}
-    </Rnd>
+        {/* If you have a gifEditor, add similar logic here: */}
+        {/* {showGifModal && (
+          <GifEditor
+            ...
+            isFirstSlide={isFirstSlide}
+            toast={toast}
+          />
+        )} */}
+      </Rnd>
+      {overlapPopup}
+    </>
   );
 };
