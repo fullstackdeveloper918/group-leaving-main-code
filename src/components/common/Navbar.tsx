@@ -227,7 +227,7 @@ const Navbar = () => {
             <div className="flex items-center lg:space-x-6 sm:space-x-4 gap-2">
               <Link
                 href="/create"
-                className="text-md btnPrimary text-blackText hidden md:block text-blackText no-underline font-medium hover:text-blueText "
+                className="text-md btnPrimary text-blackText hidden md:block text-blackText no-underline font-medium hover:text-blueText start-cardBtn"
               >
                 Start a Card
               </Link>
@@ -328,15 +328,10 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <Link
-                    href="/login"
-                    className="text-md text-blackText hidden md:block text-blackText no-underline font-medium hover:text-blueText "
-                  >
-                    Sign In
-                  </Link>
+                  
 
                   <Link href={`/register`}>
-                    <button className="text-white px-3 py-2  ml-2 rounded-md bg-blueBg d-hide-btn">
+                    <button className="text-white font-medium rounded-full bg-blueBg d-hide-btn joinHead_Btn">
                       Join Now
                     </button>
                     <img
@@ -344,6 +339,12 @@ const Navbar = () => {
                       alt="img"
                       className="mobileVisible"
                     />
+                  </Link>
+                  <Link
+                    href="/login"
+                    className="text-md text-blackText hidden md:block text-blackText no-underline font-medium signIn_Btn"
+                  >
+                    Sign In
                   </Link>
                 </>
               )}

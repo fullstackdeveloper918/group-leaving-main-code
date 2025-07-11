@@ -52,21 +52,24 @@ const Register = () => {
 
   
   return (
-    <section className="auth-pages d-flex align-items-center h-100 bg-lightBg py-12 loginPage">
+    <section className="auth-pages d-flex align-items-center h-100 bg-lightBg loginPage register-page-sec">
       <div className="container">
       <ToastContainer/>
         <Row justify="center">
           <Col className="gutter-row" xs={23} sm={21} md={19} lg={12} xl={10}>
+          <h3 className="text-center register-head-txt font-bold">Register</h3>
             <Card
-              className="mt-3 mb-5"
+              className="reg-form"
               bordered={false}
               style={{
-                padding: "30px",
-                borderRadius: "8px",
-                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+                borderRadius: "12px",
+                // boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+                background:" #558ec912",
+                padding: "40px 35px",
+                border: "1px solid rgb(85 142 201 / 25%)",
               }}
             >
-              <h3 className="text-center mb-3 lg:text-3xl md:xl">Register</h3>
+  
               <Form
                 name="normal_login"
                 className="login-form"
@@ -75,6 +78,7 @@ const Register = () => {
                 scrollToFirstError
               >
                 <Form.Item
+                className="regform-field-box"
                   name="full_name"
                   rules={[
                     {
@@ -93,6 +97,7 @@ const Register = () => {
                 </Form.Item>
 
                 <Form.Item
+                className="regform-field-box"
                   name="email"
                   rules={[
                     {
@@ -111,6 +116,7 @@ const Register = () => {
                 </Form.Item>
 
                 <Form.Item
+                className="regform-field-box"
                   name="password"
                   rules={[
                     { required: true, message: "Please enter a password" },
@@ -133,7 +139,7 @@ const Register = () => {
                 </small>
 
                 <Form.Item name="newsletter" valuePropName="checked" >
-                  <Checkbox className="checkBoxWrapper">
+                  <Checkbox className="checkBoxWrapper receive-txt-box">
                     Receive occasional emails with exclusive special offers and
                     product updates.
                   </Checkbox>
@@ -143,7 +149,7 @@ const Register = () => {
                   size="large"
                   type="primary"
                   htmlType="submit"
-               className="loginBtn w-100"
+               className="loginBtn regBtn w-100"
                loading={loading}
                 >
                   Register
