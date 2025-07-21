@@ -19,7 +19,7 @@ interface UserInfo {
 const RazorPay = ({ amount, type,bundleId,bundleOption }: any) => {
   //  const getToken = cookies().get("auth_token")?.value || "";
   //   console.log(getToken, "Access Token");
-    console.log(bundleId, "bundleId");
+    console.log(amount, "bundleId");
     
     console.log(type, "wertfghdfg");
     console.log(bundleOption, "sfasdfasd");
@@ -73,7 +73,7 @@ setState(data)
       const options = {
         key: "rzp_test_NPDqhJnbXJi072", // Ensure this is set in .env.local
         // key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Ensure this is set in .env.local
-        amount: amount,
+        amount: Math.round(amount * 100),
         currency: "INR",
         name: "Wedding",
         description: "Test Transaction",
@@ -99,6 +99,7 @@ setState(data)
                 cart_uuid: cartId,
                 product_id: product_id,
                 user_uuid: userInfo?.uuid,
+                sender_name: name,
                 paymentId: paymentId,
                 payment_for: type==="single"?"card":"bundle",
                 is_payment_for_both: type==="bundle"?true:false,

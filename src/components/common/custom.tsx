@@ -123,7 +123,7 @@ const Custom: React.FC = () => {
 
   // Initialize params.id
   useEffect(() => {
-    console.log(params, "id here to fix lalala");
+    console.log(params?.id, "id here to fix lalala");
     if (params.id) setId(params.id);
   }, [params]);
 
@@ -281,8 +281,6 @@ const Custom: React.FC = () => {
           apiElements.length >= 0
             ? Math.max(...apiElements.map((el: any) => el.slideIndex || 0))
             : 0;
-        console.log("Max Slide Index from API:", maxIndex);
-
         // Initialize slides based on path
         let filledSlides = isEditorPath
           ? [
@@ -294,10 +292,11 @@ const Custom: React.FC = () => {
                 link: "https://blog.significa.pt/css-only-slider-71727effff0b",
                 card_img: SlideImg_0,
               },
-            ]
+           
+          ]
           : [...initialSlides];
 
-        console.log("Initial filledSlides length:", maxIndex);
+        console.log("Initial filledSlides length:", maxIndex, filledSlides.length);
 
         // Only add new slides if maxIndex requires it
         if (maxIndex + 1 > filledSlides.length) {
@@ -328,20 +327,65 @@ const Custom: React.FC = () => {
   console.log(elements?.length, "new element hree");
 
   // Refined cleanup function: remove all empty slides from the end except the last one
-  function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
-    // Find the last slide with content
-    let lastWithContent = slidesArr.length - 1;
-    for (; lastWithContent >= 0; lastWithContent--) {
-      const hasContent = elementsArr.some(
-        (el: any) => el.slideIndex === lastWithContent
-      );
-      if (hasContent) break;
-    }
-    // Always keep only one empty slide at the end
-    const minSlides = 1;
-    const newLength = Math.max(lastWithContent + 2, minSlides);
-    return slidesArr.slice(0, newLength);
+  // function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
+  //   console.log(slidesArr, elementsArr ,"please giving")
+  //   let lastWithContent = slidesArr.length - 1;
+
+  //   console.log(lastWithContent,"lastWithContent new")
+  //   for (; lastWithContent >= 0; lastWithContent--) {
+  //     const hasContent = elementsArr.some(
+  //       (el: any) =>{if(el.slideIndex && !lastWithContent){
+
+  //       }else{
+  //         el.slideIndex === lastWithContent
+  //       }
+  //       }
+  //     );
+  //     if (hasContent) break;
+  //   }
+  //   const minSlides = 1;
+  //   const newLength = Math.max(lastWithContent + 2, minSlides);
+  //   return slidesArr.slice(0, newLength);
+  // }
+function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
+  console.log(slidesArr, elementsArr, "please giving new slides");
+
+  // Clone the slides to avoid mutating the original
+  const newSlides = [...slidesArr];
+
+  // Find the last slide index with content
+  let lastWithContent = newSlides.length - 1;
+  for (; lastWithContent >= 0; lastWithContent--) {
+    const hasContent = elementsArr.some((el: any) => {
+      // If element's slideIndex is beyond current slide count, add a new slide
+      if (el.slideIndex >= newSlides.length) {
+        const missingCount = el.slideIndex - newSlides.length + 1;
+        for (let i = 0; i < missingCount; i++) {
+          newSlides.push({
+              id: `slide-${i + 1}`,
+              title: "New Slide",
+              subtitle: "New Subtitle",
+              text: "This is a dynamically generated slide.",
+              link: "https://example.com",
+              card_img: SlideImg_6,
+            }); // Or default slide structure
+        }
+        console.log(`Added ${missingCount} missing slides`);
+        return true; // Now consider it as having content
+      }
+
+      // Normal check
+      return el.slideIndex === lastWithContent;
+    });
+
+    if (hasContent) break;
   }
+
+  // Always keep one empty slide at the end
+  const minSlides = 1;
+  let newLength = Math.max(lastWithContent + 2, minSlides);
+  return newSlides.slice(0, newLength);
+}
 
   useEffect(() => {
     if (elements?.length == 0) {
@@ -441,10 +485,10 @@ const Custom: React.FC = () => {
   // Handle adding a new message (and new slide)
   const handleAddMessageClick = () => {
     // Only jump to last slide if on slide 0-4
-    if (activeSlideIndex <= 4) {
+    if (activeSlideIndex <= 4 && !isEditorPath) {
       const lastSlideIndex = slides.length - 2;
       // const lastSlideIndex = 5;
-
+console.log(lastSlideIndex,"lastSlideIndex")
       const newSlide = {
         id: `slide-${slides.length + 1}`,
         title: "New Slide",

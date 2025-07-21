@@ -240,6 +240,7 @@ const GroupCollection = ({
             brandKey={searchParams?.brandKey}
             groupId={params.id}
             cardShareData={cardShareData}
+            searchParams={searchParams}
           />
         </div>
       </div>

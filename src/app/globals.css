@@ -726,7 +726,22 @@ body {
 .broad-model-box {
   border-radius: 12px;
   border: 1px solid #dfdfdf;
-  padding: 40px 35px;
+  padding: 20px 25px;
+}
+#choose-gift-return {
+  position: absolute;
+ left: 25px;
+    top: 22px;
+  font-weight: 600;
+}
+
+.gift-cards-tools{
+  float: left;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
 }
 .account-card-box {
   display: flex;

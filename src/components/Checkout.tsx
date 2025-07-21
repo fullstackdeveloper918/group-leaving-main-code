@@ -86,12 +86,56 @@ const Checkout = ({ data }: any) => {
   console.log(numCards, "numCards");
   console.log(salePrice, "salePrice");
   console.log(bundleOption, "bundleOption");
+  const [shareImageData, setShareImageData] = useState<any>(null);
 
+    const { id } = useParams();
+  
+  
+  
+  
+  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://dating.goaideme.com/card/users-cards",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${gettoken}`,
+            },
+          }
+        );
+
+        const data = await response.json();
+        setShareImageData(data); // Store response data in state
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+  console.log(shareImageData, "shareImageData here");
+
+  const cardShareData = shareImageData?.listing?.find(
+    (item: any) => item.uuid === id
+  );  
+  
+  
+  
+  console.log(cardShareData,"cardShareDatassaes")
+  
+  
+  
+  
   const onChange = (e: any) => {
     setVaoucher(e);
   };
 
-  const stripe = useStripe();
+ const stripe = useStripe();
   const cardPrices: any = {
     5: { price: 22.45, perCard: 4.49, discount: "10%" },
     10: { price: 40.9, perCard: 4.09, discount: "18%" },
@@ -110,8 +154,7 @@ const Checkout = ({ data }: any) => {
       : bundleSingleCard;
 
   const amount: any =
-    cardType === "individual"
-      ? individualCardprice
+    cardType === "individual" ? individualCardprice
       : cardType === "group"
       ? bundleOption === "single"
         ? bundleSingleCard
@@ -471,9 +514,14 @@ const Checkout = ({ data }: any) => {
 
         <div className="flex-1 mt-6 md:mt-0 md:ml-6">
           <div className="bg-gray-50 p-6 rounded-lg shadow-md">
-            <h2 className="text-lg font-bold mb-4">Your Card</h2>
-            <div className="flex justify-between items-center mb-4">
-              <span>Group Card for TRYRT</span>
+            <h2 className="text-lg font-bold mb-0">Your Card</h2>
+            <div className="flex justify-between items-start flex-col mb-4">
+              <span>Group Card for {cardShareData?.title}</span>
+               <img
+                  src={`https://dating.goaideme.com/${cardShareData?.images?.[0]?.card_images?.[0]}`} // Replace with your gift card image
+                  alt="E-Gift Card"
+                  className="w-40 h-30 mt-3 object-contain rounded-md"
+                />
             </div>
             <div className="flex justify-between items-center mb-4">
               <input

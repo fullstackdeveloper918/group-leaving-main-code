@@ -5,6 +5,7 @@ import axios from "axios";
 import CollectionPayment from "./CollectionPayment";
 import ContributorsModal from "./ContributorsModal";
 import { usePathname } from "next/navigation";
+import { AiFillEdit } from "react-icons/ai";
 
 const GiftCardCollectionPot = ({
   brandKey,
@@ -71,7 +72,7 @@ const GiftCardCollectionPot = ({
       console.log("data1 here", data1);
 
       const response = await fetch(
-        ` https://dating.goaideme.com/order/get-single-product?product_id=${brandKey2}`, // Sending brandKey as query parameter
+        `https://dating.goaideme.com/order/get-single-product?product_id=${brandKey2}`, // Sending brandKey as query parameter
         {
           method: "GET", // No body for GET requests
           headers: {
@@ -168,7 +169,7 @@ const GiftCardCollectionPot = ({
   // const selectGiftImage = giftCard?.data?.imageUrls ? giftCard.data.imageUrls["278w-326ppi"] : null;
 
   console.log(selectGiftImage, "selectGiftImage");
-
+               console.log(selectedImage,"selectedImage")
   return (
     <>
       <div className="bg-white shadow-lg rounded-lg p-6">
@@ -177,18 +178,24 @@ const GiftCardCollectionPot = ({
             <h2 className="text-lg font-semibold mb-4 text-center">
               Group Gift Fund
             </h2>
-            <div className="flex justify-center mb-4">
+            <div className="flex justify-center items-center mb-4 flex-col">
+
+                 <div className="gift-cards-tools">
+                  <AiFillEdit />
+
+                 </div>
+
               {brandKey ? (
                 <img
                   src={selectGiftImage} // Replace with your gift card image
                   alt="E-Gift Card"
-                  className="w-32 h-20 object-contain"
+                  className="w-50 h-30 object-contain rounded-md"
                 />
               ) : (
                 <img
                   src={`https://dating.goaideme.com/${cardShareData?.images?.[0]?.card_images?.[0]}`} // Replace with your gift card image
                   alt="E-Gift Card"
-                  className="w-32 h-20 object-contain"
+                  className="w-40 h-30 object-contain rounded-md"
                 />
               )}
             </div>
@@ -208,25 +215,26 @@ const GiftCardCollectionPot = ({
               <div className="text-center mb-2 gap-2 items-center justify-center flex flex-col">
                 <button
                   onClick={() => setIsContributeModalOpen(true)}
-                  className="w-[40%] bg-blue-600 text-[14px] text-black border-2 border-blue-700 px-2 py-2 rounded"
+                  className=" w-[40%] bg-[#558ec9]  text-white  px-4 py-2  rounded-md hover:bg-blue-700 transition"
                 >
-                  View Contributors
+              Add Participant
                 </button>
 
+              </div>
+              <div className="text-center mb-2 justify-center">
+              <button className="text-red hover:underline">Remove</button>
+            </div>
+            </div>
                 <button
                   onClick={async () => {
                     await fetchGiftCardProducts();
                     setIsGiftCardModalOpen(true);
                   }}
-                  className=" w-[40%] bg-[#558ec9]  text-white  px-4 py-2  rounded-md hover:bg-blue-700 transition"
+                                    className="w-[40%] bg-blue-600 text-[14px] text-black border-2 border-blue-700 px-2 py-2 rounded"
+
                 >
                   Add to Gift Card
                 </button>
-              </div>
-              {/* <div className="text-center mb-2 justify-center">
-              <button className="text-black-600 hover:underline">Remove</button>
-            </div> */}
-            </div>
           </>
         }
 
@@ -248,16 +256,17 @@ const GiftCardCollectionPot = ({
               <h2 className="model-head-broad font-semibold mb-2 text-center">
                 Choose a Gift Card
               </h2>
+                {!selectedImage &&
               <button
                 className="absolute top-3 right-2 bg-gray-200 text-gray-700 px-2 py-1 rounded-md hover:bg-gray-300 fw-semibold close-broad-modelbtn"
                 onClick={() => {
                   setIsGiftCardModalOpen(false);
                   setSelectedImage(null);
                 }}
-              >
-                Close
-              </button>
+              >X
+              </button>}
               {/* How Collection Pots Work */}
+              {!selectedImage &&
               <div className="bg-blue-100 p-4 ps-0 rounded-md mb-2">
                 <h3 className="text-lg font-semibold">
                   How does a group fund work?
@@ -270,40 +279,42 @@ const GiftCardCollectionPot = ({
                     their board.
                   </li>
                 </ul>
-              </div>
+              </div>}
               {/* Conditionally render based on whether an image is selected */}
               {selectedImage ? (
                 <div className="flex flex-col items-center">
-                  <div className="">
+                  <div className="mb-2">
                     <button
+                    id="choose-gift-return"
                       className="text-black"
-                      onClick={() => setSelectedImage(null)}
-                    >
-                      Return
+                      onClick={() => setSelectedImage(null)} >
+                        <i className="fas fa-arrow-left"></i> Back
+
                     </button>
                   </div>
                   <div className="">
                     <img
                       src={selectedImage.logoUrls?.[0]}
                       alt=""
-                      className=""
+                      className="w-[100%] rounded-md"
                     />
                   </div>
-                  <h2 className="text-xl font-bold ">
+                  <h2 className="text-xl font-bold mt-3">
                     {selectedImage.brand?.brandName}
                   </h2>
-                  <p className="text-sm text-gray-500">
-                    Nation: <span className="font-bold">IND</span>
+                  <p className="text-sm text-gray-500 mb-2">
+                    Nation: <span className="font-bold ml-2">IND</span>
                   </p>
-                  <p className="text-sm text-gray-500">
-                    Money: <span className="font-bold">INR</span>
+                  <p className="text-sm text-gray-500 mb-2">
+                    Money: <span className="font-bold ml-2">{selectedImage?.senderCurrencyCode}</span>
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 mb-2">
                     Amount:{" "}
-                    <span className="font-bold">
-                      {selectedImage?.senderFee}
+                    <span className="font-bold ml-2">
+                     ₹{selectedImage?.senderFee}
                     </span>
                   </p>
+  
                   <p className="text-xs text-gray-400 mt-1 text-center">
                     (If your total exceeds the limit, we&apos;ll split it into
                     multiple gift cards)
@@ -315,7 +326,7 @@ const GiftCardCollectionPot = ({
                     View terms
                   </a>
                   <button
-                    className="bg-blue-600 text-black px-4 py-2 rounded mt-2 hover:bg-blue-700"
+                    className="bg-[#558ec9] text-white px-4 py-2 rounded mt-2 hover:bg-blue-700"
                     onClick={() => {
                       // Add logic for adding gift card here
                       setIsGiftCardModalOpen(false);
