@@ -248,6 +248,7 @@ const Checkout = ({ data }: any) => {
       return; // Exit early if critical data is missing
     }
     try {
+      console.log(bundledata,"data here bundledata")
       const requestData = {
         bundle_uuid: bundledata?.data[0]?.product_id,
         card_uuid: product_id,
@@ -514,7 +515,7 @@ const Checkout = ({ data }: any) => {
 
         <div className="flex-1 mt-6 md:mt-0 md:ml-6">
           <div className="bg-gray-50 p-6 rounded-lg shadow-md">
-            <h2 className="text-lg font-bold mb-0">Your Card</h2>
+            <h2 className="text-lg font-bold mb-0Shared Gift Fund">Your Card</h2>
             <div className="flex justify-between items-start flex-col mb-4">
               <span>Group Card for {cardShareData?.title}</span>
                <img

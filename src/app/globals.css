@@ -1045,7 +1045,7 @@ button.cancel-editBtn:hover {
   margin-bottom: 35px;
 }
 .signIn_Btn {
-  background: #000;
+  background: #558ec9;
   color: #fff;
   padding: 14px 24px;
   border-radius: 36px;
@@ -1055,6 +1055,7 @@ button.cancel-editBtn:hover {
 .joinHead_Btn {
   padding: 14px 24px;
   line-height: normal;
+  background: rgba(0, 0, 0, 0.473);
 }
 .start-cardBtn {
   background: transparent;
@@ -1846,9 +1847,9 @@ button.cancel-editBtn:hover {
 .editor_option {
   display: flex;
   gap: 7px;
-  max-width: 21rem;
+  max-width: 100%;
   margin: 0px auto;
-  justify-content: start;
+  justify-content: center;
   align-items: center;
 }
 .editor_option > div {

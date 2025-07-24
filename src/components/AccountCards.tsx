@@ -5,6 +5,7 @@ import Link from "next/link";
 import Cookies from "js-cookie";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 type Card = {
   id: number;
   title: string;
@@ -38,6 +39,8 @@ type Card = {
 
 const AccountCards = ({ data }: any) => {
   console.log(data, "uouwerouwe");
+
+  const [showModal,setShowModal] = useState(false)
 
   // const AccountCards = () => {
   const router = useRouter();
@@ -91,6 +94,28 @@ const AccountCards = ({ data }: any) => {
   const formattedDate = dateObject.toLocaleDateString("en-CA"); // 'en-CA' gives 'YYYY-MM-DD' format
 
   console.log(formattedDate, "jljljlj");
+
+
+
+  
+  const handleDelete = async () => {
+    try {
+      // Call your delete API here
+      const res = await fetch(`/api/delete/`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+           // Callback to refresh list or UI
+        setShowModal(false);
+      } else {
+        alert("Failed to delete.");
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      alert("An error occurred.");
+    }
+  };
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8 py-md-10">
       <ToastContainer />
@@ -103,6 +128,7 @@ const AccountCards = ({ data }: any) => {
           </div>
         ) : (
           data?.listing?.map((card: any) => {
+            {console.log(card,"here to see card text")}
             // Format the delivery date to 'YYYY-MM-DD'
             const formattedDeliveryDate = card.delivery_date
               ? new Date(card.delivery_date).toLocaleDateString("en-CA") // Format if valid
@@ -146,6 +172,8 @@ const AccountCards = ({ data }: any) => {
                         </p>
                       </div>
                       {/* Action Buttons */}
+
+                      <div className="d-flex items-center gap-2">
                       {card.is_remove_from_cart === 0 ? (
                         <Link href={`/card/pay/${card?.card_uuid}`}>
                           <button className="mt-2 bg-blue-500 text-black border border-gray-300 px-4 rounded-full hover:bg-blue-600">
@@ -160,6 +188,14 @@ const AccountCards = ({ data }: any) => {
                           </button>
                         </Link>
                       )}
+                       <AiFillEdit className="cursor-pointer" 
+/>
+  <AiFillDelete
+        fill="#db0404"
+        className="cursor-pointer text-red-600"
+        onClick={() => setShowModal(true)}
+      />
+                    </div>
                     </div>
                     {/* <hr /> */}
 
@@ -202,6 +238,42 @@ const AccountCards = ({ data }: any) => {
           })
         )}
       </div>
+
+    {showModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full relative">
+      {/* X Icon Button */}
+      <button
+        onClick={() => setShowModal(false)}
+        className="absolute top-3 right-4 text-gray-500 hover:text-black text-[32px] "
+        aria-label="Close modal"
+      >
+        &times;
+      </button>
+
+      <h2 className="text-lg font-bold mb-4">Are you sure?</h2>
+      <p className="mb-4">Do you really want to delete this item? This action cannot be undone.</p>
+      
+      <div className="flex justify-end gap-2">
+        <button
+          onClick={() => setShowModal(false)}
+          style={{ background: "#9f9e9e7a", fontWeight: "500" }}
+          className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleDelete}
+          style={{ background: "#db0404", fontWeight: "500" }}
+          className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

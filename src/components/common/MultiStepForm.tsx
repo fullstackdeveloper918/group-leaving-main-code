@@ -31,6 +31,7 @@ const MultiStepForm = ({ params }: any) => {
   console.log(params, "params");
   const [userInfo, setUserInfo] = useState<any>(null);
   const [uuid, setUuid] = useState<string | null>(null);
+  const [currencyError,setCurrencyError] = useState<string>("")
   console.log(uuid, "uuidforcheck");
   useEffect(() => {
     const cookies = document.cookie.split("; ");
@@ -82,6 +83,13 @@ const MultiStepForm = ({ params }: any) => {
     router.push("/login");
   };
   const handleNext = () => {
+
+
+    if(step === 3 && !selectedOption){
+      setCurrencyError("Please Select Contributions Currency.")
+      return;
+    }
+    // setCurrencyError
     if (!recipientName) {
       setError("Recipient name is required.");
       return; // Stop submission if validation fails
@@ -131,10 +139,7 @@ const MultiStepForm = ({ params }: any) => {
     // Clear the email error if validation passes
     setEmailError("");
     setStep((prev) => prev + 1);
-    if (!senderName) {
-      setSenderError("Please enter your name.");
-      return; // Stop submission if validation fails
-    }
+ 
   };
 
   const handlePrevious = () => {
@@ -143,6 +148,7 @@ const MultiStepForm = ({ params }: any) => {
   const [selectedOption, setSelectedOption] = useState("");
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
+    setCurrencyError("")
     setSelectedOption(value);
     // You can also update the address state if needed
     // setAddress(value);
@@ -153,7 +159,10 @@ const MultiStepForm = ({ params }: any) => {
   // const [loading1,setLoading]=useState(false)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+   if (!senderName) {
+      setSenderError("Please enter your name.");
+      return; // Stop submission if validation fails
+    }
     try {
       let item = {
         user_uuid: uuid,
@@ -305,10 +314,10 @@ const MultiStepForm = ({ params }: any) => {
                 )}
               </div>
 
-              <div>
+              <div     className="block mt-3 mb-3">
                 <label
                   htmlFor="recipientEmail"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block mt-2 text-sm font-medium text-gray-700"
                 >
                   Recipient’s Email Address
                 </label>
@@ -333,7 +342,7 @@ const MultiStepForm = ({ params }: any) => {
               <button
                 type="button"
                 onClick={!accessToken ? handleLogin : handleNext}
-                className="w-full bg-blueBg text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700"
+                className="w-full bg-[#558ec9] mt-2 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700"
               >
                 Continue
               </button>
@@ -395,6 +404,7 @@ const MultiStepForm = ({ params }: any) => {
               <button
                 type="button"
                 onClick={handlePrevious}
+                style={{background:"#8080804d"}}
                 className="w-full bg-gray-300 text-black py-2 px-4 rounded-md shadow-sm hover:bg-gray-400"
               >
                 Back
@@ -403,9 +413,9 @@ const MultiStepForm = ({ params }: any) => {
               <button
                 type="button"
                 onClick={handleNext}
-                className="w-full bg-blue-600 text-black py-2 px-4 rounded-md shadow-sm hover:bg-blue-700"
+                className="w-full bg-[#558ec9] mt-2 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700"
               >
-                → Continue
+              Continue  → 
               </button>
             </>
           )}
@@ -433,10 +443,17 @@ const MultiStepForm = ({ params }: any) => {
                   <option value="aud">AUD</option>
                   <option value="eur">EUR</option>
                 </select>
+                {currencyError &&      <p
+                    className="text-red-500 text-sm mt-2"
+                    style={{ color: "red" }}
+                  >
+                    {currencyError}
+                  </p>}
               </div>
 
               <button
                 type="button"
+                       style={{background:"#8080804d"}}
                 onClick={handlePrevious}
                 className="w-full bg-gray-300 text-black py-2 px-4 rounded-md shadow-sm hover:bg-gray-400"
               >
@@ -446,7 +463,7 @@ const MultiStepForm = ({ params }: any) => {
               <button
                 type="button"
                 onClick={handleNext}
-                className="w-full bg-blue-600 text-black py-2 px-4 rounded-md shadow-sm hover:bg-blue-700"
+                className="w-full bg-[#558ec9] mt-2 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700"
               >
                 Next
               </button>
@@ -504,6 +521,7 @@ const MultiStepForm = ({ params }: any) => {
               </div>
 
               <button
+                     style={{background:"#8080804d"}}
                 type="button"
                 onClick={handlePrevious}
                 className="w-full bg-gray-300 text-black py-2 px-4 rounded-md shadow-sm hover:bg-gray-400"
@@ -513,7 +531,7 @@ const MultiStepForm = ({ params }: any) => {
 
               <button
                 type="submit"
-                className="w-full bg-blueBg text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700"
+                className="w-full bg-blueBg mt-2 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700"
               >
                 Submit
               </button>

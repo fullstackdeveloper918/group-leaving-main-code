@@ -10,6 +10,10 @@ import {
 
 const { Text, Title } = Typography;
 
+const date = new Date();
+const year = date.getFullYear()
+
+console.log(year,"yeadra")
 const Footer: React.FC = () => {
   return (
     <div className="container-fluid pt-12">
@@ -134,7 +138,7 @@ const Footer: React.FC = () => {
           padding: "20px 0",
         }}
       >
-        <Text>© Copyright 2024, All Rights Reserved by Groupluckcards</Text>
+        <Text>© Copyright {year}, All Rights Reserved by Groupluckcards</Text>
       </Row>
     </div>
   );

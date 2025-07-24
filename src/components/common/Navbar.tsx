@@ -331,7 +331,7 @@ const Navbar = () => {
                   
 
                   <Link href={`/register`}>
-                    <button className="text-white font-medium rounded-full bg-blueBg d-hide-btn joinHead_Btn">
+                    <button className="text-white font-medium rounded-full  d-hide-btn joinHead_Btn">
                       Join Now
                     </button>
                     <img

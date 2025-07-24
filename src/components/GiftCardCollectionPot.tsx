@@ -181,7 +181,10 @@ const GiftCardCollectionPot = ({
             <div className="flex justify-center items-center mb-4 flex-col">
 
                  <div className="gift-cards-tools">
-                  <AiFillEdit />
+                  <AiFillEdit className="cursor-pointer"  onClick={async () => {
+                    await fetchGiftCardProducts();
+                    setIsGiftCardModalOpen(true);
+                  }}/>
 
                  </div>
 
