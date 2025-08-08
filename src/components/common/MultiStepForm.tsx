@@ -150,8 +150,7 @@ const MultiStepForm = ({ params }: any) => {
     const value = e.target.value;
     setCurrencyError("")
     setSelectedOption(value);
-    // You can also update the address state if needed
-    // setAddress(value);
+
   };
   console.log(selectedDate, "selectedDate");
   console.log(selectedTime, "selectedTime");
