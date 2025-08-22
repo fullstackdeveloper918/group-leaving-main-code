@@ -58,8 +58,8 @@ const Checkout = ({ data }: any) => {
   // console.log(bundleOption, "bundleOptionqqqqqq");
 
   // State to store the selected sale price
-  const [salePrice, setSalePrice] = useState("22.45");
-  const [exact, setExact] = useState<any>("");
+  const [salePrice, setSalePrice] = useState(22.45);
+  const [exact, setExact] = useState<any>();
   const [selectBundle, setSelectBundle] = useState<any>("");
 
   // const [state, setState]=useState<any>("")
