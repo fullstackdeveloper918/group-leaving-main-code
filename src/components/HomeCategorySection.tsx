@@ -423,7 +423,7 @@ const HomeCategorySection = async({params,searchParams}:any) => {
  
  //  Sidebar
  
- let data = await fetch('https://dating.goaideme.com/card/collection-listing', { cache: 'no-store' })
+ let data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/card/collection-listing`, { cache: 'no-store' })
  let data1 = await data.json();
    console.log(data1, "qwe323355");
  //  const url = 'https://dating.goaideme.com/card/collection-listing';
@@ -449,7 +449,7 @@ const HomeCategorySection = async({params,searchParams}:any) => {
    // All cards
  
    const api2: Api = {
-     url: `https://dating.goaideme.com/card/single-card-listing/${collectionType}`,
+     url: `${process.env.NEXT_PUBLIC_API_URL}/card/single-card-listing/${collectionType}`,
      method: "GET",
      // body: { key: 'value' }
      // comment only
@@ -480,7 +480,7 @@ const HomeCategorySection = async({params,searchParams}:any) => {
                 <Link href={`/card/new/${card?.uuid}?category=${card?.title}`}>
                   <Image
                     className="rounded-t-lg w-full h-full object-cover"
-                    src={`https://dating.goaideme.com/${card?.images[0]?.card_images[0]}`}
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/${card?.images[0]?.card_images[0]}`}
                     alt="card-img"
                     width={100}
                     height={100}
@@ -498,7 +498,7 @@ const HomeCategorySection = async({params,searchParams}:any) => {
                 <Link href={`/card/new/${card?.uuid}?category=${card?.title}`}>
                   <Image
                     className="rounded-t-lg w-full h-full object-cover"
-                    src={`https://dating.goaideme.com/${card?.images[0]?.card_images[0]}`}
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/${card?.images[0]?.card_images[0]}`}
                     alt="card-img"
                     width={500}
                     height={300}

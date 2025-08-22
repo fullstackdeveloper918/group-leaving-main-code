@@ -50,7 +50,7 @@ const GiftCardCollectionPot = ({
   const fetchGiftCard = async () => {
     try {
       const response1 = await fetch(
-        "https://dating.goaideme.com/order/create-token",
+        `${process.env.NEXT_PUBLIC_API_URL}/order/create-token`,
         {
           // replace '/api/cart' with the correct endpoint
           method: "POST",
@@ -72,7 +72,7 @@ const GiftCardCollectionPot = ({
       console.log("data1 here", data1);
 
       const response = await fetch(
-        `https://dating.goaideme.com/order/get-single-product?product_id=${brandKey2}`, // Sending brandKey as query parameter
+        `${process.env.NEXT_PUBLIC_API_URL}/order/get-single-product?product_id=${brandKey2}`, // Sending brandKey as query parameter
         {
           method: "GET", // No body for GET requests
           headers: {
@@ -94,7 +94,7 @@ const GiftCardCollectionPot = ({
   const fetchGiftCardProducts = async () => {
     try {
       const response = await fetch(
-        "https://dating.goaideme.com/order/create-token",
+        `${process.env.NEXT_PUBLIC_API_URL}/order/create-token`,
         {
           method: "POST",
           headers: {
@@ -108,7 +108,7 @@ const GiftCardCollectionPot = ({
       }
       const data = await response.json();
       const response1 = await fetch(
-        " https://dating.goaideme.com/order/get-products",
+        `${process.env.NEXT_PUBLIC_API_URL}/order/get-products`,
         {
           method: "POST",
           headers: {
@@ -196,7 +196,7 @@ const GiftCardCollectionPot = ({
                 />
               ) : (
                 <img
-                  src={`https://dating.goaideme.com/${cardShareData?.images?.[0]?.card_images?.[0]}`} // Replace with your gift card image
+                  src={`${process.env.NEXT_PUBLIC_API_URL}/${cardShareData?.images?.[0]?.card_images?.[0]}`} // Replace with your gift card image
                   alt="E-Gift Card"
                   className="w-40 h-30 object-contain rounded-md"
                 />

@@ -17,7 +17,7 @@ const Navbar = () => {
   const router = useRouter();
   const param = useParams();
 
-  console.log("paramsss", param);
+  // console.log("paramsss", param);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -26,7 +26,7 @@ const Navbar = () => {
   // const { accessToken, setAccessToken } = useAccessToken();
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
-  console.log("accessTokenn", accessToken);
+  // console.log("accessTokenn", accessToken);
 
   useEffect(() => {
     let token = "";
@@ -44,7 +44,7 @@ const Navbar = () => {
       // Cookies.set("user_info",userData)
       // setIsNewLogin(true);
     }
-    console.log("tokenbyme", token);
+    // console.log("tokenbyme", token);
   }, []);
 
   useEffect(() => {

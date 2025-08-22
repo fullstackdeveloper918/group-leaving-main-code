@@ -53,7 +53,7 @@ const CardSlider: React.FC<any> = ({
     };
   
     try {
-      const response = await fetch("https://dating.goaideme.com/card/add-editor-messages", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/card/add-editor-messages`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json", // Add this header to specify JSON

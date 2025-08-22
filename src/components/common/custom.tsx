@@ -145,7 +145,7 @@ const Custom: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://dating.goaideme.com/card/users-cards",
+          `${process.env.NEXT_PUBLIC_API_URL}/card/users-cards`,
           {
             method: "GET",
             headers: {
@@ -181,7 +181,7 @@ const Custom: React.FC = () => {
           subtitle: "SCSS Only Slider",
           text: "Learn to create a SCSS-only responsive slider.",
           link: "...",
-          card_img: `https://dating.goaideme.com/${cardShareData.images?.[0]?.card_images?.[0]}`,
+          card_img: `${process.env.NEXT_PUBLIC_API_URL}/${cardShareData.images?.[0]?.card_images?.[0]}`,
         },
       ]);
     }
@@ -257,7 +257,7 @@ const Custom: React.FC = () => {
     const fetchEditorData = async () => {
       try {
         const response = await fetch(
-          `https://dating.goaideme.com/card/edit-messages-by-unique-id/${id}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/card/edit-messages-by-unique-id/${id}`,
           {
             method: "GET",
             headers: { "Content-Type": "application/json" },
@@ -438,7 +438,7 @@ function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
     // return
     try {
       const response = await fetch(
-        "https://dating.goaideme.com/card/add-editor-messages",
+        `${process.env.NEXT_PUBLIC_API_URL}/card/add-editor-messages`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -467,7 +467,7 @@ function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
     // return
     try {
       const response = await fetch(
-        "https://dating.goaideme.com/card/add-editor-messages",
+        `${process.env.NEXT_PUBLIC_API_URL}/card/add-editor-messages`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -553,7 +553,7 @@ console.log(lastSlideIndex,"lastSlideIndex")
       const formData = new FormData();
       formData.append("file", file);
       const response = await fetch(
-        "https://dating.goaideme.com/card/update-editor-messages",
+        `${process.env.NEXT_PUBLIC_API_URL}/card/update-editor-messages`,
         {
           method: "POST",
           body: formData,
@@ -575,7 +575,7 @@ console.log(lastSlideIndex,"lastSlideIndex")
           if (activeSlideIndex !== null) {
             const newImage = {
               type: "image",
-              content: `https://dating.goaideme.com/${imageUrl}`,
+              content: `${process.env.NEXT_PUBLIC_API_URL}/${imageUrl}`,
               slideIndex: targetIndex,
 
               // slideIndex:

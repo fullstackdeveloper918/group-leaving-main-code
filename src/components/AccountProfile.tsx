@@ -43,7 +43,7 @@ const AccountProfile = ({ userInfo, data }: any) => {
         additional_invoice: invoiceDetails,
       };
 
-      let res = await fetch("https://dating.goaideme.com/user/update-profile", {
+      let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/update-profile`, {
         method: "POST", // Method set to POST
         headers: {
           "Content-Type": "application/json", // Indicates that you're sending JSON

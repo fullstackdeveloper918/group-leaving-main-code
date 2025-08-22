@@ -109,7 +109,7 @@ const SignBoard = ({searchParams}:any) => {
       };
       logFormData(formData);
       try {
-        const response = await axios.post("https://dating.goaideme.com/messages/demo-sign-board", formData, {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/messages/demo-sign-board`, formData, {
           headers: {
             "Content-Type": "multipart/form-data", // Set header to multipart/form-data
           },
@@ -146,7 +146,7 @@ const SignBoard = ({searchParams}:any) => {
 
 const getData=async()=>{
 try {
-  let res=await axios.get(`https://dating.goaideme.com/messages/single-demo-board/${searchParams}`)
+  let res=await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/messages/single-demo-board/${searchParams}`)
   console.log(res.data.data,"lsjlsjdfjsljd");
   setState(res.data.data)
 } catch (error) {
@@ -186,7 +186,7 @@ const editBoard = async (e: React.FormEvent) => {
   };
   logFormData(formData);
   try {
-    const response = await axios.post("https://dating.goaideme.com/messages/update-single-demo-board", formData, {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/messages/update-single-demo-board`, formData, {
       headers: {
         "Content-Type": "multipart/form-data", // Set header to multipart/form-data
       },

@@ -39,7 +39,7 @@ const DemoViewCard = ({ downloadBoard, excludeDiv }: any) => {
   const getBoard = async () => {
     try {
       let res = await fetch(
-        "https://dating.goaideme.com/messages/demo-sign-board-list"
+        `${process.env.NEXT_PUBLIC_API_URL}/messages/demo-sign-board-list`
       );
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
@@ -101,7 +101,7 @@ const DemoViewCard = ({ downloadBoard, excludeDiv }: any) => {
               {msg.image && (
                 <img
                   // src={msg.image}
-                  src={`https://dating.goaideme.com/${msg.image}`}
+                  src={`${process.env.NEXT_PUBLIC_API_URL}/${msg.image}`}
                   // alt="Birthday image"
                   className="w-full rounded-md mb-4"
                 />

@@ -72,7 +72,7 @@ const EscrowPayment = ({ closeModal, brandKey, groupId,paymentAmount,name }: any
         handler: function (response: any) {
           console.log("Payment successful", response);
           fetch(
-            "https://dating.goaideme.com/razorpay/save-payment",
+            `${process.env.NEXT_PUBLIC_API_URL}/razorpay/save-payment`,
             // 'https://dating.goaideme.com/razorpay/link-by-user-id',
             {
               method: "POST",

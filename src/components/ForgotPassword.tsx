@@ -13,7 +13,7 @@ const ForgotPassword = ({searchParams}:any) => {
         };
         try {
           const response = await fetch(
-            "https://dating.goaideme.com/user/update_reset_password",
+            `${process.env.NEXT_PUBLIC_API_URL}/user/update_reset_password`,
             {
               method: "POST",
               headers: {

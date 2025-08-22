@@ -38,7 +38,7 @@ const GroupCollection = ({
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://dating.goaideme.com/card/users-cards",
+          `${process.env.NEXT_PUBLIC_API_URL}/card/users-cards`,
           {
             method: "GET",
             headers: {
@@ -88,7 +88,7 @@ const GroupCollection = ({
 
     try {
       const response = await fetch(
-        "https://dating.goaideme.com/razorpay/locked-collecton-link",
+        `${process.env.NEXT_PUBLIC_API_URL}/razorpay/locked-collecton-link`,
         {
           // replace '/api/cart' with the correct endpoint
           method: "POST",
@@ -123,7 +123,7 @@ const GroupCollection = ({
     };
     try {
       const response = await fetch(
-        "https://dating.goaideme.com/razorpay/submit-now",
+        `${process.env.NEXT_PUBLIC_API_URL}/razorpay/submit-now`,
         {
           method: "POST",
           headers: {

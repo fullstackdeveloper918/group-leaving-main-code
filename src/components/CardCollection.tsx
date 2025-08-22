@@ -10,7 +10,7 @@ const CardCollection = async ({ params }: any) => {
   console.log(type, "type");
   console.log(searchQuery, "searchQuery");
   // Sidebar: Fetch collection listing
-  let data = await fetch('https://dating.goaideme.com/card/collection-listing', { cache: 'no-store' });
+  let data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/card/collection-listing`, { cache: 'no-store' });
   let data1 = await data.json();
   console.log(data1, "Collection Listing Data");
   // Find the matching collection type (UUID) based on the URL slug
@@ -28,7 +28,7 @@ const CardCollection = async ({ params }: any) => {
   console.log("finalSearchQuery",finalSearchQuery)
   // All cards: Fetch cards based on search and category params
   const api2 = {
-    url: `https://dating.goaideme.com/card/card-listing?search=${encodeURIComponent(finalSearchQuery)}&category=${encodeURIComponent(collectionType)}`,
+    url: `${process.env.NEXT_PUBLIC_API_URL}/card/card-listing?search=${encodeURIComponent(finalSearchQuery)}&category=${encodeURIComponent(collectionType)}`,
     method: "GET",
   };
   const response = await fetchFromServer(api2);

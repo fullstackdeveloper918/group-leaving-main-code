@@ -4,7 +4,13 @@ export default {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
+        protocol: 'http',           // allow HTTP
+        hostname: 'localhost',      // your local backend
+        port: '3002',               // optional: restrict to port 3002
+        pathname: '/**',            // allow all paths
+      },
+      {
+        protocol: 'https',          // allow all HTTPS images
         hostname: '*',
         pathname: '/**',
       },

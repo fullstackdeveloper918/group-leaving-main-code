@@ -69,7 +69,7 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
     try {
       // Send form data to the API (replace with your API endpoint)
       const response = await fetch(
-        "https://dating.goaideme.com/razorpay/update-link",
+        `${process.env.NEXT_PUBLIC_API_URL}/razorpay/update-link`,
         {
           method: "POST",
           headers: {

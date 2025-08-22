@@ -8,7 +8,7 @@ const page = async({params}:any) => {
 
   console.log(params.id,"chhchc");
   const api2: Api = {
-    url: `https://dating.goaideme.com/card/single-bundle-detail/${params.id}`,
+    url: `${process.env.NEXT_PUBLIC_API_URL}/card/single-bundle-detail/${params.id}`,
     method: "GET",
     // body: { key: 'value' }
     // comment only

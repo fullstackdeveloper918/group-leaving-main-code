@@ -42,7 +42,7 @@ const page = async ({ params }: any) => {
   // };
   // const data1 = await fetchFromServer(api1);
   const api2: any = {
-    url: `https://dating.goaideme.com/card/users-cards`,
+    url: `${process.env.NEXT_PUBLIC_API_URL}/cart/purchased-cart-listing`,
     method: "GET",
   };
   const data2 = await fetchFromServer(api2);
@@ -57,7 +57,7 @@ const page = async ({ params }: any) => {
   // const token = userInfo.token;
   // console.log(token,"tokfdfdfdfen");
   const data: any = {
-    url: `https://dating.goaideme.com/user/profile`,
+    url: `${process.env.NEXT_PUBLIC_API_URL}/user/profile`,
     method: "GET",
   };
   const posts = await fetchFromServer(data);

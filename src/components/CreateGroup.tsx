@@ -27,7 +27,7 @@ const CreateGroup = ({ data }: any) => {
     try {
       setLoading1(true);
       const response = await fetch(
-        "https://dating.goaideme.com/order/create-token",
+        `${process.env.NEXT_PUBLIC_API_URL}/order/create-token`,
         {
           // replace '/api/cart' with the correct endpoint
           method: "POST",
@@ -47,7 +47,7 @@ const CreateGroup = ({ data }: any) => {
       const data = await response.json(); // Assuming the response returns JSON
       console.log(data, "sdfghjkl;");
       const response1 = await fetch(
-        " https://dating.goaideme.com/order/get-products",
+        `${process.env.NEXT_PUBLIC_API_URL}/order/get-products`,
         {
           // replace '/api/cart' with the correct endpoint
           method: "POST",
@@ -195,7 +195,7 @@ const CreateGroup = ({ data }: any) => {
     try {
       setLoading(true);
       const response = await fetch(
-        "https://dating.goaideme.com/razorpay/create-link",
+        `${process.env.NEXT_PUBLIC_API_URL}/razorpay/create-link`,
         {
           // replace '/api/cart' with the correct endpoint
           method: "POST",

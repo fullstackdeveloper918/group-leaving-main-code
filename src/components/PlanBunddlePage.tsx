@@ -47,7 +47,7 @@ const PlanBunddlePage = ({ data2 }: any) => {
                 // additional_invoice:invoiceDetails
               };
               
-              let res = await fetch('https://dating.goaideme.com/discount/is-voucher-valid', {
+              let res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/discount/is-voucher-valid`, {
                 method: 'POST', // Method set to POST
                 headers: {
                   'Content-Type': 'application/json', // Indicates that you're sending JSON

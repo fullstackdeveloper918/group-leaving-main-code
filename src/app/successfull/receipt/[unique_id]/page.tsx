@@ -4,7 +4,7 @@ import { fetchFromServer } from '@/app/actions/fetchFromServer';
 const ReceiptPage = async ({ params }: { params: { unique_id: string } }) => {
   // Fetch receipt/payment/card details using the unique_id
   const api = {
-    url: `https://dating.goaideme.com/card/receipt/${params.unique_id}`,
+    url: `${process.env.NEXT_PUBLIC_API_URL}/card/receipt/${params.unique_id}`,
     method: 'GET',
   };
   let data: any = null;

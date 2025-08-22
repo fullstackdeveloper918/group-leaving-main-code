@@ -38,7 +38,7 @@ type Card = {
 // ];
 
 const AccountCards = ({ data }: any) => {
-  console.log(data, "uouwerouwe");
+  // console.log(data, "uouwerouwe");
 
   const [showModal,setShowModal] = useState(false)
 
@@ -62,7 +62,7 @@ const AccountCards = ({ data }: any) => {
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
-  //       const data = await fetch('https://dating.goaideme.com/card/users-cards', {
+  //       const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/card/users-cards`, {
   //         method: 'GET',
   //         headers: {
   //           'Authorization': `Bearer ${gettoken}`,
@@ -93,7 +93,7 @@ const AccountCards = ({ data }: any) => {
   // Format the date to YYYY-MM-DD
   const formattedDate = dateObject.toLocaleDateString("en-CA"); // 'en-CA' gives 'YYYY-MM-DD' format
 
-  console.log(formattedDate, "jljljlj");
+  // console.log(formattedDate, "jljljlj");
 
 
 
@@ -128,7 +128,7 @@ const AccountCards = ({ data }: any) => {
           </div>
         ) : (
           data?.listing?.map((card: any) => {
-            {console.log(card,"here to see card text")}
+            // {console.log(card,"here to see card text")}
             // Format the delivery date to 'YYYY-MM-DD'
             const formattedDeliveryDate = card.delivery_date
               ? new Date(card.delivery_date).toLocaleDateString("en-CA") // Format if valid
@@ -138,7 +138,7 @@ const AccountCards = ({ data }: any) => {
                   "en-CA"
                 ) // Format if valid
               : "Not Scheduled"; // 'en-CA' gives 'YYYY-MM-DD'
-            console.log(card, "yuyuyu");
+            // console.log(card, "yuyuyu");
 
             const iiii = card;
             // console.log("cardis", card)
@@ -152,7 +152,7 @@ const AccountCards = ({ data }: any) => {
                   <div className="cd-img-inn">
                   <img
                     // src={"https://groupleavingcards.com/images/gift/collection_pot.png"}
-                    src={`https://dating.goaideme.com/${card?.images[0]?.card_images[0]}`}
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/${card?.images[0]?.card_images[0]}`}
                     alt={card.title}
                     className="w-full h-full object-cover rounded-lg"
                   />

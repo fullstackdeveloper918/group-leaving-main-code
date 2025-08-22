@@ -70,7 +70,7 @@ const Card = ({ item, index }) => {
         <Link href={`/card/new/${item?.uuid}?category=${item?.title}`}>
           <Image
             className="rounded-t-lg w-full min-h-[300px] object-cover rounded-md"
-            src={`https://dating.goaideme.com/${item?.images[0]?.card_images[0]}`}
+            src={`${process.env.NEXT_PUBLIC_API_URL}/${item?.images[0]?.card_images[0]}`}
             layout="responsive"
             width={500} // Set appropriate width
             height={300} // Set appropriate height

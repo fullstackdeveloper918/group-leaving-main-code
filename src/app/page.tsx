@@ -36,13 +36,13 @@ const Home: React.FC<HomeProps> = async ({ searchParams }) => {
   console.log("API Response:", data);
   // Fetch second API response
   const api2: Api = {
-    url: "https://dating.goaideme.com/card/collection-listing",
+    url: "${process.env.NEXT_PUBLIC_API_URL}/card/collection-listing",
     method: "GET",
   };
   
   const data2: ApiResponse<any> = await fetchFromServer(api2);
   console.log("Collection Listing Response:", data2.data);
-  let user = await fetch('https://dating.goaideme.com/user/profile', {
+  let user = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/profile`, {
     method: 'GET', // Method set to GET
     headers: {
       'Authorization': `Bearer ${token}` // Send the token in the Authorization header

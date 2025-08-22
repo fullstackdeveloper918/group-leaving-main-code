@@ -21,12 +21,12 @@ const categories = [
 ];
 
 const Sidebar = ({ urlValue,cardLabel,response }: { urlValue: string,cardLabel:any,response:any }) => {
-  console.log(urlValue, "yyyyy");
-  console.log(response, "tyuityui");
+  // console.log(urlValue, "yyyyy");
+  // console.log(response, "tyuityui");
   const router = useRouter();
 
   const handleClick = (category: string, id:any) => {
-    console.log(category, "category");
+    // console.log(category, "category");
     const formattedCategory = category.toLowerCase().replace(/\s+/g, '-');
     router.push(cardLabel?`/card/${formattedCategory}/${cardLabel}`:`/card/${formattedCategory}`);
   };
@@ -36,7 +36,7 @@ const Sidebar = ({ urlValue,cardLabel,response }: { urlValue: string,cardLabel:a
       <ul className="md:space-y-2    md:block flex md:space-x-0 space-x-3 items-start overflow-x-auto md:sticky md:top-5 md:m-0 p-0  md:w-100  w-[100%] m-auto ">
         {response?.data?.map((category:any) => (
           <li
-            key={category}
+            key={category.id}
             onClick={() => handleClick(category?.collection_title,category?.uuid)}
             className={`cursor-pointer ${
               urlValue === category?.collection_title.toLowerCase().replace(/\s+/g, '-')

@@ -41,14 +41,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  console.log(accessToken, "dfghere");
+  // console.log(accessToken, "dfghere");
 
   useEffect(() => {
     const cookies = parseCookies();
-    console.log(cookies, "coofghjklkies");
+    // console.log(cookies, "coofghjklkies");
 
     const token = cookies.auth_token;
-    console.log(typeof token, "qwertyu");
+    // console.log(typeof token, "qwertyu");
 
     if (token) {
       setAccessToken(token);

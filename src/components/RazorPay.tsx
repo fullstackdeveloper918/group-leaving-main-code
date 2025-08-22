@@ -16,57 +16,65 @@ interface UserInfo {
   uuid?: string;
 }
 
-const RazorPay = ({ amount, type,bundleId,bundleOption }: any) => {
+const RazorPay = ({ amount, type,cart_id,bundleId }: any) => {
   //  const getToken = cookies().get("auth_token")?.value || "";
   //   console.log(getToken, "Access Token");
-    console.log(amount, "bundleId");
+    // console.log(amount, "bundleId");
     
-    console.log(type, "wertfghdfg");
-    console.log(bundleOption, "sfasdfasd");
+    // console.log(type, "wertfghdfg");
+    // console.log(bundleOption, "sfasdfasd");
     
   const router = useRouter();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const param = useParams();
-  console.log(param,"param");
-  console.log(userInfo,"userInfo");
-  console.log(type,"qazxsw");
+  // console.log(param,"param");
+  // console.log(userInfo,"userInfo");
+  // console.log(type,"qazxsw");
   
   const [state, setState] = useState<string>("");
   const [authToken, setAuthToken] = useState<string>("");
-  console.log(authToken,"authToken");
+  // console.log(authToken,"authToken");
 
   useEffect(() => {
     const cookies = nookies.get();
     const token = cookies.auth_token || "";
     setAuthToken(token);
-    console.log(token, "Access Token");
+    // console.log(token, "Access Token");
   }, [state]);
   const searchParams = useSearchParams();
-  console.log(type,"type");
+  // console.log(type,"type");
   
-  const cartId = searchParams.get("cart_uuid"); // Correct way to extract cart_uuid
-  console.log("cartId",cartId)
+  const cartId = cart_id ; // Correct way to extract cart_uuid
+  // console.log("cartId",cartId)
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     const cookies = nookies.get();
-    console.log("cookiesUserInfo",cookies.userInfo);
+    // console.log("cookiesUserInfo",cookies.userInfo);
     const userInfoFromCookie: UserInfo | null = cookies.userInfo
       ? JSON.parse(cookies.userInfo)
       : null;
     setUserInfo(userInfoFromCookie);
   }, []);
 const [uniqueId,setUniqueId] =useState<any>("")
-console.log(uniqueId,"uniqueId");
+// console.log(uniqueId,"uniqueId");
 
   const handlePayment = async () => {
     setIsProcessing(true);
     try {
-      const response = await fetch("/api1/create", { method: "POST" });
+      // const response = await fetch("/api1/create", { method: "POST" });
+      const response = await fetch("/api1/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ amount: Math.round(amount * 100) }), 
+      });
       const data = await response.json();
-setState(data)
+      console.log(data,"data from api")
+      setState(data)
       if (!window.Razorpay) {
-        console.error("Razorpay SDK not loaded");
+        // console.error("Razorpay SDK not loaded");
         return;
       }
 
@@ -79,16 +87,16 @@ setState(data)
         description: "Test Transaction",
         order_id: data.orderId,
         handler: async (response: any) => {
-          console.log("Payment successful", response);
+          // console.log("Payment successful", response);
           
           const paymentId = response.razorpay_payment_id;
           const product_id = param.id;
 
-          console.log("product_id",product_id)
-          console.log("sadfasdfassfdasf",userInfo)
+          // console.log("product_id",product_id)
+          // console.log("sadfasdfassfdasf",userInfo)
           // headers["Authorization"] = `Bearer ${getToken}`;
           try {
-            const paymentResponse = await fetch("https://dating.goaideme.com/razorpay/save-payment", {
+            const paymentResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/razorpay/save-payment`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -111,7 +119,7 @@ setState(data)
               throw new Error("Payment save failed");
             }
             const responseData = await paymentResponse.json();
-            console.log(responseData,"paymentResponse");
+            // console.log(responseData,"paymentResponse");
             if (type === "bundleFor") {
               router.push(`/account/bundles`);
             } else{

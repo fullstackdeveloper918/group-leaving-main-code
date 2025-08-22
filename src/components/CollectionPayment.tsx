@@ -52,7 +52,7 @@ const CollectionPayment = ({
   const fetchGiftCard = async () => {
     try {
       const response = await fetch(
-        "https://dating.goaideme.com/order/create-token",
+        `${process.env.NEXT_PUBLIC_API_URL}/order/create-token`,
         {
           // replace '/api/cart' with the correct endpoint
           method: "POST",
@@ -122,7 +122,7 @@ const CollectionPayment = ({
 
           try {
             const paymentResponse = await fetch(
-              "https://dating.goaideme.com/order/create-orders",
+              `${process.env.NEXT_PUBLIC_API_URL}/order/create-orders`,
               {
                 method: "POST",
                 headers: {

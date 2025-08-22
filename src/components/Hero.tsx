@@ -39,7 +39,7 @@ const Hero = ({
   data?: any[];
 }) => {
   // console.log(userData, "props"); // :white_tick: Corrected console.log
-  console.log("tokendata", token);
+  // console.log("tokendata", token);
   const [isNewLogin, setIsNewLogin] = useState(false);
   const [displayedText, setDisplayedText] = useState("");
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
@@ -87,7 +87,7 @@ const Hero = ({
       typeWriter(categoriesName[currentCategoryIndex], 0);
     }
   }, [currentCategoryIndex, isTyping]);
-  console.log(displayedText, "displayedText");
+  // console.log(displayedText, "displayedText");
   const settings = {
     dots: true,
     infinite: true,

@@ -35,7 +35,7 @@ const CreateBoard = ({ data }: any) => {
     try {
       setLoading1(true);
       const response = await fetch(
-        "https://dating.goaideme.com/order/create-token",
+        `${process.env.NEXT_PUBLIC_API_URL}/order/create-token`,
         {
           // replace '/api/cart' with the correct endpoint
           method: "POST",
@@ -55,7 +55,7 @@ const CreateBoard = ({ data }: any) => {
       const data = await response.json(); // Assuming the response returns JSON
       console.log(data, "sdfghjkl;");
       const response1 = await fetch(
-        " https://dating.goaideme.com/order/get-products",
+        `${process.env.NEXT_PUBLIC_API_URL}/order/get-products`,
         {
           // replace '/api/cart' with the correct endpoint
           method: "POST",
@@ -209,7 +209,7 @@ const CreateBoard = ({ data }: any) => {
     try {
       setLoading(true);
       const response = await fetch(
-        "https://dating.goaideme.com/groupboard/add-groupboard",
+        `${process.env.NEXT_PUBLIC_API_URL}/groupboard/add-groupboard`,
         {
           // replace '/api/cart' with the correct endpoint
           method: "POST",

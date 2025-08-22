@@ -4,7 +4,7 @@ const superagent = SuperagentPromise(_superagent, global.Promise);
 import { parseCookies } from 'nookies';
 import { info } from "console";
 
-const API_ROOT = 'https://dating.goaideme.com/';
+const API_ROOT = process.env.NEXT_PUBLIC_API_URL+'/';
 // const API_ROOT = 'https://dating.goaideme.com/';
 // const API_ROOT = process.env.NEXT_PUBLIC_LIVE_API_URL;
 // https://dating.goaideme.com/user/register

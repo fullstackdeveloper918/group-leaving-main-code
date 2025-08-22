@@ -8,7 +8,7 @@ import amazon_gift from "../../assets/images/amazon_gift.png";
 import Link from "next/link";
 import GiftCard from "@/components/common/GiftCard";
 const page = async () => {
-  let data = await fetch("https://dating.goaideme.com/tango/fetch-data", {
+  let data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tango/fetch-data`, {
     method: "GET", // Method set to GET
     headers: {
       "Cache-Control": "no-cache",

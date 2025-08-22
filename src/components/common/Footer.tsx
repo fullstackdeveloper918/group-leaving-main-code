@@ -13,7 +13,6 @@ const { Text, Title } = Typography;
 const date = new Date();
 const year = date.getFullYear()
 
-console.log(year,"yeadra")
 const Footer: React.FC = () => {
   return (
     <div className="container-fluid pt-12">

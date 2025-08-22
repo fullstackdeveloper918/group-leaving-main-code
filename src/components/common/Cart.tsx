@@ -14,16 +14,16 @@ const Cart = () => {
   const router = useRouter();
   const gettoken = Cookies.get("auth_token");
 
-  console.log(gettoken, "gettokenravi");
+  // console.log(gettoken, "gettokenravi");
 
   const [data, setData] = useState<any>([]);
 
-  console.log(data, "iooioio");
+  // console.log(data, "iooioio");
 
   const getdata = async () => {
     try {
       let res = await fetch(
-        "https://dating.goaideme.com/cart/cart-listing",
+        `${process.env.NEXT_PUBLIC_API_URL}/cart/cart-listing`,
         {
           method: "GET",
           headers: {
@@ -85,7 +85,7 @@ const Cart = () => {
                 <div className="flex items-center w-full gap-4 flex-column flex-lg-row">
                   <div className="cd-img-inn">
                   <img
-                    src={`https://dating.goaideme.com/${card?.images[0]?.card_images[0]}`}
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/${card?.images[0]?.card_images[0]}`}
                     alt={card.title}
                     className="w-full h-full object-cover rounded-lg"
                     />
@@ -106,7 +106,7 @@ const Cart = () => {
                       {/* Action Buttons */}
                       {card.is_remove_from_cart === 0 ? (
                         <Link
-                          href={`/card/pay/${card.card_uuid}?cart_uuid=${card.cart_uuid}`}
+                          href={`/card/pay/${card.cart_uuid}`}
                         >
                           <button className="bg-[#ecc94b] text-black border border-gray-300 px-3 h-10 rounded-pill fw-semibold payCart-btn">
                             Pay now

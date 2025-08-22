@@ -38,7 +38,7 @@ const EnvelopCard = ({ getdata }: any) => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://dating.goaideme.com/card/users-cards",
+          `${process.env.NEXT_PUBLIC_API_URL}/card/users-cards`,
           {
             method: "GET",
             headers: {
@@ -84,7 +84,7 @@ const EnvelopCard = ({ getdata }: any) => {
       const fetchData = async () => {
         try {
           const response = await fetch(
-            `https://dating.goaideme.com/card/edit-messages-by-unique-id/${id}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/card/edit-messages-by-unique-id/${id}`,
             {
               method: "GET",
               headers: {
@@ -221,7 +221,7 @@ const EnvelopCard = ({ getdata }: any) => {
             style={{height:"100%"}}
               src={
                 // "https://groupleavingcards.com/assets/design/617318f94c962c605abdeabb.jpg"
-                `https://dating.goaideme.com/${cardShareData?.images?.[0]?.card_images?.[0]}`
+                `${process.env.NEXT_PUBLIC_API_URL}/${cardShareData?.images?.[0]?.card_images?.[0]}`
               }
               alt="content"
             />

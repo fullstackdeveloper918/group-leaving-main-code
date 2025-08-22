@@ -182,7 +182,7 @@ const MultiStepForm = ({ params }: any) => {
       // return;
       // Make the fetch POST request
       const response = await fetch(
-        "https://dating.goaideme.com/cart/add-cart",
+        `${process.env.NEXT_PUBLIC_API_URL}/cart/add-cart`,
         {
           // replace '/api/cart' with the correct endpoint
           method: "POST",
@@ -223,7 +223,7 @@ const MultiStepForm = ({ params }: any) => {
         // cookies.remove("auth_token")
       }
 
-      router.push(`/card/pay/${params}?cart_uuid=${data.data.cart_uuid}`);
+      router.push(`/card/pay/${data.data.cart_uuid}`);
       console.log("Final submission", { recipientName, recipientEmail });
     } catch (err: any) {
       setLoading(false);

@@ -36,7 +36,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     };
 
     console.log(params,"params here")
-    const shareableLink = `https://groupwish.in/share/editor/${params.id}`;
+    const shareableLink = `${process.env.NEXT_PUBLIC_API_URL}/share/editor/${params.id}`;
   
     const handleCopy = () => {
       navigator.clipboard.writeText(shareableLink);
@@ -49,7 +49,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://dating.goaideme.com/card/users-cards",
+          `${process.env.NEXT_PUBLIC_API_URL}/card/users-cards`,
           {
             method: "GET",
             headers: {
@@ -100,7 +100,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                       </span>
                     </button>
                     <Image
-                      src={cardData?.images?.[0]?.card_images?.[0] ? `https://dating.goaideme.com/${cardData.images[0].card_images[0]}` : "https://gift.wegift.io/static/product_assets/AMZ-GB/AMZ-GB-card.png"}
+                      src={cardData?.images?.[0]?.card_images?.[0] ? `${process.env.NEXT_PUBLIC_API_URL}/${cardData.images[0].card_images[0]}` : "https://gift.wegift.io/static/product_assets/AMZ-GB/AMZ-GB-card.png"}
                       width={200}
                       height={200}
                       alt={cardData?.title || "Card Image"}

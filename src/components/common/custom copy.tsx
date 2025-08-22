@@ -79,7 +79,7 @@ console.log(userInfo?.uuid,"userInf");
     };
   
     try {
-      const response = await fetch("https://dating.goaideme.com/card/add-editor-messages", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/card/add-editor-messages`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json", // Add this header to specify JSON
@@ -238,7 +238,7 @@ console.log(newMessage,"newMessage");
       // formData.append("user_uuid", user_uuid:userInfo?.uuid);
   
       // Make the POST request with the form data (multipart/form-data)
-      const response = await fetch("https://dating.goaideme.com/card/update-editor-messages", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/card/update-editor-messages`, {
         method: "POST",
         body: formData,
       });
@@ -262,7 +262,7 @@ console.log(newMessage,"newMessage");
               // Creating the object to store the image data
               const newImage = {
                 type: "image",
-                content: `https://dating.goaideme.com/${imageUrl}`,  // Use the URL from the API response
+                content: `${process.env.NEXT_PUBLIC_API_URL}/${imageUrl}`,  // Use the URL from the API response
                 slideIndex: activeSlideIndex + 1,  // Slide index for reference
                 x: 0,  // Starting X position (can be updated as needed)
                 y: 0,  // Starting Y position (can be updated as needed)

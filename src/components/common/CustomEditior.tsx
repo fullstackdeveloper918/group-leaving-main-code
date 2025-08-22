@@ -52,7 +52,7 @@ const CustomEditior = () => {
     } as any;
     try {
       const response = await fetch(
-        "https://dating.goaideme.com/card/add-editor-messages",
+        `${process.env.NEXT_PUBLIC_API_URL}/card/add-editor-messages`,
         {
           method: "POST",
           body: JSON.stringify(item),
@@ -65,7 +65,9 @@ const CustomEditior = () => {
 
       const data = await response.json();
       console.log("Image uploaded successfully:", data);
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
   };
   const [editorContent, setEditorContent] = useState("");
   const [images, setImages] = useState<string[]>([
@@ -282,7 +284,7 @@ const CustomEditior = () => {
 
       // Make the POST request with the form data (multipart/form-data)
       const response = await fetch(
-        "https://dating.goaideme.com/card/update-editor-messages",
+        `${process.env.NEXT_PUBLIC_API_URL}/card/update-editor-messages`,
         {
           method: "POST",
           body: formData,
@@ -308,7 +310,7 @@ const CustomEditior = () => {
               // Creating the object to store the image data
               const newImage = {
                 type: "image",
-                content: `https://dating.goaideme.com/${imageUrl}`, // Use the URL from the API response
+                content: `${process.env.NEXT_PUBLIC_API_URL}/${imageUrl}`, // Use the URL from the API response
                 slideIndex: activeSlideIndex + 1, // Slide index for reference
                 x: 0, // Starting X position (can be updated as needed)
                 y: 0, // Starting Y position (can be updated as needed)

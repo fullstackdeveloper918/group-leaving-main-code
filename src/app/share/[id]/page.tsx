@@ -22,7 +22,7 @@ const Page: React.FC<PageProps> = ({ params, searchParams }) => {
   const fetchContributeData = useCallback(async () => {
     try {
       const response = await fetch(
-        `https://dating.goaideme.com/card/users-cards/${params.id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/card/users-cards/${params.id}`,
         {
           method: "GET",
           headers: { "Cache-Control": "no-cache" },
@@ -45,7 +45,7 @@ const Page: React.FC<PageProps> = ({ params, searchParams }) => {
       try {
         console.log(params.id, "Fetching Data...");
         const response = await fetch(
-          `https://dating.goaideme.com/razorpay/single-link-listing/${params.id}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/razorpay/single-link-listing/${params.id}`,
           {
             method: "GET",
             headers: {

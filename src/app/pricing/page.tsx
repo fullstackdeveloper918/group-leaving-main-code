@@ -7,7 +7,7 @@ import { fetchFromServer } from "../actions/fetchFromServer";
 const page = async() => {
 
   const api: Api = {
-    url: `https://dating.goaideme.com/card/pricing-listing`,
+    url: `${process.env.NEXT_PUBLIC_API_URL}/card/pricing-listing`,
     method: "GET",
     // body: { key: 'value' }
     // comment only
@@ -19,7 +19,7 @@ console.log(data,'check');
 
 
   const api2: Api = {
-    url: `https://dating.goaideme.com/card/bundle-list`,
+    url: `${process.env.NEXT_PUBLIC_API_URL}/card/bundle-list`,
     method: "GET",
     // body: { key: 'value' }
     // comment only

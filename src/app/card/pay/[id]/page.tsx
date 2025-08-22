@@ -5,22 +5,22 @@ import { Api } from "@/interfaces/interfaces";
 import React from "react";
 
 const page = async({ searchParams,params }:any) => {
-  console.log(params,"mnmnnm");
+  // console.log(params,"mnmnnm");
   const api2: Api = {
-    url: `https://dating.goaideme.com/card/bundle-list`,
+    url: `${process.env.NEXT_PUBLIC_API_URL}/card/bundle-list`,
     method: "GET",
     // body: { key: 'value' }
     // comment only
   };
 
   const data2 = await fetchFromServer(api2);
-  console.log(data2,"opop");
+  // console.log(data2,"opop");
   
   return (
     <>
-      <StripeElement>
+      {/* <StripeElement> */}
         <Checkout data={data2}/>
-      </StripeElement>
+      {/* </StripeElement> */}
     </>
   );
 };

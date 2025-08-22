@@ -5,7 +5,7 @@ const page = async(params:any) => {
   const id = params?.params?.id;
   console.log(id,"hsjkhajkshd");
   
-  const response = await fetch(`https://dating.goaideme.com/card/edit-messages-by-unique-id/${id}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/card/edit-messages-by-unique-id/${id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

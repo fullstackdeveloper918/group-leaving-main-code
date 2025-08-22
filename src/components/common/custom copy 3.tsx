@@ -297,7 +297,7 @@ const Custom: React.FC = () => {
 
     try {
       const response = await fetch(
-        "https://dating.goaideme.com/card/add-editor-messages",
+        `${process.env.NEXT_PUBLIC_API_URL}/card/add-editor-messages`,
         {
           method: "POST",
           headers: {
@@ -360,7 +360,7 @@ const Custom: React.FC = () => {
       formData.append("file", file);
 
       const response = await fetch(
-        "https://dating.goaideme.com/card/update-editor-messages",
+        `${process.env.NEXT_PUBLIC_API_URL}/card/update-editor-messages`,
         {
           method: "POST",
           body: formData,
@@ -384,7 +384,7 @@ const Custom: React.FC = () => {
             if (activeSlideIndex !== null) {
               const newImage = {
                 type: "image",
-                content: `https://dating.goaideme.com/${imageUrl}`,
+                content: `${process.env.NEXT_PUBLIC_API_URL}/${imageUrl}`,
                 slideIndex: activeSlideIndex,
                 x: 0,
                 y: 0,

@@ -27,7 +27,7 @@ const ContributorsModal: React.FC<ContributeModelProps> = ({ isOpen, onClose, gr
     if (!isOpen) return;
     setLoading(true);
     setError(null);
-    fetch(`https://dating.goaideme.com/order/get-orders?group_id=${groupId}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/order/get-orders?group_id=${groupId}`)
       .then(res => res.json())
       .then(data => {
         setContributors(data.orders || []);
