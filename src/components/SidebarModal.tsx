@@ -22,8 +22,8 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
   isClose,
   createlinkuserId,
 }) => {
-  console.log("databysidebarmodel", data?.collection_title);
-  console.log("databysidebarmodel", data);
+  // console.log("databysidebarmodel", data?.collection_title);
+  // console.log("databysidebarmodel", data);
   const [deliveryOption, setDeliveryOption] = useState("later");
   const [collectionTitle, setCollectionTitle] = useState(
     data?.cartDetail?.[0]?.recipient_name
@@ -49,7 +49,7 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
     setCookieValue(userData?.uuid || null);
   }, []);
 
-  console.log("cookie value", cookieValue);
+  // console.log("cookie value", cookieValue);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -104,7 +104,7 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
     }
   };
 
-  console.log("collectionTitle", data);
+  // console.log("collectionTitle", data);
 
   return (
     <div

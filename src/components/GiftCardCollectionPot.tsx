@@ -5,7 +5,8 @@ import axios from "axios";
 import CollectionPayment from "./CollectionPayment";
 import ContributorsModal from "./ContributorsModal";
 import { usePathname } from "next/navigation";
-import { AiFillEdit } from "react-icons/ai";
+import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import Cookies from "js-cookie";
 
 const GiftCardCollectionPot = ({
   brandKey,
@@ -24,14 +25,14 @@ const GiftCardCollectionPot = ({
   const [showPayment, setShowPayment] = useState(false);
   const [showContributors, setShowContributors] = useState(false);
   const [selectedImage, setSelectedImage] = useState<any | null>(null);
-
+  const gettoken = Cookies.get("auth_token");
   const pathname = usePathname();
   const parts = pathname.split("/");
   const brandKey2 = parts[parts.length - 1];
 
-  console.log(cardShareData, "cardshareDate herer");
+  // console.log(cardShareData, "cardshareDate herer");
 
-  console.log(showContributors, "showContributors");
+  // console.log(showContributors, "showContributors");
   const handleProceed = () => {
     if (name.trim() === "") {
       setShowWarning(true);
@@ -44,50 +45,26 @@ const GiftCardCollectionPot = ({
   const [giftCard, setGiftCard] = useState<any>("");
   const [makeAnonymous, setMakeAnonymous] = useState(false);
   const [state, setState] = useState<any>("");
-  console.log(brandKey, "brandKey");
-  console.log(isCustomAmount, "customAmount");
+  // console.log(brandKey, "brandKey");
+  // console.log(isCustomAmount, "customAmount");
 
   const fetchGiftCard = async () => {
     try {
-      const response1 = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/order/create-token`,
-        {
-          // replace '/api/cart' with the correct endpoint
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            // 'Authorization': `Bearer ${gettoken}`
-          },
-          body: "",
-        }
-      );
-
-      // Check if the request was successful
-      if (!response1.ok) {
-        throw new Error("Failed to add item to cart");
-      }
-
-      const data1 = await response1.json();
-
-      console.log("data1 here", data1);
-
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/order/get-single-product?product_id=${brandKey2}`, // Sending brandKey as query parameter
+        `${process.env.NEXT_PUBLIC_API_URL}/reloadly/card/${groupId}`, // Sending brandKey as query parameter
         {
           method: "GET", // No body for GET requests
           headers: {
             "Content-Type": "application/json", // Only for JSON responses
-            Authorization: `Bearer ${data1?.data?.access_token}`,
+            Authorization: `Bearer ${gettoken}`,
           },
         }
       );
 
       const data = await response.json();
-      console.log(data, "lsjdflj");
-
+      // console.log(data, "fetched all giftcards");
       setGiftCard(data);
     } catch (error) {}
-    // return data;
   };
 
   // Fetch gift card products (like in CreateBoard)
@@ -128,6 +105,34 @@ const GiftCardCollectionPot = ({
     }
   };
 
+  const addGiftCard = async(giftCard : any) => {
+    // console.log(giftCard,"giftCard");
+    let temp_body = {
+      "cartId":groupId,
+      "giftcard":giftCard
+    }
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/reloadly/save-card`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${gettoken}`,
+          },
+          body: JSON.stringify(temp_body),
+        }
+      );
+      const data = await response.json();
+      if (data) {
+        await fetchGiftCard();
+      }
+      // console.log(data,"data response");
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
     // const brandKey = 'yourBrandKeyValue';  // Replace with your actual brandKey value
     fetchGiftCard();
@@ -140,14 +145,14 @@ const GiftCardCollectionPot = ({
     }
   }, [refreshFromCreateBoard]);
 
-  console.log(giftCard, "giftCard");
+  // console.log(giftCard, "giftCard");
 
   // Calculate base amount, service fee (5%), and total
   const baseAmount = isCustomAmount ? parseFloat(customAmount) : selectedAmount;
   const serviceFee = +(baseAmount * 0.05).toFixed(2);
   const totalAmount = +(baseAmount + serviceFee).toFixed(2);
 
-  console.log(totalAmount, "totalAmount");
+  // console.log(totalAmount, "totalAmount");
   // Remove all isModalOpen, setIsModalOpen, openModal, closeModal, and modal rendering logic from GiftCardCollectionPot
   // Add a prop: onGiftCardAdded (callback)
   // For the Add to Gift Card button, use onClick={() => setIsModalOpen(true)}
@@ -168,66 +173,73 @@ const GiftCardCollectionPot = ({
   // const selectGiftImage = giftCard.data?.imageUrls["278w-326ppi"];
   // const selectGiftImage = giftCard?.data?.imageUrls ? giftCard.data.imageUrls["278w-326ppi"] : null;
 
-  console.log(selectGiftImage, "selectGiftImage");
-               console.log(selectedImage,"selectedImage")
+  // console.log(selectGiftImage, "selectGiftImage");
+  // console.log(selectedImage,"selectedImage")
   return (
     <>
       <div className="bg-white shadow-lg rounded-lg p-6">
         {
           <>
-            <h2 className="text-lg font-semibold mb-4 text-center">
-              Group Gift Fund
-            </h2>
-            <div className="flex justify-center items-center mb-4 flex-col">
+            {giftCard?.cards?.map((card : any) => (
+              <div
+                key={card.id}
+                className="border rounded-lg shadow-md p-4 mb-6 bg-white"
+              >
+                <h2 className="text-lg font-semibold mb-4 text-center">
+                  Group Gift Fund
+                </h2>
 
-                 <div className="gift-cards-tools">
-                  <AiFillEdit className="cursor-pointer"  onClick={async () => {
-                    await fetchGiftCardProducts();
-                    setIsGiftCardModalOpen(true);
-                  }}/>
+                <div className="flex justify-center items-center mb-4 flex-col ">
+                <div className="gift-cards-tools self-end mb-4 flex space-x-6 text-2xl pb-2">
+  <AiFillEdit
+    className="cursor-pointer hover:text-blue-600 transition"
+    onClick={async () => {
+      await fetchGiftCardProducts();
+      setIsGiftCardModalOpen(true);
+    }}
+  />
+  <AiFillDelete
+    className="cursor-pointer hover:text-red-600 transition"
+    onClick={async () => {
+      // delete logic
+    }}
+  />
+</div>
 
-                 </div>
+                  {brandKey ? (
+                    <img
+                      src={selectGiftImage}
+                      alt="E-Gift Card"
+                      className="w-50 h-30 object-contain rounded-md shadow"
+                    />
+                  ) : (
+                    <img
+                      src={`${card?.logoUrls}`}
+                      alt="E-Gift Card"
+                      className="w-50 h-50 object-contain rounded-md shadow"
+                    />
+                  )}
+                </div>
 
-              {brandKey ? (
-                <img
-                  src={selectGiftImage} // Replace with your gift card image
-                  alt="E-Gift Card"
-                  className="w-50 h-30 object-contain rounded-md"
-                />
-              ) : (
-                <img
-                  src={`${process.env.NEXT_PUBLIC_API_URL}/${cardShareData?.images?.[0]?.card_images?.[0]}`} // Replace with your gift card image
-                  alt="E-Gift Card"
-                  className="w-40 h-30 object-contain rounded-md"
-                />
-              )}
-            </div>
-            {/* <div className="text-center mb-4 justify-center">
-<p className="text-2xl font-bold">£0</p>
-</div> */}
-            {/* <EscrowPayment /> */}
-            <div className="text-center mb-4 justify-center   flex-col">
-              {brandKey ? (
-                <p className="text-2xl font-bold">
-                  INR {giftCard.data?.senderFee}
-                </p>
-              ) : (
-                <p className="text-2xl font-bold">INR {cardShareData?.price}</p>
-              )}
+                <div className="text-center mb-4 justify-center flex-col">
+                  {brandKey ? (
+                    <p className="text-2xl font-bold">INR {giftCard.data?.senderFee}</p>
+                  ) : (
+                    <p className="text-2xl font-bold">INR {cardShareData?.price}</p>
+                  )}
 
-              <div className="text-center mb-2 gap-2 items-center justify-center flex flex-col">
-                <button
-                  onClick={() => setIsContributeModalOpen(true)}
-                  className=" w-[40%] bg-[#558ec9]  text-white  px-4 py-2  rounded-md hover:bg-blue-700 transition"
-                >
-              Add Participant
-                </button>
-
+                  <div className="text-center mb-2 gap-2 items-center justify-center flex flex-col">
+                    <button
+                      onClick={() => setIsContributeModalOpen(true)}
+                      className="w-[40%] bg-[#558ec9] text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                    >
+                      Add Participant
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div className="text-center mb-2 justify-center">
-              <button className="text-red hover:underline">Remove</button>
-            </div>
-            </div>
+            ))}
+
                 <button
                   onClick={async () => {
                     await fetchGiftCardProducts();
@@ -334,6 +346,7 @@ const GiftCardCollectionPot = ({
                       // Add logic for adding gift card here
                       setIsGiftCardModalOpen(false);
                       setSelectedImage(null);
+                      addGiftCard(selectedImage);
                     }}
                   >
                     Add this Gift Card

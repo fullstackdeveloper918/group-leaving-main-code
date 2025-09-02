@@ -182,7 +182,7 @@ const AccountCards = ({ data }: any) => {
                         </Link>
                       ) : (
                         // /share/${data?.data?.uuid}?brandKey=${brandKeys}
-                        <Link href={`/share/${card?.uuid}`}>
+                        <Link href={`/share/${card?.cartDetail[0]?.cart_uuid}`}>
                           <button className="px-3 h-10 rounded-pill seeGiftbtn">
                             See Gift
                           </button>

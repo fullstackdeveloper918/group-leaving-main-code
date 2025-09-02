@@ -9,7 +9,7 @@ interface PageProps {
 }
 
 const Page: React.FC<PageProps> = ({ params, searchParams }) => {
-  console.log(params.id, "Fetching Data...");
+  // console.log(params.id, "Fetching Data...");
 
   const [data, setData] = useState<any>(null);
   const [isClose, setClose] = useState<boolean>(true);
@@ -43,7 +43,7 @@ const Page: React.FC<PageProps> = ({ params, searchParams }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(params.id, "Fetching Data...");
+        // console.log(params.id, "Fetching Data...");
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/razorpay/single-link-listing/${params.id}`,
           {
@@ -59,7 +59,7 @@ const Page: React.FC<PageProps> = ({ params, searchParams }) => {
         }
 
         const jsonData = await response.json();
-        console.log(jsonData, "Response Data");
+        // console.log(jsonData, "Response Data");
         setData(jsonData);
       } catch (err: any) {
         // toast.error("Error fetching data: " + err.message);

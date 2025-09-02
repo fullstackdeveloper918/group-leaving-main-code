@@ -8,7 +8,7 @@ const CopyclickBoard = () => {
   const pathname = usePathname(); // Get the path part of the URL
   const searchParams = useSearchParams();
   const url = `${pathname}?${searchParams.toString()}`;
-  console.log(url, "hhhh");
+  // console.log(url, "hhhh");
   const [showCopyBoard, setShowCopyBoard] = useState(false);
 
   const handleClick = () => {
