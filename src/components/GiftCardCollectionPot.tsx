@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import EscrowPayment from "./EscrowPayment";
-import axios from "axios";
+// import EscrowPayment from "./EscrowPayment";
+// import axios from "axios";
 import CollectionPayment from "./CollectionPayment";
 import ContributorsModal from "./ContributorsModal";
 import { usePathname } from "next/navigation";
-import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import { AiFillDelete, AiOutlineUser } from "react-icons/ai";
 import Cookies from "js-cookie";
 
 const GiftCardCollectionPot = ({
@@ -17,21 +17,24 @@ const GiftCardCollectionPot = ({
   const [isContributorsModalOpen, setIsContributorsModalOpen] = useState(false);
   const [isGiftCardModalOpen, setIsGiftCardModalOpen] = useState(false);
   const [isContributeModalOpen, setIsContributeModalOpen] = useState(false);
-  const [selectedAmount, setSelectedAmount] = useState(20); // Default selected amount
+  // const [selectedAmount, setSelectedAmount] = useState(20); // Default selected amount
   const [isCustomAmount, setIsCustomAmount] = useState<any>(false); // Tracks if "Other" is selected
-  const [customAmount, setCustomAmount] = useState<any>(20); // Custom amount input
+  // const [customAmount, setCustomAmount] = useState<any>(20); // Custom amount input
   const [name, setName] = useState("");
   const [showWarning, setShowWarning] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
   const [showContributors, setShowContributors] = useState(false);
   const [selectedImage, setSelectedImage] = useState<any | null>(null);
   const gettoken = Cookies.get("auth_token");
-  const pathname = usePathname();
-  const parts = pathname.split("/");
-  const brandKey2 = parts[parts.length - 1];
-
+  // const pathname = usePathname();
+  // const parts = pathname.split("/");
+  // const brandKey2 = parts[parts.length - 1];
+  const [selectedContributeAmount, setSelectedContributeAmount] = useState<number>(0); 
+  const [selectedContributeAmountOgCurrency,setSelectedContributeAmountOgCurrency] = useState<number>(0);
+  const [error, setError] = useState<string>(""); // validation message for RANGE
   // console.log(cardShareData, "cardshareDate herer");
-
+  const [reloadlyId, setReloadlyId] = useState<string>("");
+  // const [loading, setLoading] = useState(false);
   // console.log(showContributors, "showContributors");
   const handleProceed = () => {
     if (name.trim() === "") {
@@ -45,11 +48,13 @@ const GiftCardCollectionPot = ({
   const [giftCard, setGiftCard] = useState<any>("");
   const [makeAnonymous, setMakeAnonymous] = useState(false);
   const [state, setState] = useState<any>("");
+  const [selectedProduct, setSelectedProduct] = useState<any>("");
   // console.log(brandKey, "brandKey");
   // console.log(isCustomAmount, "customAmount");
 
   const fetchGiftCard = async () => {
     try {
+      // setLoading(true);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/reloadly/card/${groupId}`, // Sending brandKey as query parameter
         {
@@ -62,48 +67,74 @@ const GiftCardCollectionPot = ({
       );
 
       const data = await response.json();
-      // console.log(data, "fetched all giftcards");
+      console.log(data, "fetched all giftcards");
       setGiftCard(data);
     } catch (error) {}
+    // finally {
+    //   setLoading(false); // stop loading
+    // }
   };
 
   // Fetch gift card products (like in CreateBoard)
   const fetchGiftCardProducts = async () => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/order/create-token`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: "",
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to get token");
-      }
-      const data = await response.json();
+      // const response = await fetch(
+      //   `${process.env.NEXT_PUBLIC_API_URL}/order/create-token`,
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: "",
+      //   }
+      // );
+      // if (!response.ok) {
+      //   throw new Error("Failed to get token");
+      // }
+      // const data = await response.json();
       const response1 = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/order/get-products`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${data?.data?.access_token}`,
-          },
           body: "",
+          headers: {
+            "Content-Type": "application/json"
+          },
         }
       );
+      // console.log(response1,"response1");
       if (!response1.ok) {
         throw new Error("Failed to get products");
       }
       const data1 = await response1.json();
+      // console.log(data1,"data1");
       setState(data1);
     } catch (error) {
       // handle error if needed
     }
   };
+
+  const fetchGiftCardProductDetail = async(productId : any,uuid : any) => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/order/get-single-product/?product_id=${productId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        },
+      }
+    );
+    // console.log(response1,"response1");
+    if (!response.ok) {
+      throw new Error("Failed to get products");
+    }
+    const data = await response.json();
+    data.data.reloadly_cart_id = uuid;
+    // console.log(data,"selected product details");
+    setSelectedProduct(data.data);
+  }
+    
+  
 
   const addGiftCard = async(giftCard : any) => {
     // console.log(giftCard,"giftCard");
@@ -148,28 +179,28 @@ const GiftCardCollectionPot = ({
   // console.log(giftCard, "giftCard");
 
   // Calculate base amount, service fee (5%), and total
-  const baseAmount = isCustomAmount ? parseFloat(customAmount) : selectedAmount;
-  const serviceFee = +(baseAmount * 0.05).toFixed(2);
-  const totalAmount = +(baseAmount + serviceFee).toFixed(2);
+  // const baseAmount = isCustomAmount ? parseFloat(customAmount) : selectedAmount;
+  // const serviceFee = +(baseAmount * 0.05).toFixed(2);
+  // const totalAmount = +(baseAmount + serviceFee).toFixed(2);
 
   // console.log(totalAmount, "totalAmount");
   // Remove all isModalOpen, setIsModalOpen, openModal, closeModal, and modal rendering logic from GiftCardCollectionPot
   // Add a prop: onGiftCardAdded (callback)
   // For the Add to Gift Card button, use onClick={() => setIsModalOpen(true)}
 
-  const handleAmountChange = (amount: any) => {
-    setIsCustomAmount(false);
-    setSelectedAmount(amount);
-  };
+  // const handleAmountChange = (amount: any) => {
+  //   setIsCustomAmount(false);
+  //   setSelectedAmount(amount);
+  // };
 
-  const handleCustomAmount = (e: any) => {
-    const value = e.target.value;
-    if (!isNaN(value) && value >= 2) {
-      setCustomAmount(parseFloat(value));
-    }
-  };
+  // const handleCustomAmount = (e: any) => {
+  //   const value = e.target.value;
+  //   if (!isNaN(value) && value >= 2) {
+  //     setCustomAmount(parseFloat(value));
+  //   }
+  // };
   // Check if giftCard and giftCard.data are defined before accessing imageUrls
-  const selectGiftImage = giftCard.data?.logoUrls[0];
+  // const selectGiftImage = giftCard.data?.logoUrls[0];
   // const selectGiftImage = giftCard.data?.imageUrls["278w-326ppi"];
   // const selectGiftImage = giftCard?.data?.imageUrls ? giftCard.data.imageUrls["278w-326ppi"] : null;
 
@@ -177,6 +208,11 @@ const GiftCardCollectionPot = ({
   // console.log(selectedImage,"selectedImage")
   return (
     <>
+      {/* {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-white/30 backdrop-blur-sm z-50">
+          <div className="bg-white p-6 rounded shadow-lg">Loading...</div>
+        </div>
+      )} */}
       <div className="bg-white shadow-lg rounded-lg p-6">
         {
           <>
@@ -188,49 +224,50 @@ const GiftCardCollectionPot = ({
                 <h2 className="text-lg font-semibold mb-4 text-center">
                   Group Gift Fund
                 </h2>
-
                 <div className="flex justify-center items-center mb-4 flex-col ">
-                <div className="gift-cards-tools self-end mb-4 flex space-x-6 text-2xl pb-2">
-  <AiFillEdit
-    className="cursor-pointer hover:text-blue-600 transition"
-    onClick={async () => {
-      await fetchGiftCardProducts();
-      setIsGiftCardModalOpen(true);
-    }}
-  />
-  <AiFillDelete
-    className="cursor-pointer hover:text-red-600 transition"
-    onClick={async () => {
-      // delete logic
-    }}
-  />
-</div>
-
-                  {brandKey ? (
+                  <div className="gift-cards-tools self-end mb-4 flex space-x-6 text-2xl pb-2">
+                    <AiOutlineUser
+                      className="cursor-pointer hover:text-blue-600 transition"
+                      onClick={async () => {
+                        // await fetchGiftCardProducts();
+                        setIsContributorsModalOpen(true);
+                        setReloadlyId(card?.uuid)
+                      }}
+                    />
+                    <AiFillDelete
+                      className="cursor-pointer hover:text-red-600 transition"
+                      onClick={async () => {
+                        // delete logic
+                      }}
+                    />
+                  </div>
+                  {/* {brandKey ? (
                     <img
                       src={selectGiftImage}
                       alt="E-Gift Card"
                       className="w-50 h-30 object-contain rounded-md shadow"
                     />
-                  ) : (
+                  ) : ( */}
                     <img
                       src={`${card?.logoUrls}`}
                       alt="E-Gift Card"
                       className="w-50 h-50 object-contain rounded-md shadow"
                     />
-                  )}
+                  
                 </div>
 
                 <div className="text-center mb-4 justify-center flex-col">
-                  {brandKey ? (
-                    <p className="text-2xl font-bold">INR {giftCard.data?.senderFee}</p>
-                  ) : (
-                    <p className="text-2xl font-bold">INR {cardShareData?.price}</p>
-                  )}
+                  
+                    <p className="text-2xl font-bold"> {card?.amount.toFixed(2)} INR</p>
+                  
 
                   <div className="text-center mb-2 gap-2 items-center justify-center flex flex-col">
                     <button
-                      onClick={() => setIsContributeModalOpen(true)}
+                      onClick={async () => {
+                        await fetchGiftCardProductDetail(card?.productId,card?.uuid);
+                        setIsContributeModalOpen(true);
+                      }}
+                      
                       className="w-[40%] bg-[#558ec9] text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
                     >
                       Add Participant
@@ -240,29 +277,26 @@ const GiftCardCollectionPot = ({
               </div>
             ))}
 
-                <button
-                  onClick={async () => {
-                    await fetchGiftCardProducts();
-                    setIsGiftCardModalOpen(true);
-                  }}
-                                    className="w-[40%] bg-blue-600 text-[14px] text-black border-2 border-blue-700 px-2 py-2 rounded"
-
-                >
-                  Add to Gift Card
-                </button>
+            <button
+              onClick={async () => {
+                await fetchGiftCardProducts();
+                setIsGiftCardModalOpen(true);
+              }}
+              className="w-[40%] bg-blue-600 text-[14px] text-black border-2 border-blue-700 px-2 py-2 rounded"
+            >
+              Add to Gift Card
+            </button>
           </>
         }
 
-        {/* <div className="mt-6 text-center justify-center">
-        <button className="bg-blue-600 text-black border-2 border-blue-700 px-4 py-2 rounded-md hover:bg-blue-700 transition">
-          Add Gift Card
-        </button>
-      </div> */}
-        {/* </Link> */}
-
-        {/* Remove all isModalOpen, setIsModalOpen, openModal, closeModal, and modal rendering logic from GiftCardCollectionPot */}
-        {/* Add a prop: onGiftCardAdded (callback) */}
-        {/* For the Add to Gift Card button, use onClick={() => setIsModalOpen(true)} */}
+        {isContributorsModalOpen && (
+            <ContributorsModal
+            isOpen={isContributorsModalOpen}
+            onClose={() => setIsContributorsModalOpen(false)}
+            groupId={groupId}
+            reloadlyId={reloadlyId}
+          />
+        )}
 
         {isGiftCardModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
@@ -385,13 +419,10 @@ const GiftCardCollectionPot = ({
             </div>
           </div>
         )}
-
-        {/* Contribute Modal (full payment modal) */}
-        {isContributeModalOpen && (
+        {isContributeModalOpen && selectedProduct && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-            <div className="bg-white p-6 rounded-md shadow-lg max-w-sm w-full relative">
-              {/* Top-left Cancel Button */}
-              <h2 className="text-center font-bold">E-Gift Card</h2>
+            <div className="bg-white p-6 rounded-md shadow-lg max-w-lg w-full relative">
+              <h2 className="text-center py-3">Contribute to the Gift Card</h2>
 
               <button
                 className="absolute top-4 right-4 bg-gray-200 text-gray-700 px-2 py-1 rounded-md hover:bg-gray-300"
@@ -400,60 +431,84 @@ const GiftCardCollectionPot = ({
                 X
               </button>
 
-              <div className="flex justify-around mb-4">
-                {[10, 15, 20].map((amount) => (
-                  <button
-                    key={amount}
-                    className={`px-4 py-2 rounded-md border ${
-                      !isCustomAmount && selectedAmount === amount
-                        ? "bg-blue-600 text-blueText"
-                        : "bg-gray-200 text-black"
-                    }`}
-                    onClick={() => handleAmountChange(amount)}
-                  >
-                    ₹{amount}
-                  </button>
-                ))}
-                <button
-                  className={`px-4 py-2 rounded-md border ${
-                    isCustomAmount
-                      ? "bg-blue-600 text-blueText"
-                      : "bg-gray-200 text-black"
-                  }`}
-                  onClick={() => {
-                    setIsCustomAmount(true);
-                    setSelectedAmount(0);
-                  }}
-                >
-                  Other
-                </button>
-              </div>
+              {/* FIXED denomination handling */}
+              {selectedProduct.denominationType === "FIXED" && (
+                <div className="flex flex-wrap justify-evenly gap-3 mb-4">
+                  {selectedProduct.fixedSenderDenominations.map(
+                    (amount: number, idx: number) => (
+                      <button
+                        key={amount}
+                        className={`px-4 py-2 rounded-md border ${
+                          selectedContributeAmount === amount
+                            ? "bg-blue-600 text-blueText"
+                            : "bg-gray-200 text-black"
+                        }`}
+                        onClick={() => {
+                          setSelectedContributeAmount(amount);
+                          setSelectedContributeAmountOgCurrency(selectedProduct.fixedRecipientDenominations[idx]);
+                          setIsCustomAmount(false);
+                        }}
+                      >
+                        ₹{amount.toFixed(2)} (
+                        {selectedProduct.fixedRecipientDenominations[idx]}{" "}
+                        {selectedProduct.recipientCurrencyCode})
+                      </button>
+                    )
+                  )}
+                </div>
+              )}
 
-              {isCustomAmount && (
+              {/* RANGE denomination handling */}
+              {selectedProduct.denominationType === "RANGE" && (
                 <div className="mb-4">
                   <label className="block text-sm font-medium mb-1">
-                    Custom Amount (₹)
+                    Enter amount ({selectedProduct.senderCurrencyCode})
                   </label>
                   <input
                     type="number"
-                    min="2"
-                    value={customAmount}
-                    onChange={handleCustomAmount}
+                    // value={selectedContributeAmount}
+                    id="amount" 
+                    name="amount"
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      const min = selectedProduct.minSenderDenomination;
+                      const max = selectedProduct.maxSenderDenomination;
+
+                      if (value < min || value > max) {
+                        setError(
+                          `Please enter between ₹${min.toFixed(
+                            2
+                          )} and ₹${max.toFixed(2)}`
+                        );
+                        setSelectedContributeAmount(0);
+                        setSelectedContributeAmountOgCurrency(0);
+                      } else {
+                        setError("");
+                        setSelectedContributeAmount(value);
+                        setSelectedContributeAmountOgCurrency(Math.round(value/selectedProduct.recipientCurrencyToSenderCurrencyExchangeRate));
+                      }
+                    }}
                     className="border-2 border-gray-300 px-4 py-2 rounded-md w-full"
                   />
-                  <p className="text-sm text-gray-500 mt-1">Min ₹2.00</p>
+                  {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+                  {!error && (
+                    <p className="text-sm text-gray-500 mt-1">
+                      Min ₹{selectedProduct.minSenderDenomination.toFixed(2)} – Max ₹
+                      {selectedProduct.maxSenderDenomination.toFixed(2)}
+                    </p>
+                  )}
                 </div>
               )}
 
               {/* Show amount, service fee, and total */}
               <p className="mb-2 text-sm text-gray-600">
-                Amount: ₹{baseAmount.toFixed(2)}
+                Amount: ₹{selectedContributeAmount.toFixed(2)}
               </p>
               <p className="mb-2 text-sm text-gray-600">
-                Service fee (5%): ₹{serviceFee.toFixed(2)}
+                Service fee (5%): ₹{(selectedContributeAmount * 0.05).toFixed(2)}
               </p>
               <p className="mb-4 text-lg font-semibold">
-                Total: ₹{totalAmount.toFixed(2)}
+                Total: ₹{(selectedContributeAmount * 1.05).toFixed(2)}
               </p>
 
               <input
@@ -467,6 +522,7 @@ const GiftCardCollectionPot = ({
               {showWarning && (
                 <p className="text-red-500 mb-2">Please fill in your name</p>
               )}
+
               <div className="flex items-center mb-4">
                 <input
                   type="checkbox"
@@ -483,21 +539,18 @@ const GiftCardCollectionPot = ({
               <div className="flex justify-center mt-4">
                 <CollectionPayment
                   closeModal={() => setIsContributeModalOpen(false)}
-                  paymentAmount={totalAmount}
+                  paymentAmount={selectedContributeAmount * 1.05}
                   name={name}
-                  brandKey={brandKey}
+                  product_id={selectedProduct.productId}
                   groupId={groupId}
-                  amount={totalAmount}
+                  amount={selectedContributeAmount * 1.05}
                   setIsCustomAmount={setIsContributeModalOpen}
-                  cart_id={groupId}
+                  reloadly_cart_id={selectedProduct.reloadly_cart_id}
+                  reloadly_amount={selectedContributeAmountOgCurrency}
                   type={"greeting"}
+                  onSuccess={fetchGiftCard}
                 />
               </div>
-
-              <p className="text-sm text-gray-500 mt-4 text-center">
-                You&apos;ll be taken to our payment provider Stripe to complete
-                the payment.
-              </p>
             </div>
           </div>
         )}

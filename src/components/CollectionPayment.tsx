@@ -4,7 +4,7 @@ import Script from "next/script";
 import nookies from "nookies";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
-import ContributorsModal from "./ContributorsModal";
+// import ContributorsModal from "./ContributorsModal";
 
 declare global {
   interface Window {
@@ -22,63 +22,35 @@ const CollectionPayment = ({
   amount,
   type,
   closeModal,
-  brandKey,
+  product_id,
   paymentAmount,
   name,
   setIsCustomAmount,
-  handleProceed
+  handleProceed,
+  reloadly_cart_id,
+  reloadly_amount,
+  groupId,
+  onSuccess,
 }: any) => {
-  const router = useRouter();
+  // const router = useRouter();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const param = useParams();
-  console.log(param, "param");
-  const [giftCard, setGiftCard] = useState<any>("");
-  const searchParams = useSearchParams();
-  console.log(type, "type");
+  // console.log(param, "param");
+  // const [giftCard, setGiftCard] = useState<any>("");
+  // const searchParams = useSearchParams();
+  // console.log(type, "type");
 
-  const cartId = searchParams.get("cart_uuid"); // Correct way to extract cart_uuid
-  console.log("cartId", cartId);
+  // const cartId = searchParams.get("cart_uuid"); // Correct way to extract cart_uuid
+  // console.log("cartId", cartId);
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     const cookies = nookies.get();
-    console.log("cookiesUserInfo", cookies.user_info);
+    // console.log("cookiesUserInfo", cookies.user_info);
     const userInfoFromCookie: UserInfo | null = cookies.user_info
       ? JSON.parse(cookies.user_info)
       : null;
     setUserInfo(userInfoFromCookie);
-  }, []);
-  console.log(paymentAmount, "asdasdasasdd");
-  const fetchGiftCard = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/order/create-token`,
-        {
-          // replace '/api/cart' with the correct endpoint
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            // 'Authorization': `Bearer ${gettoken}`
-          },
-          body: "",
-        }
-      );
-
-      // Check if the request was successful
-      if (!response.ok) {
-        throw new Error("Failed to add item to cart");
-      }
-
-      const data = await response.json();
-
-      setGiftCard(data);
-    } catch (error) {}
-    // return data;
-  };
-
-  useEffect(() => {
-    // const brandKey = 'yourBrandKeyValue';  // Replace with your actual brandKey value
-    fetchGiftCard();
   }, []);
   const handlePayment = async () => {
       if(!name){
@@ -116,45 +88,36 @@ const CollectionPayment = ({
           console.log("Payment successful", response);
 
           const paymentId = response.razorpay_payment_id;
-          const product_id = param.id;
+          // const product_id = param.id;
 
-          console.log("product_id", product_id);
-
+          // console.log("product_id", product_id);
+          // console.log("reloadly amount ",reloadly_amount);
+          // console.log("groupID ",groupId);
           try {
             const paymentResponse = await fetch(
               `${process.env.NEXT_PUBLIC_API_URL}/order/create-orders`,
               {
                 method: "POST",
                 headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${giftCard?.data?.access_token}`,
+                  "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                  product_id: brandKey,
+                  cart_id:groupId,
+                  reloadly_cart_id:reloadly_cart_id,
+                  product_id: product_id,
                   quantity: 1,
-                  unit_price: paymentAmount,
+                  unit_price: reloadly_amount,
                   sender_name: name,
-                  customIdentifier: "obucks158",
-                  productAdditionalRequirements: { userId: "13" },
-                  recipient_email: "ansdfaaayone@email.com",
-                  country_code: "ES",
-                  phone_number: "012345478",
-                  preOrder: false,
-
-                  // recipient_email:""
-                  // cart_uuid: cartId,
-                  // product_id: product_id,
-                  // user_uuid: userInfo?.uuid,
-                  // paymentId: paymentId,
-                  // payment_for: type,
-                  // collection_link:"sdfsrwr"
                 }),
               }
             );
             if (!paymentResponse.ok) {
               throw new Error("Payment save failed");
             }
-
+            if (paymentResponse) {
+              if (onSuccess) await onSuccess();
+            }
+            // console.log(paymentResponse," payment res order save");
             // Redirect based on type after successful payment
             // if (type === "bundle") {
             //   router.push(`/account/bundles`);
@@ -190,7 +153,7 @@ const CollectionPayment = ({
     }
   };
 
-  console.log(paymentAmount,"paymentAmount")
+  // console.log(paymentAmount,"paymentAmount")
   return (
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
