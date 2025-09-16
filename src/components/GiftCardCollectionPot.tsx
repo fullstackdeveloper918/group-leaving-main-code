@@ -29,8 +29,12 @@ const GiftCardCollectionPot = ({
   // const pathname = usePathname();
   // const parts = pathname.split("/");
   // const brandKey2 = parts[parts.length - 1];
-  const [selectedContributeAmount, setSelectedContributeAmount] = useState<number>(0); 
-  const [selectedContributeAmountOgCurrency,setSelectedContributeAmountOgCurrency] = useState<number>(0);
+  const [selectedContributeAmount, setSelectedContributeAmount] =
+    useState<number>(0);
+  const [
+    selectedContributeAmountOgCurrency,
+    setSelectedContributeAmountOgCurrency,
+  ] = useState<number>(0);
   const [error, setError] = useState<string>(""); // validation message for RANGE
   // console.log(cardShareData, "cardshareDate herer");
   const [reloadlyId, setReloadlyId] = useState<string>("");
@@ -98,7 +102,7 @@ const GiftCardCollectionPot = ({
           method: "POST",
           body: "",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
         }
       );
@@ -114,13 +118,13 @@ const GiftCardCollectionPot = ({
     }
   };
 
-  const fetchGiftCardProductDetail = async(productId : any,uuid : any) => {
+  const fetchGiftCardProductDetail = async (productId: any, uuid: any) => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/order/get-single-product/?product_id=${productId}`,
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
       }
     );
@@ -132,16 +136,14 @@ const GiftCardCollectionPot = ({
     data.data.reloadly_cart_id = uuid;
     // console.log(data,"selected product details");
     setSelectedProduct(data.data);
-  }
-    
-  
+  };
 
-  const addGiftCard = async(giftCard : any) => {
+  const addGiftCard = async (giftCard: any) => {
     // console.log(giftCard,"giftCard");
     let temp_body = {
-      "cartId":groupId,
-      "giftcard":giftCard
-    }
+      cartId: groupId,
+      giftcard: giftCard,
+    };
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/reloadly/save-card`,
@@ -216,7 +218,7 @@ const GiftCardCollectionPot = ({
       <div className="bg-white shadow-lg rounded-lg p-6">
         {
           <>
-            {giftCard?.cards?.map((card : any) => (
+            {giftCard?.cards?.map((card: any) => (
               <div
                 key={card.id}
                 className="border rounded-lg shadow-md p-4 mb-6 bg-white"
@@ -231,7 +233,7 @@ const GiftCardCollectionPot = ({
                       onClick={async () => {
                         // await fetchGiftCardProducts();
                         setIsContributorsModalOpen(true);
-                        setReloadlyId(card?.uuid)
+                        setReloadlyId(card?.uuid);
                       }}
                     />
                     <AiFillDelete
@@ -248,26 +250,28 @@ const GiftCardCollectionPot = ({
                       className="w-50 h-30 object-contain rounded-md shadow"
                     />
                   ) : ( */}
-                    <img
-                      src={`${card?.logoUrls}`}
-                      alt="E-Gift Card"
-                      className="w-50 h-50 object-contain rounded-md shadow"
-                    />
-                  
+                  <img
+                    src={`${card?.logoUrls}`}
+                    alt="E-Gift Card"
+                    className="w-50 h-50 object-contain rounded-md shadow"
+                  />
                 </div>
 
                 <div className="text-center mb-4 justify-center flex-col">
-                  
-                    <p className="text-2xl font-bold"> {card?.amount.toFixed(2)} INR</p>
-                  
+                  <p className="text-2xl font-bold">
+                    {" "}
+                    {card?.amount.toFixed(2)} INR
+                  </p>
 
                   <div className="text-center mb-2 gap-2 items-center justify-center flex flex-col">
                     <button
                       onClick={async () => {
-                        await fetchGiftCardProductDetail(card?.productId,card?.uuid);
+                        await fetchGiftCardProductDetail(
+                          card?.productId,
+                          card?.uuid
+                        );
                         setIsContributeModalOpen(true);
                       }}
-                      
                       className="w-[40%] bg-[#558ec9] text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
                     >
                       Add Participant
@@ -290,7 +294,7 @@ const GiftCardCollectionPot = ({
         }
 
         {isContributorsModalOpen && (
-            <ContributorsModal
+          <ContributorsModal
             isOpen={isContributorsModalOpen}
             onClose={() => setIsContributorsModalOpen(false)}
             groupId={groupId}
@@ -305,40 +309,43 @@ const GiftCardCollectionPot = ({
               <h2 className="model-head-broad font-semibold mb-2 text-center">
                 Choose a Gift Card
               </h2>
-                {!selectedImage &&
-              <button
-                className="absolute top-3 right-2 bg-gray-200 text-gray-700 px-2 py-1 rounded-md hover:bg-gray-300 fw-semibold close-broad-modelbtn"
-                onClick={() => {
-                  setIsGiftCardModalOpen(false);
-                  setSelectedImage(null);
-                }}
-              >X
-              </button>}
+              {!selectedImage && (
+                <button
+                  className="absolute top-3 right-2 bg-gray-200 text-gray-700 px-2 py-1 rounded-md hover:bg-gray-300 fw-semibold close-broad-modelbtn"
+                  onClick={() => {
+                    setIsGiftCardModalOpen(false);
+                    setSelectedImage(null);
+                  }}
+                >
+                  X
+                </button>
+              )}
               {/* How Collection Pots Work */}
-              {!selectedImage &&
-              <div className="bg-blue-100 p-4 ps-0 rounded-md mb-2">
-                <h3 className="text-lg font-semibold">
-                  How does a group fund work?
-                </h3>
-                <ul className="text-md text-gray-600 mt-2 ps-0">
-                  <li>1. Pick a gift card to add to your board.</li>
-                  <li>2. Friends and colleagues can chip in.</li>
-                  <li>
-                    3. The recipient gets the gift card instantly when they open
-                    their board.
-                  </li>
-                </ul>
-              </div>}
+              {!selectedImage && (
+                <div className="bg-blue-100 p-4 ps-0 rounded-md mb-2">
+                  <h3 className="text-lg font-semibold">
+                    How does a group fund work?
+                  </h3>
+                  <ul className="text-md text-gray-600 mt-2 ps-0">
+                    <li>1. Pick a gift card to add to your board.</li>
+                    <li>2. Friends and colleagues can chip in.</li>
+                    <li>
+                      3. The recipient gets the gift card instantly when they
+                      open their board.
+                    </li>
+                  </ul>
+                </div>
+              )}
               {/* Conditionally render based on whether an image is selected */}
               {selectedImage ? (
                 <div className="flex flex-col items-center">
                   <div className="mb-2">
                     <button
-                    id="choose-gift-return"
+                      id="choose-gift-return"
                       className="text-black"
-                      onClick={() => setSelectedImage(null)} >
-                        <i className="fas fa-arrow-left"></i> Back
-
+                      onClick={() => setSelectedImage(null)}
+                    >
+                      <i className="fas fa-arrow-left"></i> Back
                     </button>
                   </div>
                   <div className="">
@@ -355,15 +362,18 @@ const GiftCardCollectionPot = ({
                     Nation: <span className="font-bold ml-2">IND</span>
                   </p>
                   <p className="text-sm text-gray-500 mb-2">
-                    Money: <span className="font-bold ml-2">{selectedImage?.senderCurrencyCode}</span>
+                    Money:{" "}
+                    <span className="font-bold ml-2">
+                      {selectedImage?.senderCurrencyCode}
+                    </span>
                   </p>
                   <p className="text-sm text-gray-500 mb-2">
                     Amount:{" "}
                     <span className="font-bold ml-2">
-                     ₹{selectedImage?.senderFee}
+                      ₹{selectedImage?.senderFee}
                     </span>
                   </p>
-  
+
                   <p className="text-xs text-gray-400 mt-1 text-center">
                     (If your total exceeds the limit, we&apos;ll split it into
                     multiple gift cards)
@@ -445,7 +455,9 @@ const GiftCardCollectionPot = ({
                         }`}
                         onClick={() => {
                           setSelectedContributeAmount(amount);
-                          setSelectedContributeAmountOgCurrency(selectedProduct.fixedRecipientDenominations[idx]);
+                          setSelectedContributeAmountOgCurrency(
+                            selectedProduct.fixedRecipientDenominations[idx]
+                          );
                           setIsCustomAmount(false);
                         }}
                       >
@@ -467,7 +479,7 @@ const GiftCardCollectionPot = ({
                   <input
                     type="number"
                     // value={selectedContributeAmount}
-                    id="amount" 
+                    id="amount"
                     name="amount"
                     onChange={(e) => {
                       const value = Number(e.target.value);
@@ -485,16 +497,23 @@ const GiftCardCollectionPot = ({
                       } else {
                         setError("");
                         setSelectedContributeAmount(value);
-                        setSelectedContributeAmountOgCurrency(Math.round(value/selectedProduct.recipientCurrencyToSenderCurrencyExchangeRate));
+                        setSelectedContributeAmountOgCurrency(
+                          Math.round(
+                            value /
+                              selectedProduct.recipientCurrencyToSenderCurrencyExchangeRate
+                          )
+                        );
                       }
                     }}
                     className="border-2 border-gray-300 px-4 py-2 rounded-md w-full"
                   />
-                  {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+                  {error && (
+                    <p className="text-red-500 text-sm mt-1">{error}</p>
+                  )}
                   {!error && (
                     <p className="text-sm text-gray-500 mt-1">
-                      Min ₹{selectedProduct.minSenderDenomination.toFixed(2)} – Max ₹
-                      {selectedProduct.maxSenderDenomination.toFixed(2)}
+                      Min ₹{selectedProduct.minSenderDenomination.toFixed(2)} –
+                      Max ₹{selectedProduct.maxSenderDenomination.toFixed(2)}
                     </p>
                   )}
                 </div>
@@ -505,7 +524,8 @@ const GiftCardCollectionPot = ({
                 Amount: ₹{selectedContributeAmount.toFixed(2)}
               </p>
               <p className="mb-2 text-sm text-gray-600">
-                Service fee (5%): ₹{(selectedContributeAmount * 0.05).toFixed(2)}
+                Service fee (5%): ₹
+                {(selectedContributeAmount * 0.05).toFixed(2)}
               </p>
               <p className="mb-4 text-lg font-semibold">
                 Total: ₹{(selectedContributeAmount * 1.05).toFixed(2)}

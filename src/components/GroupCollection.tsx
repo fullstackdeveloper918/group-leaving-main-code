@@ -10,6 +10,8 @@ import nookies from "nookies";
 import SendGiftModal from "./common/SendGiftModal";
 import Cookies from "js-cookie";
 import { useParams } from "next/navigation";
+import Custom from "./common/custom";
+import CommonCustomEditor from "./common/newcustomeditor/CommonCustomEdtior";
 
 const GroupCollection = ({
   params,
@@ -86,9 +88,9 @@ const GroupCollection = ({
   // const cardShareData = shareImageData?.listing?.find(
   //   (item: any) => item.uuid === id
   // );
-  const cardShareData =  shareCartData?.data || [];
+  const cardShareData = shareCartData?.data || [];
 
-  // console.log("cardShareData heree", cardShareData);
+  console.log("cardShareData heree", cardShareData);
 
   // const [editCollection, setEditCollection] = useState(data);
 
@@ -244,7 +246,7 @@ const GroupCollection = ({
               </button>
             </div>
             <CopyclickBoard />
-            <div className="mt-4 border-t pt-4">
+            {/* <div className="mt-4 border-t pt-4">
               <h3 className="text-md font-semibold mb-2">
                 Include a Greeting Card in this Collection?
               </h3>
@@ -258,6 +260,9 @@ const GroupCollection = ({
                   Include Greeting Card
                 </button>
               </Link>
+            </div> */}
+            <div className="w-full mt-8">
+              <CommonCustomEditor cardShareData={cardShareData} />
             </div>
           </div>
 

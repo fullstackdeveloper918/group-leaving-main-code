@@ -38,54 +38,12 @@ type Card = {
 // ];
 
 const AccountCards = ({ data }: any) => {
-  // console.log(data, "uouwerouwe");
+  console.log(data, "AccountCards data");
 
-  const [showModal,setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
 
   // const AccountCards = () => {
   const router = useRouter();
-
-  // const [data,setData] = useState<any>([])
-  // console.log(data, "cshjksd");
-  // router.replace(`/share/${data?.data?.uuid}?brandKey=${brandKeys}`);
-  // const filterData = data?.listing?.filter((item:any)=> item.paymentStatus==="captured")
-  // console.log(data,"filterData");
-  // useEffect(()=>{
-  //     if(data?.error){
-  //         Cookies.remove("auth_token"); // This won't work on the client side
-  //         toast.error("Session expired. Please log in again.");
-  //         router.replace("/login");
-  //                 // window.location.reload();
-  //     }
-  // },[data])
-  // const gettoken = Cookies.get("auth_token");
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/card/users-cards`, {
-  //         method: 'GET',
-  //         headers: {
-  //           'Authorization': `Bearer ${gettoken}`,
-  //         },
-  //       });
-
-  //       const posts = await data.json();
-  //       setData(posts)
-  //       console.log("postssssssssssssss",posts)
-
-  //       if (posts?.statusCode === 401) {
-  //         Cookies.remove("auth_token"); // This won't work on the client side
-  //         toast.error("Session expired. Please log in again.");
-  //         router.replace("/login");
-  //         window.location.reload();
-  //       }
-  //     } catch (error) {
-  //       toast.error("Error fetching profile data:");
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   const deliveryDate = "2024-11-28T00:00:00.000Z";
   const dateObject = new Date(deliveryDate);
@@ -95,9 +53,6 @@ const AccountCards = ({ data }: any) => {
 
   // console.log(formattedDate, "jljljlj");
 
-
-
-  
   const handleDelete = async () => {
     try {
       // Call your delete API here
@@ -106,7 +61,7 @@ const AccountCards = ({ data }: any) => {
       });
 
       if (res.ok) {
-           // Callback to refresh list or UI
+        // Callback to refresh list or UI
         setShowModal(false);
       } else {
         alert("Failed to delete.");
@@ -150,12 +105,12 @@ const AccountCards = ({ data }: any) => {
                 <div className="flex w-full card-full-cover-box gap-4">
                   {/* Image */}
                   <div className="cd-img-inn">
-                  <img
-                    // src={"https://groupleavingcards.com/images/gift/collection_pot.png"}
-                    src={`${process.env.NEXT_PUBLIC_API_URL}/${card?.images[0]?.card_images[0]}`}
-                    alt={card.title}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
+                    <img
+                      // src={"https://groupleavingcards.com/images/gift/collection_pot.png"}
+                      src={`${process.env.NEXT_PUBLIC_API_URL}/${card?.images[0]?.card_images[0]}`}
+                      alt={card.title}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
                   </div>
                   {/* Card Details */}
                   <div className="outer-card-box-ac">
@@ -174,28 +129,29 @@ const AccountCards = ({ data }: any) => {
                       {/* Action Buttons */}
 
                       <div className="d-flex items-center gap-2">
-                      {card.is_remove_from_cart === 0 ? (
-                        <Link href={`/card/pay/${card?.card_uuid}`}>
-                          <button className="mt-2 bg-blue-500 text-black border border-gray-300 px-4 rounded-full hover:bg-blue-600">
-                            Pay now
-                          </button>
-                        </Link>
-                      ) : (
-                        // /share/${data?.data?.uuid}?brandKey=${brandKeys}
-                        <Link href={`/share/${card?.cartDetail[0]?.cart_uuid}`}>
-                          <button className="px-3 h-10 rounded-pill seeGiftbtn">
-                            See Gift
-                          </button>
-                        </Link>
-                      )}
-                       <AiFillEdit className="cursor-pointer" 
-/>
-  <AiFillDelete
-        fill="#db0404"
-        className="cursor-pointer text-red-600"
-        onClick={() => setShowModal(true)}
-      />
-                    </div>
+                        {card.is_remove_from_cart === 0 ? (
+                          <Link href={`/card/pay/${card?.card_uuid}`}>
+                            <button className="mt-2 bg-blue-500 text-black border border-gray-300 px-4 rounded-full hover:bg-blue-600">
+                              Pay now
+                            </button>
+                          </Link>
+                        ) : (
+                          // /share/${data?.data?.uuid}?brandKey=${brandKeys}
+                          <Link
+                            href={`/share/${card?.cartDetail[0]?.cart_uuid}`}
+                          >
+                            <button className="px-3 h-10 rounded-pill seeGiftbtn">
+                              See Gift
+                            </button>
+                          </Link>
+                        )}
+                        <AiFillEdit className="cursor-pointer" />
+                        <AiFillDelete
+                          fill="#db0404"
+                          className="cursor-pointer text-red-600"
+                          onClick={() => setShowModal(true)}
+                        />
+                      </div>
                     </div>
                     {/* <hr /> */}
 
@@ -239,41 +195,43 @@ const AccountCards = ({ data }: any) => {
         )}
       </div>
 
-    {showModal && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full relative">
-      {/* X Icon Button */}
-      <button
-        onClick={() => setShowModal(false)}
-        className="absolute top-3 right-4 text-gray-500 hover:text-black text-[32px] "
-        aria-label="Close modal"
-      >
-        &times;
-      </button>
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full relative">
+            {/* X Icon Button */}
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-3 right-4 text-gray-500 hover:text-black text-[32px] "
+              aria-label="Close modal"
+            >
+              &times;
+            </button>
 
-      <h2 className="text-lg font-bold mb-4">Are you sure?</h2>
-      <p className="mb-4">Do you really want to delete this item? This action cannot be undone.</p>
-      
-      <div className="flex justify-end gap-2">
-        <button
-          onClick={() => setShowModal(false)}
-          style={{ background: "#9f9e9e7a", fontWeight: "500" }}
-          className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-        >
-          Cancel
-        </button>
-        <button
-          onClick={handleDelete}
-          style={{ background: "#db0404", fontWeight: "500" }}
-          className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
-        >
-          Delete
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+            <h2 className="text-lg font-bold mb-4">Are you sure?</h2>
+            <p className="mb-4">
+              Do you really want to delete this item? This action cannot be
+              undone.
+            </p>
 
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowModal(false)}
+                style={{ background: "#9f9e9e7a", fontWeight: "500" }}
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                style={{ background: "#db0404", fontWeight: "500" }}
+                className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

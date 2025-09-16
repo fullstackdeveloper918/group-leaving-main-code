@@ -61,11 +61,13 @@ const Cart = () => {
       <ToastContainer />
       <h1 className="font-bold mb-4 mb-md-5 my-card-head">My Carts</h1>
       <div className="w-full account-cart-box">
-        {(!data?.data || data?.data.length === 0) ? (
+        {!data?.data || data?.data.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10">
             <p className="mb-4 text-gray-500">No carts found.</p>
             <Link href="/card/farewell">
-              <button className="bg-[#558ec9] text-white text-600 px-6 py-2 rounded-full shadow hover:bg-blue-500 transition">Add Cards</button>
+              <button className="bg-[#558ec9] text-white text-600 px-6 py-2 rounded-full shadow hover:bg-blue-500 transition">
+                Add Cards
+              </button>
             </Link>
           </div>
         ) : (
@@ -84,10 +86,10 @@ const Cart = () => {
               >
                 <div className="flex items-center w-full gap-4 flex-column flex-lg-row">
                   <div className="cd-img-inn">
-                  <img
-                    src={`${process.env.NEXT_PUBLIC_API_URL}/${card?.images[0]?.card_images[0]}`}
-                    alt={card.title}
-                    className="w-full h-full object-cover rounded-lg"
+                    <img
+                      // src={`${process.env.NEXT_PUBLIC_API_URL}/${card?.images[0]?.card_images[0]}`}
+                      alt={card.title}
+                      className="w-full h-full object-cover rounded-lg"
                     />
                   </div>
                   <div className="w-full">
@@ -105,9 +107,7 @@ const Cart = () => {
                       </div>
                       {/* Action Buttons */}
                       {card.is_remove_from_cart === 0 ? (
-                        <Link
-                          href={`/card/pay/${card.cart_uuid}`}
-                        >
+                        <Link href={`/card/pay/${card.cart_uuid}`}>
                           <button className="bg-[#ecc94b] text-black border border-gray-300 px-3 h-10 rounded-pill fw-semibold payCart-btn">
                             Pay now
                           </button>

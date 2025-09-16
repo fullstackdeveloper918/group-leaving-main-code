@@ -8,9 +8,9 @@ import Link from "next/link";
 import { Api } from "@/interfaces/interfaces";
 import { fetchFromServer } from "@/app/actions/fetchFromServer";
 
-const HomeCategorySection = async({params,searchParams}:any) => {
-  console.log(searchParams?.category,"yuuuuuuu");
-  
+const HomeCategorySection = async ({ params, searchParams }: any) => {
+  console.log(searchParams?.category, "yuuuuuuu");
+
   const array = [
     {
       id: 1,
@@ -409,104 +409,110 @@ const HomeCategorySection = async({params,searchParams}:any) => {
     },
   ];
 
-
-
-  const filteredCards = array.filter((card) => card.type === searchParams?.category?.category);
+  const filteredCards = array.filter(
+    (card) => card.type === searchParams?.category?.category
+  );
   const filteredCards1 = array.filter((card) => card.type);
   // const type = searchParams?.category||"farewell"
   // console.log(type,"ioioio");
-  
+
   // const type = params.slug[0];
- 
+
   // console.log(type,"type");
-  
- 
- //  Sidebar
- 
- let data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/card/collection-listing`, { cache: 'no-store' })
- let data1 = await data.json();
-   console.log(data1, "qwe323355");
- //  const url = 'https://dating.goaideme.com/card/collection-listing';
- 
- //  const response1 = await fetch(url, {
- //   method: 'GET',
- //   cache: 'no-store',
- // });
- 
- // const data = await response1.json();
- //   console.log(data, "check145454523");
-   const normalizedType =searchParams?.category?.replace('-', ' ')||"farewell";
-   console.log(normalizedType,"normalizedType");
-   
-   const matchedObject = data1.data.find((item: any) => {
-     const normalizedTags = item.collection_title.replace('-', ' ');
-     return normalizedTags === normalizedType;
-   });
-   console.log(matchedObject,"matchedObject");
-   const collectionType = matchedObject ? matchedObject.uuid : null;
-   console.log(collectionType,"collectionType");
- 
-   // All cards
- 
-   const api2: Api = {
-     url: `${process.env.NEXT_PUBLIC_API_URL}/card/single-card-listing/${collectionType}`,
-     method: "GET",
-     // body: { key: 'value' }
-     // comment only
-   };
- 
-   const response = await fetchFromServer(api2);
-   console.log(response, "response");
- 
-  
- 
- 
-   const cardLabel = "params.slug[1]";
+
+  //  Sidebar
+
+  let data = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/card/collection-listing`,
+    { cache: "no-store" }
+  );
+  let data1 = await data.json();
+  console.log(data1, "qwe323355");
+  //  const url = 'https://dating.goaideme.com/card/collection-listing';
+
+  //  const response1 = await fetch(url, {
+  //   method: 'GET',
+  //   cache: 'no-store',
+  // });
+
+  // const data = await response1.json();
+  //   console.log(data, "check145454523");
+  const normalizedType =
+    searchParams?.category?.replace("-", " ") || "farewell";
+  console.log(normalizedType, "normalizedType");
+
+  const matchedObject = data1.data.find((item: any) => {
+    const normalizedTags = item.collection_title.replace("-", " ");
+    return normalizedTags === normalizedType;
+  });
+  console.log(matchedObject, "matchedObject");
+  const collectionType = matchedObject ? matchedObject.uuid : null;
+  console.log(collectionType, "collectionType");
+
+  // All cards
+
+  const api2: Api = {
+    url: `${process.env.NEXT_PUBLIC_API_URL}/card/single-card-listing/${collectionType}`,
+    method: "GET",
+    // body: { key: 'value' }
+    // comment only
+  };
+
+  const response = await fetchFromServer(api2);
+  console.log(response, "response on homecategorysection");
+
+  const cardLabel = "params.slug[1]";
   //  console.log(type, "tyjgjgjgjgpe");
- 
+
   return (
     <div>
-      <Filter urlValue={searchParams?.category} cardLabel={cardLabel} response={data1} />
+      <Filter
+        urlValue={searchParams?.category}
+        cardLabel={cardLabel}
+        response={data1}
+      />
       {/* <Filter searchParams={searchParams} /> */}
 
       <div className="flex flex-col items-center  bg-white">
-        <div className=" flex lg:space-x-8  space-x-6 md:w-full md:max-w-full justify-center max-w-[96%] mx-auto flex_responsive" >
-          {response?.data > 0 ? (
-            response?.data?.slice(0, 4).map((card:any) => (
-              <div
-                key={card.id}
-                className="max-w-sm lg:w-64 lg:h-80 md:w-[150px] md:h-[150px] w-[100px] h-[100px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 overflow-hidden"
-              >
-                <Link href={`/card/new/${card?.uuid}?category=${card?.title}`}>
-                  <Image
-                    className="rounded-t-lg w-full h-full object-cover"
-                    src={`${process.env.NEXT_PUBLIC_API_URL}/${card?.images[0]?.card_images[0]}`}
-                    alt="card-img"
-                    width={100}
-                    height={100}
-                  />
-                </Link>
-              </div>
-            ))
-          ) : (
-            response?.data?.slice(0, 4).map((card:any) => (
-              <div
-                key={card.id}
-                // className="max-w-sm 2xl:w-64 2xl:h-80 xl:w-56 xl:h-56 md:w-[150px] md:h-[150px] w-[100px] h-[100px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 overflow-hidden"
-            className="card_width_img"
-            >
-                <Link href={`/card/new/${card?.uuid}?category=${card?.title}`}>
-                  <Image
-                    className="rounded-t-lg w-full h-full object-cover"
-                    src={`${process.env.NEXT_PUBLIC_API_URL}/${card?.images[0]?.card_images[0]}`}
-                    alt="card-img"
-                    width={500}
-                    height={300}
-                  />
-                </Link>
-              </div>
-            ))
-          )}
+        <div className=" flex lg:space-x-8  space-x-6 md:w-full md:max-w-full justify-center max-w-[96%] mx-auto flex_responsive">
+          {response?.data > 0
+            ? response?.data?.slice(0, 4).map((card: any) => (
+                <div
+                  key={card.id}
+                  className="max-w-sm lg:w-64 lg:h-80 md:w-[150px] md:h-[150px] w-[100px] h-[100px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 overflow-hidden"
+                >
+                  <Link
+                    href={`/card/new/${card?.uuid}?category=${card?.title}`}
+                  >
+                    <Image
+                      className="rounded-t-lg w-full h-full object-cover"
+                      src={`${process.env.NEXT_PUBLIC_API_URL}/   ${card?.images[0]?.card_images[0]}`}
+                      alt="card-img"
+                      width={100}
+                      height={100}
+                    />
+                  </Link>
+                </div>
+              ))
+            : response?.data?.slice(0, 4).map((card: any) => (
+                <div
+                  key={card.id}
+                  // className="max-w-sm 2xl:w-64 2xl:h-80 xl:w-56 xl:h-56 md:w-[150px] md:h-[150px] w-[100px] h-[100px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 overflow-hidden"
+                  className="card_width_img"
+                >
+                  <Link
+                    href={`/card/new/${card?.uuid}?category=${card?.title}`}
+                  >
+                    <Image
+                      className="rounded-t-lg w-full h-full object-cover"
+                      src={`${process.env.NEXT_PUBLIC_API_URL}/${card?.images[0]?.card_images[0]}`}
+                      alt="card-img"
+                      width={500}
+                      height={300}
+                    />
+                  </Link>
+                </div>
+              ))}
           {/* {filteredCards.length > 0 ? (
             filteredCards.slice(0, 4).map((card) => (
               <div
@@ -538,17 +544,16 @@ const HomeCategorySection = async({params,searchParams}:any) => {
               </div>
             ))
           )} */}
-          
         </div>
         <div>
-          <Link href={`/card/${searchParams?.category||"farewell"}`}>
-        <button className=' btnPrimary mx-auto my-5 mb-3'>
-        See more designs
-        </button>
+          <Link href={`/card/${searchParams?.category || "farewell"}`}>
+            <button className=" btnPrimary mx-auto my-5 mb-3">
+              See more designs
+            </button>
           </Link>
+        </div>
       </div>
-      </div>
-   {/* <div className="flex justify-center">
+      {/* <div className="flex justify-center">
   <Swiper
     spaceBetween={30}
     slidesPerView={4}
@@ -571,7 +576,6 @@ const HomeCategorySection = async({params,searchParams}:any) => {
     ))}
   </Swiper>
 </div> */}
-
     </div>
   );
 };
