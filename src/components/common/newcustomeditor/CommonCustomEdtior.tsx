@@ -96,33 +96,6 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   // const id = searchParams()
   const id = params?.id;
 
-  // useEffect(() => {
-  //   console.log(params?.id, "id here to fix lalala");
-  //   if (params.id) setId(params.id);
-  // }, [params]);
-
-  console.log(id, "id here to fix");
-
-  useEffect(() => {
-    if (!cardShareData?.images?.[0]?.card_images?.[0]) return;
-
-    const imageUrl = `${process.env.NEXT_PUBLIC_API_URL}/${cardShareData.images[0].card_images[0]}`;
-
-    const initialSlides = [
-      {
-        id: "slide-1",
-        title: "Development",
-        subtitle: "SCSS Only Slider",
-        text: "Learn to create a SCSS-only responsive slider.",
-        link: "https://blog.significa.pt/css-only-slider-71727effff0b",
-        card_img: imageUrl,
-      },
-    ];
-
-    setSlides(initialSlides);
-  }, [cardShareData]);
-  console.log("slide here", slides);
-
   // Initialize userInfo from cookies
   useEffect(() => {
     const cookies = nookies.get();
@@ -167,27 +140,11 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
     (item: any) => item?.message_unique_id === params.id
   );
 
-  // useEffect(() => {
-  //   if (basePath === "/share/editor" && cardShareData) {
-  //     setSlides([
-  //       {
-  //         id: "slide-1",
-  //         title: "Development",
-  //         subtitle: "SCSS Only Slider",
-  //         text: "Learn to create a SCSS-only responsive slider.",
-  //         link: "...",
-  //         card_img: `${process.env.NEXT_PUBLIC_API_URL}/${cardShareData.images?.[0]?.card_images?.[0]}`,
-  //       },
-  //     ]);
-  //   }
-  // }, [basePath, cardShareData]);
-  // console.log("cardShareData", cardShareData);
-
   useEffect(() => {
     const fetchEditorDatas = async () => {
       if (!id) return;
 
-      console.log(id, "ID is here on editor data");
+      console.log("ID is here on editor data:", id);
 
       try {
         const response = await fetch(
@@ -213,131 +170,93 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
         console.log("Fetched data:", data);
 
         const apiElements = data?.editor_messages || [];
-        console.log("API Elements:", apiElements);
-
         setElements(apiElements);
 
-        // Get max slideIndex from API elements
         const maxIndex =
           apiElements.length > 0
             ? Math.max(...apiElements.map((el: any) => el.slideIndex || 0))
             : 0;
 
-        // Initialize filled slides
-        let filledSlides = isEditorPath
-          ? [
-              {
-                id: "slide-1",
-                title: "Development",
-                subtitle: "SCSS Only Slider",
-                text: "Learn to create a SCSS-only responsive slider.",
-                link: "https://blog.significa.pt/css-only-slider-71727effff0b",
-                card_img: cardShareData?.images?.[0]?.card_images?.[0] || "", // fixed: avoid invalid string
-              },
-            ]
-          : [...slides];
+        const firstSlideImage = cardShareData?.images?.[0]?.card_images?.[0];
 
-        // Add additional slides if needed
-        if (maxIndex + 1 > filledSlides.length) {
-          for (let i = filledSlides.length; i <= maxIndex; i++) {
-            filledSlides.push({
-              id: `slide-${i + 1}`,
-              title: "New Slide",
-              subtitle: "New Subtitle",
-              text: "This is a dynamically generated slide.",
-              link: "https://example.com",
-              card_img: SlideImg_5,
-            });
-          }
+        // Wait for image to load
+        if (!firstSlideImage) {
+          console.warn("First slide image not yet available. Waiting...");
+          return;
+        }
+
+        let filledSlides: any[] = [];
+
+        // First slide with image
+        filledSlides.push({
+          id: `slide-1`,
+          title: "New Slide",
+          subtitle: "New Subtitle",
+          text: "This is a dynamically generated slide.",
+          link: "https://example.com",
+          card_img: `http://localhost:3002/${firstSlideImage}`,
+        });
+
+        // Additional slides (if needed)
+        for (let i = 1; i <= maxIndex; i++) {
+          filledSlides.push({
+            id: `slide-${i + 1}`,
+            title: "New Slide",
+            subtitle: "New Subtitle",
+            text: "This is a dynamically generated slide.",
+            link: "https://example.com",
+            card_img: SlideImg_5,
+          });
         }
 
         console.log("Final slides:", filledSlides);
         setSlides(filledSlides);
       } catch (error) {
         console.error("Error fetching editor data:", error);
-        setElements([]);
-        setSlides(isEditorPath ? [slides[0]] : slides);
+
+        const firstSlideImage = cardShareData?.images?.[0]?.card_images?.[0];
+
+        if (!firstSlideImage) {
+          console.warn("First slide image not available even in catch.");
+          setSlides([]);
+          return;
+        }
+
+        const newSlides = [];
+
+        // ✅ Slide 1: Use the image from cardShareData
+        newSlides.push({
+          id: `slide-1`,
+          title: "New Slide",
+          subtitle: "New Subtitle",
+          text: "This is a dynamically generated slide.",
+          link: "https://example.com",
+          card_img: `http://localhost:3002/${firstSlideImage}`,
+        });
+
+        // ✅ Slide 2: Always add a second empty slide
+        newSlides.push({
+          id: `slide-2`,
+          title: "New Slide",
+          subtitle: "New Subtitle",
+          text: "This is another dynamically generated slide.",
+          link: "https://example.com",
+          card_img: SlideImg_5,
+        });
+
+        // setElements([]); // empty editor data
+        // setActiveSlideIndex(1);
+        console.log("newslides here on catch", newSlides);
+        setSlides(newSlides);
+        console.log("activeSlideIndex here", activeSlideIndex);
+        if (activeSlideIndex === 0) {
+          setActiveSlideIndex(newSlides.length - 2);
+        }
       }
     };
 
     fetchEditorDatas();
-  }, [id]);
-
-  // useEffect(() => {
-  //   const fetchEditorData = async () => {
-  //     console.log(id, "id is here on editor data");
-  //     try {
-  //       const response = await fetch(
-  //         `${process.env.NEXT_PUBLIC_API_URL}/card/edit-messages-by-unique-id/${id}`,
-  //         // `${process.env.NEXT_PUBLIC_API_URL}/cart/editor-messages/${id}`,
-  //         {
-  //           method: "GET",
-  //           headers: { "Content-Type": "application/json" },
-  //         }
-  //       );
-
-  //       // if (!response.ok) throw new Error("Failed to fetch data");
-
-  //       const data = await response.json();
-  //       // console.log("Fetched data here:", data);
-
-  //       const apiElements = data?.data?.[0]?.editor_messages || [];
-  //       // console.log("API Elements22:", apiElements);
-  //       // setElements(apiElements);
-
-  //       // const getitingNewSlide = apiElements?.map(e)=> e.filter(slides?.lastIndex.slideIndex == e?.slideIndex return true)
-
-  //       console.log(slides, "ddddddd");
-  //       // Get max slide index from API data
-  //       const maxIndex =
-  //         apiElements.length >= 0
-  //           ? Math.max(...apiElements.map((el: any) => el.slideIndex || 0))
-  //           : 0;
-  //       // Initialize slides based on path
-  //       let filledSlides = isEditorPath
-  //         ? [
-  //             {
-  //               id: "slide-1",
-  //               title: "Development",
-  //               subtitle: "SCSS Only Slider",
-  //               text: "Learn to create a SCSS-only responsive slider.",
-  //               link: "https://blog.significa.pt/css-only-slider-71727effff0b",
-  //               card_img: `{${cardShareData?.images?.card_images?.[0]}}`,
-  //             },
-  //           ]
-  //         : [...slides];
-
-  //       console.log(
-  //         "Initial filledSlides length:",
-  //         maxIndex,
-  //         filledSlides.length
-  //       );
-
-  //       // Only add new slides if maxIndex requires it
-  //       if (maxIndex + 1 > filledSlides.length) {
-  //         for (let i = filledSlides.length + 1; i >= maxIndex; i--) {
-  //           filledSlides.push({
-  //             id: `slide-${i + 1}`,
-  //             title: "New Slide",
-  //             subtitle: "New Subtitle",
-  //             text: "This is a dynamically generated slide.",
-  //             link: "https://example.com",
-  //             card_img: SlideImg_5,
-  //           });
-  //         }
-  //       }
-
-  //       console.log("Updated filledSlides length1:", slides);
-  //       setSlides(filledSlides);
-  //     } catch (error) {
-  //       console.error("Error fetching editor data:", error);
-  //       // setElements([]);
-  //       setSlides(isEditorPath ? [slides[0]] : slides);
-  //     }
-  //   };
-
-  //   fetchEditorData();
-  // }, []);
+  }, [cardShareData, id]);
 
   console.log(elements?.length, "new element hree");
 
@@ -373,6 +292,11 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
       });
 
       if (hasContent) break;
+    }
+
+    // If no content found at all, treat the first slide as having content
+    if (lastWithContent < 0) {
+      lastWithContent = 0;
     }
 
     // Always keep one empty slide at the end
@@ -510,31 +434,31 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   };
 
   // Save message from editor
-  const handleSaveMessage = () => {
-    if (activeSlideIndex === null) {
-      alert("No active slide selected!");
-      return;
-    }
-    // Text can only be added to slides after the 5th (index >= 5)
-    // If trying to add to slide 0-4, add to last slide instead
-    const targetIndex =
-      activeSlideIndex <= 4 ? slides.length - 2 : activeSlideIndex;
+  // const handleSaveMessage = () => {
+  //   if (activeSlideIndex === null) {
+  //     alert("No active slide selected!");
+  //     return;
+  //   }
+  //   // Text can only be added to slides after the 5th (index >= 5)
+  //   // If trying to add to slide 0-4, add to last slide instead
+  //   const targetIndex =
+  //     activeSlideIndex <= 4 ? slides.length - 2 : activeSlideIndex;
 
-    const newMessage = {
-      type: "text",
-      content: editorContent || "Default message",
-      slideIndex: targetIndex,
+  //   const newMessage = {
+  //     type: "text",
+  //     content: editorContent || "Default message",
+  //     slideIndex: targetIndex,
 
-      // slideIndex: activeSlideIndex,
-      x: 0,
-      y: 0,
-      user_uuid: userInfo?.uuid,
-    };
-    setElements([...elements, newMessage]);
-    setShowModal(false);
-    setEditorContent("");
-    sendEditorData();
-  };
+  //     // slideIndex: activeSlideIndex,
+  //     x: 0,
+  //     y: 0,
+  //     user_uuid: userInfo?.uuid,
+  //   };
+  //   setElements([...elements, newMessage]);
+  //   setShowModal(false);
+  //   setEditorContent("");
+  //   sendEditorData();
+  // };
 
   // Handle image upload
   const handleImageUpload = async (
@@ -648,17 +572,17 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   };
 
   // Add a new slide
-  const handleAddPage = () => {
-    const newSlide = {
-      id: `slide-${slides.length + 1}`,
-      title: "New Slide",
-      subtitle: "New Subtitle",
-      text: "This is a new slide",
-      link: "https://example.com",
-      card_img: SlideImg_5,
-    };
-    setSlides((prevSlides: any[]) => [...prevSlides, newSlide]);
-  };
+  // const handleAddPage = () => {
+  //   const newSlide = {
+  //     id: `slide-${slides.length + 1}`,
+  //     title: "New Slide",
+  //     subtitle: "New Subtitle",
+  //     text: "This is a new slide",
+  //     link: "https://example.com",
+  //     card_img: SlideImg_5,
+  //   };
+  //   setSlides((prevSlides: any[]) => [...prevSlides, newSlide]);
+  // };
 
   // Convert image to base64 for PDF
   const fetchImageAsBase64 = async (imageUrl: string) => {
@@ -759,14 +683,16 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   };
 
   const handleNextSlide = () => {
+    console.log("go to next slide", slides.length);
+    console.log("go to next activeSlideIndex", activeSlideIndex);
     if (activeSlideIndex < slides.length - 1)
       handleSlideChange(activeSlideIndex + 1);
   };
 
-  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newIndex = Number.parseInt(e.target.value);
-    handleSlideChange(newIndex);
-  };
+  // const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const newIndex = Number.parseInt(e.target.value);
+  //   handleSlideChange(newIndex);
+  // };
 
   // Close modals
   const closeModal = () => {
@@ -833,6 +759,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   }, [activeSlideIndex, showModal, elements]);
 
   console.log("selectedElement heresss", selectedElement);
+  console.log("cardsharedata on commoncustomeditor11", cardShareData);
 
   return (
     <>
@@ -890,57 +817,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
               </div>
             </button>
           </div>
-          {/* <div className="search_input" style={{ position: "relative" }}>
-            <button
-              onClick={toggleDropdown}
-              disabled={showModal}
-              style={{
-                all: "unset",
-                cursor: showModal ? "not-allowed" : "pointer",
-              }}
-            >
-              <div className={`upload_svg ${showModal ? "disabled" : ""}`}>
-                <svg
-                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
-                  focusable="false"
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  data-testid="MoreHorizIcon"
-                >
-                  <path d="M6 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 0c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 0c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2z" />
-                </svg>
-              </div>
-            </button>
-            {openDropdown && (
-              <div className="absolute mt-2 bg-white border border-gray-200 rounded-md shadow-lg z-50 click-model">
-                <div
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer txt-ed-field"
-                  style={{ whiteSpace: "nowrap" }}
-                >
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    disabled={showModal}
-                  />
-                  <div
-                    className={`upload_svg bg-transparent ${
-                      showModal ? "disabled" : ""
-                    }`}
-                  >
-                    Add HandWriting
-                  </div>
-                </div>
-                <div
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer txt-ed-field"
-                  style={{ whiteSpace: "nowrap" }}
-                  onClick={() => openModal("Sticker")}
-                >
-                  Add Sticker
-                </div>
-              </div>
-            )}
-          </div> */}
+
           {id !== "fwzDVjvbQ_X" && (
             <div style={{ textAlign: "center" }}>
               <button
