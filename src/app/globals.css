@@ -730,12 +730,12 @@ body {
 }
 #choose-gift-return {
   position: absolute;
- left: 25px;
-    top: 22px;
+  left: 25px;
+  top: 22px;
   font-weight: 600;
 }
 
-.gift-cards-tools{
+.gift-cards-tools {
   float: left;
   width: 100%;
   display: flex;
@@ -2855,4 +2855,9 @@ left: unset !important;
   border-radius: 4px;
   color: rgb(255, 255, 255);
   background-color: rgb(189, 189, 189);
+}
+
+.bgGray:hover {
+  background-color: rgb(236, 236, 236);
+  /* border: 1px solid gray; */
 }

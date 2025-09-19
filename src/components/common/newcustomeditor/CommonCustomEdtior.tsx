@@ -818,7 +818,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
             </button>
           </div>
 
-          {id !== "fwzDVjvbQ_X" && (
+          {/* {id !== "fwzDVjvbQ_X" && (
             <div style={{ textAlign: "center" }}>
               <button
                 className="add-btn"
@@ -828,7 +828,58 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
                 Preview
               </button>
             </div>
-          )}
+          )} */}
+          <div className="search_input" style={{ position: "relative" }}>
+            <button
+              onClick={toggleDropdown}
+              disabled={showModal}
+              style={{
+                all: "unset",
+                cursor: showModal ? "not-allowed" : "pointer",
+              }}
+            >
+              <div className={`upload_svg ${showModal ? "disabled" : ""}`}>
+                <svg
+                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
+                  focusable="false"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  data-testid="MoreHorizIcon"
+                >
+                  <path d="M6 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 0c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 0c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2z" />
+                </svg>
+              </div>
+            </button>
+            {openDropdown && (
+              <div className="absolute mt-2 bg-white border border-gray-200 rounded-md shadow-lg z-50 click-model">
+                <div
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer txt-ed-field"
+                  style={{ whiteSpace: "nowrap" }}
+                >
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={showModal}
+                  />
+                  <div
+                    className={`upload_svg bg-transparent ${
+                      showModal ? "disabled" : ""
+                    }`}
+                  >
+                    Add HandWriting
+                  </div>
+                </div>
+                <div
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer txt-ed-field"
+                  style={{ whiteSpace: "nowrap" }}
+                  onClick={() => openModal("Sticker")}
+                >
+                  Add Sticker
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="card-carousel">

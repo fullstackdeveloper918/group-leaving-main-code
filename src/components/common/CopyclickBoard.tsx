@@ -1,7 +1,7 @@
 "use client";
 import { Tooltip } from "antd";
 import { usePathname, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const CopyclickBoard = () => {
@@ -10,11 +10,27 @@ const CopyclickBoard = () => {
   const url = `${pathname}?${searchParams.toString()}`;
   // console.log(url, "hhhh");
   const [showCopyBoard, setShowCopyBoard] = useState(false);
+  // const [baseUrl, setBaseUrl] = useState("");
+  const [value, setValue] = useState("");
+
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     setBaseUrl(window.location.origin); // 👉 gives "https://groupwish.in"
+  //   }
+  // }, []);
+  // console.log(baseUrl, "baseurl");
 
   const handleClick = () => {
     setShowCopyBoard((prev) => !prev);
   };
-  const [value, setValue] = useState(`https://groupwish.in${url}`);
+  // const [value, setValue] = useState(`https://groupwish.in${url}`);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const baseUrl = window.location.origin; // 👉 e.g. "https://groupwish.in"
+      setValue(`${baseUrl}${url}`); // 👉 full link
+    }
+  }, [url]);
+  console.log(value, "value of url");
   let currentToastPromise: Promise<void> | null = null;
   const handleCopy = () => {
     navigator.clipboard

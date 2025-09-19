@@ -198,7 +198,6 @@ const GroupCollection = ({
             </h1>
           )}
 
-    
           <div className="flex gap-5 mb-4 items-center justify-center">
             <button
               className="bg-blue-600 border-2 border-blue-700 text-black px-4 py-2 rounded-md hover:bg-blue-700 transition"
@@ -226,8 +225,9 @@ const GroupCollection = ({
           </button>
         </div>
       )}
-      <div className="flex  items-center justify-center ">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-6xl">
+
+      <div className="flex  items-center justify-center w-full">
+        <div className="flex flex-col w-full justify-center">
           <div className="bg-white shadow-lg  rounded-lg p-6 ">
             {cookieValue && (
               <>
@@ -246,11 +246,11 @@ const GroupCollection = ({
                     <p className="text-gray-500 mb-4">Coordinator</p>
                   </div>
                 </div>
-                <div className="flex">
+                {/* <div className="flex">
                   <button className="text-blue-600 hover:underline mb-2">
                     Post a note for your team
                   </button>
-                </div>
+                </div> */}
               </>
             )}
             <CopyclickBoard />
@@ -269,17 +269,20 @@ const GroupCollection = ({
                 </button>
               </Link>
             </div> */}
-            <div className="w-full mt-8">
-              <CommonCustomEditor cardShareData={cardShareData} />
-            </div>
           </div>
 
-          <GiftCardCollectionPot
-            brandKey={searchParams?.brandKey}
-            groupId={params.id}
-            cardShareData={cardShareData}
-            searchParams={searchParams}
-          />
+          <div className="flex w-full justify-center">
+            <div className="w-[48%] mt-8 flex flex-col">
+              <CommonCustomEditor cardShareData={cardShareData} />
+            </div>
+
+            <GiftCardCollectionPot
+              brandKey={searchParams?.brandKey}
+              groupId={params.id}
+              cardShareData={cardShareData}
+              searchParams={searchParams}
+            />
+          </div>
         </div>
       </div>
       <SidebarModal

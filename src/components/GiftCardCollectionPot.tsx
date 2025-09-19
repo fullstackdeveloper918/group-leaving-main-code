@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 // import EscrowPayment from "./EscrowPayment";
 // import axios from "axios";
 import CollectionPayment from "./CollectionPayment";
@@ -7,6 +7,15 @@ import ContributorsModal from "./ContributorsModal";
 import { usePathname } from "next/navigation";
 import { AiFillDelete, AiOutlineUser } from "react-icons/ai";
 import Cookies from "js-cookie";
+import Image from "next/image";
+import userIcon from "../assets/icons/abj.png";
+import NextTopLoader from "nextjs-toploader";
+// import { useTopLoader } from "nextjs-toploader";
+
+type TopLoaderRef = {
+  continuousStart: () => void;
+  complete: () => void;
+};
 
 const GiftCardCollectionPot = ({
   brandKey,
@@ -26,6 +35,7 @@ const GiftCardCollectionPot = ({
   const [showContributors, setShowContributors] = useState(false);
   const [selectedImage, setSelectedImage] = useState<any | null>(null);
   const gettoken = Cookies.get("auth_token");
+  // const loader = useTopLoader();
   // const pathname = usePathname();
   // const parts = pathname.split("/");
   // const brandKey2 = parts[parts.length - 1];
@@ -40,6 +50,7 @@ const GiftCardCollectionPot = ({
   const [reloadlyId, setReloadlyId] = useState<string>("");
   // const [loading, setLoading] = useState(false);
   // console.log(showContributors, "showContributors");
+  const loaderRef = useRef<TopLoaderRef | null>(null);
   const handleProceed = () => {
     if (name.trim() === "") {
       setShowWarning(true);
@@ -208,7 +219,18 @@ const GiftCardCollectionPot = ({
   // const selectGiftImage = giftCard?.data?.imageUrls ? giftCard.data.imageUrls["278w-326ppi"] : null;
 
   // console.log(selectGiftImage, "selectGiftImage");
-  // console.log(selectedImage,"selectedImage")
+  console.log(giftCard?.cards, "giftCard?.cards?");
+  const handleClick = async () => {
+    try {
+      loaderRef.current?.continuousStart(); // start loader
+      await fetchGiftCardProducts();
+      setIsGiftCardModalOpen(true);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      loaderRef.current?.complete(); // stop loader
+    }
+  };
   return (
     <>
       {/* {loading && (
@@ -216,33 +238,59 @@ const GiftCardCollectionPot = ({
           <div className="bg-white p-6 rounded shadow-lg">Loading...</div>
         </div>
       )} */}
-      <div className="bg-white shadow-lg rounded-lg p-6">
+      <NextTopLoader
+        color="#00C4CC"
+        initialPosition={0.08}
+        crawlSpeed={20}
+        height={3}
+        crawl={true}
+        showSpinner={false}
+        easing="ease"
+        speed={100}
+        shadow="0 0 10px #2299DD,0 0 5px #2299DD"
+      />
+      <div className="bg-white p-6 w-[30%] flex flex-col mt-[126px]">
         {
           <>
             {giftCard?.cards?.map((card: any) => (
               <div
                 key={card.id}
-                className="border rounded-lg shadow-md p-4 mb-6 bg-white"
+                className="rounded-lg w-[100%] shadow-lg p-4 mb-6 bg-white"
               >
-                <h2 className="text-lg font-semibold mb-4 text-center">
+                <h3 className="text-center text-md font-normal ">
                   Group Gift Fund
-                </h2>
+                </h3>
                 <div className="flex justify-center items-center mb-4 flex-col ">
                   <div className="gift-cards-tools self-end mb-4 flex space-x-6 text-2xl pb-2">
-                    <AiOutlineUser
+                    {/* <AiOutlineUser
                       className="cursor-pointer hover:text-blue-600 transition"
                       onClick={async () => {
                         // await fetchGiftCardProducts();
                         setIsContributorsModalOpen(true);
                         setReloadlyId(card?.uuid);
                       }}
-                    />
-                    <AiFillDelete
+                    /> */}
+                    <button
+                      className="text-center text-md font-normal relative"
+                      onClick={async () => {
+                        // await fetchGiftCardProducts();
+                        setIsContributorsModalOpen(true);
+                        setReloadlyId(card?.uuid);
+                      }}
+                    >
+                      {/* <span className="absolute bottom-3 text-white rounded-full px-2 text-center usercount">
+                        {contributors.length}
+                      </span> */}
+                      <span className="">
+                        <Image src={userIcon} alt="user" />
+                      </span>
+                    </button>
+                    {/* <AiFillDelete
                       className="cursor-pointer hover:text-red-600 transition"
                       onClick={async () => {
                         // delete logic
                       }}
-                    />
+                    /> */}
                   </div>
                   {/* {brandKey ? (
                     <img
@@ -254,7 +302,7 @@ const GiftCardCollectionPot = ({
                   <img
                     src={`${card?.logoUrls}`}
                     alt="E-Gift Card"
-                    className="w-50 h-50 object-contain rounded-md shadow"
+                    className="w-[70%] h-50 object-contain rounded-md shadow"
                   />
                 </div>
 
@@ -262,6 +310,7 @@ const GiftCardCollectionPot = ({
                   <p className="text-2xl font-bold">
                     {" "}
                     {card?.amount.toFixed(2)} INR
+                    {/* {card?.recipient_name} */}
                   </p>
 
                   <div className="text-center mb-2 gap-2 items-center justify-center flex flex-col">
@@ -273,9 +322,13 @@ const GiftCardCollectionPot = ({
                         );
                         setIsContributeModalOpen(true);
                       }}
-                      className="w-[40%] bg-[#558ec9] text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                      className="bg-greyBorder bgGray text-blackText rounded-lg  w-100 text-sm p-2.5 cursor-pointer"
                     >
-                      Add Participant
+                      Chip in for{" "}
+                      <span className="capitalize">
+                        {cardShareData?.recipient_name}
+                      </span>{" "}
+                      Gift
                     </button>
                   </div>
                 </div>
@@ -283,11 +336,13 @@ const GiftCardCollectionPot = ({
             ))}
 
             <button
-              onClick={async () => {
-                await fetchGiftCardProducts();
-                setIsGiftCardModalOpen(true);
-              }}
-              className="w-[40%] bg-blue-600 text-[14px] text-black border-2 border-blue-700 px-2 py-2 rounded"
+              // onClick={async () => {
+              //   await fetchGiftCardProducts();
+              //   setIsGiftCardModalOpen(true);
+              // }}
+              onClick={handleClick}
+              // className="w-[40%] bgblue text-[14px] text-black border-2 border-blue-700 px-2 py-2 rounded"
+              className=" btnPrimary text-center w-100 mt-3 rounded-md"
             >
               Add to Gift Card
             </button>
