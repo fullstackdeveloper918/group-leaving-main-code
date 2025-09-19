@@ -151,11 +151,12 @@ const GiftCardCollectionPot = ({
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${gettoken}`,
+            // Authorization: `Bearer ${gettoken}`,
           },
           body: JSON.stringify(temp_body),
         }
       );
+      // console.log(response,"response");
       const data = await response.json();
       if (data) {
         await fetchGiftCard();

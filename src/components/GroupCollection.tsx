@@ -16,7 +16,7 @@ import CommonCustomEditor from "./common/newcustomeditor/CommonCustomEdtior";
 const GroupCollection = ({
   params,
   searchParams,
-  data,
+  // data,
   setClose,
   isClose,
 }: any) => {
@@ -67,7 +67,7 @@ const GroupCollection = ({
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${gettoken}`,
+              // Authorization: `Bearer ${gettoken}`,
             },
             body: JSON.stringify(postData),
           }
@@ -108,7 +108,7 @@ const GroupCollection = ({
   const lockeCollection = async () => {
     let item = {
       user_uuid: cookieValue,
-      link_id: data?.data?.uuid,
+      // link_id: data?.data?.uuid,
       type: isLocked,
     };
     // console.log(item, "item");
@@ -186,65 +186,73 @@ const GroupCollection = ({
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <div className="bg-white shadow-lg rounded-lg p-6 mb-6 text-center">
-        {searchParams?.brandKey ? (
-          <h1 className="text-3xl font-bold mb-4">
-            {capFirst(data?.data?.collection_title)}
-          </h1>
-        ) : (
-          <h1 className="text-3xl font-bold mb-4">
-            {cardShareData?.cartDetail?.[0]?.recipient_name}
-          </h1>
-        )}
-        <div className="flex gap-5 mb-4 items-center justify-center">
+      {cookieValue && (
+        <div className="bg-white shadow-lg rounded-lg p-6 mb-6 text-center">
+          {searchParams?.brandKey ? (
+            <h1 className="text-3xl font-bold mb-4">
+              {/* {capFirst(data?.data?.collection_title)} */}
+            </h1>
+          ) : (
+            <h1 className="text-3xl font-bold mb-4">
+              {cardShareData?.cartDetail?.[0]?.recipient_name}
+            </h1>
+          )}
+
+    
+          <div className="flex gap-5 mb-4 items-center justify-center">
+            <button
+              className="bg-blue-600 border-2 border-blue-700 text-black px-4 py-2 rounded-md hover:bg-blue-700 transition"
+              onClick={() => setIsSidebarOpen(true)}
+            >
+              Modify Collection
+            </button>
+            <button
+              className="bg-blue-600 border-2 border-blue-700 text-black px-4 py-2 rounded-md hover:bg-blue-700 transition"
+              onClick={lockeCollection}
+            >
+              {isLocked ? "Unlock Collection" : "Secure Collection"}
+            </button>
+          </div>
+          <p className="text-gray-600 mb-4">
+            No delivery date has been chosen yet. Set one to motivate
+            contributions, or send your gift right away by clicking{" "}
+            <span className="font-semibold">Send Immediately</span>.
+          </p>
           <button
+            onClick={() => setIsModalOpen(true)}
             className="bg-blue-600 border-2 border-blue-700 text-black px-4 py-2 rounded-md hover:bg-blue-700 transition"
-            onClick={() => setIsSidebarOpen(true)}
           >
-            Modify Collection
-          </button>
-          <button
-            className="bg-blue-600  border-2 border-blue-700 text-black px-4 py-2 rounded-md hover:bg-blue-700 transition"
-            onClick={lockeCollection}
-          >
-            {isLocked ? "Unlock Collection" : "Secure Collection"}
+            Send Immediately
           </button>
         </div>
-        <p className="text-gray-600 mb-4">
-          No delivery date has been chosen yet. Set one to motivate
-          contributions, or send your gift right away by clicking{" "}
-          <span className="font-semibold">Send Immediately</span>.
-        </p>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-blue-600 border-2 border-blue-700 text-black px-4 py-2 rounded-md hover:bg-blue-700 transition"
-        >
-          Send Immediately
-        </button>
-      </div>
+      )}
       <div className="flex  items-center justify-center ">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-6xl">
           <div className="bg-white shadow-lg  rounded-lg p-6 ">
-            <div className="texts-sections" id="flex-orgainisier">
-              <div
-                className="MuiAvatar-root MuiAvatar-rounded MuiAvatar-colorDefault mui-gfmqku"
-                aria-label="recipe"
-                style={{ backgroundColor: "rgb(230, 101, 129)" }}
-              >
-                F
-              </div>
-              <div>
-                <h2 className="text-lg font-semibold mb-0">
-                  {capFirst(organiser)}
-                </h2>
-                <p className="text-gray-500 mb-4">Coordinator</p>
-              </div>
-            </div>
-            <div className="flex">
-              <button className="text-blue-600 hover:underline mb-2">
-                Post a note for your team
-              </button>
-            </div>
+            {cookieValue && (
+              <>
+                <div className="texts-sections" id="flex-orgainisier">
+                  <div
+                    className="MuiAvatar-root MuiAvatar-rounded MuiAvatar-colorDefault mui-gfmqku"
+                    aria-label="recipe"
+                    style={{ backgroundColor: "rgb(230, 101, 129)" }}
+                  >
+                    F
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-semibold mb-0">
+                      {capFirst(organiser)}
+                    </h2>
+                    <p className="text-gray-500 mb-4">Coordinator</p>
+                  </div>
+                </div>
+                <div className="flex">
+                  <button className="text-blue-600 hover:underline mb-2">
+                    Post a note for your team
+                  </button>
+                </div>
+              </>
+            )}
             <CopyclickBoard />
             {/* <div className="mt-4 border-t pt-4">
               <h3 className="text-md font-semibold mb-2">

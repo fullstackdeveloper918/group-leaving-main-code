@@ -36,7 +36,7 @@ export const config = {
     // "/dashboard/:path*",
     "/user_list/:path*",
     // "/board/",
-    "/share/:path*",
+    // "/share/:path*",
     "/card/boardpay/:path*",
     "/account/:path*",
     // Optionally, apply to other paths if needed
