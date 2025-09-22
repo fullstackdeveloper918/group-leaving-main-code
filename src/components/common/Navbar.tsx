@@ -8,7 +8,7 @@ import LogoutModal from "./LogoutModal";
 import { useParams, useRouter } from "next/navigation";
 import { destroyCookie, parseCookies } from "nookies";
 // import GoodLuckCad from "../../assets/images/congratulations/good_luck.png"
-import GoodLuckCad from "../../assets/images/new_logo.png";
+import GoodLuckCad from "../../../public/newimage/logoGroup.png";
 import register from "../../assets/images/register.png";
 import { useAccessToken } from "@/app/context/AccessTokenContext";
 import Cookies from "js-cookie";
@@ -328,8 +328,6 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  
-
                   <Link href={`/register`}>
                     <button className="text-white font-medium rounded-full  d-hide-btn joinHead_Btn">
                       Join Now

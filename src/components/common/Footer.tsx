@@ -1,17 +1,20 @@
 "use client";
 import React from "react";
 import { Row, Col, Typography } from "antd";
+import GoodLuckCad from "../../../public/newimage/logoGroup.png";
 import {
   FacebookOutlined,
   InstagramOutlined,
   LinkedinOutlined,
   MailOutlined,
 } from "@ant-design/icons";
+import Link from "next/link";
+import Image from "next/image";
 
 const { Text, Title } = Typography;
 
 const date = new Date();
-const year = date.getFullYear()
+const year = date.getFullYear();
 
 const Footer: React.FC = () => {
   return (
@@ -19,11 +22,21 @@ const Footer: React.FC = () => {
       <Row justify="space-around">
         <Col xs={24} sm={12} md={6}>
           <div style={{ textAlign: "center" }}>
-            <div className="flex items-center text-2xl font-semibold">
+            {/* <div className="flex items-center text-2xl font-semibold">
               <span className="text-black">Good</span>
               <span className="text-blueText">luck</span>
               <span className="text-black">cards</span>
-            </div>
+            </div> */}
+
+            <Link href={`/`} className="no-underline w-3/12">
+              <Image
+                src={GoodLuckCad.src}
+                height={200}
+                width={200}
+                alt="Good Luck"
+                className="text-4xl font-bold logo_img"
+              />
+            </Link>
 
             <p
               className="text-blackText text-left mt-2"
@@ -46,16 +59,27 @@ const Footer: React.FC = () => {
           </Title>
           <ul className="p-0">
             <li className="block  py-2  no-underline text-black  transition-all ease-in  hover:text-blueBg hover:px-2 ">
-              <a href="/about" className="text-black hover:text-blueBg">About</a>
+              <a href="/about" className="text-black hover:text-blueBg">
+                About
+              </a>
             </li>
             <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2  ">
-              <a href="/office" className="text-black hover:text-blueBg">Office</a>
+              <a href="/office" className="text-black hover:text-blueBg">
+                Office
+              </a>
             </li>
             <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2  ">
-              <a href="/license-verification" className="text-black hover:text-blueBg">License Verification</a>
+              <a
+                href="/license-verification"
+                className="text-black hover:text-blueBg"
+              >
+                License Verification
+              </a>
             </li>
             <li className="block  py-2  no-underline text-black  transition-all ease-in  hover:text-blueBg hover:px-2 ">
-              <a href="/spay-neuter" className="text-black hover:text-blueBg">Spay & Neuter</a>
+              <a href="/spay-neuter" className="text-black hover:text-blueBg">
+                Spay & Neuter
+              </a>
             </li>
           </ul>
         </Col>
@@ -115,16 +139,30 @@ const Footer: React.FC = () => {
           </Title>
           <ul className="p-0">
             <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2   hover:text-blueBg hover:px-2">
-              <a href="/free-ebooks" className="text-black hover:text-blueBg">Free eBooks</a>
+              <a href="/free-ebooks" className="text-black hover:text-blueBg">
+                Free eBooks
+              </a>
             </li>
             <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2  ">
-              <a href="/development-tutorial" className="text-black hover:text-blueBg">Development Tutorial</a>
+              <a
+                href="/development-tutorial"
+                className="text-black hover:text-blueBg"
+              >
+                Development Tutorial
+              </a>
             </li>
             <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2  ">
-              <a href="/how-to-blog" className="text-black hover:text-blueBg">How to - Blog</a>
+              <a href="/how-to-blog" className="text-black hover:text-blueBg">
+                How to - Blog
+              </a>
             </li>
             <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2  ">
-              <a href="/youtube-playlist" className="text-black hover:text-blueBg">Youtube Playlist</a>
+              <a
+                href="/youtube-playlist"
+                className="text-black hover:text-blueBg"
+              >
+                Youtube Playlist
+              </a>
             </li>
           </ul>
         </Col>

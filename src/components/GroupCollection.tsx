@@ -147,6 +147,7 @@ const GroupCollection = ({
     let item = {
       email: email,
       user_uuid: cookieValue,
+      cart_uuid: id,
     };
     try {
       const response = await fetch(

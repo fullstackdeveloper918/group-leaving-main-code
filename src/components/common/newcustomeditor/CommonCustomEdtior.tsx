@@ -95,6 +95,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
 
   // const id = searchParams()
   const id = params?.id;
+  console.log(id, "id from params");
 
   // Initialize userInfo from cookies
   useEffect(() => {
@@ -194,7 +195,8 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
           subtitle: "New Subtitle",
           text: "This is a dynamically generated slide.",
           link: "https://example.com",
-          card_img: `http://localhost:3002/${firstSlideImage}`,
+          // card_img: `http://localhost:3002/${firstSlideImage}`,
+          card_img: `${process.env.NEXT_PUBLIC_API_URL}/${firstSlideImage}`,
         });
 
         // Additional slides (if needed)
@@ -231,8 +233,11 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
           subtitle: "New Subtitle",
           text: "This is a dynamically generated slide.",
           link: "https://example.com",
-          card_img: `http://localhost:3002/${firstSlideImage}`,
+          // card_img: `http://localhost:3002/${firstSlideImage}`,
+          card_img: `${process.env.NEXT_PUBLIC_API_URL}/${firstSlideImage}`,
         });
+
+        console.log("newslides here on catch", newSlides);
 
         // ✅ Slide 2: Always add a second empty slide
         newSlides.push({

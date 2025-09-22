@@ -145,7 +145,7 @@ const AccountCards = ({ data }: any) => {
                             </button>
                           </Link>
                         )}
-                        <AiFillEdit className="cursor-pointer" />
+                        {/* <AiFillEdit className="cursor-pointer" /> */}
                         <AiFillDelete
                           fill="#db0404"
                           className="cursor-pointer text-red-600"

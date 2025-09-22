@@ -4,18 +4,18 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import HTMLFlipBook from "react-pageflip";
 import Cookies from "js-cookie";
+import Image from "next/image";
 
 // PageCover Component
 const PageCover = React.forwardRef((props: any, ref: any) => {
   return (
     <div className="cover" ref={ref} data-density="hard">
-    
-        {props.children}
-      
+      {props.children}
     </div>
   );
 });
 PageCover.displayName = "PageCover";
+
 // Page Component
 const Page = React.forwardRef((props: any, ref: any) => {
   return (
@@ -25,6 +25,7 @@ const Page = React.forwardRef((props: any, ref: any) => {
   );
 });
 Page.displayName = "Page";
+
 const EnvelopCard = ({ getdata }: any) => {
   const { id } = useParams();
   const [responseData, setResponseData] = useState<any>(null);
@@ -57,26 +58,8 @@ const EnvelopCard = ({ getdata }: any) => {
 
     fetchData();
   }, []);
+
   console.log(shareImageData, "shareImageData here");
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         "https://dating.goaideme.com/card/users-cards",
-  //         { method: "GET", headers: { "Content-Type": "application/json" } }
-  //       );
-  //       const data = await response.json();
-
-  //       // Get the last element
-  //       const lastCard = data.at?.(-1) ?? data[data.length - 1];
-  //       setShareImageData(lastCard);
-  //     } catch (err) {
-  //       console.error("Error fetching data:", err);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   // Fetch data when id changes
   useEffect(() => {
@@ -104,7 +87,7 @@ const EnvelopCard = ({ getdata }: any) => {
     }
   }, [id]);
 
-  console.log(responseData, "responsose data herer");
+  console.log(responseData, "responseData here");
 
   // Handle the case when data is still being fetched
   if (
@@ -114,12 +97,6 @@ const EnvelopCard = ({ getdata }: any) => {
   ) {
     return <div>Loading...</div>; // Show loading while data is being fetched
   }
-
-  // const api2: any = {
-  //   url: `https://dating.goaideme.com/card/users-cards`,
-  //   method: "GET",
-  // };
-  // const data2 = await fetchFromServer(api2);
 
   console.log("shareImageData", shareImageData);
   console.log("shareImageData id", id);
@@ -147,6 +124,13 @@ const EnvelopCard = ({ getdata }: any) => {
           .cover {
             background-color: rgb(251, 225, 139);
             box-shadow: 0 1.5em 3em -1em rgb(70, 69, 69);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            position: relative;
           }
 
           .btn,
@@ -186,10 +170,18 @@ const EnvelopCard = ({ getdata }: any) => {
             align-items: center;
             justify-content: center;
           }
+
+          .bottom-text {
+            position: absolute;
+            bottom: 20px;
+            font-size: 1em;
+            color: #333;
+            text-align: center;
+            width: 100%;
+          }
         `}
       </style>
 
-      <h2 className="editor_option mb-5">Preview</h2>
       <div className="mt-5 mb-3">
         <HTMLFlipBook
           width={550}
@@ -218,16 +210,12 @@ const EnvelopCard = ({ getdata }: any) => {
         >
           <PageCover>
             <img
-            style={{height:"100%"}}
-              src={
-                // "https://groupleavingcards.com/assets/design/617318f94c962c605abdeabb.jpg"
-                `${process.env.NEXT_PUBLIC_API_URL}/${cardShareData?.images?.[0]?.card_images?.[0]}`
-              }
+              style={{ height: "100%" }}
+              src={`${process.env.NEXT_PUBLIC_API_URL}/${getdata?.data?.images?.[0]?.card_images?.[0]}`}
               alt="content"
             />
           </PageCover>
 
-          {/* Loop through the editor messages from responseData */}
           {responseData?.data?.[0]?.editor_messages?.map(
             (item: any, index: any) => (
               <Page
@@ -261,8 +249,17 @@ const EnvelopCard = ({ getdata }: any) => {
             )
           )}
 
-          <PageCover>
-            <div className="mt-5">Back Cover</div>
+          <PageCover className="flex items-center justify-center w-full mx-auto">
+            <Image
+              src={"/newimage/logoGroup.png"}
+              alt="logo"
+              width={150}
+              height={50}
+              className="mx-auto flex items-center justify-center"
+            />
+            <p className="bottom-text">
+              Create a card like this one. Go to Groupwish.com
+            </p>
           </PageCover>
         </HTMLFlipBook>
       </div>

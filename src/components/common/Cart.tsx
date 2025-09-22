@@ -87,7 +87,7 @@ const Cart = () => {
                 <div className="flex items-center w-full gap-4 flex-column flex-lg-row">
                   <div className="cd-img-inn">
                     <img
-                      // src={`${process.env.NEXT_PUBLIC_API_URL}/${card?.images[0]?.card_images[0]}`}
+                      src={`${process.env.NEXT_PUBLIC_API_URL}/${card?.images[0]?.card_images[0]}`}
                       alt={card.title}
                       className="w-full h-full object-cover rounded-lg"
                     />
