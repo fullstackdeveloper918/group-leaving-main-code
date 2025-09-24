@@ -80,7 +80,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   const [slides, setSlides] = useState<any[]>([]);
   const [data, setData] = useState<any[]>([]);
   const [shareImageData, setShareImageData] = useState<any>(null);
-  console.log(slides, "sldessss");
+  // console.log(slides, "sldessss");
   const pathname = usePathname();
   const isEditorPath = /^\/share\/editor\/[^/]+$/.test(pathname);
   const searchParams = useSearchParams();
@@ -89,13 +89,13 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   const [first, second] = pathname.split("/").slice(1, 3);
   const basePath = `/${first}/${second}`;
 
-  console.log(pathname, "isEditorPath");
+  // console.log(pathname, "isEditorPath");
 
-  console.log("cardsharedata on commoncustomeditor", cardShareData);
+  // console.log("cardsharedata on commoncustomeditor", cardShareData);
 
   // const id = searchParams()
   const id = params?.id;
-  console.log(id, "id from params");
+  // console.log(id, "id from params");
 
   // Initialize userInfo from cookies
   useEffect(() => {
@@ -133,10 +133,10 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
 
     fetchData();
   }, [gettoken]);
-  console.log(shareImageData, "shareImageData here");
+  // console.log(shareImageData, "shareImageData here");
 
   // if (basePath === "/share/editor") {
-  console.log(params, "params here to fix");
+  // console.log(params, "params here to fix");
   const cardShareDatas = shareImageData?.listing?.find(
     (item: any) => item?.message_unique_id === params.id
   );
@@ -145,7 +145,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
     const fetchEditorDatas = async () => {
       if (!id) return;
 
-      console.log("ID is here on editor data:", id);
+      // console.log("ID is here on editor data:", id);
 
       try {
         const response = await fetch(
@@ -168,7 +168,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
         }
 
         const data = await response.json();
-        console.log("Fetched data:", data);
+        // console.log("Fetched data:", data);
 
         const apiElements = data?.editor_messages || [];
         setElements(apiElements);
@@ -211,7 +211,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
           });
         }
 
-        console.log("Final slides:", filledSlides);
+        // console.log("Final slides:", filledSlides);
         setSlides(filledSlides);
       } catch (error) {
         console.error("Error fetching editor data:", error);
@@ -237,7 +237,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
           card_img: `${process.env.NEXT_PUBLIC_API_URL}/${firstSlideImage}`,
         });
 
-        console.log("newslides here on catch", newSlides);
+        // console.log("newslides here on catch", newSlides);
 
         // ✅ Slide 2: Always add a second empty slide
         newSlides.push({
@@ -251,9 +251,9 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
 
         // setElements([]); // empty editor data
         // setActiveSlideIndex(1);
-        console.log("newslides here on catch", newSlides);
+        // console.log("newslides here on catch", newSlides);
         setSlides(newSlides);
-        console.log("activeSlideIndex here", activeSlideIndex);
+        // console.log("activeSlideIndex here", activeSlideIndex);
         if (activeSlideIndex === 0) {
           setActiveSlideIndex(newSlides.length - 2);
         }
@@ -263,10 +263,10 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
     fetchEditorDatas();
   }, [cardShareData, id]);
 
-  console.log(elements?.length, "new element hree");
+  // console.log(elements?.length, "new element hree");
 
   function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
-    console.log(slidesArr, elementsArr, "please giving new slides");
+    // console.log(slidesArr, elementsArr, "please giving new slides");
 
     // Clone the slides to avoid mutating the original
     const newSlides = [...slidesArr];
@@ -288,7 +288,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
               card_img: SlideImg_6,
             }); // Or default slide structure
           }
-          console.log(`Added ${missingCount} missing slides`);
+          // console.log(`Added ${missingCount} missing slides`);
           return true; // Now consider it as having content
         }
 
@@ -318,14 +318,14 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
     // Clean up extra empty slides at the end, but never remove the last one
     setSlides((prevSlides) => cleanupSlides(prevSlides, elements));
 
-    console.log(elements, slides, "here to matched data");
+    // console.log(elements, slides, "here to matched data");
     const lastSlide = slides?.[slides.length - 1];
-    console.log("lastSlide:", lastSlide);
+    // console.log("lastSlide:", lastSlide);
     const isLastSlideInElements = elements?.some(
       (e) => `slide-${e?.slideIndex + 1}` === lastSlide?.id
     );
 
-    console.log(isLastSlideInElements, "isLastSlideInElements");
+    // console.log(isLastSlideInElements, "isLastSlideInElements");
     if (isLastSlideInElements) {
       const newSlideIndex = slides.length; // e.g., 3 if you already have 3 slides
       const newSlide = {
@@ -341,7 +341,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
     }
   }, [elements]);
 
-  console.log(slides, "elements new");
+  // console.log(slides, "elements new");
 
   // Save elements to localStorage and update server
   useEffect(() => {
@@ -370,13 +370,13 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
       );
       if (!response.ok) throw new Error("Failed to upload data");
       const data = await response.json();
-      console.log("Data uploaded successfully:", data);
+      // console.log("Data uploaded successfully:", data);
     } catch (error) {
       console.error("Error uploading data:", error);
     }
   };
 
-  console.log(userInfo, "oiuiuy");
+  // console.log(userInfo, "oiuiuy"); 
 
   // Update editor data on server
   const updateEditorData = async () => {
@@ -399,7 +399,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
       );
       if (!response.ok) throw new Error("Failed to upload data");
       const data = await response.json();
-      console.log("Data uploaded successfully:", data);
+      // console.log("Data uploaded successfully:", data);
     } catch (error) {
       console.error("Error uploading data:", error);
     }
@@ -411,7 +411,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
     if (activeSlideIndex <= 4 && !isEditorPath) {
       const lastSlideIndex = slides.length - 2;
       // const lastSlideIndex = 5;
-      console.log(lastSlideIndex, "lastSlideIndex");
+      // console.log(lastSlideIndex, "lastSlideIndex");
       const newSlide = {
         id: `slide-${slides.length + 1}`,
         title: "New Slide",
@@ -688,8 +688,8 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   };
 
   const handleNextSlide = () => {
-    console.log("go to next slide", slides.length);
-    console.log("go to next activeSlideIndex", activeSlideIndex);
+    // console.log("go to next slide", slides.length);
+    // console.log("go to next activeSlideIndex", activeSlideIndex);
     if (activeSlideIndex < slides.length - 1)
       handleSlideChange(activeSlideIndex + 1);
   };
@@ -750,7 +750,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
     sendEditorData();
     router.push(`/envelop/${id}`);
   };
-  console.log(activeSlideIndex, "piopipi");
+  // console.log(activeSlideIndex, "piopipi");
 
   // Only for TextEditor: keep modal open and update content on slide change
   useEffect(() => {
@@ -763,8 +763,8 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
     }
   }, [activeSlideIndex, showModal, elements]);
 
-  console.log("selectedElement heresss", selectedElement);
-  console.log("cardsharedata on commoncustomeditor11", cardShareData);
+  // console.log("selectedElement heresss", selectedElement);
+  // console.log("cardsharedata on commoncustomeditor11", cardShareData);
 
   return (
     <>

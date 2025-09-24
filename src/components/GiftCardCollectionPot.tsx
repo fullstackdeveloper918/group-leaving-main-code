@@ -82,7 +82,7 @@ const GiftCardCollectionPot = ({
       );
 
       const data = await response.json();
-      console.log(data, "fetched all giftcards");
+      // console.log(data, "fetched all giftcards");
       setGiftCard(data);
     } catch (error) {}
     // finally {
@@ -219,7 +219,7 @@ const GiftCardCollectionPot = ({
   // const selectGiftImage = giftCard?.data?.imageUrls ? giftCard.data.imageUrls["278w-326ppi"] : null;
 
   // console.log(selectGiftImage, "selectGiftImage");
-  console.log(giftCard?.cards, "giftCard?.cards?");
+  // console.log(giftCard?.cards, "giftCard?.cards?");
   const handleClick = async () => {
     try {
       loaderRef.current?.continuousStart(); // start loader

@@ -37,29 +37,30 @@ const CopyclickBoard = () => {
       .writeText(value)
       .then(() => {
         // Create a new toast promise
-        const newToastPromise = new Promise<void>((resolve) => {
-          // Dismiss the current toast if it exists
-          if (currentToastPromise) {
-            toast.dismiss();
-          }
+        // const newToastPromise = new Promise<void>((resolve) => {
+        //   // Dismiss the current toast if it exists
+        //   if (currentToastPromise) {
+        //     toast.dismiss();
+        //   }
 
           // Show the new toast
-          const toastId = toast.success("Copied to clipboard!", {
+          toast.success("Copied to clipboard!", {
             onClose: () => {
-              resolve(); // Resolve the promise when the toast is closed
+              // resolve(); // Resolve the promise when the toast is closed
+              setShowCopyBoard(false);
             },
             autoClose: 1000,
           });
-        });
+        // });
 
         // Set the current toast promise to the new one
-        currentToastPromise = newToastPromise;
+        // currentToastPromise = newToastPromise;
 
-        // Wait for the toast to close before allowing another to be shown
-        currentToastPromise.then(() => {
-          currentToastPromise = null; // Clear the reference after the toast closes
-        });
-        setShowCopyBoard(false);
+        // // Wait for the toast to close before allowing another to be shown
+        // currentToastPromise.then(() => {
+        //   currentToastPromise = null; // Clear the reference after the toast closes
+        // });
+        
       })
       .catch((err) => {
         console.error("Failed to copy: ", err);

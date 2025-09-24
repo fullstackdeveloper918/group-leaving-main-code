@@ -25,10 +25,10 @@ const MultiStepForm = ({ params }: any) => {
   const [error, setError] = useState("");
   const [senderError, setSenderError] = useState("");
   const [emailError, setEmailError] = useState("");
-  console.log(recipientName, "recipientName");
-  console.log(senderName, "senderName");
-  console.log(cardType, "cardType");
-  console.log(params, "params");
+  // console.log(recipientName, "recipientName");
+  // console.log(senderName, "senderName");
+  // console.log(cardType, "cardType");
+  // console.log(params, "params");
   const [userInfo, setUserInfo] = useState<any>(null);
   const [uuid, setUuid] = useState<string | null>(null);
   const [currencyError,setCurrencyError] = useState<string>("")
@@ -77,7 +77,7 @@ const MultiStepForm = ({ params }: any) => {
   // console.log(recipientName,"recipientName");
   // console.log(recipientName,"recipientName");
   const [selectedDate, setSelectedDate] = useState(""); // to store date value
-  const [selectedTime, setSelectedTime] = useState(""); // to store time value
+  // const [selectedTime, setSelectedTime] = useState(""); // to store time value
   const handleLogin = () => {
     toast.error("Please login");
     router.push("/login");
@@ -152,9 +152,9 @@ const MultiStepForm = ({ params }: any) => {
     setSelectedOption(value);
 
   };
-  console.log(selectedDate, "selectedDate");
-  console.log(selectedTime, "selectedTime");
-  console.log(cardType, "cardType");
+  // console.log(selectedDate, "selectedDate");
+  // console.log(selectedTime, "selectedTime");
+  // console.log(cardType, "cardType");
   // const [loading1,setLoading]=useState(false)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -172,7 +172,7 @@ const MultiStepForm = ({ params }: any) => {
         sender_name: senderName,
         do_it_late: cardType === "later" ? true : false,
         delivery_date: selectedDate,
-        delivery_time: selectedTime,
+        // delivery_time: selectedTime,
         allow_private: false,
         add_confetti: false,
       };
@@ -388,13 +388,13 @@ const MultiStepForm = ({ params }: any) => {
                         className="ml-auto text-gray-500"
                         placeholder="Date"
                       />
-                      <input
+                      {/* <input
                         type="time"
                         value={selectedTime}
                         onChange={(e) => setSelectedTime(e.target.value)}
                         className="ml-auto text-gray-500"
                         placeholder="Time"
-                      />
+                      /> */}
                     </div>
                   </>
                 )}

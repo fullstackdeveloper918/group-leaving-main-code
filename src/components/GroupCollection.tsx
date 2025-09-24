@@ -90,7 +90,7 @@ const GroupCollection = ({
   // );
   const cardShareData = shareCartData?.data || [];
 
-  console.log("cardShareData heree", cardShareData);
+  // console.log("cardShareData heree", cardShareData);
 
   // const [editCollection, setEditCollection] = useState(data);
 
@@ -289,11 +289,12 @@ const GroupCollection = ({
       <SidebarModal
         isOpen={isSidebarOpen}
         // setEditCollection= {setEditCollection}
-        setClose={setClose}
-        isClose={isClose}
+        // setClose={setClose}
+        // isClose={isClose}
         onClose={() => setIsSidebarOpen(false)}
         data={cardShareData}
-        createlinkuserId={cookieValue}
+        // createlinkuserId={cookieValue}
+        cartId={params.id}
       />
       <SendGiftModal
         isOpen={isModalOpen}

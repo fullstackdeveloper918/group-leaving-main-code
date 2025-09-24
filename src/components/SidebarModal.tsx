@@ -8,9 +8,10 @@ interface SidebarModalProps {
   isOpen: boolean;
   onClose: () => void;
   data: any;
-  setClose: any;
-  isClose: any;
-  createlinkuserId: any;
+  // setClose: any;
+  // isClose: any;
+  // createlinkuserId: any;
+  cartId: any;
   // setEditCollection:any
 }
 
@@ -18,9 +19,10 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
   isOpen,
   onClose,
   data,
-  setClose,
-  isClose,
-  createlinkuserId,
+  // setClose,
+  // isClose,
+  // createlinkuserId,
+  cartId
 }) => {
   // console.log("databysidebarmodel", data?.collection_title);
   // console.log("databysidebarmodel", data);
@@ -35,19 +37,19 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
     data?.cartDetail?.[0]?.recipient_email
   );
   const [deliveryDate, setDeliveryDate] = useState(data?.start_date);
-  const [deliveryTime, setDeliveryTime] = useState(data?.end_date);
-  const [cookieValue, setCookieValue] = useState<string | null>(null);
+  // const [deliveryTime, setDeliveryTime] = useState(data?.end_date);
+  // const [cookieValue, setCookieValue] = useState<string | null>(null);
   // console.log(cookieValue,"cookieValue");
 
   const gettoken = Cookies.get("auth_token");
 
-  useEffect(() => {
-    // Get cookies on the client side
-    const cookies = nookies.get(); // retrieves cookies from document.cookie
-    const userData = cookies.user_info ? JSON.parse(cookies.user_info) : null;
+  // useEffect(() => {
+  //   // Get cookies on the client side
+  //   const cookies = nookies.get(); // retrieves cookies from document.cookie
+  //   const userData = cookies.user_info ? JSON.parse(cookies.user_info) : null;
 
-    setCookieValue(userData?.uuid || null);
-  }, []);
+  //   setCookieValue(userData?.uuid || null);
+  // }, []);
 
   // console.log("cookie value", cookieValue);
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,21 +57,17 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
 
     // Collect form data
     const formData = {
-      edit_by: createlinkuserId,
-      brandKey: data?.brandKey,
-      linkUuid: data?.cartDetail?.[0]?.cart_uuid,
+      cart_uuid: cartId,
       collection_title: collectionTitle,
       sender_name: senderName,
       recipient_email: recipientEmail,
-      delivery_option: deliveryOption,
-      start_date: deliveryDate,
-      end_date: deliveryTime,
+      delivery_date: deliveryDate
     };
 
     try {
       // Send form data to the API (replace with your API endpoint)
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/razorpay/update-link`,
+        `${process.env.NEXT_PUBLIC_API_URL}/cart/modify-cart-details`,
         {
           method: "POST",
           headers: {
@@ -81,16 +79,16 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
       );
 
       if (response.ok) {
-        toast.success("Data saved successfully", { autoClose: 1000 });
-        // alert("Data saved successfully");
-        setClose(!isClose);
-        // console.log("respoSidemodel",formData)
-        // console.log("respoSidemodelrs",response)
-        //    setEditCollection((prev: any) => ({
-        //   ...prev,
-        //   data: formData, // Updating the nested `data` properly
-        // }));
-        onClose(); // Close the modal after successful submission
+        toast.success("Data saved successfully", {
+          autoClose: 1000,
+          onClose: () => {
+            onClose(); 
+          }
+        });
+
+        // setClose(!isClose);
+
+        // onClose();
       } else {
         toast.error("Failed to save data", { autoClose: 2000 });
         // alert("Failed to save data");
@@ -218,7 +216,7 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
                         className="block w-full p-2 border border-gray-300 rounded"
                       />
                     </label>
-                    <label className="block">
+                    {/* <label className="block">
                       <span className="sr-only">Time</span>
                       <input
                         type="time"
@@ -226,7 +224,7 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
                         onChange={(e) => setDeliveryTime(e.target.value)}
                         className="block w-full p-2 border border-gray-300 rounded"
                       />
-                    </label>
+                    </label> */}
                   </div>
                 )}
               </div>
