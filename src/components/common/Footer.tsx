@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 import { Row, Col, Typography } from "antd";
-import GoodLuckCad from "../../../public/newimage/logoGroup.png";
+// import GoodLuckCad from "../../../public/newimage/logoGroup.png";
+import GoodLuckCad from "../../../public/newimage/Groupwish-logo.png";
 import {
   FacebookOutlined,
   InstagramOutlined,

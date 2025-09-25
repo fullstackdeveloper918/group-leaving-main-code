@@ -462,7 +462,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
           />
         )} */}
       </Rnd>
-      {overlapPopup}
+      {/* {overlapPopup} */}
     </>
   );
 };

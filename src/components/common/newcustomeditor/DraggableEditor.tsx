@@ -3,7 +3,6 @@ import { Rnd } from "react-rnd";
 import nookies from "nookies";
 import TextEditor from "./SingleTextEditor";
 import ImageEditor from "./NewImageEditor";
-import ReactDOM from "react-dom";
 import { FaLock } from "react-icons/fa";
 
 // Interfaces
@@ -66,8 +65,10 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   elements,
   initialX,
   initialY,
-  width = 220,
-  height = 200,
+  // width = 220,
+  // height = 200,
+  width,
+  height,
   isDraggable = true,
   color = "#000",
   fontFamily = "Arial",
@@ -86,41 +87,12 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [showTextModal, setShowTextModal] = useState(false);
+  const [zIndex, setZIndex] = useState(1); // Default z-index
   const isEditing = activeSlide === index.activeSlide;
-  const [showOverlapPopup, setShowOverlapPopup] = useState(false);
-  const [pendingElement, setPendingElement] = useState<any>(null);
-  const [forceSave, setForceSave] = useState(false);
   const sizeRef = useRef({ width, height });
 
   // Lock logic for first slide only
   const isFirstSlide = activeSlide === 0;
-
-  // Helper: Check overlap between two elements
-  function isOverlapping(a: any, b: any) {
-    if (a.slideIndex !== b.slideIndex) return false;
-    return !(
-      a.x + (a.width || 220) <= b.x ||
-      a.x >= b.x + (b.width || 220) ||
-      a.y + (a.height || 200) <= b.y ||
-      a.y >= b.y + (b.height || 200)
-    );
-  }
-
-  // Check for overlap before saving/moving
-  function checkAndHandleOverlap(newElement: any) {
-    const overlap = elements.some(
-      (el, i) =>
-        i !== index.original &&
-        el.slideIndex === newElement.slideIndex &&
-        isOverlapping(el, newElement)
-    );
-    if (overlap && !forceSave) {
-      setPendingElement(newElement);
-      setShowOverlapPopup(true);
-      return true; // Block action
-    }
-    return false; // No overlap, proceed
-  }
 
   // Initialize userInfo from cookies
   useEffect(() => {
@@ -189,10 +161,6 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
 
   // Handle text element click
   const handleClick = () => {
-    //   if (isFirstSlide) {
-    //     toast("You do not have permission to add to the front cover");
-    //     return;
-    //   }
     if (type === "text" && !showTextModal && !showImageModal && isEditing) {
       setSelectedElement({
         ...elements[index.original],
@@ -206,10 +174,6 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
 
   // Handle image/gif click
   const handleImageClick = () => {
-    // if (isFirstSlide) {
-    //   toast("You do not have permission to add to the front cover");
-    //   return;
-    // }
     if (
       (type === "image" || type === "gif") &&
       !showImageModal &&
@@ -234,79 +198,14 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   const isImageModalOpenForThisElement =
     showImageModal && selectedElement?.originalIndex === index.original;
 
-  // Overlap popup
-  const overlapPopup = showOverlapPopup
-    ? ReactDOM.createPortal(
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-[9999]">
-          <div className="bg-white p-6 rounded shadow-lg max-w-md w-full">
-            <h2 className="text-lg font-bold mb-2">
-              Overlapping {type === "text" ? "Signature" : "Element"}
-            </h2>
-            <p className="mb-2">
-              Whoa this card is popular, it looks like your{" "}
-              {type === "text" ? "signature" : "element"} is overlapping.
-              <br />
-              Someone may have signed or added content while you were writing
-              your message.
-            </p>
-            <h3 className="font-semibold mt-4 mb-2">
-              How to move your {type === "text" ? "signature" : "element"}
-            </h3>
-            <ul className="list-disc pl-5 mb-4 text-sm text-gray-700">
-              <li>
-                Drag and drop your {type === "text" ? "signature" : "element"}{" "}
-                to a free spot
-              </li>
-              <li>Change pages by using the arrows below the card</li>
-              <li>Once done click the save button</li>
-            </ul>
-            <div className="flex justify-end gap-2 mt-4">
-              <button
-                className="text-red-500 hover:underline mr-2"
-                onClick={() => {
-                  setShowOverlapPopup(false);
-                  setForceSave(true);
-                  if (pendingElement) {
-                    updateElement(
-                      pendingElement.x,
-                      pendingElement.y,
-                      pendingElement.width,
-                      pendingElement.height
-                    );
-                    setPendingElement(null);
-                    setForceSave(false);
-                    setShowTextModal(false);
-                    setShowImageModal(false);
-                  }
-                }}
-              >
-                Save anyway
-              </button>
-              <button
-                className="bg-blue-600 text-black px-4 py-2 rounded"
-                onClick={() => {
-                  setShowOverlapPopup(false);
-                  setPendingElement(null);
-                  setForceSave(false);
-                }}
-              >
-                Move {type === "text" ? "Signature" : "Element"}
-              </button>
-            </div>
-          </div>
-        </div>,
-        document.body
-      )
-    : null;
-
   return (
     <>
       {/* Lock icon for first slide only */}
-      {/* {isFirstSlide && (
+      {isFirstSlide && (
         <div style={{ position: "absolute", top: 8, left: 8, zIndex: 10000 }}>
           <FaLock size={24} color="#888" title="Front cover is locked" />
         </div>
-      )} */}
+      )}
       <Rnd
         className={`${type === "text" ? "editor-react-drag" : ""} ${
           showTextModal && "editor-transform"
@@ -314,6 +213,11 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
         bounds="parent"
         position={showTextModal ? { x: 0, y: 0 } : position}
         size={type === "text" ? undefined : sizeRef.current}
+        onDragStart={() => {
+          if (!isFirstSlide) {
+            setZIndex(100); // Set high z-index when dragging starts
+          }
+        }}
         onDrag={
           showTextModal
             ? (_, d) => {
@@ -322,10 +226,10 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
             : undefined
         }
         onDragStop={(_, d) => {
-          const newElement = { ...elements[index.original], x: d.x, y: d.y };
-          if (!checkAndHandleOverlap(newElement)) {
-            if (!isFirstSlide) setPosition({ x: d.x, y: d.y });
+          if (!isFirstSlide) {
+            setPosition({ x: d.x, y: d.y });
             updateElement(d.x, d.y);
+            setZIndex(1); // Reset z-index after dragging
           }
         }}
         onResize={(_, __, ref, ___, pos) => {
@@ -344,17 +248,11 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
           ) {
             const newWidth = parseInt(ref.style.width);
             const newHeight = parseInt(ref.style.height);
-            const newElement = {
-              ...elements[index.original],
-              x: pos.x,
-              y: pos.y,
-              width: newWidth,
-              height: newHeight,
-            };
-            if (!checkAndHandleOverlap(newElement)) {
-              if (!isFirstSlide) setPosition(pos);
+            if (!isFirstSlide) {
+              setPosition(pos);
               sizeRef.current = { width: newWidth, height: newHeight };
               updateElement(pos.x, pos.y, newWidth, newHeight);
+              setZIndex(1); // Reset z-index after resizing
             }
           }
         }}
@@ -372,6 +270,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
           pointerEvents: "auto",
           cursor: "default",
           transform: "none",
+          zIndex: zIndex, // Apply dynamic z-index
         }}
       >
         {(type === "image" || type === "gif") &&
@@ -398,8 +297,8 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
               opacity: isEditing ? 1 : 0.5,
               cursor: isEditing ? "pointer" : "not-allowed",
               userSelect: "none",
-              width: "100%",
-              height: "100%",
+              width: width,
+              height: height,
               padding: "8px",
               color,
               fontFamily,
@@ -410,7 +309,15 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
             onClick={handleClick}
           >
             <div
-              className="p-2"
+              className={`p-2`}
+              style={{
+                wordBreak: "break-word",
+                whiteSpace: "pre-wrap",
+                letterSpacing: "3px",
+                // minHeight: "20px",
+                // maxHeight: "400px",
+                // overflowY: "auto",
+              }}
               dangerouslySetInnerHTML={{
                 __html: content?.split("\n")[0] || "",
               }}
@@ -453,16 +360,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
             isFirstSlide={isFirstSlide}
           />
         )}
-        {/* If you have a gifEditor, add similar logic here: */}
-        {/* {showGifModal && (
-          <GifEditor
-            ...
-            isFirstSlide={isFirstSlide}
-            toast={toast}
-          />
-        )} */}
       </Rnd>
-      {overlapPopup}
     </>
   );
 };

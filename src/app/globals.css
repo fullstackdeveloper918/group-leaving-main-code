@@ -2261,7 +2261,7 @@ left: unset !important;
 .carousel-wrapper {
   position: relative;
   width: 100%;
-  height: 750px;
+  height: 612px;
   margin: 0 auto;
 }
 
@@ -2275,7 +2275,7 @@ left: unset !important;
 .carousel-slide {
   position: absolute;
   width: 100%;
-  height: 750px;
+  height: 630px;
   top: 0;
   left: 50%;
   transform-origin: center center;
@@ -2860,4 +2860,38 @@ left: unset !important;
 .bgGray:hover {
   background-color: rgb(236, 236, 236);
   /* border: 1px solid gray; */
+}
+
+/* 25-09-25 editor  */
+
+.editor-design {
+  max-width: 500px;
+  font-family: Arial, sans-serif;
+}
+
+.text-editor-place {
+  width: 100%;
+  border: none;
+  padding: 4px;
+}
+
+.text-editor-place:focus {
+  outline: none;
+}
+
+.border-bottom {
+  border-bottom: 1px solid;
+}
+
+.transition {
+  transition: all 0.2s ease;
+}
+
+.editor-cancel:hover,
+.editor-delete:hover {
+  background-color: #fee2e2;
+}
+
+.editor-save:hover {
+  background-color: #4f46e5;
 }

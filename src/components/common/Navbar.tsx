@@ -8,7 +8,8 @@ import LogoutModal from "./LogoutModal";
 import { useParams, useRouter } from "next/navigation";
 import { destroyCookie, parseCookies } from "nookies";
 // import GoodLuckCad from "../../assets/images/congratulations/good_luck.png"
-import GoodLuckCad from "../../../public/newimage/logoGroup.png";
+// import GoodLuckCad from "../../../public/newimage/logoGroup.png";
+import GoodLuckCad from "../../../public/newimage/Groupwish-logo.png";
 import register from "../../assets/images/register.png";
 import { useAccessToken } from "@/app/context/AccessTokenContext";
 import Cookies from "js-cookie";

@@ -16,21 +16,21 @@ interface UserInfo {
   uuid?: string;
 }
 
-const RazorPay = ({ amount, type,cart_id,bundleId }: any) => {
+const RazorPay = ({ amount, type, cart_id, bundleId }: any) => {
   //  const getToken = cookies().get("auth_token")?.value || "";
   //   console.log(getToken, "Access Token");
-    // console.log(amount, "bundleId");
-    
-    // console.log(type, "wertfghdfg");
-    // console.log(bundleOption, "sfasdfasd");
-    
+  // console.log(amount, "bundleId");
+
+  // console.log(type, "wertfghdfg");
+  // console.log(bundleOption, "sfasdfasd");
+
   const router = useRouter();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const param = useParams();
   // console.log(param,"param");
   // console.log(userInfo,"userInfo");
   // console.log(type,"qazxsw");
-  
+
   const [state, setState] = useState<string>("");
   const [authToken, setAuthToken] = useState<string>("");
   // console.log(authToken,"authToken");
@@ -43,8 +43,8 @@ const RazorPay = ({ amount, type,cart_id,bundleId }: any) => {
   }, [state]);
   const searchParams = useSearchParams();
   // console.log(type,"type");
-  
-  const cartId = cart_id ; // Correct way to extract cart_uuid
+
+  const cartId = cart_id; // Correct way to extract cart_uuid
   // console.log("cartId",cartId)
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -56,8 +56,8 @@ const RazorPay = ({ amount, type,cart_id,bundleId }: any) => {
       : null;
     setUserInfo(userInfoFromCookie);
   }, []);
-const [uniqueId,setUniqueId] =useState<any>("")
-// console.log(uniqueId,"uniqueId");
+  const [uniqueId, setUniqueId] = useState<any>("");
+  // console.log(uniqueId,"uniqueId");
 
   const handlePayment = async () => {
     setIsProcessing(true);
@@ -68,11 +68,11 @@ const [uniqueId,setUniqueId] =useState<any>("")
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ amount: Math.round(amount * 100) }), 
+        body: JSON.stringify({ amount: Math.round(amount * 100) }),
       });
       const data = await response.json();
-      console.log(data,"data from api")
-      setState(data)
+      console.log(data, "data from api");
+      setState(data);
       if (!window.Razorpay) {
         // console.error("Razorpay SDK not loaded");
         return;
@@ -88,7 +88,7 @@ const [uniqueId,setUniqueId] =useState<any>("")
         order_id: data.orderId,
         handler: async (response: any) => {
           // console.log("Payment successful", response);
-          
+
           const paymentId = response.razorpay_payment_id;
           const product_id = param.id;
 
@@ -96,25 +96,28 @@ const [uniqueId,setUniqueId] =useState<any>("")
           // console.log("sadfasdfassfdasf",userInfo)
           // headers["Authorization"] = `Bearer ${getToken}`;
           try {
-            const paymentResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/razorpay/save-payment`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-               'Authorization': `Bearer ${authToken}`
-                // "Authorization":`Bearer ${authToken}`
-              },
-              body: JSON.stringify({
-                cart_uuid: cartId,
-                product_id: product_id,
-                user_uuid: userInfo?.uuid,
-                sender_name: name,
-                paymentId: paymentId,
-                payment_for: type==="single"?"card":"bundle",
-                is_payment_for_both: type==="bundle"?true:false,
-                bundle_uuid: bundleId==="bundle_card"?"":bundleId,
-                collection_link:"sdfsrwr"
-              }),
-            });
+            const paymentResponse = await fetch(
+              `${process.env.NEXT_PUBLIC_API_URL}/razorpay/save-payment`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${authToken}`,
+                  // "Authorization":`Bearer ${authToken}`
+                },
+                body: JSON.stringify({
+                  cart_uuid: cartId,
+                  product_id: product_id,
+                  user_uuid: userInfo?.uuid,
+                  sender_name: name,
+                  paymentId: paymentId,
+                  payment_for: type === "single" ? "card" : "bundle",
+                  is_payment_for_both: type === "bundle" ? true : false,
+                  bundle_uuid: bundleId === "bundle_card" ? "" : bundleId,
+                  collection_link: "sdfsrwr",
+                }),
+              }
+            );
             if (!paymentResponse.ok) {
               throw new Error("Payment save failed");
             }
@@ -122,11 +125,13 @@ const [uniqueId,setUniqueId] =useState<any>("")
             // console.log(responseData,"paymentResponse");
             if (type === "bundleFor") {
               router.push(`/account/bundles`);
-            } else{
-              router.push(`/successfull?unique_id=${responseData?.data?.messages_unique_id}`);
+            } else {
+              router.push(
+                // `/successfull?unique_id=${responseData?.data?.messages_unique_id}`
+                `/successfull?cart_uuid=${cartId}`
+              );
             }
-            setUniqueId(responseData?.data?.messages_unique_id)
-            
+            setUniqueId(responseData?.data?.messages_unique_id);
           } catch (error) {
             console.error("Error saving payment:", error);
           }
