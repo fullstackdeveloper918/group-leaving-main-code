@@ -1,17 +1,24 @@
-import React from 'react'
-import SuccessfulPage from '../../components/common/Success';
-const page = ({searchParams}:any) => {
-    console.log(searchParams,"searchParams");
-    
-    const uniqueId = searchParams?.unique_id; // Safely accessing unique_id
+import React from "react";
+import SuccessfulPage from "../../components/common/Success";
 
-    console.log(uniqueId, "unique_id");
-    
+// This is a Server Component receiving searchParams as a prop
+const Page = ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string };
+}) => {
+  console.log(searchParams, "searchParams");
+
+  const cartUuid = searchParams?.cart_uuid;
+  const uniqueId = searchParams?.unique_id;
+
+  console.log(cartUuid, "cartUuid here");
+
   return (
     <div>
-        <SuccessfulPage unique_Id={uniqueId}/>
+      <SuccessfulPage cartUuid={cartUuid} />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default Page;

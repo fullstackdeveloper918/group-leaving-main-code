@@ -71,16 +71,18 @@ const Checkout = ({ data }: any) => {
     const selectedCount = data?.data.find(
       (count: any) => count.number_of_cards === Number(e.target.value)
     );
-  
+
     if (!selectedCount) return;
-  
+
     setNumCards(Number(e.target.value)); // Update number of cards state
     setSelectBundle(selectedCount); // Save full bundle info
-  
+
     // Format prices to two decimal places
     const formattedSalePrice = Number(selectedCount.sale_price.toFixed(2));
-    const formattedPerCardPrice = Number(selectedCount.per_card_price.toFixed(2));
-  
+    const formattedPerCardPrice = Number(
+      selectedCount.per_card_price.toFixed(2)
+    );
+
     setSalePrice(formattedSalePrice);
     setExact(formattedPerCardPrice);
   };
@@ -93,9 +95,9 @@ const Checkout = ({ data }: any) => {
   const [shareImageData, setShareImageData] = useState<any>(null);
   const [shareCartData, setShareCartData] = useState<any>(null);
 
-    const { id } = useParams();
+  const { id } = useParams();
 
-    useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const postData = {
@@ -114,7 +116,7 @@ const Checkout = ({ data }: any) => {
         );
 
         const data = await response.json();
-        console.log(data,"data from api")
+        console.log(data, "data from api");
         setShareCartData(data); // Store response data in state
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -122,48 +124,41 @@ const Checkout = ({ data }: any) => {
     };
 
     fetchData();
-  }, [id]); 
-  
-  
-  
-  
-    
+  }, [id]);
+
   // useEffect(() => {
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await fetch(
-    //       `${process.env.NEXT_PUBLIC_API_URL}/card/users-cards`,
-    //       {
-    //         method: "GET",
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //           Authorization: `Bearer ${gettoken}`,
-    //         },
-    //       }
-    //     );
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       `${process.env.NEXT_PUBLIC_API_URL}/card/users-cards`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${gettoken}`,
+  //         },
+  //       }
+  //     );
 
-    //     const data = await response.json();
-    //     setShareImageData(data); // Store response data in state
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //   }
-    // };
+  //     const data = await response.json();
+  //     setShareImageData(data); // Store response data in state
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
 
-    // fetchData();
+  // fetchData();
   // }, []);
-  // console.log(shareImageData, "shareImageData here");  
-  const cardShareData =  shareCartData?.data || [];
+  // console.log(shareImageData, "shareImageData here");
+  const cardShareData = shareCartData?.data || [];
 
   // console.log(cardShareData,"cardShareDatassaes")
-  
-  
-  
-  
+
   const onChange = (e: any) => {
     setVaoucher(e);
   };
 
-//  const stripe = useStripe();
+  //  const stripe = useStripe();
   // const cardPrices: any = {
   //   5: { price: 22.45, perCard: 4.49, discount: "10%" },
   //   10: { price: 40.9, perCard: 4.09, discount: "18%" },
@@ -182,7 +177,8 @@ const Checkout = ({ data }: any) => {
   //     : bundleSingleCard;
 
   const amount: any =
-    cardType === "individual" ? cardShareData?.cardData?.individual_price
+    cardType === "individual"
+      ? cardShareData?.cardData?.individual_price
       : cardType === "group"
       ? bundleOption === "single"
         ? cardShareData?.cardData?.group_card_price
@@ -304,7 +300,10 @@ const Checkout = ({ data }: any) => {
       if (posts?.status == 200) {
         // console.log("Payment successful!");
         toast.success("payment successful", { autoClose: 2000 });
-        router.push(`/successfull?unique_id=${posts?.data}`);
+        router.push(
+          `/successfull?unique_id=${posts?.data}`
+          // `/successfull?cart_uuid=${cartUuid}`
+        );
       } else {
         console.log("Payment failed:", posts?.message);
       }
@@ -478,11 +477,12 @@ const Checkout = ({ data }: any) => {
                         className="border border-gray-300 p-2 rounded-lg w-full"
                       >
                         {data?.data.map((count: any) => {
-                          const basePrice = cardShareData?.cardData?.group_card_price || 0;
-                          const salePrice = (count.discount
-                            ? basePrice * (1 - count.discount / 100)
-                            : basePrice
-                          ) * (count?.number_of_cards ?? 1);
+                          const basePrice =
+                            cardShareData?.cardData?.group_card_price || 0;
+                          const salePrice =
+                            (count.discount
+                              ? basePrice * (1 - count.discount / 100)
+                              : basePrice) * (count?.number_of_cards ?? 1);
 
                           const perCardPrice = count.number_of_cards
                             ? salePrice / count.number_of_cards
@@ -497,13 +497,14 @@ const Checkout = ({ data }: any) => {
                               key={count.number_of_cards}
                               value={count.number_of_cards}
                             >
-                              {count?.number_of_cards} Cards — ₹{salePrice.toFixed(2)} INR (₹
-                              {perCardPrice.toFixed(2)} INR/card) - {count.discount}% off
+                              {count?.number_of_cards} Cards — ₹
+                              {salePrice.toFixed(2)} INR (₹
+                              {perCardPrice.toFixed(2)} INR/card) -{" "}
+                              {count.discount}% off
                             </option>
                           );
                         })}
                       </select>
-
 
                       <p className="text-gray-600 text-sm mt-2">
                         Card bundles require a single payment and won&apos;t
@@ -521,7 +522,6 @@ const Checkout = ({ data }: any) => {
 
           {/* Payment Options */}
           <div className="space-y-4">
-
             {quantity === 0 ? (
               <>
                 <RazorPay
@@ -553,14 +553,16 @@ const Checkout = ({ data }: any) => {
 
         <div className="flex-1 mt-6 md:mt-0 md:ml-6">
           <div className="bg-gray-50 p-6 rounded-lg shadow-md">
-            <h2 className="text-lg font-bold mb-0Shared Gift Fund">Your Card</h2>
+            <h2 className="text-lg font-bold mb-0Shared Gift Fund">
+              Your Card
+            </h2>
             <div className="flex justify-between items-start flex-col mb-4">
               <span>Group Card for {cardShareData?.recipient_name}</span>
-               <img
-                  src={`${process.env.NEXT_PUBLIC_API_URL}/${cardShareData?.images?.[0]?.card_images?.[0]}`} // Replace with your gift card image
-                  alt="E-Gift Card"
-                  className="w-40 h-30 mt-3 object-contain rounded-md"
-                />
+              <img
+                src={`${process.env.NEXT_PUBLIC_API_URL}/${cardShareData?.images?.[0]?.card_images?.[0]}`} // Replace with your gift card image
+                alt="E-Gift Card"
+                className="w-40 h-30 mt-3 object-contain rounded-md"
+              />
             </div>
             <div className="flex justify-between items-center mb-4">
               <input

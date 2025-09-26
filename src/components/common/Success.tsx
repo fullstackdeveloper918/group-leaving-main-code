@@ -1,15 +1,17 @@
-"use client";  // Ensure this is at the top for client-side rendering
+"use client"; // Ensure this is at the top for client-side rendering
 
 import React from "react";
 import { CheckCircleIcon, ClipboardIcon } from "@heroicons/react/24/solid";
 import { toast, ToastContainer } from "react-toastify";
 import Link from "next/link";
 
-const Success = ({ unique_Id }: any) => {
+const Success = ({ cartUuid }: any) => {
+  console.log(cartUuid, "unique_Id in success page");
+  const baseUrl = window.location.origin;
   const handleCopy = () => {
-    if (unique_Id) {
+    if (cartUuid) {
       navigator.clipboard
-        .writeText(`https://groupwish.in/share/editor/${unique_Id}`)
+        .writeText(`${baseUrl}/share/${cartUuid}`)
         .then(() => {
           toast.success("Link copied successfully");
         })
@@ -44,22 +46,22 @@ const Success = ({ unique_Id }: any) => {
           <CheckCircleIcon className="success-icon" />
           <h1 className="success-title">Success!</h1>
           <p className="success-description">
-            Thanks for your payment, we&apos;ve created your card and it&apos;s ready to be signed.
+            Thanks for your payment, we&apos;ve created your card and it&apos;s
+            ready to be signed.
           </p>
         </div>
 
         {/* Shareable Link */}
         <div className="shareable-link-container">
           <label className="shareable-label">
-            Share the link with friends or colleagues so they can add their own messages:
+            Share the link with friends or colleagues so they can add their own
+            messages:
           </label>
           <div className="shareable-input-container">
             <input
               type="text"
               readOnly
-              value={
-                unique_Id ? `https://groupwish.in/share/editor/${unique_Id}` : ""
-              }
+              value={cartUuid ? `${baseUrl}/share/${cartUuid}` : ""}
               className="shareable-input"
             />
             <button onClick={handleCopy} className="copy-button">
@@ -70,13 +72,13 @@ const Success = ({ unique_Id }: any) => {
 
         {/* Buttons */}
         <div className="button-container">
-          {unique_Id && (
-            <Link href={`/successfull/receipt/${unique_Id}`}>
+          {cartUuid && (
+            <Link href={`/successfull/receipt/${cartUuid}`}>
               <button className="view-receipt-button">View Receipt</button>
             </Link>
           )}
-          {unique_Id && (
-            <Link href={`/share/editor/${unique_Id}`}>
+          {cartUuid && (
+            <Link href={`/share/${cartUuid}`}>
               <button className="sign-card-button">Sign Card</button>
             </Link>
           )}

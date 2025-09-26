@@ -334,7 +334,9 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
         subtitle: "New Subtitle",
         text: "This is a dynamically generated slide.",
         link: "https://example.com",
-        card_img: SlideImg_5,
+        // card_img: SlideImg_5,
+        // card_img: "/newimage/Farewell.png",
+        card_img: "/newimage/content.png",
       };
 
       setSlides((prevSlides) => [...prevSlides, newSlide]);
@@ -980,8 +982,10 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
                             elements={elements}
                             initialX={el.x || 0}
                             initialY={el.y || 0}
-                            width={320}
-                            height={200}
+                            // width={320}
+                            // height={200}
+                            width={el.width || 320}
+                            height={el.height || 200}
                             isDraggable={true}
                             color={el.color}
                             fontFamily={el.fontFamily}

@@ -273,7 +273,10 @@ const GroupCollection = ({
           </div>
 
           <div className="flex w-full justify-center">
-            <div className="w-[48%] mt-8 flex flex-col">
+            <div
+              className="mt-8 flex flex-col"
+              style={{ width: "550px", maxWidth: "650px" }}
+            >
               <CommonCustomEditor cardShareData={cardShareData} />
             </div>
 

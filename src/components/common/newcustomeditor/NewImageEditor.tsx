@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useEditorPosition } from "../../editor/hooks/useEditorPosition";
 import { FaTrash } from "react-icons/fa";
-import ImageResizableContainer from "../../editor/components/ImageResizableContainer";
+// import ImageResizableContainer from "../../editor/components/ImageResizableContainer";
 import { toast } from "react-toastify";
+import ResizableEditor from "./ResizableEditor";
 
 interface ImageEditorProps {
   onHide: () => void;
@@ -139,7 +140,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
 
   return (
     <div className="flex flex-col items-center w-full max-w-2xl editor-design-image">
-      <ImageResizableContainer
+      <ResizableEditor
         position={position}
         setPosition={setPosition}
         isDragging={isDragging}
@@ -160,7 +161,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
           }}
           draggable={false}
         />
-      </ImageResizableContainer>
+      </ResizableEditor>
       <div className="px-2 pb-2">
         <div className="bg-white mt-2 px-4 w-fit">
           <div className="flex justify-center align-items-center gap-2 py-2">
