@@ -89,7 +89,8 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   const [showTextModal, setShowTextModal] = useState(false);
   const [zIndex, setZIndex] = useState(1); // Default z-index
   const isEditing = activeSlide === index.activeSlide;
-  const sizeRef = useRef({ width, height });
+  // const sizeRef = useRef({ width, height });
+  const sizeRef = useRef<{ width: any; height: any }>({ width: 0, height: 0 });
 
   // Lock logic for first slide only
   const isFirstSlide = activeSlide === 0;
@@ -313,7 +314,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
               style={{
                 wordBreak: "break-word",
                 whiteSpace: "pre-wrap",
-                letterSpacing: "3px",
+                // letterSpacing: "1px",
                 // minHeight: "20px",
                 // maxHeight: "400px",
                 // overflowY: "auto",

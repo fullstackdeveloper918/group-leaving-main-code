@@ -97,7 +97,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
       initialX: selectedElement?.content ? selectedElement?.x : 60,
       initialY: selectedElement?.content ? selectedElement?.y : 200,
       slideWidth: 500,
-      slideHeight: 650,
+      slideHeight: 620,
       editorWidth: selectedElement?.width ?? 300,
       editorHeight: selectedElement?.height ?? 100,
     });
@@ -187,6 +187,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
         user_uuid: user_uuid,
         editor_messages: [newElement],
       };
+      console.log("Payload for API:", payload);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/cart/upsert-editor-messages`,
         {
@@ -203,7 +204,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
       }
 
       const result = await response.json();
-      toast.success("Saved Changes & Synced with Server");
+      toast.success("Saved Changes Successfully");
     } catch (error) {
       console.error("API Error:", error);
       toast.error("Failed to sync with server");
@@ -234,7 +235,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const handleResize = (newWidth: number, newHeight: number) => {
     const SLIDE_WIDTH = 500;
     const SLIDE_HEIGHT = 650;
-    const MIN_WIDTH = 220;
+    const MIN_WIDTH = 300;
     const MAX_WIDTH = 400;
 
     const clampedWidth = Math.min(Math.max(newWidth, MIN_WIDTH), MAX_WIDTH);
@@ -270,11 +271,15 @@ const TextEditor: React.FC<TextEditorProps> = ({
   return (
     <div
       ref={slideRef}
-      className="flex flex-col justify-center items-center w-full max-w-2xl editor-design"
+      className="flex flex-col justify-center items-center"
+      // className="flex flex-col justify-center items-center editor-design"
       style={{
         position: "absolute",
         top: `${position.y}px`,
+        // bottom: `${position.y}px`,
         left: `${position.x}px`,
+        width: `${position.width}`,
+        height: `${position.height}`,
         zIndex: 1000,
       }}
     >
@@ -314,7 +319,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
               const onMouseMove = (moveEvent: MouseEvent) => {
                 const deltaX = startX - moveEvent.clientX;
                 const newWidth = Math.min(
-                  Math.max(startWidth + deltaX, 220),
+                  Math.max(startWidth + deltaX, 300),
                   400
                 );
                 const newLeft = Math.min(
@@ -344,7 +349,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
               const onMouseMove = (moveEvent: MouseEvent) => {
                 const deltaX = moveEvent.clientX - startX;
                 const newWidth = Math.min(
-                  Math.max(startWidth + deltaX, 220),
+                  Math.max(startWidth + deltaX, 300),
                   400
                 );
                 handleResize(newWidth, position.height);
@@ -371,7 +376,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
                 }));
                 adjustTextareaHeight();
               }}
-              className="resize-none outline-none text-editor-place w-full"
+              className="resize-none outline-none hightTextArea w-full"
               style={{
                 fontFamily: editorState.fontFamily,
                 fontSize: editorState.fontSize,
@@ -382,6 +387,8 @@ const TextEditor: React.FC<TextEditorProps> = ({
                 wordWrap: "break-word",
                 minHeight: "10px",
                 maxHeight: "400px",
+                height: "36px !important",
+                lineHeight: "1",
               }}
               // cols={1}
             />

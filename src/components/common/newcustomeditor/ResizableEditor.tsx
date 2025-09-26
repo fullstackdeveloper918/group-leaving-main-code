@@ -2,6 +2,8 @@ import React, { useRef, ReactNode } from "react";
 import { Position } from "../../editor/types/editor";
 
 interface ResizableContainerProps {
+  position?: Position;
+  setPosition?: React.Dispatch<React.SetStateAction<Position>>;
   children: ReactNode;
   isDragging: boolean;
   startDragging: (e: React.MouseEvent<HTMLDivElement>) => void;
