@@ -41,7 +41,9 @@ const AccountCards = ({ data }: any) => {
   console.log(data, "AccountCards data");
 
   const [showModal, setShowModal] = useState(false);
-
+  const [selectedCartUuid, setSelectedCartUuid] = useState<string | null>(null);
+  const [cards, setCards] = useState<any[]>(data?.listing || []);
+  const [, forceUpdate] = useState(0);
   // const AccountCards = () => {
   const router = useRouter();
 
@@ -53,22 +55,33 @@ const AccountCards = ({ data }: any) => {
 
   // console.log(formattedDate, "jljljlj");
 
-  const handleDelete = async () => {
+  const handleDelete = async (cart_uuid: any) => {
     try {
+      const gettoken = Cookies.get("auth_token");
       // Call your delete API here
-      const res = await fetch(`/api/delete/`, {
-        method: "DELETE",
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/soft-delete/${cart_uuid}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${gettoken}`,
+        },
       });
 
       if (res.ok) {
         // Callback to refresh list or UI
         setShowModal(false);
+        toast.success("Card deleted successfully");
+        
+        // setCards((prev) =>
+        //   prev.filter((c) => c.cartDetail[0]?.cart_uuid !== cart_uuid)
+        // );
+        // forceUpdate((x) => x + 1);
       } else {
-        alert("Failed to delete.");
+        toast.error("Failed to delete.");
       }
     } catch (error) {
       console.error("Delete error:", error);
-      alert("An error occurred.");
+      toast.error("An error occurred.");
     }
   };
   return (
@@ -77,12 +90,12 @@ const AccountCards = ({ data }: any) => {
       <h1 className="font-bold mb-4 mb-md-5 my-card-head">My Cards</h1>
 
       <div className="w-full account-card-box">
-        {!data?.listing || data?.listing.length === 0 ? (
+        {!cards || cards.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10">
             <p className="mb-4 text-gray-500">No data found.</p>
           </div>
         ) : (
-          data?.listing?.map((card: any) => {
+          cards?.map((card: any) => {
             // {console.log(card,"here to see card text")}
             // Format the delivery date to 'YYYY-MM-DD'
             const formattedDeliveryDate = card.delivery_date
@@ -99,7 +112,7 @@ const AccountCards = ({ data }: any) => {
             // console.log("cardis", card)
             return (
               <div
-                key={card.id}
+                key={card?.cartDetail[0]?.cart_uuid}
                 className="rounded-lg p-6 mb-4 flex justify-between items-center account-inner-card"
               >
                 <div className="flex w-full card-full-cover-box gap-4">
@@ -149,7 +162,10 @@ const AccountCards = ({ data }: any) => {
                         <AiFillDelete
                           fill="#db0404"
                           className="cursor-pointer text-red-600"
-                          onClick={() => setShowModal(true)}
+                          onClick={() => {
+                            setSelectedCartUuid(card?.cartDetail[0]?.cart_uuid);
+                            setShowModal(true);
+                          }}
                         />
                       </div>
                     </div>
@@ -222,7 +238,7 @@ const AccountCards = ({ data }: any) => {
                 Cancel
               </button>
               <button
-                onClick={handleDelete}
+                onClick={() => selectedCartUuid && handleDelete(selectedCartUuid)}
                 style={{ background: "#db0404", fontWeight: "500" }}
                 className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
               >

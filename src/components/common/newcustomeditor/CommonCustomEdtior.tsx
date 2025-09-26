@@ -334,9 +334,9 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
         subtitle: "New Subtitle",
         text: "This is a dynamically generated slide.",
         link: "https://example.com",
-        // card_img: SlideImg_5,
+        card_img: SlideImg_5,
         // card_img: "/newimage/Farewell.png",
-        card_img: "/newimage/content.png",
+        // card_img: "/newimage/content.png",
       };
 
       setSlides((prevSlides) => [...prevSlides, newSlide]);
@@ -410,8 +410,8 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   // Handle adding a new message (and new slide)
   const handleAddMessageClick = () => {
     // Only jump to last slide if on slide 0-4
-    if (activeSlideIndex <= 4 && !isEditorPath) {
-      const lastSlideIndex = slides.length - 2;
+    if (activeSlideIndex <= 1 && !isEditorPath) {
+      const lastSlideIndex = slides.length - 1;
       // const lastSlideIndex = 5;
       // console.log(lastSlideIndex, "lastSlideIndex");
       const newSlide = {
@@ -771,7 +771,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   return (
     <>
       <ToastContainer />
-      <div className="card-carousel-container select-none" id="main-carousle">
+      <div className="card-carousel-container select-none overflow-visible" id="main-carousle">
         <div className="editor_option" style={{ marginBottom: "15px" }}>
           <div>
             <button
@@ -1006,11 +1006,11 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
                 );
               })}
             </div>
-            <div className="carousel-controls">
+            <div className="carousel-controls" style={{ zIndex: -1 }}>
               <button className="carousel-arrow prev" onClick={handlePrevSlide}>
                 ◀
               </button>
-              <div className="carousel-slider-container">
+              <div className="carousel-slider-container" style={{ zIndex: -1 }}>
                 <div className="progress-bar-container">
                   <div className="progress-track"></div>
                   <div

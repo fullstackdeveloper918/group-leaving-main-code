@@ -235,7 +235,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const handleResize = (newWidth: number, newHeight: number) => {
     const SLIDE_WIDTH = 500;
     const SLIDE_HEIGHT = 650;
-    const MIN_WIDTH = 300;
+    const MIN_WIDTH = 220;
     const MAX_WIDTH = 400;
 
     const clampedWidth = Math.min(Math.max(newWidth, MIN_WIDTH), MAX_WIDTH);
@@ -319,7 +319,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
               const onMouseMove = (moveEvent: MouseEvent) => {
                 const deltaX = startX - moveEvent.clientX;
                 const newWidth = Math.min(
-                  Math.max(startWidth + deltaX, 300),
+                  Math.max(startWidth + deltaX, 220),
                   400
                 );
                 const newLeft = Math.min(
@@ -349,7 +349,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
               const onMouseMove = (moveEvent: MouseEvent) => {
                 const deltaX = moveEvent.clientX - startX;
                 const newWidth = Math.min(
-                  Math.max(startWidth + deltaX, 300),
+                  Math.max(startWidth + deltaX, 220),
                   400
                 );
                 handleResize(newWidth, position.height);
