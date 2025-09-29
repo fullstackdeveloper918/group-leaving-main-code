@@ -5,268 +5,268 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import checkSvg from "../../assets/images/check.svg";
 import api from "@/utils/api";
-import { cookies } from "next/dist/client/components/headers";
 import { toast, ToastContainer } from "react-toastify";
-import nookies, { parseCookies, destroyCookie } from "nookies";
+import { parseCookies, destroyCookie } from "nookies";
 import { useAccessToken } from "@/app/context/AccessTokenContext";
-const MultiStepForm = ({ params }: any) => {
+
+// Define TypeScript interfaces for props and user info
+interface MultiStepFormProps {
+  params: { card_uuid: string };
+}
+
+interface UserInfo {
+  uuid: string;
+}
+
+const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
   const router = useRouter();
+  const { accessToken, setAccessToken } = useAccessToken();
 
+  // State declarations
   const [step, setStep] = useState(1);
-  console.log(step, "jjjkljkl");
-
   const [recipientName, setRecipientName] = useState("");
   const [loading, setLoading] = useState(false);
   const [senderName, setSenderName] = useState("");
   const [recipientEmail, setRecipientEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [number, setNumber] = useState("");
-  const [cardType, setCardType] = useState<any>("later");
+  const [cardType, setCardType] = useState<"date" | "later">("later");
   const [error, setError] = useState("");
   const [senderError, setSenderError] = useState("");
   const [emailError, setEmailError] = useState("");
-  console.log(recipientName, "recipientName");
-  console.log(senderName, "senderName");
-  console.log(cardType, "cardType");
-  console.log(params, "params");
-  const [userInfo, setUserInfo] = useState<any>(null);
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [uuid, setUuid] = useState<string | null>(null);
-  const [currencyError,setCurrencyError] = useState<string>("")
-  console.log(uuid, "uuidforcheck");
-  useEffect(() => {
-    const cookies = document.cookie.split("; ");
-    const userInfoCookie = cookies.find((cookie) =>
-      cookie.startsWith("userInfo=")
-    );
+  const [currencyError, setCurrencyError] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
+  const [selectedOption, setSelectedOption] = useState("");
+  const [countBundle, setCountBundle] = useState<number>(0);
 
-    if (userInfoCookie) {
-      const cookieValue = userInfoCookie.split("=")[1];
-      try {
-        const parsedUserInfo = JSON.parse(decodeURIComponent(cookieValue));
-        setUserInfo(parsedUserInfo);
-
-        // Extracting the UUID from the parsed userInfo object
-        if (parsedUserInfo && parsedUserInfo.uuid) {
-          setUuid(parsedUserInfo.uuid);
-          console.log("UUID:", parsedUserInfo.uuid);
-        }
-      } catch (error) {
-        console.error("Error parsing userInfo cookie", error);
-      }
-    }
-  }, []);
-
-  const cookies = parseCookies();
-  const { accessToken, setAccessToken } = useAccessToken();
-  console.log(accessToken, "accessToken");
-
+  // Initialize access token and user info from cookies
   useEffect(() => {
     const cookies = parseCookies();
-    console.log(cookies, "cookies");
-
     const token = cookies.auth_token;
-    console.log(typeof token, "iooioio");
-
+    console.log(token, "token in multi step form");
     if (token) {
       setAccessToken(token);
-    } else {
-      // alert("nothing")
     }
-  }, []);
 
-  // console.log(recipientName,"recipientName");
-  // console.log(recipientName,"recipientName");
-  const [selectedDate, setSelectedDate] = useState(""); // to store date value
-  const [selectedTime, setSelectedTime] = useState(""); // to store time value
+    const userInfoCookie = cookies.userInfo;
+    if (userInfoCookie) {
+      try {
+        const parsedUserInfo: UserInfo = JSON.parse(
+          decodeURIComponent(userInfoCookie)
+        );
+        setUserInfo(parsedUserInfo);
+        if (parsedUserInfo?.uuid) {
+          setUuid(parsedUserInfo.uuid);
+        }
+      } catch (error) {
+        console.error("Error parsing userInfo cookie:", error);
+      }
+    }
+  }, [setAccessToken]);
+
+  // Fetch bundle count
+  useEffect(() => {
+    const fetchBundleCount = async () => {
+      if (!accessToken) return;
+
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/user/profile`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+            // body: JSON.stringify({}),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log(result, "profile data");
+        const bundleCount = result?.data?.bundle_card_count ?? 0;
+        console.log(bundleCount, "bundle count");
+        setCountBundle(bundleCount);
+      } catch (error) {
+        console.error("Error fetching bundle count:", error);
+        toast.error("Failed to fetch profile data");
+      }
+    };
+
+    fetchBundleCount();
+  }, [accessToken]);
+
+  // Handle login redirect
   const handleLogin = () => {
     toast.error("Please login");
     router.push("/login");
   };
-  const handleNext = () => {
 
-
-    if(step === 3 && !selectedOption){
-      setCurrencyError("Please Select Contributions Currency.")
-      return;
-    }
-    // setCurrencyError
-    if (!recipientName) {
-      setError("Recipient name is required.");
-      return; // Stop submission if validation fails
-    }
-
-    if (!recipientEmail) {
-      setEmailError("Recipient Email is required.");
-      return; // Stop submission if validation fails
-    }
+  // Email validation
+  const validateEmail = (email: string): string => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) return "Recipient email is required.";
+    if (!emailRegex.test(email)) return "Invalid email format.";
+    return "";
+  };
 
-    if (!emailRegex.test(recipientEmail)) {
-      // If email is missing '@' symbol
-      if (!recipientEmail.includes("@")) {
-        setEmailError("@ symbol is required.");
+  // Handle form navigation
+  const handleNext = () => {
+    if (step === 1) {
+      if (!recipientName) {
+        setError("Recipient name is required.");
         return;
       }
-
-      // If email contains '@' but no domain or ends with '@' (like 'example@')
-      const parts = recipientEmail.split("@");
-      if (parts.length === 2 && !parts[1]) {
-        setEmailError("Domain (e.g., gmail.com) is required.");
+      const emailValidationError = validateEmail(recipientEmail);
+      if (emailValidationError) {
+        setEmailError(emailValidationError);
         return;
       }
-
-      // If email contains '@' but the domain is incomplete or malformed
-      if (parts.length === 2 && parts[1].length < 3) {
-        // Basic domain check
-        setEmailError("Invalid domain. Example: gmail.com");
-        return;
-      }
-
-      // If email is in an incomplete format like 'skjfhdkjsd@'
-      if (
-        recipientEmail.indexOf("@") > -1 &&
-        recipientEmail.split("@").length === 2
-      ) {
-        setEmailError("Invalid email format. Example: user@example.com");
-        return;
-      }
-
-      // Catch all for any invalid email format
-      setEmailError("Invalid email format.");
+      setError("");
+      setEmailError("");
+    } else if (step === 3 && !selectedOption) {
+      setCurrencyError("Please select contributions currency.");
       return;
     }
-
-    // Clear the email error if validation passes
-    setEmailError("");
     setStep((prev) => prev + 1);
- 
   };
 
   const handlePrevious = () => {
     setStep((prev) => prev - 1);
   };
-  const [selectedOption, setSelectedOption] = useState("");
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    setCurrencyError("")
-    setSelectedOption(value);
 
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedOption(e.target.value);
+    setCurrencyError("");
   };
-  console.log(selectedDate, "selectedDate");
-  console.log(selectedTime, "selectedTime");
-  console.log(cardType, "cardType");
-  // const [loading1,setLoading]=useState(false)
-  const handleSubmit = async (e: React.FormEvent) => {
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-   if (!senderName) {
+
+    if (!senderName) {
       setSenderError("Please enter your name.");
-      return; // Stop submission if validation fails
+      return;
     }
+    setSenderError("");
+
+    if (!uuid || !accessToken) {
+      toast.error("User authentication required.");
+      router.push("/login");
+      return;
+    }
+
     try {
-      let item = {
+      setLoading(true);
+
+      const item = {
         user_uuid: uuid,
-        card_uuid: params,
-        currency_type: "INR",
+        card_uuid: params.card_uuid,
+        currency_type: selectedOption || "INR",
         recipient_name: recipientName,
         recipient_email: recipientEmail,
         sender_name: senderName,
-        do_it_late: cardType === "later" ? true : false,
+        do_it_late: cardType === "later",
         delivery_date: selectedDate,
         delivery_time: selectedTime,
         allow_private: false,
         add_confetti: false,
+        is_remove_from_cart: countBundle === 0 ? 0 : 1,
       };
 
-      setLoading(true);
-      console.log(item, "item");
-      // return;
-      // Make the fetch POST request
+      // Add to cart API
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/cart/add-cart`,
         {
-          // replace '/api/cart' with the correct endpoint
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`,
           },
-
           body: JSON.stringify(item),
         }
       );
 
-      // Check if the request was successful
-      console.log("objectres", response);
-      // if (!response.ok) {
-      //   throw new Error('Failed to add item to cart');
-      // }
+      const data = await response.json();
 
-      const data = await response.json(); // Assuming the response returns JSON
       if (response.status === 200) {
-        toast.success("Cart Added Successfully");
-      }
+        toast.success("Cart added successfully");
 
-      if (response.status === 400) {
-        toast.error(data?.error, { autoClose: 1000 });
-        // router.push('/card/farewell')
-      }
-      console.log("datamultistepform", data);
-      // Optionally reset form values or error states
-      // setError("");
-      // setRecipientName("");
+        if (countBundle === 0) {
+          router.push(`/card/pay/${data.data.cart_uuid}`);
+        } else {
+          // Use card API
+          const useCardRes = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/cart/use-card/${uuid}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+          console.log(useCardRes, "use card response raw");
+          const useCardData = await useCardRes.json();
+          console.log(useCardData, "use card response");
 
-      if (response.status === 401 && response.statusText === "Unauthorized") {
-        toast.error("token is expire");
-        router.replace("/login");
+          if (useCardData) {
+            router.push(`/successfull?cart_uuid=${data.data.cart_uuid}`);
+          } else {
+            toast.error(useCardData?.error || "Failed to use card");
+          }
+        }
+      } else if (response.status === 400) {
+        toast.error(data?.error || "Invalid request");
+      } else if (response.status === 401) {
+        toast.error("Session expired. Please log in again.");
         destroyCookie(null, "auth_token");
-        window.location.reload();
-        // cookies.remove("auth_token")
+        router.replace("/login");
+      } else {
+        toast.error(data?.error || "Something went wrong");
       }
-
-      router.push(`/card/pay/${data.data.cart_uuid}`);
-      console.log("Final submission", { recipientName, recipientEmail });
     } catch (err: any) {
+      console.error("Error during submission:", err);
+      toast.error(err.message || "An error occurred");
+    } finally {
       setLoading(false);
-      // console.error("Error during submissionss", error);
-      console.log("fsdfsdf", err);
-      // toast.error(err.message);
     }
   };
+
   return (
     <>
+      <ToastContainer />
       <div className="flex space-x-8 mb-8 absolute top-10">
-        <ToastContainer />
-
-        {/* count steps  */}
         <div className="text-center after_line disabled">
           <div className={step >= 1 ? "step_count" : "step_count1"}>1</div>
           <p className="md:text-md text-sm font-medium mb-0">
             Choose a Template
           </p>
         </div>
-
-        <div className="text-center  before_line">
+        <div className="text-center before_line">
           <div className={step >= 2 ? "step_count" : "step_count1"}>2</div>
           <p className="md:text-md text-sm font-medium mb-0">
             Fill in the Details
           </p>
         </div>
-
         <div className={step > 3 ? "text-center before_line" : ""}>
           <div className={step >= 3 ? "step_count" : "step_count1"}>3</div>
           <p className="md:text-md text-sm font-medium mb-0">
             Complete Payment & Share
           </p>
         </div>
-        {step > 3 ? (
+        {step > 3 && (
           <div className="text-center">
-            <div className="submit_svg ">
-              <img src={checkSvg.src} alt="imgccheck" />
+            <div className="submit_svg">
+              <img src={checkSvg.src} alt="check" />
             </div>
             <p className="md:text-md text-sm font-medium mb-0">Submit</p>
           </div>
-        ) : (
-          ""
         )}
       </div>
 
@@ -280,12 +280,7 @@ const MultiStepForm = ({ params }: any) => {
             ? "Would you like to gather contributions for a gift card?"
             : "Who is sending this card?"}
         </h2>
-        <form
-          // loading={loading}
-          onSubmit={handleSubmit}
-          aria-disabled={false}
-          className="space-y-6"
-        >
+        <form onSubmit={handleSubmit} className="space-y-6">
           {step === 1 && (
             <>
               <div>
@@ -299,45 +294,36 @@ const MultiStepForm = ({ params }: any) => {
                   id="recipientName"
                   type="text"
                   value={recipientName}
-                  onChange={(e) => setRecipientName(e.target.value)}
-                  required
+                  onChange={(e) => {
+                    setRecipientName(e.target.value);
+                    setError("");
+                  }}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
-                {!recipientName && error && (
-                  <p
-                    className="text-red-500 text-sm mt-2"
-                    style={{ color: "red" }}
-                  >
-                    {error}
-                  </p>
-                )}
+                {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
               </div>
-
-              <div     className="block mt-3 mb-3">
+              <div>
                 <label
                   htmlFor="recipientEmail"
-                  className="block mt-2 text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700"
                 >
-                  Recipient’s Email Address
+                  Recipient’s Email Address{" "}
+                  <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="recipientEmail"
                   type="email"
-                  required
                   value={recipientEmail}
-                  onChange={(e) => setRecipientEmail(e.target.value)}
+                  onChange={(e) => {
+                    setRecipientEmail(e.target.value);
+                    setEmailError("");
+                  }}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
                 {emailError && (
-                  <p
-                    className="text-red-500 text-sm mt-2"
-                    style={{ color: "red" }}
-                  >
-                    {emailError}
-                  </p>
+                  <p className="text-red-500 text-sm mt-2">{emailError}</p>
                 )}
               </div>
-
               <button
                 type="button"
                 onClick={!accessToken ? handleLogin : handleNext}
@@ -347,7 +333,6 @@ const MultiStepForm = ({ params }: any) => {
               </button>
             </>
           )}
-
           {step === 2 && (
             <>
               <div>
@@ -373,52 +358,47 @@ const MultiStepForm = ({ params }: any) => {
                   />
                   <span className="text-lg">I’ll decide later</span>
                 </label>
-
                 {cardType === "date" && (
                   <>
                     <p className="mt-3">
                       This is based on the timezone your computer is set to.
                     </p>
-                    <div className="gap-3">
+                    <div className="flex gap-3">
                       <input
                         type="date"
                         value={selectedDate}
                         min={new Date().toISOString().split("T")[0]}
                         onChange={(e) => setSelectedDate(e.target.value)}
-                        className="ml-auto text-gray-500"
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                         placeholder="Date"
                       />
                       <input
                         type="time"
                         value={selectedTime}
                         onChange={(e) => setSelectedTime(e.target.value)}
-                        className="ml-auto text-gray-500"
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                         placeholder="Time"
                       />
                     </div>
                   </>
                 )}
               </div>
-
               <button
                 type="button"
                 onClick={handlePrevious}
-                style={{background:"#8080804d"}}
                 className="w-full bg-gray-300 text-black py-2 px-4 rounded-md shadow-sm hover:bg-gray-400"
               >
                 Back
               </button>
-
               <button
                 type="button"
                 onClick={handleNext}
                 className="w-full bg-[#558ec9] mt-2 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700"
               >
-              Continue  → 
+                Continue →
               </button>
             </>
           )}
-
           {step === 3 && (
             <>
               <div>
@@ -442,23 +422,17 @@ const MultiStepForm = ({ params }: any) => {
                   <option value="aud">AUD</option>
                   <option value="eur">EUR</option>
                 </select>
-                {currencyError &&      <p
-                    className="text-red-500 text-sm mt-2"
-                    style={{ color: "red" }}
-                  >
-                    {currencyError}
-                  </p>}
+                {currencyError && (
+                  <p className="text-red-500 text-sm mt-2">{currencyError}</p>
+                )}
               </div>
-
               <button
                 type="button"
-                       style={{background:"#8080804d"}}
                 onClick={handlePrevious}
                 className="w-full bg-gray-300 text-black py-2 px-4 rounded-md shadow-sm hover:bg-gray-400"
               >
                 Back
               </button>
-
               <button
                 type="button"
                 onClick={handleNext}
@@ -468,7 +442,6 @@ const MultiStepForm = ({ params }: any) => {
               </button>
             </>
           )}
-
           {step === 4 && (
             <>
               <div>
@@ -477,88 +450,68 @@ const MultiStepForm = ({ params }: any) => {
                   type="text"
                   value={senderName}
                   placeholder="Your Name"
-                  onChange={(e) => setSenderName(e.target.value)}
-                  required
+                  onChange={(e) => {
+                    setSenderName(e.target.value);
+                    setSenderError("");
+                  }}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
-                {!senderName && senderError && (
-                  <p
-                    className="text-red-500 text-sm mt-2"
-                    style={{ color: "red" }}
-                  >
-                    {senderError}
-                  </p>
+                {senderError && (
+                  <p className="text-red-500 text-sm mt-2">{senderError}</p>
                 )}
               </div>
-
               <div className="form-check form-switch">
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  id="flexSwitchCheckChecked"
+                  id="flexSwitchCheckConfetti"
                 />
                 <label
                   className="form-check-label"
-                  htmlFor="flexSwitchCheckChecked"
+                  htmlFor="flexSwitchCheckConfetti"
                 >
                   Include confetti in this card
                 </label>
               </div>
-
               <div className="form-check form-switch">
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  id="flexSwitchCheckChecked"
+                  id="flexSwitchCheckPrivate"
                 />
                 <label
                   className="form-check-label"
-                  htmlFor="flexSwitchCheckChecked"
+                  htmlFor="flexSwitchCheckPrivate"
                 >
                   Allow private messages
                 </label>
               </div>
-
               <button
-                     style={{background:"#8080804d"}}
                 type="button"
                 onClick={handlePrevious}
                 className="w-full bg-gray-300 text-black py-2 px-4 rounded-md shadow-sm hover:bg-gray-400"
               >
                 Back
               </button>
-
               <button
                 type="submit"
-                className="w-full bg-blueBg mt-2 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700"
+                disabled={loading}
+                className="w-full bg-[#558ec9] mt-2 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700 disabled:opacity-50"
               >
-                Submit
+                {loading ? "Submitting..." : "Submit"}
               </button>
             </>
           )}
         </form>
-        {/* Pagination Dots */}
-        <div className="flex space-x-2 mt-6 items-center justify-center d-none">
-          <div
-            className={`w-3 h-3 ${
-              step >= 1 ? "bg-blue-600" : "bg-gray-300"
-            } rounded-full`}
-          ></div>
-          <div
-            className={`w-3 h-3 ${
-              step >= 2 ? "bg-blue-600" : "bg-gray-300"
-            } rounded-full`}
-          ></div>
-          <div
-            className={`w-3 h-3 ${
-              step >= 3 ? "bg-blue-600" : "bg-gray-300"
-            } rounded-full`}
-          ></div>
-          <div
-            className={`w-3 h-3 ${
-              step >= 4 ? "bg-blue-600" : "bg-gray-300"
-            } rounded-full`}
-          ></div>
+        <div className="flex space-x-2 mt-6 items-center justify-center">
+          {[1, 2, 3, 4].map((dot) => (
+            <div
+              key={dot}
+              className={`w-3 h-3 ${
+                step >= dot ? "bg-blue-600" : "bg-gray-300"
+              } rounded-full`}
+            />
+          ))}
         </div>
       </div>
     </>

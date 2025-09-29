@@ -16,24 +16,54 @@ interface UserInfo {
   uuid?: string;
 }
 
-const RazorPay = ({ amount, type, cart_id, bundleId }: any) => {
+const RazorPay = ({ amount, type, cart_id, bundleId, numberOfCards }: any) => {
   //  const getToken = cookies().get("auth_token")?.value || "";
   //   console.log(getToken, "Access Token");
-  // console.log(amount, "bundleId");
+  console.log(
+    amount,
+    "amount",
+    bundleId,
+    "bundleid",
+    cart_id,
+    "cartid",
+    "numberOfCards",
+    numberOfCards
+  );
 
   // console.log(type, "wertfghdfg");
   // console.log(bundleOption, "sfasdfasd");
 
   const router = useRouter();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const [success, setSuccess] = useState(false);
   const param = useParams();
   // console.log(param,"param");
   // console.log(userInfo,"userInfo");
   // console.log(type,"qazxsw");
 
   const [state, setState] = useState<string>("");
+  // const
   const [authToken, setAuthToken] = useState<string>("");
   // console.log(authToken,"authToken");
+
+  // function getCookie(name: string): string | null {
+  //   const value = `; ${document.cookie}`;
+  //   const parts = value.split(`; ${name}=`);
+  //   if (parts.length === 2) {
+  //     const raw = parts.pop()?.split(";").shift();
+  //     if (raw) {
+  //       return decodeURIComponent(raw); // always a string here
+  //     }
+  //   }
+  //   return null;
+  // }
+
+  // const userInfoCookie = getCookie("userInfo");
+  // if (userInfoCookie) {
+  //   const user = JSON.parse(userInfoCookie);
+  //   console.log(user.full_name); // "ravitester"
+  //   console.log(user.email); // from cookie data
+  // }
 
   useEffect(() => {
     const cookies = nookies.get();
@@ -57,7 +87,7 @@ const RazorPay = ({ amount, type, cart_id, bundleId }: any) => {
     setUserInfo(userInfoFromCookie);
   }, []);
   const [uniqueId, setUniqueId] = useState<any>("");
-  // console.log(uniqueId,"uniqueId");
+  console.log(userInfo, "userInfo here");
 
   const handlePayment = async () => {
     setIsProcessing(true);
@@ -126,8 +156,10 @@ const RazorPay = ({ amount, type, cart_id, bundleId }: any) => {
             if (type === "bundleFor") {
               router.push(`/account/bundles`);
             } else {
+              setSuccess(true);
               router.push(
                 // `/successfull?unique_id=${responseData?.data?.messages_unique_id}`
+
                 `/successfull?cart_uuid=${cartId}`
               );
             }
@@ -163,6 +195,38 @@ const RazorPay = ({ amount, type, cart_id, bundleId }: any) => {
       setIsProcessing(false);
     }
   };
+
+  useEffect(() => {
+    if (success) {
+      const saveBundle = async () => {
+        try {
+          const paymentResponse = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/cart/buy-bundle/${userInfo?.uuid}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${authToken}`,
+              },
+              body: JSON.stringify({
+                count: numberOfCards,
+              }),
+            }
+          );
+
+          if (!paymentResponse.ok) {
+            throw new Error("Number of card bundle not saved for user");
+          }
+
+          console.log("Card bundle saved successfully!");
+        } catch (error) {
+          console.error("Error saving card bundle number:", error);
+        }
+      };
+
+      saveBundle();
+    }
+  }, [success, userInfo?.uuid, authToken, numberOfCards]);
 
   return (
     <>

@@ -262,6 +262,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
 
     fetchEditorDatas();
   }, [cardShareData, id]);
+  // }, [cardShareData, id]);
 
   console.log(elements?.length, "new element hree");
 
