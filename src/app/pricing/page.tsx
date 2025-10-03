@@ -15,7 +15,6 @@ const page = async() => {
 
   const data = await fetchFromServer(api);
 
-console.log(data,'check');
 
 
   const api2: Api = {
@@ -26,7 +25,6 @@ console.log(data,'check');
   };
 
   const data2 = await fetchFromServer(api2);
-  console.log(data2,"ksdfghkdfgh");
   
   return (
     <>

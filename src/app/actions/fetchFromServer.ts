@@ -5,7 +5,6 @@ export async function fetchFromServer(api: Api): Promise<any> {
   const { url, method, body = null } = api;
   // :white_tick: Correct way to get the token in Next.js
   const getToken = cookies().get("auth_token")?.value || "";
-  console.log(getToken, "Access Token");
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",

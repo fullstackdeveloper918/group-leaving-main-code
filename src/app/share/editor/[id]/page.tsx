@@ -4,7 +4,7 @@ import MySignatures from '@/components/common/MySignatures'
 import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 // import userIcon from "../../../../../assets/icons/abj.png";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import Cookies from 'js-cookie';
 import { Button, Input, Modal, QRCode, Space, Typography } from "antd";
 const { Paragraph, Text } = Typography;
@@ -35,7 +35,6 @@ const Page = ({ params }: { params: { id: string } }) => {
       setIsModalVisible(true);
     };
 
-    console.log(params,"params here")
     const shareableLink = `${process.env.NEXT_PUBLIC_API_URL}/share/editor/${params.id}`;
   
     const handleCopy = () => {
@@ -66,7 +65,6 @@ const Page = ({ params }: { params: { id: string } }) => {
           );
           setCardData(card);
         }
-        console.log(data,"data is here")
       } catch (error) {
         console.error("Error fetching data:", error);
       }

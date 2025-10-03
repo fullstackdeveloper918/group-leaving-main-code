@@ -274,7 +274,6 @@ const CreateBoard = ({ data }: any) => {
   };
   return (
     <div>
-      <ToastContainer />
       <div className="flex flex-col items-center justify-center border border-[#e5e7eb bg-lightBg grp-broad">
         <h1 className="text-4xl font-bold mb-8 text-center">
           Start a Group Board

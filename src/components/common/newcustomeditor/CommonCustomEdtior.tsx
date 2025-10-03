@@ -240,14 +240,14 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
         // console.log("newslides here on catch", newSlides);
 
         // ✅ Slide 2: Always add a second empty slide
-        newSlides.push({
-          id: `slide-2`,
-          title: "New Slide",
-          subtitle: "New Subtitle",
-          text: "This is another dynamically generated slide.",
-          link: "https://example.com",
-          card_img: SlideImg_5,
-        });
+        // newSlides.push({
+        //   id: `slide-2`,
+        //   title: "New Slide",
+        //   subtitle: "New Subtitle",
+        //   text: "This is another dynamically generated slide.",
+        //   link: "https://example.com",
+        //   card_img: SlideImg_5,
+        // });
 
         // setElements([]); // empty editor data
         // setActiveSlideIndex(1);
@@ -255,7 +255,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
         setSlides(newSlides);
         // console.log("activeSlideIndex here", activeSlideIndex);
         if (activeSlideIndex === 0) {
-          setActiveSlideIndex(newSlides.length - 2);
+          // setActiveSlideIndex(newSlides.length - 2);
         }
       }
     };
@@ -311,23 +311,17 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   }
 
   useEffect(() => {
-    if (elements?.length == 0) {
-      setSlides([...slides]);
+    if (elements?.length === 0) {
+      return;
     }
-
-    // Clean up extra empty slides at the end, but never remove the last one
+    // Only cleanup slides, don't auto-add
     setSlides((prevSlides) => cleanupSlides(prevSlides, elements));
+  }, [elements]);
 
-    // console.log(elements, slides, "here to matched data");
-    const lastSlide = slides?.[slides.length - 1];
-    // console.log("lastSlide:", lastSlide);
-    const isLastSlideInElements = elements?.some(
-      (e) => `slide-${e?.slideIndex + 1}` === lastSlide?.id
-    );
-
-    // console.log(isLastSlideInElements, "isLastSlideInElements");
-    if (isLastSlideInElements) {
-      const newSlideIndex = slides.length; // e.g., 3 if you already have 3 slides
+  // Add a manual "Add Page" button function:
+  const handleAddPage = () => {
+    setSlides((prevSlides) => {
+      const newSlideIndex = prevSlides.length;
       const newSlide = {
         id: `slide-${newSlideIndex + 1}`,
         title: "New Slide",
@@ -335,13 +329,22 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
         text: "This is a dynamically generated slide.",
         link: "https://example.com",
         card_img: SlideImg_5,
-        // card_img: "/newimage/Farewell.png",
-        // card_img: "/newimage/content.png",
       };
 
-      setSlides((prevSlides) => [...prevSlides, newSlide]);
-    }
-  }, [elements]);
+      // Create new array with all existing slides plus the new one
+      const updatedSlides = [...prevSlides, newSlide];
+
+      // Navigate to the new slide after state updates
+      setTimeout(() => {
+        setActiveSlideIndex(newSlideIndex);
+        if (sliderRef.current) {
+          sliderRef.current.value = newSlideIndex.toString();
+        }
+      }, 0);
+
+      return updatedSlides;
+    });
+  };
 
   // console.log(slides, "elements new");
 
@@ -378,7 +381,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
     }
   };
 
-  // console.log(userInfo, "oiuiuy"); 
+  // console.log(userInfo, "oiuiuy");
 
   // Update editor data on server
   const updateEditorData = async () => {
@@ -423,10 +426,6 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
         card_img: SlideImg_5,
       };
 
-      // const lastSlideIndex = slides.length - 1;
-
-      // setSlides((prevSlides: any[]) => [...prevSlides, newSlide]);
-      // const newSlideIndex = slides.length;
       setActiveSlideIndex(lastSlideIndex);
       setShowModal(true);
 
@@ -440,34 +439,6 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
     setShowModal(true);
   };
 
-  // Save message from editor
-  // const handleSaveMessage = () => {
-  //   if (activeSlideIndex === null) {
-  //     alert("No active slide selected!");
-  //     return;
-  //   }
-  //   // Text can only be added to slides after the 5th (index >= 5)
-  //   // If trying to add to slide 0-4, add to last slide instead
-  //   const targetIndex =
-  //     activeSlideIndex <= 4 ? slides.length - 2 : activeSlideIndex;
-
-  //   const newMessage = {
-  //     type: "text",
-  //     content: editorContent || "Default message",
-  //     slideIndex: targetIndex,
-
-  //     // slideIndex: activeSlideIndex,
-  //     x: 0,
-  //     y: 0,
-  //     user_uuid: userInfo?.uuid,
-  //   };
-  //   setElements([...elements, newMessage]);
-  //   setShowModal(false);
-  //   setEditorContent("");
-  //   sendEditorData();
-  // };
-
-  // Handle image upload
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -770,8 +741,10 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
 
   return (
     <>
-      <ToastContainer />
-      <div className="card-carousel-container select-none overflow-visible" id="main-carousle">
+      <div
+        className="card-carousel-container select-none overflow-visible"
+        id="main-carousle"
+      >
         <div className="editor_option" style={{ marginBottom: "15px" }}>
           <div>
             <button
@@ -824,18 +797,6 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
               </div>
             </button>
           </div>
-
-          {/* {id !== "fwzDVjvbQ_X" && (
-            <div style={{ textAlign: "center" }}>
-              <button
-                className="add-btn"
-                onClick={openEnvelop}
-                disabled={showModal}
-              >
-                Preview
-              </button>
-            </div>
-          )} */}
           <div className="search_input" style={{ position: "relative" }}>
             <button
               onClick={toggleDropdown}
@@ -886,6 +847,20 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
                 </div>
               </div>
             )}
+          </div>
+          <div>
+            <button
+              className="bg-[#E0E9F2] font-extrabold text-blueBg p-2 rounded-full w-[40px] h-[40px]"
+              onClick={handleAddPage}
+              disabled={showModal}
+              style={{
+                padding: "10px",
+                borderRadius: "50px",
+              }}
+              title="Add New Slide" // <-- Tooltip added here
+            >
+              +
+            </button>
           </div>
         </div>
 

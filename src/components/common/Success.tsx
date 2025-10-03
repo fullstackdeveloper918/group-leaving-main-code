@@ -23,7 +23,6 @@ const Success = ({ cartUuid }: any) => {
 
   return (
     <div className="success-container">
-      <ToastContainer />
       <div className="success-card">
         {/* Steps */}
         <div className="steps-container">

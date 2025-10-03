@@ -67,7 +67,6 @@ const AccountEmailprefrence = ({ userInfo, data }: any) => {
   };
   return (
     <>
-      <ToastContainer />
       <div className="max-w-xl mx-auto rounded-lg email-form-outer-box mt-5">
         <h2 className="text-2xl font-bold text-center e-pref-head">Email Settings</h2>
         <div className="space-y-4">

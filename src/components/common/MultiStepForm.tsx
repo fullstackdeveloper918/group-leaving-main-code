@@ -235,7 +235,6 @@ const MultiStepForm = ({ params }: any) => {
   return (
     <>
       <div className="flex space-x-8 mb-8 absolute top-10">
-        <ToastContainer />
 
         {/* count steps  */}
         <div className="text-center after_line disabled">

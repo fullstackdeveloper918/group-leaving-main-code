@@ -138,7 +138,6 @@ const BoardCheckout = ({data}:any) => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center p-5">
-      <ToastContainer/> 
     <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 md:flex">
       {/* Left Section */}
       <div className="flex-1">

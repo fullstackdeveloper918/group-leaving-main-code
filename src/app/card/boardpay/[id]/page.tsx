@@ -4,7 +4,6 @@ import { Api } from '@/interfaces/interfaces';
 import React from 'react'
 
 const page =async({ searchParams,params }:any) => {
-     console.log(params,"mnmnnm");
       const api2: Api = {
         url: `${process.env.NEXT_PUBLIC_API_URL}/card/bundle-list`,
         method: "GET",

@@ -285,7 +285,6 @@ const CreateGroup = ({ data }: any) => {
   const selectGiftImage = selectedImage?.logoUrls[0];
   return (
     <div>
-      <ToastContainer />
 
       <div className="flex flex-col items-center justify-center border border-[#e5e7eb bg-lightBg gift-collec">
         <h2 className="text-4xl font-bold mb-8 text-center">

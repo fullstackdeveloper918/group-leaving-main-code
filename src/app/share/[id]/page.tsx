@@ -10,69 +10,11 @@ interface PageProps {
 }
 
 const Page: React.FC<PageProps> = ({ params, searchParams }) => {
-  // console.log(params.id, "Fetching Data...");
-
-  // const [data, setData] = useState<any>(null);
   const [isClose, setClose] = useState<boolean>(true);
   const [showContribute, setShowContribute] = useState(false);
   const [contributeData, setContributeData] = useState<any>(null);
   const [contributeName, setContributeName] = useState("");
   const [contributeAmount, setContributeAmount] = useState("");
-
-  // Fetch card by id for contribute section
-  // const fetchContributeData = useCallback(async () => {
-  //   try {
-  //     const response = await fetch(
-  //       `${process.env.NEXT_PUBLIC_API_URL}/card/users-cards/${params.id}`,
-  //       {
-  //         method: "GET",
-  //         headers: { "Cache-Control": "no-cache" },
-  //       }
-  //     );
-  //     if (!response.ok) throw new Error("Failed to fetch card");
-  //     const json = await response.json();
-  //     setContributeData(json?.data);
-  //   } catch (err) {
-  //     setContributeData(null);
-  //   }
-  // }, [params.id]);
-
-  // useEffect(() => {
-  //   if (showContribute) fetchContributeData();
-  // }, [showContribute, fetchContributeData]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       // console.log(params.id, "Fetching Data...");
-  //       const response = await fetch(
-  //         `${process.env.NEXT_PUBLIC_API_URL}/razorpay/single-link-listing/${params.id}`,
-  //         {
-  //           method: "GET",
-  //           headers: {
-  //             "Cache-Control": "no-cache",
-  //           },
-  //         }
-  //       );
-
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch data");
-  //       }
-
-  //       const jsonData = await response.json();
-  //       // console.log(jsonData, "Response Data");
-  //       setData(jsonData);
-  //     } catch (err: any) {
-  //       // toast.error("Error fetching data: " + err.message);
-  //     } finally {
-  //       // setLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [isClose]);
-
-  // if (loading) return <p>Loading...</p>;
 
   return (
     <>

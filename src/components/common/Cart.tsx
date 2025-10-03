@@ -58,7 +58,6 @@ const Cart = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8 py-md-10">
-      <ToastContainer />
       <h1 className="font-bold mb-4 mb-md-5 my-card-head">My Carts</h1>
       <div className="w-full account-cart-box">
         {!data?.data || data?.data.length === 0 ? (

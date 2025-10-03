@@ -849,7 +849,6 @@ console.log(lastSlideIndex,"lastSlideIndex")
 
   return (
     <>
-      <ToastContainer />
       <div className="card-carousel-container select-none" id="main-carousle">
         <div className="editor_option" style={{ marginBottom: "15px" }}>
           <div>

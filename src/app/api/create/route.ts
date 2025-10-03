@@ -21,7 +21,6 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    console.log("Order created successfully:", order);
 let data={
     account: "P1gOu6pIR43T4d", // Replace with the actual beneficiary Razorpay account ID
     amount,
@@ -36,7 +35,6 @@ let data={
     // Create a transfer with the on-hold flag (escrow)
     const transfer = await razorpay.transfers.create(data);
 
-    console.log("Transfer created successfully:", transfer);
 
     // Return the relevant data to the frontend, including the hold amount
     return NextResponse.json({

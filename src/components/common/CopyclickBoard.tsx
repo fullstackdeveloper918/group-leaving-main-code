@@ -69,7 +69,6 @@ const CopyclickBoard = () => {
 
   return (
     <>
-      <ToastContainer />
       <button
         onClick={handleClick}
         className="bg-blue-600 cursor-grab text-black border-2 border-blue-700 px-4 py-2 rounded-md hover:bg-blue-700 transition"
