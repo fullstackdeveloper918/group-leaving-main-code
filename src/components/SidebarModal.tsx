@@ -1,75 +1,93 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import nookies from "nookies";
+import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { IoIosCloseCircleOutline } from "react-icons/io";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+
 interface SidebarModalProps {
   isOpen: boolean;
   onClose: () => void;
-  data: any;
-  setClose: any;
-  isClose: any;
-  createlinkuserId: any;
-  // setEditCollection:any
+  cartId: string;
 }
 
 const SidebarModal: React.FC<SidebarModalProps> = ({
   isOpen,
   onClose,
-  data,
-  setClose,
-  isClose,
-  createlinkuserId,
+  cartId,
 }) => {
-  // console.log("databysidebarmodel", data?.collection_title);
-  // console.log("databysidebarmodel", data);
-  const [deliveryOption, setDeliveryOption] = useState("later");
-  const [collectionTitle, setCollectionTitle] = useState(
-    data?.cartDetail?.[0]?.recipient_name
+  const [deliveryOption, setDeliveryOption] = useState<"later" | "set-date">(
+    "later"
   );
-  const [senderName, setSenderName] = useState(
-    data?.cartDetail?.[0]?.sender_name
-  );
-  const [recipientEmail, setRecipientEmail] = useState(
-    data?.cartDetail?.[0]?.recipient_email
-  );
-  const [deliveryDate, setDeliveryDate] = useState(data?.start_date);
-  const [deliveryTime, setDeliveryTime] = useState(data?.end_date);
-  const [cookieValue, setCookieValue] = useState<string | null>(null);
-  // console.log(cookieValue,"cookieValue");
-
+  const [collectionTitle, setCollectionTitle] = useState("");
+  const [senderName, setSenderName] = useState("");
+  const [recipientEmail, setRecipientEmail] = useState("");
+  const [deliveryDate, setDeliveryDate] = useState("");
+  const [loading, setLoading] = useState(false);
   const gettoken = Cookies.get("auth_token");
 
+  // Fetch cart data when modal opens or cartId changes
   useEffect(() => {
-    // Get cookies on the client side
-    const cookies = nookies.get(); // retrieves cookies from document.cookie
-    const userData = cookies.user_info ? JSON.parse(cookies.user_info) : null;
+    if (!isOpen || !cartId) return;
 
-    setCookieValue(userData?.uuid || null);
-  }, []);
+    const fetchCartData = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/cart/single-cart-by-id`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ cart_uuid: cartId }),
+          }
+        );
 
-  // console.log("cookie value", cookieValue);
+        if (!res.ok) throw new Error("Failed to fetch cart data");
+
+        const data = await res.json();
+        const cartDetail = data?.data || {};
+        setCollectionTitle(cartDetail.cardData?.title || "");
+        setSenderName(cartDetail.sender_name || "");
+        setRecipientEmail(cartDetail.recipient_email || "");
+        setDeliveryDate(data?.start_date || "");
+        setDeliveryOption(data?.start_date ? "set-date" : "later");
+      } catch (error) {
+        console.error("Error fetching cart data:", error);
+        toast.error("Failed to load cart data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCartData();
+  }, [isOpen, cartId]);
+
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Collect form data
-    const formData = {
-      edit_by: createlinkuserId,
-      brandKey: data?.brandKey,
-      linkUuid: data?.cartDetail?.[0]?.cart_uuid,
+    if (!cartId) {
+      toast.error("Cart ID is missing");
+      return;
+    }
+
+    const formData: any = {
+      cart_uuid: cartId,
       collection_title: collectionTitle,
       sender_name: senderName,
       recipient_email: recipientEmail,
-      delivery_option: deliveryOption,
-      start_date: deliveryDate,
-      end_date: deliveryTime,
     };
 
+    // Include delivery date only if "set-date" is selected
+    if (deliveryOption === "set-date") {
+      formData.delivery_date = deliveryDate;
+    }
+
     try {
-      // Send form data to the API (replace with your API endpoint)
+      setLoading(true);
+      console.log("Submitting data:", formData);
+
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/razorpay/update-link`,
+        `${process.env.NEXT_PUBLIC_API_URL}/cart/modify-cart-details`,
         {
           method: "POST",
           headers: {
@@ -80,43 +98,47 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
         }
       );
 
-      if (response.ok) {
-        toast.success("Data saved successfully", { autoClose: 1000 });
-        // alert("Data saved successfully");
-        setClose(!isClose);
-        // console.log("respoSidemodel",formData)
-        // console.log("respoSidemodelrs",response)
-        //    setEditCollection((prev: any) => ({
-        //   ...prev,
-        //   data: formData, // Updating the nested `data` properly
-        // }));
-        onClose(); // Close the modal after successful submission
-      } else {
-        toast.error("Failed to save data", { autoClose: 2000 });
-        // alert("Failed to save data");
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Backend error:", errorData);
+        toast.error(errorData?.message || "Failed to save data", {
+          autoClose: 2000,
+        });
+        return;
       }
+
+      const data = await response.json();
+      const updatedCart = data?.data || {};
+
+      // Update all state fields with latest data from backend
+      setCollectionTitle(updatedCart.collection_title || collectionTitle);
+      setSenderName(updatedCart.sender_name || senderName);
+      setRecipientEmail(updatedCart.recipient_email || recipientEmail);
+      setDeliveryDate(updatedCart.delivery_date || deliveryDate);
+
+      toast.success("Data saved successfully", {
+        autoClose: 1000,
+        onClose: onClose, // close modal after success
+      });
     } catch (error) {
+      console.error("Error submitting form:", error);
       toast.error("An error occurred while saving the data.", {
         autoClose: 2000,
       });
-      console.error("Error submitting form:", error);
-      // alert("An error occurred while saving the data.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // console.log("collectionTitle", data);
+  if (!isOpen) return null;
 
   return (
     <div
-      className={`fixed inset-0 z-50 bg-black bg-opacity-30 transition-opacity ${
-        isOpen ? "opacity-100 visible" : "opacity-0 invisible"
-      }`}
+      className="fixed inset-0 z-50 bg-white/30 backdrop-blur-sm transition-opacity"
       onClick={onClose}
     >
       <div
-        className={`fixed top-0 right-0 h-full w-96 bg-white shadow-lg transition-transform ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className="fixed top-0 right-0 h-full w-96 bg-white shadow-lg transition-transform"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="p-4 border-b flex justify-between items-center">
@@ -128,88 +150,85 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
             <IoIosCloseCircleOutline size={30} />
           </button>
         </div>
-        <form onSubmit={handleSubmit}>
-          <div className="p-4 space-y-4">
-            <label className="block">
-              <span className="text-gray-700">
-                Enter a title for your collection:
-              </span>
-              <input
-                type="text"
-                value={
-                  collectionTitle !== undefined
-                    ? collectionTitle
-                    : data?.cartDetail?.[0]?.recipient_name || ""
-                }
-                onChange={(e) => setCollectionTitle(e.target.value)}
-                placeholder="Collection Name"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded"
-              />
-            </label>
-            <label className="block">
-              <span className="text-gray-700">
-                Who is sending this collection? (optional)
-              </span>
-              <input
-                type="text"
-                value={
-                  senderName !== undefined
-                    ? senderName
-                    : data?.cartDetail?.[0]?.sender_name || ""
-                }
-                onChange={(e) => setSenderName(e.target.value)}
-                placeholder="Your Name"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded"
-              />
-            </label>
-            <label className="block">
-              <span className="text-gray-700">Recipient&apos;s Email</span>
-              <input
-                type="email"
-                value={
-                  recipientEmail !== undefined
-                    ? recipientEmail
-                    : data?.cartDetail?.[0]?.recipient_email || ""
-                }
-                onChange={(e) => setRecipientEmail(e.target.value)}
-                placeholder="Recipient's Email"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded"
-              />
-            </label>
-            <div>
-              <span className="text-gray-700">
-                When should we deliver the gift to the recipient?
-              </span>
-              <div className="mt-2">
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="radio"
-                    name="delivery"
-                    className="form-radio"
-                    value="set-date"
-                    checked={deliveryOption === "set-date"}
-                    onChange={(e) => setDeliveryOption(e.target.value)}
-                  />
-                  <span>Choose delivery date</span>
-                </label>
-                <label className="flex items-center space-x-2 mt-1">
-                  <input
-                    type="radio"
-                    name="delivery"
-                    className="form-radio"
-                    value="later"
-                    checked={deliveryOption === "later"}
-                    onChange={(e) => setDeliveryOption(e.target.value)}
-                  />
-                  <span>Set this later</span>
-                </label>
-                <p className="mt-2 text-sm text-gray-500">
-                  The delivery time is based on your computer&apos;s timezone.
-                </p>
-                {deliveryOption === "set-date" && (
-                  <div className="mt-4 grid grid-cols-2 gap-4">
-                    <label className="block">
-                      <span className="sr-only">Date</span>
+
+        {loading ? (
+          <div className="p-4 text-center">Loading...</div>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <div className="p-4 space-y-4">
+              <label className="block">
+                <span className="text-gray-700">
+                  Enter a title for your collection:
+                </span>
+                <input
+                  type="text"
+                  value={collectionTitle}
+                  onChange={(e) => setCollectionTitle(e.target.value)}
+                  placeholder="Collection Name"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded"
+                />
+              </label>
+
+              <label className="block">
+                <span className="text-gray-700">
+                  Who is sending this collection? (optional)
+                </span>
+                <input
+                  type="text"
+                  value={senderName}
+                  onChange={(e) => setSenderName(e.target.value)}
+                  placeholder="Your Name"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded"
+                />
+              </label>
+
+              <label className="block">
+                <span className="text-gray-700">Recipient&apos;s Email</span>
+                <input
+                  type="email"
+                  value={recipientEmail}
+                  onChange={(e) => setRecipientEmail(e.target.value)}
+                  placeholder="Recipient's Email"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded"
+                />
+              </label>
+
+              <div>
+                <span className="text-gray-700">
+                  When should we deliver the gift to the recipient?
+                </span>
+                <div className="mt-2">
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="radio"
+                      name="delivery"
+                      value="set-date"
+                      checked={deliveryOption === "set-date"}
+                      onChange={(e) =>
+                        setDeliveryOption(
+                          e.target.value as "set-date" | "later"
+                        )
+                      }
+                    />
+                    <span>Choose delivery date</span>
+                  </label>
+                  <label className="flex items-center space-x-2 mt-1">
+                    <input
+                      type="radio"
+                      name="delivery"
+                      value="later"
+                      checked={deliveryOption === "later"}
+                      onChange={(e) =>
+                        setDeliveryOption(
+                          e.target.value as "set-date" | "later"
+                        )
+                      }
+                    />
+                    <span>Set this later</span>
+                  </label>
+
+                  {deliveryOption === "set-date" && (
+                    <div className="mt-4">
                       <input
                         type="date"
                         value={deliveryDate}
@@ -217,28 +236,20 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
                         onChange={(e) => setDeliveryDate(e.target.value)}
                         className="block w-full p-2 border border-gray-300 rounded"
                       />
-                    </label>
-                    <label className="block">
-                      <span className="sr-only">Time</span>
-                      <input
-                        type="time"
-                        value={deliveryTime}
-                        onChange={(e) => setDeliveryTime(e.target.value)}
-                        className="block w-full p-2 border border-gray-300 rounded"
-                      />
-                    </label>
-                  </div>
-                )}
+                    </div>
+                  )}
+                </div>
               </div>
+
+              <button
+                type="submit"
+                className="w-full bg-blue-500 text-black border-2 py-2 px-4 rounded hover:bg-blue-600"
+              >
+                Save Changes
+              </button>
             </div>
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-black border-2 py-2 px-4 rounded hover:bg-blue-600"
-            >
-              Save Changes
-            </button>
-          </div>
-        </form>
+          </form>
+        )}
       </div>
     </div>
   );

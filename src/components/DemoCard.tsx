@@ -7,7 +7,7 @@ import EditorModal from "./common/EditorModal";
 import EditorCrousal from "./common/EditorCrousal";
 import { CopyOutlined } from "@ant-design/icons";
 import { Button, Input, Modal, QRCode, Space, Typography } from "antd";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import DemoViewCard from "./common/DemoViewCard";
 import DemoBoard from "./common/DemoBoard";
 import userIcon from "../assets/icons/abj.png";
@@ -84,7 +84,6 @@ const DemoCard = ({ params }: any) => {
       {params === "fwzDVjvbQ_X" ? (
         <>
           <section className="bg-demo_banner text-center demo_section common_padding bg-cover bg-no-repeat">
-            <ToastContainer />
             <div className="container-fluid">
               <h1 className="text-md tracking-tight demo_heading">
                 Welcome to Your Interactive Demo

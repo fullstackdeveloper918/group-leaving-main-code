@@ -40,15 +40,12 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
   const [selectedOption, setSelectedOption] = useState("");
   const [countBundle, setCountBundle] = useState<number>(0);
 
-  // Initialize access token and user info from cookies
   useEffect(() => {
     const cookies = parseCookies();
     const token = cookies.auth_token;
-    console.log(token, "token in multi step form");
     if (token) {
       setAccessToken(token);
     }
-
     const userInfoCookie = cookies.userInfo;
     if (userInfoCookie) {
       try {
@@ -65,7 +62,6 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
     }
   }, [setAccessToken]);
 
-  // Fetch bundle count
   useEffect(() => {
     const fetchBundleCount = async () => {
       if (!accessToken) return;
@@ -79,7 +75,6 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
               "Content-Type": "application/json",
               Authorization: `Bearer ${accessToken}`,
             },
-            // body: JSON.stringify({}),
           }
         );
 
@@ -88,9 +83,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
         }
 
         const result = await response.json();
-        console.log(result, "profile data");
         const bundleCount = result?.data?.bundle_card_count ?? 0;
-        console.log(bundleCount, "bundle count");
         setCountBundle(bundleCount);
       } catch (error) {
         console.error("Error fetching bundle count:", error);
@@ -146,97 +139,103 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
   };
 
   // Handle form submission
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  console.log(params);
 
-    if (!senderName) {
-      setSenderError("Please enter your name.");
-      return;
-    }
-    setSenderError("");
+  // 🔹 Store params in localStorage before API calls
+  if (params) {
+    localStorage.setItem("card_params", JSON.stringify(params));
+  }
 
-    if (!uuid || !accessToken) {
-      toast.error("User authentication required.");
-      router.push("/login");
-      return;
-    }
+  if (!senderName) {
+    setSenderError("Please enter your name.");
+    return;
+  }
+  setSenderError("");
 
-    try {
-      setLoading(true);
+  if (!uuid || !accessToken) {
+    toast.error("User authentication required.");
+    router.push("/login");
+    return;
+  }
 
-      const item = {
-        user_uuid: uuid,
-        card_uuid: params.card_uuid,
-        currency_type: selectedOption || "INR",
-        recipient_name: recipientName,
-        recipient_email: recipientEmail,
-        sender_name: senderName,
-        do_it_late: cardType === "later",
-        delivery_date: selectedDate,
-        delivery_time: selectedTime,
-        allow_private: false,
-        add_confetti: false,
-        is_remove_from_cart: countBundle === 0 ? 0 : 1,
-      };
+  try {
+    setLoading(true);
 
-      // Add to cart API
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/cart/add-cart`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify(item),
-        }
-      );
+    const item = {
+      user_uuid: uuid,
+      card_uuid: params.card_uuid,
+      currency_type: selectedOption || "INR",
+      recipient_name: recipientName,
+      recipient_email: recipientEmail,
+      sender_name: senderName,
+      do_it_late: cardType === "later",
+      delivery_date: selectedDate,
+      allow_private: false,
+      add_confetti: false,
+      is_remove_from_cart: countBundle === 0 ? 0 : 1,
+    };
 
-      const data = await response.json();
-
-      if (response.status === 200) {
-        toast.success("Cart added successfully");
-
-        if (countBundle === 0) {
-          router.push(`/card/pay/${data.data.cart_uuid}`);
-        } else {
-          // Use card API
-          const useCardRes = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/cart/use-card/${uuid}`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-          console.log(useCardRes, "use card response raw");
-          const useCardData = await useCardRes.json();
-          console.log(useCardData, "use card response");
-
-          if (useCardData) {
-            router.push(`/successfull?cart_uuid=${data.data.cart_uuid}`);
-          } else {
-            toast.error(useCardData?.error || "Failed to use card");
-          }
-        }
-      } else if (response.status === 400) {
-        toast.error(data?.error || "Invalid request");
-      } else if (response.status === 401) {
-        toast.error("Session expired. Please log in again.");
-        destroyCookie(null, "auth_token");
-        router.replace("/login");
-      } else {
-        toast.error(data?.error || "Something went wrong");
+    // Add to cart API
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/cart/add-cart`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(item),
       }
-    } catch (err: any) {
-      console.error("Error during submission:", err);
-      toast.error(err.message || "An error occurred");
-    } finally {
-      setLoading(false);
+    );
+
+    const data = await response.json();
+
+    if (response.status === 200) {
+      toast.success("Cart added successfully");
+
+      if (countBundle === 0) {
+        router.push(`/card/pay/${data.data.cart_uuid}`);
+      } else {
+        // Use card API
+        const useCardRes = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/cart/use-card/${uuid}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        const useCardData = await useCardRes.json();
+        console.log(useCardData, "use card response");
+
+        if (useCardData) {
+          router.push(`/successfull?cart_uuid=${data.data.cart_uuid}`);
+        } else {
+          toast.error(useCardData?.error || "Failed to use card");
+        }
+      }
+    } else if (response.status === 400) {
+      toast.error(data?.error || "Invalid request");
+    } else if (response.status === 401) {
+      toast.error("Session expired. Please log in again.");
+      destroyCookie(null, "auth_token");
+      router.replace("/login");
+    } else {
+      toast.error(data?.error || "Something went wrong");
     }
-  };
+  } catch (err: any) {
+    console.error("Error during submission:", err);
+    toast.error(err.message || "An error occurred");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <>
@@ -372,13 +371,13 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                         placeholder="Date"
                       />
-                      <input
+                      {/* <input
                         type="time"
                         value={selectedTime}
                         onChange={(e) => setSelectedTime(e.target.value)}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                         placeholder="Time"
-                      />
+                      /> */}
                     </div>
                   </>
                 )}

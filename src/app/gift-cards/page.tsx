@@ -12,14 +12,11 @@ const page = async () => {
     method: "GET", // Method set to GET
     headers: {
       "Cache-Control": "no-cache",
-      // 'authorization': `Bearer ${gettoken.value}` // Send the token in the Authorization header
       cache: "reload",
     },
   });
-  // console.log(gettoken,"ggg");
-  // Parse the response JSON
+
   let posts = await data.json();
-  console.log(posts, "posts");
   return (
     <>
       {/* <div className=""> */}

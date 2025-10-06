@@ -76,27 +76,14 @@ const AccountBunddles = ({ userInfo, data }: any) => {
   useEffect(() => {
     submit();
   }, []);
-  console.log(state?.message?.bundles, "jkshjsdssssssss");
-  // const filteredData = state?.message?.filter(
-  //   (item: any) => item.razorInfo.length > 0
-  // );
-  // const filteredData = state?.message?.filter(
-  //   (item: any) => item.razorInfo.length > 0
-  // );
-  // console.log("filterDataaccountbundle", filteredData);
+
   const handlePickBundle = () => {
-    // Route to the bundle selection page
     router.push("/pricing");
   };
   return (
     <div className=" flex flex-col justify-center items-center bg-gray-100 w-full">
-      {/* Page Title */}
-      <ToastContainer />
-      <div className="flex justify-center items-center gap-5 mt-4 mb-4">
-        <h1 className="font-bold text-center bundle-head">My Bundles</h1>
-        <p>Total Bundle -: {countBundle}</p>
-      </div>
-      <div className="rounded-lg w-full overflow-x-auto bg-white rounded-lg border border-grey mb-4">
+      <h1 className="font-bold text-center bundle-head">My Bundles</h1>
+      <div className="rounded-lg w-full overflow-x-auto bg-white  border border-grey mb-4">
         {/* <h2 className="text-xl font-semibold mb-4">Signed Cards</h2> */}
         <div className="overflow-x-auto inline-block min-w-full align-middle rounded-lg">
           <table className="min-w-full bg-white border rounded-lg">

@@ -10,52 +10,21 @@ import nookies from "nookies";
 import SendGiftModal from "./common/SendGiftModal";
 import Cookies from "js-cookie";
 import { useParams } from "next/navigation";
-import Custom from "./common/custom";
 import CommonCustomEditor from "./common/newcustomeditor/CommonCustomEdtior";
 
-const GroupCollection = ({
-  params,
-  searchParams,
-  // data,
-  setClose,
-  isClose,
-}: any) => {
+const GroupCollection = ({ params, searchParams }: any) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  // console.log(data, "jdkhdur");
   const { id } = useParams();
   const [cookieValue, setCookieValue] = useState<string | null>(null);
-  // console.log(cookieValue, "cookieValue");
   const [isLocked, setIsLocked] = useState(false); // State to track the lock/unlock state
   const [buttonText, setButtonText] = useState("Lock Collection");
   const [organiser, setOrganiser] = useState("");
-  // console.log(organiser, "organiser");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [shareImageData, setShareImageData] = useState<any>(null);
   const [shareCartData, setShareCartData] = useState<any>(null);
   const gettoken = Cookies.get("auth_token");
 
-  // console.log("searchParams here", searchParams.brandKey);
-
   useEffect(() => {
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await fetch(
-    //       `${process.env.NEXT_PUBLIC_API_URL}/card/users-cards`,
-    //       {
-    //         method: "GET",
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //           Authorization: `Bearer ${gettoken}`,
-    //         },
-    //       }
-    //     );
-
-    //     const data = await response.json();
-    //     setShareImageData(data); // Store response data in state
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //   }
-    // };
     const fetchData = async () => {
       try {
         const postData = {
@@ -67,14 +36,13 @@ const GroupCollection = ({
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              // Authorization: `Bearer ${gettoken}`,
             },
             body: JSON.stringify(postData),
           }
         );
-
+        console.log(params, "response from groupcollection");
         const data = await response.json();
-        // console.log(data,"data from api")
+        console.log(data, "data from groupcollection");
         setShareCartData(data); // Store response data in state
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -83,20 +51,64 @@ const GroupCollection = ({
 
     fetchData();
   }, [id]);
-  // console.log(shareImageData, "shareImageData here");
+  useEffect(() => {
+    const fetchDataImage = async () => {
+      try {
+        // First, try to get cardId from localStorage
+        const storedParams = localStorage.getItem("card_params");
+        let cardId = storedParams ? JSON.parse(storedParams) : null;
 
-  // const cardShareData = shareImageData?.listing?.find(
-  //   (item: any) => item.uuid === id
-  // );
+        // If not in localStorage, try to get it from shareCartData
+        if (!cardId && shareCartData?.data?.cartDetail?.[0]) {
+          cardId = shareCartData.data.cartDetail[0].card_id;
+        }
+
+        // If still no cardId, try using the id from params
+        if (!cardId && id) {
+          cardId = id;
+        }
+
+        console.log("Fetching image for card ID:", cardId);
+
+        if (!cardId) {
+          console.error("No card ID found");
+          return;
+        }
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/card/edit-card/${cardId}`,
+          { method: "GET" }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Full API response:", data);
+
+        const showImage = data?.data?.[0]?.images?.[0]?.card_images?.[0];
+        console.log("Extracted showImage:", showImage);
+
+        if (showImage) {
+          setShareImageData(showImage);
+        } else {
+          console.warn("No image found in response");
+        }
+      } catch (error) {
+        console.error("Error fetching image data:", error);
+      }
+    };
+
+    // Only fetch when we have either shareCartData or id available
+    if (id || shareCartData) {
+      fetchDataImage();
+    }
+  }, [id, shareCartData]);
+  console.log(shareImageData, "shareImageData");
   const cardShareData = shareCartData?.data || [];
 
-  console.log("cardShareData heree", cardShareData);
-
-  // const [editCollection, setEditCollection] = useState(data);
-
-  // const gettoken = Cookies.get("auth_token");
   useEffect(() => {
-    // Get cookies on the client side
     const cookies = nookies.get(); // retrieves cookies from document.cookie
     const userData = cookies.userInfo ? JSON.parse(cookies.userInfo) : null;
     // console.log(userData, "userData");
@@ -108,11 +120,8 @@ const GroupCollection = ({
   const lockeCollection = async () => {
     let item = {
       user_uuid: cookieValue,
-      // link_id: data?.data?.uuid,
       type: isLocked,
     };
-    // console.log(item, "item");
-
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/razorpay/locked-collecton-link`,
@@ -136,11 +145,9 @@ const GroupCollection = ({
       toast.success(!isLocked ? "Unlock Successfully" : "Lock Successfully", {
         autoClose: 1000,
       });
-      // console.log(data, "sadfdgsfdg");
+
       setIsLocked(!isLocked);
       setButtonText(isLocked ? "Unlock Collection" : "Lock Collection");
-
-      //  router.replace(`/share/${data?.data?.uuid}?brandKey=${brandKeys}`);
     } catch (error) {}
   };
   const handleSend = async (email: string) => {
@@ -177,13 +184,8 @@ const GroupCollection = ({
         "Please make sure the recipient email is valid and try again.",
         { autoClose: 2000 }
       );
-      //   alert("An error occurred. Please try again.");
     }
   };
-
-  // console.log("paramsid", params.id);
-
-  // console.log(editCollection,"editCollection11");
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -208,7 +210,7 @@ const GroupCollection = ({
             </button>
             <button
               className="bg-blue-600 border-2 border-blue-700 text-black px-4 py-2 rounded-md hover:bg-blue-700 transition"
-              onClick={lockeCollection}
+              onClick={() => lockeCollection()}
             >
               {isLocked ? "Unlock Collection" : "Secure Collection"}
             </button>
@@ -247,29 +249,9 @@ const GroupCollection = ({
                     <p className="text-gray-500 mb-4">Coordinator</p>
                   </div>
                 </div>
-                {/* <div className="flex">
-                  <button className="text-blue-600 hover:underline mb-2">
-                    Post a note for your team
-                  </button>
-                </div> */}
               </>
             )}
             <CopyclickBoard />
-            {/* <div className="mt-4 border-t pt-4">
-              <h3 className="text-md font-semibold mb-2">
-                Include a Greeting Card in this Collection?
-              </h3>
-              <p className="text-gray-500 mb-4">
-                Make your collection extra memorable by including a group
-                greeting card. The greeting card will stay at this link and
-                gather unlimited personal messages from all contributors.
-              </p>
-              <Link href={`/card/farewell/1`}>
-                <button className="bg-blue-600 text-black px-4 py-2 border-2 border-blue-700 rounded-md hover:bg-blue-700 transition">
-                  Include Greeting Card
-                </button>
-              </Link>
-            </div> */}
           </div>
 
           <div className="flex w-full justify-center">
@@ -277,7 +259,10 @@ const GroupCollection = ({
               className="mt-8 flex flex-col"
               style={{ width: "550px", maxWidth: "650px" }}
             >
-              <CommonCustomEditor cardShareData={cardShareData} />
+              <CommonCustomEditor
+                shareImageData2={shareImageData}
+                cardShareData={cardShareData}
+              />
             </div>
 
             <GiftCardCollectionPot
@@ -291,12 +276,9 @@ const GroupCollection = ({
       </div>
       <SidebarModal
         isOpen={isSidebarOpen}
-        // setEditCollection= {setEditCollection}
-        setClose={setClose}
-        isClose={isClose}
         onClose={() => setIsSidebarOpen(false)}
         data={cardShareData}
-        createlinkuserId={cookieValue}
+        cartId={params.id}
       />
       <SendGiftModal
         isOpen={isModalOpen}

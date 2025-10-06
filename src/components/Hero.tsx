@@ -98,7 +98,6 @@ const Hero = ({
   return (
     <>
       <section className="  dark:bg-gray-900   align-middle  homeBanner ">
-        <ToastContainer />
         <div className="slider-containe">
           <Slider {...settings}>
             {/********** slide 1 started  ***********/}

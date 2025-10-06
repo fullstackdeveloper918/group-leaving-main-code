@@ -76,7 +76,6 @@ const PlanBunddlePage = ({ data2 }: any) => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex justify-center items-center bg-lightBg">
-      <ToastContainer />
       <div className="bg-white p-6 rounded-[20px] hover:shadow-lg transition-all  border border-[#e5e7eb] flex flex-col justify-between h-full">
         <h1 className="text-center text-2xl font-bold mb-4">
           {data2.data[0].number_of_cards} Cards Bundle

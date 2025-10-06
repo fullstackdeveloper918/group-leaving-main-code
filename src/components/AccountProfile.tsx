@@ -86,7 +86,6 @@ const AccountProfile = ({ userInfo, data }: any) => {
   return (
     <div>
       <div className="mb-8">
-        <ToastContainer />
         <h2 className="font-bold mb-4 my-card-head my-ac-profile mt-5 text-center text-md-start">My Account</h2>
         <div className="space-y-4 profile-field-grp">
           <div>

@@ -1,6 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.progress-loader {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #00C4CC;
+  transition: width 0.3s ease-out; /* smooth width change */
+}
 
 /* :root {
   --foreground-rgb: 0, 0, 0;

@@ -40,7 +40,6 @@ const DemoBoard = () => {
   return (
    <>
    <section className="bg-demo_banner text-center demo_section common_padding bg-cover bg-no-repeat">
-        {/* <ToastContainer/> */}
         <div className="container-fluid">
             
           <h1 className="text-md tracking-tight demo_heading">

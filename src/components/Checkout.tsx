@@ -24,7 +24,7 @@ const Checkout = ({ data }: any) => {
   const [voucherDiscount, setVaoucherDiscount] = useState<any>(0);
   const [shareCartData, setShareCartData] = useState<any>(null);
   const { id } = useParams();
-
+  const [shareImageData, setShareImageData] = useState<any>(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -52,7 +52,46 @@ const Checkout = ({ data }: any) => {
 
     fetchData();
   }, [id]);
+  useEffect(() => {
+    const fetchDataImage = async () => {
+      try {
+        const storedParams = localStorage.getItem("card_params");
+        const cardId = storedParams ? JSON.parse(storedParams) : null;
 
+        console.log("Stored card ID:", cardId);
+
+        if (!cardId) {
+          console.error("No card ID found in localStorage");
+          return;
+        }
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/card/edit-card/${cardId}`,
+          { method: "GET" }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Full API response:", data);
+
+        const showImage = data?.data?.[0]?.images?.[0]?.card_images?.[0];
+        console.log("Extracted showImage:", showImage);
+
+        if (showImage) {
+          setShareImageData(showImage);
+        } else {
+          console.warn("No image found in response");
+        }
+      } catch (error) {
+        console.error("Error fetching image data:", error);
+      }
+    };
+
+    fetchDataImage();
+  }, [id]);
   const cardShareData = shareCartData?.data || [];
 
   const handleChange = (e: any) => {
@@ -176,7 +215,6 @@ const Checkout = ({ data }: any) => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center p-5">
-      <ToastContainer />
       <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 md:flex">
         <div className="flex-1">
           <div className="mb-6">
@@ -322,11 +360,15 @@ const Checkout = ({ data }: any) => {
             <h2 className="text-lg font-bold mb-0">Your Card</h2>
             <div className="flex justify-between items-start flex-col mb-4">
               <span>Group Card for {cardShareData?.recipient_name}</span>
-              <img
-                src={`${process.env.NEXT_PUBLIC_API_URL}/${cardShareData?.images?.[0]?.card_images?.[0]}`}
-                alt="E-Gift Card"
-                className="w-40 h-30 mt-3 object-contain rounded-md"
-              />
+              <div>
+                <div className="flex flex-col w-[150px] h-[150px] items-center">
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/${shareImageData}`}
+                    alt="E-Gift Card"
+                    className="w-full h-full mt-3 object-cover rounded-md"
+                  />
+                </div>
+              </div>
             </div>
             <div className="flex justify-between items-center mb-4">
               <input

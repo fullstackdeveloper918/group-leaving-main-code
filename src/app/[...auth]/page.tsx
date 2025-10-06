@@ -6,13 +6,6 @@ import ResetPassword from "../../components/ResetPassword";
 import React from "react";
 
 const page = ({params,searchParams}:any) => {
-
-  
-  console.log(params,"params here to see")
-    console.log(params?.auth[0],"kjjhjh");
-    console.log(searchParams.token,"asdfretwertwert");
-    console.log(searchParams.email,"dfghryt");
-    
   return (
   <div className="">
    {

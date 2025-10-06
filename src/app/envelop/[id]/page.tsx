@@ -1,21 +1,9 @@
 import EnvelopCard from "@/components/common/EnvelopCard";
 import React from "react";
 
-// This is a Server Component, so data is fetched on the server
 const Page = async ({ params }: { params: { id: string } }) => {
   const id = params?.id;
 
-  //  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/card/edit-messages-by-unique-id/${id}`, {
-  //   method: "GET",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     // 'Authorization': `Bearer ${authToken}`, // Add authToken if needed
-  //   },
-
-  // });
-
-  // const data = await response.json();
-  // console.log(data, "responseData");
 
   try {
     const postData = {
@@ -42,7 +30,6 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
     const data = await response.json();
 
-    console.log(data, "data from envelop page");
 
     return (
       <div>

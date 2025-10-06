@@ -3,20 +3,6 @@ import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
   const userToken = request.cookies.get('auth_token')?.value;
-  // const username:any = request.cookies.get('Username') || ''; // Default to empty string if undefined
-  // const password:any = request.cookies.get('Password') || '';
-
-  // const correctUsername = 'abhay@gmail.com';
-  // const correctPassword = 'Abhay@123';
-
-  console.log('userToken', userToken);
-  // console.log('Retrieved Username:', username);
-  // console.log('Retrieved Password:', password);
-
-  // if (username === correctUsername && password === correctPassword) {
-  //   return NextResponse.redirect(new URL("/multistep_form", request.url));
-  // } 
-  // return NextResponse.next();
 
   if(!userToken){
     return NextResponse.redirect(new URL('/login',request.url))

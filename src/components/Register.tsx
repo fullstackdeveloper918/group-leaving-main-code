@@ -54,7 +54,6 @@ const Register = () => {
   return (
     <section className="auth-pages d-flex align-items-center h-100 bg-lightBg loginPage register-page-sec">
       <div className="container">
-      <ToastContainer/>
         <Row justify="center">
           <Col className="gutter-row" xs={23} sm={21} md={19} lg={12} xl={10}>
           <h3 className="text-center register-head-txt font-bold">Register</h3>

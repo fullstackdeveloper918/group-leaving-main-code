@@ -33,8 +33,6 @@ const signatures = [
 
 export default function MySignatures() {
   const [elements, setElements] = useState<any[]>([]);
-  console.log(elements, "asdasdwq");
-
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<number | null>(null);
 

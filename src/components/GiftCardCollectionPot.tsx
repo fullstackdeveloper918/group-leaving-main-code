@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import Image from "next/image";
 import userIcon from "../assets/icons/abj.png";
 import NextTopLoader from "nextjs-toploader";
+import Loader from "./common/Loader";
 // import { useTopLoader } from "nextjs-toploader";
 
 type TopLoaderRef = {
@@ -82,7 +83,7 @@ const GiftCardCollectionPot = ({
       );
 
       const data = await response.json();
-      console.log(data, "fetched all giftcards");
+      // console.log(data, "fetched all giftcards");
       setGiftCard(data);
     } catch (error) {}
     // finally {
@@ -150,31 +151,42 @@ const GiftCardCollectionPot = ({
   };
 
   const addGiftCard = async (giftCard: any) => {
-    // console.log(giftCard,"giftCard");
     let temp_body = {
       cartId: groupId,
       giftcard: giftCard,
     };
+
+    const MIN_DISPLAY_TIME = 500; // minimum loader display in ms
+    const startTime = Date.now();
+
     try {
+      setLoading(true); // start loader
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/reloadly/save-card`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            // Authorization: `Bearer ${gettoken}`,
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(temp_body),
         }
       );
-      // console.log(response,"response");
+
       const data = await response.json();
+
       if (data) {
-        await fetchGiftCard();
+        await fetchGiftCard(); // fetch updated gift cards
       }
-      // console.log(data,"data response");
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      const elapsed = Date.now() - startTime;
+      const remaining = MIN_DISPLAY_TIME - elapsed;
+
+      if (remaining > 0) {
+        // ensure loader stays visible for MIN_DISPLAY_TIME
+        setTimeout(() => setLoading(false), remaining);
+      } else {
+        setLoading(false);
+      }
     }
   };
 
@@ -217,38 +229,24 @@ const GiftCardCollectionPot = ({
   // const selectGiftImage = giftCard.data?.logoUrls[0];
   // const selectGiftImage = giftCard.data?.imageUrls["278w-326ppi"];
   // const selectGiftImage = giftCard?.data?.imageUrls ? giftCard.data.imageUrls["278w-326ppi"] : null;
-
+  const [Loading, setLoading] = useState(false);
   // console.log(selectGiftImage, "selectGiftImage");
-  console.log(giftCard?.cards, "giftCard?.cards?");
+  // console.log(giftCard?.cards, "giftCard?.cards?");
   const handleClick = async () => {
     try {
-      loaderRef.current?.continuousStart(); // start loader
+      setLoading(true); // start loading
       await fetchGiftCardProducts();
       setIsGiftCardModalOpen(true);
     } catch (err) {
       console.error(err);
     } finally {
-      loaderRef.current?.complete(); // stop loader
+      setLoading(false); // stop loading
     }
   };
+
   return (
     <>
-      {/* {loading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-white/30 backdrop-blur-sm z-50">
-          <div className="bg-white p-6 rounded shadow-lg">Loading...</div>
-        </div>
-      )} */}
-      <NextTopLoader
-        color="#00C4CC"
-        initialPosition={0.08}
-        crawlSpeed={20}
-        height={3}
-        crawl={true}
-        showSpinner={false}
-        easing="ease"
-        speed={100}
-        shadow="0 0 10px #2299DD,0 0 5px #2299DD"
-      />
+      <Loader loading={Loading} />
       <div className="bg-white p-6 w-[30%] flex flex-col mt-[126px]">
         {
           <>
@@ -316,13 +314,20 @@ const GiftCardCollectionPot = ({
                   <div className="text-center mb-2 gap-2 items-center justify-center flex flex-col">
                     <button
                       onClick={async () => {
-                        await fetchGiftCardProductDetail(
-                          card?.productId,
-                          card?.uuid
-                        );
-                        setIsContributeModalOpen(true);
+                        try {
+                          setLoading(true); // start loader immediately
+                          await fetchGiftCardProductDetail(
+                            card?.productId,
+                            card?.uuid
+                          );
+                          setIsContributeModalOpen(true); // open modal after API
+                        } catch (err) {
+                          console.error(err);
+                        } finally {
+                          setLoading(false); // stop loader immediately when API finishes
+                        }
                       }}
-                      className="bg-greyBorder bgGray text-blackText rounded-lg  w-100 text-sm p-2.5 cursor-pointer"
+                      className="bg-greyBorder bgGray text-blackText rounded-lg w-100 text-sm p-2.5 cursor-pointer"
                     >
                       Chip in for{" "}
                       <span className="capitalize">
@@ -443,7 +448,6 @@ const GiftCardCollectionPot = ({
                   <button
                     className="bg-[#558ec9] text-white px-4 py-2 rounded mt-2 hover:bg-blue-700"
                     onClick={() => {
-                      // Add logic for adding gift card here
                       setIsGiftCardModalOpen(false);
                       setSelectedImage(null);
                       addGiftCard(selectedImage);

@@ -89,7 +89,6 @@ const CreateBoard = ({ data }: any) => {
   };
   useEffect(() => {
     const cookies = document.cookie.split("; ");
-    console.log(cookies, "asdasdasd");
 
     // Finding the 'Auth' cookie
     const authCookie = cookies.find((cookie) => cookie.startsWith("Auth="));
@@ -274,7 +273,6 @@ const CreateBoard = ({ data }: any) => {
   };
   return (
     <div>
-      <ToastContainer />
       <div className="flex flex-col items-center justify-center border border-[#e5e7eb bg-lightBg grp-broad">
         <h1 className="text-4xl font-bold mb-8 text-center">
           Start a Group Board

@@ -24,16 +24,13 @@ interface ApiResponse<T> {
   status: number;
 }
 const Home: React.FC<HomeProps> = async ({ searchParams }) => {
-  console.log("searchParams:", searchParams);
   const token:any = searchParams?.token;
-      console.log("Google Token:", token);
   // Fetch first API response
   const api: Api = {
     url: "https://fakestoreapi.com/products",
     method: "GET",
   };
   const data: ApiResponse<any> = await fetchFromServer(api);
-  console.log("API Response:", data);
   // Fetch second API response
   const api2: Api = {
     url: "${process.env.NEXT_PUBLIC_API_URL}/card/collection-listing",
@@ -49,23 +46,16 @@ const Home: React.FC<HomeProps> = async ({ searchParams }) => {
     }
   });
   let userData = await user.json();
-  console.log("postuser",userData.data)
-  // useEffect(()=>{
-  //   console.log('this is running');
-  // },[])
+
   return (
     <>
       <section>
         <div className="mt-50">
           <Hero {...cardData} token={token} userData={userData.data} />
         </div>
-        {/* <div className="section_space_50">
-          <PartnerCompanies />
-        </div> */}
+      
         <HomeCategorySection searchParams={searchParams} />
-        {/* Section 4 */}
         <Image_text_Card />
-        {/* Section 5 */}
         <div className="bg-workBg bg-no-repeat bg-cover py-16 how_we_work">
           <div className="text-center container-fluid">
             <h1 className="xl:text-4xl md:text-xl sm:text-md font-semibold">

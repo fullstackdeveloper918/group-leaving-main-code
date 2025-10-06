@@ -4,8 +4,6 @@ import Recipient from '@/components/Recipient'
 import React from 'react'
 
 const page = async({ searchParams,params }:any) => {
-  console.log(params,"sad;asdasd");
-  
   return (
     <div>
 

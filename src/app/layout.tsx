@@ -23,6 +23,7 @@ import { AccessTokenProvider } from "./context/AccessTokenContext";
 // import 'slick-carousel/slick/slick.css';
 // import 'slick-carousel/slick/slick-theme.css';
 import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 const roboto = Roboto({
   weight: ["400", "700"],
   subsets: ["latin"],
@@ -97,6 +98,17 @@ export default function RootLayout({
       </head>
       <body className={quicksand.className}>
         {/* <AntdRegistry> */}
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <AccessTokenProvider>
           <AntdRegistry>
             <MsalProvider instance={msalInstance}>
@@ -112,24 +124,12 @@ export default function RootLayout({
                 speed={100}
                 shadow="0 0 10px #2299DD,0 0 5px #2299DD"
               />
-              {/* <NextTopLoader
-            color="#2299DD"
-            initialPosition={0.08}
-            crawlSpeed={200}
-            height={3}
-            crawl={true}
-            showSpinner={true}
-            easing="ease"
-            speed={200}
-            shadow="0 0 10px #2299DD,0 0 5px #2299DD"
-          /> */}
+
               {children}
               <Footer />
             </MsalProvider>
           </AntdRegistry>
         </AccessTokenProvider>
-        {/* <!-- In public/index.html --> */}
-        {/* <script src="https://cdn.green-envelope.com/script.js"></script> */}
       </body>
     </html>
   );
