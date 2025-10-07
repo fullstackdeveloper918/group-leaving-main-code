@@ -53,7 +53,6 @@ const array = [
 // ]
 
 const Card = ({ item, index }) => {
-  console.log(item, "asdasd");
 
   const matchingCard = array.find((card) => card.type === item.type);
   console.log(matchingCard, "matchingCard");

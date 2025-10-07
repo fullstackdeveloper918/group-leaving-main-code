@@ -338,7 +338,6 @@ const Custom: React.FC = () => {
       }
 
       const data = await response.json();
-      console.log("Data uploaded successfully:", data);
     } catch (error) {
       console.error("Error uploading data:", error);
     }
@@ -367,7 +366,6 @@ const Custom: React.FC = () => {
       }
 
       const data = await response.json();
-      console.log("Data uploaded successfully:", data);
     } catch (error) {
       console.error("Error uploading data:", error);
     }
@@ -395,7 +393,6 @@ const Custom: React.FC = () => {
       const data = await response.json();
 
       setElements(data?.data[0].editor_messages)
-      console.log("Data uploaded successfully:", data?.data[0]);
     } catch (error) {
       console.error("Error uploading data:", error);
     }
@@ -738,8 +735,6 @@ const [type, setType]=useState<any>("")
       setOpenDropdown((prev) => !prev);
     // }
   };
-  console.log(openDropdown,"openDropdown");
-  console.log(elements,"openasdasdasaDropdown");
   
   return (
     <>

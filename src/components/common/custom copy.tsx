@@ -92,7 +92,6 @@ console.log(userInfo?.uuid,"userInf");
       }
   
       const data = await response.json();
-      console.log("Data uploaded successfully:", data);
     } catch (error) {
       console.error("Error uploading data:", error);
     }

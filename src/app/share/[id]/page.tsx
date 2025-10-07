@@ -1,5 +1,4 @@
 "use client";
-import Custom from "@/components/common/custom";
 import GroupCollection from "../../../components/GroupCollection";
 import React, { useEffect, useState, useCallback } from "react";
 // import { toast } from "react-hot-toast";

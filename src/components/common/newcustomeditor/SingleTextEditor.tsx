@@ -57,14 +57,8 @@ interface TextEditorProps {
 const TextEditor: React.FC<TextEditorProps> = ({
   onHide,
   setElements,
-  elements,
   selectedElement,
-  content,
   cardIndex,
-  Xposition,
-  Yposition,
-  slides,
-  isFirstSlide,
   toast,
   user_uuid,
   activeSlideIndex,
@@ -78,7 +72,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
       name,
       content,
       fontSize: selectedElement?.fontSize || "22px",
-      fontFamily: selectedElement?.fontFamily || "Boogaloo",
+      fontFamily: selectedElement?.fontFamily || "Verdana",
       fontWeight: selectedElement?.fontWeight || "500",
       color: selectedElement?.color || "#FF8A00",
       isEditing: true,
@@ -94,8 +88,8 @@ const TextEditor: React.FC<TextEditorProps> = ({
 
   const { position, setPosition, isDragging, startDragging } =
     useEditorPosition({
-      initialX: selectedElement?.content ? selectedElement?.x : 60,
-      initialY: selectedElement?.content ? selectedElement?.y : 200,
+      initialX: selectedElement?.x ?? 60,
+      initialY: selectedElement?.y ?? 200,
       slideWidth: 500,
       slideHeight: 620,
       editorWidth: selectedElement?.width ?? 300,
@@ -111,15 +105,15 @@ const TextEditor: React.FC<TextEditorProps> = ({
   // Auto-resize textarea height
   const adjustTextareaHeight = () => {
     if (editorRef.current) {
-      editorRef.current.style.height = "auto"; // Reset height
+      editorRef.current.style.height = "auto";
       const newHeight = editorRef.current.scrollHeight;
-      editorRef.current.style.height = `${newHeight}px`; // Set to scrollHeight
-      handleResize(position.width, newHeight + 50); // Update container height (+50 for name input)
+      editorRef.current.style.height = `${newHeight}px`;
+      handleResize(position.width, newHeight + 50);
     }
   };
 
   useEffect(() => {
-    adjustTextareaHeight(); // Adjust height on initial render
+    adjustTextareaHeight();
   }, [editorState.message]);
 
   useEffect(() => {
@@ -162,6 +156,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
       color: editorState.color,
     };
 
+    // Update elements immediately to prevent position jump
     if (selectedElement && cardIndex.original !== undefined) {
       setElements((prev) =>
         prev.map((element, idx) =>
@@ -187,7 +182,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
         user_uuid: user_uuid,
         editor_messages: [newElement],
       };
-      console.log("Payload for API:", payload);
+      
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/cart/upsert-editor-messages`,
         {
@@ -205,15 +200,15 @@ const TextEditor: React.FC<TextEditorProps> = ({
 
       const result = await response.json();
       toast.success("Saved Changes Successfully");
+      
+      // Close editor immediately after successful save
+      setLoading(false);
+      onHide();
     } catch (error) {
       console.error("API Error:", error);
       toast.error("Failed to sync with server");
-    }
-
-    setTimeout(() => {
       setLoading(false);
-      onHide();
-    }, 2000);
+    }
   };
 
   const handleDelete = () => {
@@ -272,21 +267,19 @@ const TextEditor: React.FC<TextEditorProps> = ({
     <div
       ref={slideRef}
       className="flex flex-col justify-center items-center"
-      // className="flex flex-col justify-center items-center editor-design"
       style={{
         position: "absolute",
         top: `${position.y}px`,
-        // bottom: `${position.y}px`,
         left: `${position.x}px`,
-        width: `${position.width}`,
-        height: `${position.height}`,
+        width: `${position.width}px`,
+        height: `${position.height}px`,
         zIndex: 1000,
       }}
     >
       <div
         style={{
           position: "absolute",
-          top: "-50px",
+          top: "-120px",
           zIndex: 9010,
           backgroundColor: "white",
         }}
@@ -387,10 +380,8 @@ const TextEditor: React.FC<TextEditorProps> = ({
                 wordWrap: "break-word",
                 minHeight: "10px",
                 maxHeight: "400px",
-                height: "36px !important",
                 lineHeight: "1",
               }}
-              // cols={1}
             />
             <input
               type="text"
@@ -432,7 +423,8 @@ const TextEditor: React.FC<TextEditorProps> = ({
             </button>
             <button
               onClick={handleSave}
-              className="px-4 py-2 bg-[#061178] text-white rounded flex items-center gap-1 hover:bg-indigo-800 transition editor-save"
+              disabled={loading}
+              className="px-4 py-2 bg-[#061178] text-white rounded flex items-center gap-1 hover:bg-indigo-800 transition editor-save disabled:opacity-50"
             >
               {loading ? "Saving..." : "Save"}
             </button>

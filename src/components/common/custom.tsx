@@ -447,7 +447,6 @@ function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
       );
       if (!response.ok) throw new Error("Failed to upload data");
       const data = await response.json();
-      console.log("Data uploaded successfully:", data);
     } catch (error) {
       console.error("Error uploading data:", error);
     }
@@ -476,7 +475,6 @@ function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
       );
       if (!response.ok) throw new Error("Failed to upload data");
       const data = await response.json();
-      console.log("Data uploaded successfully:", data);
     } catch (error) {
       console.error("Error uploading data:", error);
     }

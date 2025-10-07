@@ -9,7 +9,7 @@ import { capFirst } from "../utils/validation";
 import nookies from "nookies";
 import SendGiftModal from "./common/SendGiftModal";
 import Cookies from "js-cookie";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import Custom from "./common/custom";
 import CommonCustomEditor from "./common/newcustomeditor/CommonCustomEdtior";
 
@@ -33,7 +33,8 @@ const GroupCollection = ({
   const [shareImageData, setShareImageData] = useState<any>(null);
   const [shareCartData, setShareCartData] = useState<any>(null);
   const gettoken = Cookies.get("auth_token");
-
+  const searchParams2 = useSearchParams();
+  const cardId = searchParams2.get("cardId");
   // console.log("searchParams here", searchParams.brandKey);
 
   useEffect(() => {
@@ -83,11 +84,41 @@ const GroupCollection = ({
 
     fetchData();
   }, [id]);
-  // console.log(shareImageData, "shareImageData here");
+  useEffect(() => {
+    const fetchDataImage = async () => {
+      try {
+        if (!cardId) {
+          console.error("No card ID found");
+          return;
+        }
 
-  // const cardShareData = shareImageData?.listing?.find(
-  //   (item: any) => item.uuid === id
-  // );
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/card/edit-card/${cardId}`,
+          { method: "GET" }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Full API response:", data);
+
+        const showImage = data?.data?.[0]?.images?.[0]?.card_images?.[0];
+        console.log("Extracted showImage:", showImage);
+
+        if (showImage) {
+          setShareImageData(showImage);
+        } else {
+          console.warn("No image found in response");
+        }
+      } catch (error) {
+        console.error("Error fetching image data:", error);
+      }
+    };
+    fetchDataImage();
+    // Only fetch when we have either shareCartData or id available
+  }, []);
   const cardShareData = shareCartData?.data || [];
 
   useEffect(() => {
@@ -238,7 +269,6 @@ const GroupCollection = ({
                     <p className="text-gray-500 mb-4">Coordinator</p>
                   </div>
                 </div>
-           
               </>
             )}
             <CopyclickBoard />
@@ -249,7 +279,9 @@ const GroupCollection = ({
               className="mt-8 flex flex-col"
               style={{ width: "550px", maxWidth: "650px" }}
             >
-              <CommonCustomEditor cardShareData={cardShareData} />
+              <CommonCustomEditor
+                cardShareData={cardShareData}
+              />
             </div>
 
             <GiftCardCollectionPot

@@ -89,7 +89,6 @@ const CreateBoard = ({ data }: any) => {
   };
   useEffect(() => {
     const cookies = document.cookie.split("; ");
-    console.log(cookies, "asdasdasd");
 
     // Finding the 'Auth' cookie
     const authCookie = cookies.find((cookie) => cookie.startsWith("Auth="));

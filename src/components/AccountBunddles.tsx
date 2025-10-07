@@ -10,6 +10,44 @@ const AccountBunddles = ({ userInfo, data }: any) => {
   // let posts=null
   const [state, setState] = useState<any>("");
   const gettoken = Cookies.get("auth_token");
+  const [countBundle, setCountBundle] = useState<number>(0);
+
+  // Fetch bundle count
+  useEffect(() => {
+    const fetchBundleCount = async () => {
+      if (!gettoken) return;
+
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/user/profile`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${gettoken}`,
+            },
+            // body: JSON.stringify({}),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log(result, "profile data");
+        const bundleCount = result?.data?.bundle_card_count ?? 0;
+        console.log(bundleCount, "bundle count");
+        setCountBundle(bundleCount);
+      } catch (error) {
+        console.error("Error fetching bundle count:", error);
+        toast.error("Failed to fetch profile data");
+      }
+    };
+
+    fetchBundleCount();
+  }, [gettoken]);
+
   const submit = async () => {
     try {
       const requestData = {
@@ -38,21 +76,19 @@ const AccountBunddles = ({ userInfo, data }: any) => {
   useEffect(() => {
     submit();
   }, []);
-  console.log(state?.message?.bundles, "jkshjsdssssssss");
-  // const filteredData = state?.message?.filter(
-  //   (item: any) => item.razorInfo.length > 0
-  // );
-  // const filteredData = state?.message?.filter(
-  //   (item: any) => item.razorInfo.length > 0
-  // );
-  // console.log("filterDataaccountbundle", filteredData);
+
   const handlePickBundle = () => {
-    // Route to the bundle selection page
     router.push("/pricing");
   };
   return (
     <div className=" flex flex-col justify-center items-center bg-gray-100 w-full">
-      <h1 className="font-bold text-center bundle-head">My Bundles</h1>
+      <div className="flex justify-between items-center mb-4 w-full">
+        <h1 className="font-bold text-center bundle-head flex-1">My Bundles</h1>
+        <span className="font-bold">
+          Bundles Left: <span className="font-[500]">{countBundle}</span>
+        </span>
+      </div>
+
       <div className="rounded-lg w-full overflow-x-auto bg-white  border border-grey mb-4">
         {/* <h2 className="text-xl font-semibold mb-4">Signed Cards</h2> */}
         <div className="overflow-x-auto inline-block min-w-full align-middle rounded-lg">
@@ -76,7 +112,7 @@ const AccountBunddles = ({ userInfo, data }: any) => {
                 </th>
               </tr>
             </thead>
-            <tbody>
+            {/* <tbody>
               {state?.message?.bundles?.length > 0 ? (
                 state?.message?.bundles?.map((item: any, index: any) => (
                   <tr key={index} className="border px-3 mt-2">
@@ -107,7 +143,7 @@ const AccountBunddles = ({ userInfo, data }: any) => {
                   </td>
                 </tr>
               )}
-            </tbody>
+            </tbody> */}
           </table>
         </div>
       </div>

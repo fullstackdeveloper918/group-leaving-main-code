@@ -12,7 +12,6 @@ const ReceiptPage = async ({ params }: { params: { unique_id: string } }) => {
 
   try {
     data = await fetchFromServer(api);
-    console.log("API Response:", data);
   } catch (e) {
     console.error("Error fetching receipt:", e);
     data = null;
