@@ -2391,7 +2391,7 @@ left: unset !important;
 .carousel-arrow {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 18px;
   cursor: pointer;
   color: #4a90e2;
   padding: 0 10px;
@@ -2537,8 +2537,8 @@ left: unset !important;
 }
 .page-indicator {
   text-align: center;
-  margin-top: 10px;
-  font-size: 18px;
+  margin-top: 1px;
+  font-size: 14px;
   color: #666;
   float: left;
   width: 100%;
@@ -2733,7 +2733,7 @@ left: unset !important;
 .progress-bar-container {
   position: relative;
   width: 100%;
-  height: 8px;
+  height: 3px;
   background-color: #ddd;
   border-radius: 4px;
   /* overflow: hidden; */
@@ -2760,7 +2760,7 @@ left: unset !important;
 
 .progress-dot {
   position: absolute;
-  top: -4px;
+  top: -5px;
   width: 14px;
   height: 14px;
   background-color: #007bff;
