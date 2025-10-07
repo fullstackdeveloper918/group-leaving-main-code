@@ -117,7 +117,7 @@ export default function RootLayout({
                 color="#00C4CC"
                 initialPosition={0.08}
                 crawlSpeed={20}
-                height={3}
+                height={5}
                 crawl={true}
                 showSpinner={false}
                 easing="ease"

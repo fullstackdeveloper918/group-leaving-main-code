@@ -37,42 +37,16 @@ const RazorPay = ({ amount, type, cart_id, bundleId, numberOfCards }: any) => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [success, setSuccess] = useState(false);
   const param = useParams();
-  // console.log(param,"param");
-  // console.log(userInfo,"userInfo");
-  // console.log(type,"qazxsw");
-
   const [state, setState] = useState<string>("");
-  // const
   const [authToken, setAuthToken] = useState<string>("");
-  // console.log(authToken,"authToken");
-
-  // function getCookie(name: string): string | null {
-  //   const value = `; ${document.cookie}`;
-  //   const parts = value.split(`; ${name}=`);
-  //   if (parts.length === 2) {
-  //     const raw = parts.pop()?.split(";").shift();
-  //     if (raw) {
-  //       return decodeURIComponent(raw); // always a string here
-  //     }
-  //   }
-  //   return null;
-  // }
-
-  // const userInfoCookie = getCookie("userInfo");
-  // if (userInfoCookie) {
-  //   const user = JSON.parse(userInfoCookie);
-  //   console.log(user.full_name); // "ravitester"
-  //   console.log(user.email); // from cookie data
-  // }
-
+  const searchParams = useSearchParams();
+  const cardId = searchParams.get("cardId");
   useEffect(() => {
     const cookies = nookies.get();
     const token = cookies.auth_token || "";
     setAuthToken(token);
     // console.log(token, "Access Token");
   }, [state]);
-  const searchParams = useSearchParams();
-  // console.log(type,"type");
 
   const cartId = cart_id; // Correct way to extract cart_uuid
   // console.log("cartId",cartId)
@@ -87,7 +61,6 @@ const RazorPay = ({ amount, type, cart_id, bundleId, numberOfCards }: any) => {
     setUserInfo(userInfoFromCookie);
   }, []);
   const [uniqueId, setUniqueId] = useState<any>("");
-  console.log(userInfo, "userInfo here");
 
   const handlePayment = async () => {
     setIsProcessing(true);
@@ -158,9 +131,7 @@ const RazorPay = ({ amount, type, cart_id, bundleId, numberOfCards }: any) => {
             } else {
               setSuccess(true);
               router.push(
-                // `/successfull?unique_id=${responseData?.data?.messages_unique_id}`
-
-                `/successfull?cart_uuid=${cartId}`
+                `/successfull?cart_uuid=${cartId}?cardId=${cardId}`
               );
             }
             setUniqueId(responseData?.data?.messages_unique_id);

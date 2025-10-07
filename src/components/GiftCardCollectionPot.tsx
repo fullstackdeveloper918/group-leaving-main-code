@@ -74,40 +74,22 @@ const GiftCardCollectionPot = ({
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/reloadly/card/${groupId}`, // Sending brandKey as query parameter
         {
-          method: "GET", // No body for GET requests
+          method: "GET", 
           headers: {
-            "Content-Type": "application/json", // Only for JSON responses
+            "Content-Type": "application/json", 
             Authorization: `Bearer ${gettoken}`,
           },
         }
       );
 
       const data = await response.json();
-      // console.log(data, "fetched all giftcards");
       setGiftCard(data);
     } catch (error) {}
-    // finally {
-    //   setLoading(false); // stop loading
-    // }
+
   };
 
-  // Fetch gift card products (like in CreateBoard)
   const fetchGiftCardProducts = async () => {
     try {
-      // const response = await fetch(
-      //   `${process.env.NEXT_PUBLIC_API_URL}/order/create-token`,
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: "",
-      //   }
-      // );
-      // if (!response.ok) {
-      //   throw new Error("Failed to get token");
-      // }
-      // const data = await response.json();
       const response1 = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/order/get-products`,
         {
@@ -123,10 +105,8 @@ const GiftCardCollectionPot = ({
         throw new Error("Failed to get products");
       }
       const data1 = await response1.json();
-      // console.log(data1,"data1");
       setState(data1);
     } catch (error) {
-      // handle error if needed
     }
   };
 
@@ -146,7 +126,6 @@ const GiftCardCollectionPot = ({
     }
     const data = await response.json();
     data.data.reloadly_cart_id = uuid;
-    // console.log(data,"selected product details");
     setSelectedProduct(data.data);
   };
 
@@ -156,7 +135,7 @@ const GiftCardCollectionPot = ({
       giftcard: giftCard,
     };
 
-    const MIN_DISPLAY_TIME = 500; // minimum loader display in ms
+    const MIN_DISPLAY_TIME = 500; 
     const startTime = Date.now();
 
     try {
@@ -182,7 +161,6 @@ const GiftCardCollectionPot = ({
       const remaining = MIN_DISPLAY_TIME - elapsed;
 
       if (remaining > 0) {
-        // ensure loader stays visible for MIN_DISPLAY_TIME
         setTimeout(() => setLoading(false), remaining);
       } else {
         setLoading(false);
@@ -191,63 +169,31 @@ const GiftCardCollectionPot = ({
   };
 
   useEffect(() => {
-    // const brandKey = 'yourBrandKeyValue';  // Replace with your actual brandKey value
     fetchGiftCard();
   }, []);
 
   useEffect(() => {
     if (refreshFromCreateBoard) {
-      // Call your refresh logic here, e.g., refetchGiftCard();
       fetchGiftCard();
     }
   }, [refreshFromCreateBoard]);
-
-  // console.log(giftCard, "giftCard");
-
-  // Calculate base amount, service fee (5%), and total
-  // const baseAmount = isCustomAmount ? parseFloat(customAmount) : selectedAmount;
-  // const serviceFee = +(baseAmount * 0.05).toFixed(2);
-  // const totalAmount = +(baseAmount + serviceFee).toFixed(2);
-
-  // console.log(totalAmount, "totalAmount");
-  // Remove all isModalOpen, setIsModalOpen, openModal, closeModal, and modal rendering logic from GiftCardCollectionPot
-  // Add a prop: onGiftCardAdded (callback)
-  // For the Add to Gift Card button, use onClick={() => setIsModalOpen(true)}
-
-  // const handleAmountChange = (amount: any) => {
-  //   setIsCustomAmount(false);
-  //   setSelectedAmount(amount);
-  // };
-
-  // const handleCustomAmount = (e: any) => {
-  //   const value = e.target.value;
-  //   if (!isNaN(value) && value >= 2) {
-  //     setCustomAmount(parseFloat(value));
-  //   }
-  // };
-  // Check if giftCard and giftCard.data are defined before accessing imageUrls
-  // const selectGiftImage = giftCard.data?.logoUrls[0];
-  // const selectGiftImage = giftCard.data?.imageUrls["278w-326ppi"];
-  // const selectGiftImage = giftCard?.data?.imageUrls ? giftCard.data.imageUrls["278w-326ppi"] : null;
   const [Loading, setLoading] = useState(false);
-  // console.log(selectGiftImage, "selectGiftImage");
-  // console.log(giftCard?.cards, "giftCard?.cards?");
   const handleClick = async () => {
     try {
-      setLoading(true); // start loading
+      setLoading(true);
       await fetchGiftCardProducts();
       setIsGiftCardModalOpen(true);
     } catch (err) {
       console.error(err);
     } finally {
-      setLoading(false); // stop loading
+      setLoading(false);
     }
   };
 
   return (
     <>
       <Loader loading={Loading} />
-      <div className="bg-white p-6 w-[30%] flex flex-col mt-[126px]">
+      <div className="bg-white p-6 w-[30%] flex flex-col mt-[36px]">
         {
           <>
             {giftCard?.cards?.map((card: any) => (

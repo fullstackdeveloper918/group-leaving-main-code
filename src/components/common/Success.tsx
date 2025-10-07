@@ -2,11 +2,10 @@
 
 import React from "react";
 import { CheckCircleIcon, ClipboardIcon } from "@heroicons/react/24/solid";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import Link from "next/link";
 
 const Success = ({ cartUuid }: any) => {
-  console.log(cartUuid, "unique_Id in success page");
   const baseUrl = window.location.origin;
   const handleCopy = () => {
     if (cartUuid) {

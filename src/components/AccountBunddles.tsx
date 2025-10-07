@@ -82,7 +82,13 @@ const AccountBunddles = ({ userInfo, data }: any) => {
   };
   return (
     <div className=" flex flex-col justify-center items-center bg-gray-100 w-full">
-      <h1 className="font-bold text-center bundle-head">My Bundles</h1>
+      <div className="flex justify-between items-center mb-4 w-full">
+        <h1 className="font-bold text-center bundle-head flex-1">My Bundles</h1>
+        <span className="font-bold">
+          Bundles Left: <span className="font-[500]">{countBundle}</span>
+        </span>
+      </div>
+
       <div className="rounded-lg w-full overflow-x-auto bg-white  border border-grey mb-4">
         {/* <h2 className="text-xl font-semibold mb-4">Signed Cards</h2> */}
         <div className="overflow-x-auto inline-block min-w-full align-middle rounded-lg">

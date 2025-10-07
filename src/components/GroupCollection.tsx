@@ -9,22 +9,54 @@ import { capFirst } from "../utils/validation";
 import nookies from "nookies";
 import SendGiftModal from "./common/SendGiftModal";
 import Cookies from "js-cookie";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
+import Custom from "./common/custom";
 import CommonCustomEditor from "./common/newcustomeditor/CommonCustomEdtior";
 
-const GroupCollection = ({ params, searchParams }: any) => {
+const GroupCollection = ({
+  params,
+  searchParams,
+  // data,
+  setClose,
+  isClose,
+}: any) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  // console.log(data, "jdkhdur");
   const { id } = useParams();
   const [cookieValue, setCookieValue] = useState<string | null>(null);
+  // console.log(cookieValue, "cookieValue");
   const [isLocked, setIsLocked] = useState(false); // State to track the lock/unlock state
   const [buttonText, setButtonText] = useState("Lock Collection");
   const [organiser, setOrganiser] = useState("");
+  // console.log(organiser, "organiser");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [shareImageData, setShareImageData] = useState<any>(null);
   const [shareCartData, setShareCartData] = useState<any>(null);
   const gettoken = Cookies.get("auth_token");
+  const searchParams2 = useSearchParams();
+  const cardId = searchParams2.get("cardId");
+  // console.log("searchParams here", searchParams.brandKey);
 
   useEffect(() => {
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await fetch(
+    //       `${process.env.NEXT_PUBLIC_API_URL}/card/users-cards`,
+    //       {
+    //         method: "GET",
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //           Authorization: `Bearer ${gettoken}`,
+    //         },
+    //       }
+    //     );
+
+    //     const data = await response.json();
+    //     setShareImageData(data); // Store response data in state
+    //   } catch (error) {
+    //     console.error("Error fetching data:", error);
+    //   }
+    // };
     const fetchData = async () => {
       try {
         const postData = {
@@ -36,13 +68,14 @@ const GroupCollection = ({ params, searchParams }: any) => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              // Authorization: `Bearer ${gettoken}`,
             },
             body: JSON.stringify(postData),
           }
         );
-        console.log(params, "response from groupcollection");
+
         const data = await response.json();
-        console.log(data, "data from groupcollection");
+        // console.log(data,"data from api")
         setShareCartData(data); // Store response data in state
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -54,22 +87,6 @@ const GroupCollection = ({ params, searchParams }: any) => {
   useEffect(() => {
     const fetchDataImage = async () => {
       try {
-        // First, try to get cardId from localStorage
-        const storedParams = localStorage.getItem("card_params");
-        let cardId = storedParams ? JSON.parse(storedParams) : null;
-
-        // If not in localStorage, try to get it from shareCartData
-        if (!cardId && shareCartData?.data?.cartDetail?.[0]) {
-          cardId = shareCartData.data.cartDetail[0].card_id;
-        }
-
-        // If still no cardId, try using the id from params
-        if (!cardId && id) {
-          cardId = id;
-        }
-
-        console.log("Fetching image for card ID:", cardId);
-
         if (!cardId) {
           console.error("No card ID found");
           return;
@@ -99,13 +116,9 @@ const GroupCollection = ({ params, searchParams }: any) => {
         console.error("Error fetching image data:", error);
       }
     };
-
+    fetchDataImage();
     // Only fetch when we have either shareCartData or id available
-    if (id || shareCartData) {
-      fetchDataImage();
-    }
-  }, [id, shareCartData]);
-  console.log(shareImageData, "shareImageData");
+  }, []);
   const cardShareData = shareCartData?.data || [];
 
   useEffect(() => {
@@ -145,9 +158,11 @@ const GroupCollection = ({ params, searchParams }: any) => {
       toast.success(!isLocked ? "Unlock Successfully" : "Lock Successfully", {
         autoClose: 1000,
       });
-
+      // console.log(data, "sadfdgsfdg");
       setIsLocked(!isLocked);
       setButtonText(isLocked ? "Unlock Collection" : "Lock Collection");
+
+      //  router.replace(`/share/${data?.data?.uuid}?brandKey=${brandKeys}`);
     } catch (error) {}
   };
   const handleSend = async (email: string) => {
@@ -184,8 +199,13 @@ const GroupCollection = ({ params, searchParams }: any) => {
         "Please make sure the recipient email is valid and try again.",
         { autoClose: 2000 }
       );
+      //   alert("An error occurred. Please try again.");
     }
   };
+
+  // console.log("paramsid", params.id);
+
+  // console.log(editCollection,"editCollection11");
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -260,7 +280,6 @@ const GroupCollection = ({ params, searchParams }: any) => {
               style={{ width: "550px", maxWidth: "650px" }}
             >
               <CommonCustomEditor
-                shareImageData2={shareImageData}
                 cardShareData={cardShareData}
               />
             </div>

@@ -31,7 +31,7 @@ export default function Loader({ loading }: LoaderProps) {
 
   return (
     <div className="fixed inset-0 flex items-start justify-center z-50 pointer-events-none">
-      <div className="w-full h-[3px] bg-white/30 backdrop-blur-sm relative overflow-hidden">
+      <div className="w-full h-[5px] bg-white/30 backdrop-blur-sm relative overflow-hidden">
         <div
           className="progress-loader"
           style={{ width: `${width}%` }}

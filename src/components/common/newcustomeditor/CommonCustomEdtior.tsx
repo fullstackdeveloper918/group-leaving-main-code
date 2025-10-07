@@ -40,30 +40,16 @@ interface UserInfo {
 }
 
 interface CommonCustomEditorProps {
-  cardShareData: any; // Or better: a specific type if you know the shape
-  shareImageData2: any; // Add this line
+  cardShareData: any;
 }
-
-// const initialSlides = [
-//   {
-//     id: "slide-1",
-//     title: "Development",
-//     subtitle: "SCSS Only Slider",
-//     text: "Learn to create a SCSS-only responsive slider.",
-//     link: "https://blog.significa.pt/css-only-slider-71727effff0b",
-//     // card_img: SlideImg_0,
-//     // card_img: `${process.env.NEXT_PUBLIC_API_URL}/${cardShareData?.images?.[0]?.card_images?.[0]}`,
-//   },
-// ];
 
 const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   cardShareData,
-  shareImageData2,
 }) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const router = useRouter();
   const params = useParams();
-  // const [id, setId] = useState<any>(null);
+  const [hasAddedFirstMessage, setHasAddedFirstMessage] = useState(false);
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -87,10 +73,44 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   const isEditorPath = /^\/share\/editor\/[^/]+$/.test(pathname);
   const searchParams = useSearchParams();
   // const [slides, setSlides] = useState<any[]>([]);
-
+  const cardId = searchParams.get("cardId");
   const [first, second] = pathname.split("/").slice(1, 3);
   const basePath = `/${first}/${second}`;
+  useEffect(() => {
+    const fetchDataImage = async () => {
+      try {
+        if (!cardId) {
+          console.error("No card ID found");
+          return;
+        }
 
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/card/edit-card/${cardId}`,
+          { method: "GET" }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Full API response:", data);
+
+        const showImage = data?.data?.[0]?.images?.[0]?.card_images?.[0];
+        console.log("Extracted showImage:", showImage);
+
+        if (showImage) {
+          setShareImageData(showImage);
+        } else {
+          console.warn("No image found in response");
+        }
+      } catch (error) {
+        console.error("Error fetching image data:", error);
+      }
+    };
+    fetchDataImage();
+    // Only fetch when we have either shareCartData or id available
+  }, []);
   // console.log(pathname, "isEditorPath");
 
   // console.log("cardsharedata on commoncustomeditor", cardShareData);
@@ -135,13 +155,6 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
 
     fetchData();
   }, [gettoken]);
-  // console.log(shareImageData, "shareImageData here");
-
-  // if (basePath === "/share/editor") {
-  // console.log(params, "params here to fix");
-  const cardShareDatas = shareImageData?.listing?.find(
-    (item: any) => item?.message_unique_id === params.id
-  );
 
   useEffect(() => {
     const fetchEditorDatas = async () => {
@@ -197,11 +210,9 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
           subtitle: "New Subtitle",
           text: "This is a dynamically generated slide.",
           link: "https://example.com",
-          // card_img: `http://localhost:3002/${firstSlideImage}`,
-          card_img: `${process.env.NEXT_PUBLIC_API_URL}/${firstSlideImage}`,
+        card_img: `${process.env.NEXT_PUBLIC_API_URL}/${cardId ? shareImageData : firstSlideImage}`,
         });
 
-        // Additional slides (if needed)
         for (let i = 1; i <= maxIndex; i++) {
           filledSlides.push({
             id: `slide-${i + 1}`,
@@ -212,8 +223,6 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
             card_img: SlideImg_5,
           });
         }
-
-        // console.log("Final slides:", filledSlides);
         setSlides(filledSlides);
       } catch (error) {
         console.error("Error fetching editor data:", error);
@@ -227,58 +236,29 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
         }
 
         const newSlides = [];
-
-        // ✅ Slide 1: Use the image from cardShareData
         newSlides.push({
           id: `slide-1`,
           title: "New Slide",
           subtitle: "New Subtitle",
           text: "This is a dynamically generated slide.",
           link: "https://example.com",
-          // card_img: `http://localhost:3002/${firstSlideImage}`,
-          card_img: `${process.env.NEXT_PUBLIC_API_URL}/${shareImageData2}`,
+           card_img: `${process.env.NEXT_PUBLIC_API_URL}/${cardId ? shareImageData : firstSlideImage}`,
         });
 
-        // console.log("newslides here on catch", newSlides);
-
-        // ✅ Slide 2: Always add a second empty slide
-        // newSlides.push({
-        //   id: `slide-2`,
-        //   title: "New Slide",
-        //   subtitle: "New Subtitle",
-        //   text: "This is another dynamically generated slide.",
-        //   link: "https://example.com",
-        //   card_img: SlideImg_5,
-        // });
-
-        // setElements([]); // empty editor data
-        // setActiveSlideIndex(1);
-        // console.log("newslides here on catch", newSlides);
         setSlides(newSlides);
-        // console.log("activeSlideIndex here", activeSlideIndex);
         if (activeSlideIndex === 0) {
-          // setActiveSlideIndex(newSlides.length - 2);
         }
       }
     };
 
     fetchEditorDatas();
   }, [cardShareData, id]);
-  // }, [cardShareData, id]);
-
-  // console.log(elements?.length, "new element hree");
 
   function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
-    // console.log(slidesArr, elementsArr, "please giving new slides");
-
-    // Clone the slides to avoid mutating the original
     const newSlides = [...slidesArr];
-
-    // Find the last slide index with content
     let lastWithContent = newSlides.length - 1;
     for (; lastWithContent >= 0; lastWithContent--) {
       const hasContent = elementsArr.some((el: any) => {
-        // If element's slideIndex is beyond current slide count, add a new slide
         if (el.slideIndex >= newSlides.length) {
           const missingCount = el.slideIndex - newSlides.length + 1;
           for (let i = 0; i < missingCount; i++) {
@@ -289,10 +269,9 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
               text: "This is a dynamically generated slide.",
               link: "https://example.com",
               card_img: SlideImg_6,
-            }); // Or default slide structure
+            });
           }
-          // console.log(`Added ${missingCount} missing slides`);
-          return true; // Now consider it as having content
+          return true;
         }
 
         // Normal check
@@ -301,13 +280,9 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
 
       if (hasContent) break;
     }
-
-    // If no content found at all, treat the first slide as having content
     if (lastWithContent < 0) {
       lastWithContent = 0;
     }
-
-    // Always keep one empty slide at the end
     const minSlides = 1;
     let newLength = Math.max(lastWithContent + 2, minSlides);
     return newSlides.slice(0, newLength);
@@ -317,11 +292,9 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
     if (elements?.length === 0) {
       return;
     }
-    // Only cleanup slides, don't auto-add
     setSlides((prevSlides) => cleanupSlides(prevSlides, elements));
   }, [elements]);
 
-  // Add a manual "Add Page" button function:
   const handleAddPage = () => {
     setSlides((prevSlides) => {
       const newSlideIndex = prevSlides.length;
@@ -415,13 +388,14 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
 
   // Handle adding a new message (and new slide)
   const handleAddMessageClick = () => {
-    // Only jump to last slide if on slide 0-4
-    if (activeSlideIndex <= 1 && !isEditorPath) {
-      const lastSlideIndex = slides.length - 1;
-      // const lastSlideIndex = 5;
-      // console.log(lastSlideIndex, "lastSlideIndex");
+    // If this is the first time adding a message and we're on slide 0
+    if (!hasAddedFirstMessage && activeSlideIndex === 0) {
+      // Calculate the new slide index before adding
+      const newSlideIndex = slides.length;
+
+      // Create a new slide
       const newSlide = {
-        id: `slide-${slides.length + 1}`,
+        id: `slide-${newSlideIndex + 1}`,
         title: "New Slide",
         subtitle: "New Subtitle",
         text: "This is a new slide",
@@ -429,16 +403,40 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
         card_img: SlideImg_5,
       };
 
-      setActiveSlideIndex(lastSlideIndex);
-      setShowModal(true);
+      // Add the new slide and update states
+      setSlides((prev) => [...prev, newSlide]);
+      setHasAddedFirstMessage(true);
+      setActiveSlideIndex(newSlideIndex);
 
+      if (sliderRef.current) {
+        sliderRef.current.value = newSlideIndex.toString();
+      }
+
+      // Open modal on the new slide after state updates
+      setTimeout(() => {
+        setShowModal(true);
+      }, 150);
+
+      return;
+    }
+
+    // For subsequent clicks on slide 0
+    if (activeSlideIndex === 0 && !isEditorPath) {
+      // Navigate to last slide
+      const lastSlideIndex = slides.length - 1;
+
+      setActiveSlideIndex(lastSlideIndex);
       if (sliderRef.current) {
         sliderRef.current.value = lastSlideIndex.toString();
       }
-      setShowModal(true);
+
+      setTimeout(() => {
+        setShowModal(true);
+      }, 150);
       return;
     }
-    // For slides 5 and above, stay on current slide
+
+    // Normal case: just open modal on current slide
     setShowModal(true);
   };
 
@@ -597,47 +595,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
     }
   };
 
-  // Download slides as PDF
-  const handleDownloadPDF = async () => {
-    const pdf = new jsPDF("p", "mm", "a4");
-    const slideWidth = 210;
-    const slideHeight = 297;
 
-    for (let i = 0; i < slides.length; i++) {
-      const base64Image = await fetchImageAsBase64(slides[i].card_img.src);
-      if (!base64Image) continue;
-
-      if (i !== 0) pdf.addPage();
-      pdf.addImage(
-        base64Image,
-        "JPEG",
-        10,
-        10,
-        slideWidth - 20,
-        slideHeight / 2
-      );
-
-      elements.forEach((el) => {
-        if (el.slideIndex === i + 1) {
-          if (el.type === "text") {
-            pdf.setFontSize(14);
-            pdf.setTextColor(0, 0, 255);
-            pdf.text(el.content, 10 + el.x, slideHeight / 2 + 20 + el.y);
-          } else if (el.type === "image" || el.type === "gif") {
-            pdf.addImage(
-              el.content,
-              "JPEG",
-              10 + el.x,
-              slideHeight / 2 + 20 + el.y,
-              50,
-              50
-            );
-          }
-        }
-      });
-    }
-    pdf.save("slides_with_positions.pdf");
-  };
 
   // Handle slide navigation
   const handleSlideChange = (index: number) => {
@@ -754,7 +712,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
               className="add_btn"
               onClick={handleAddMessageClick}
               disabled={showModal}
-              style={{ padding: "10px", borderRadius: "50px" }}
+              style={{ padding: "10px", fontSize: "14px", borderRadius: "50px" }}
             >
               Add Your Message
             </button>
@@ -860,7 +818,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
                 padding: "10px",
                 borderRadius: "50px",
               }}
-              title="Add New Slide" // <-- Tooltip added here
+              title="Add New Slide"
             >
               +
             </button>

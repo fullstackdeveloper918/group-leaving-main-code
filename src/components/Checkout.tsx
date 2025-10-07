@@ -14,6 +14,7 @@ const Checkout = ({ data }: any) => {
   const cartUuid = query.get("cart_uuid");
   const product_id = param.id;
   const gettoken = Cookies.get("auth_token");
+  const cardId = query.get("cardId");
 
   const [bundleOption, setBundleOption] = useState<any>("single");
   const [numCards, setNumCards] = useState<any>(null);
@@ -55,13 +56,7 @@ const Checkout = ({ data }: any) => {
   useEffect(() => {
     const fetchDataImage = async () => {
       try {
-        const storedParams = localStorage.getItem("card_params");
-        const cardId = storedParams ? JSON.parse(storedParams) : null;
-
-        console.log("Stored card ID:", cardId);
-
         if (!cardId) {
-          console.error("No card ID found in localStorage");
           return;
         }
 

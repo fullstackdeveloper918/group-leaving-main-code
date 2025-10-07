@@ -8,12 +8,14 @@ interface SidebarModalProps {
   isOpen: boolean;
   onClose: () => void;
   cartId: string;
+  data: any;
 }
 
 const SidebarModal: React.FC<SidebarModalProps> = ({
   isOpen,
   onClose,
   cartId,
+  data,
 }) => {
   const [deliveryOption, setDeliveryOption] = useState<"later" | "set-date">(
     "later"
