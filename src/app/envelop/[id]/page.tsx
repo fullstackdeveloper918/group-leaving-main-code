@@ -3,8 +3,6 @@ import React from "react";
 
 const Page = async ({ params }: { params: { id: string } }) => {
   const id = params?.id;
-
-
   try {
     const postData = {
       cartUuid: id,

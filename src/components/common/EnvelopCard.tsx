@@ -30,9 +30,6 @@ const EnvelopCard = ({ getdata }: any) => {
   const { id } = useParams();
   const [responseData, setResponseData] = useState<any>(null);
   const [shareImageData, setShareImageData] = useState<any>(null);
-  console.log(getdata, "getdata");
-  console.log(responseData, "responseData");
-
   const gettoken = Cookies.get("auth_token");
 
   useEffect(() => {
@@ -59,9 +56,6 @@ const EnvelopCard = ({ getdata }: any) => {
     fetchData();
   }, []);
 
-  console.log(shareImageData, "shareImageData here");
-
-  // Fetch data when id changes
   useEffect(() => {
     if (id) {
       const fetchData = async () => {
@@ -77,7 +71,7 @@ const EnvelopCard = ({ getdata }: any) => {
           );
 
           const data = await response.json();
-          setResponseData(data); // Store response data in state
+          setResponseData(data); 
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -86,20 +80,13 @@ const EnvelopCard = ({ getdata }: any) => {
       fetchData();
     }
   }, [id]);
-
-  console.log(responseData, "responseData here");
-
-  // Handle the case when data is still being fetched
   if (
     !responseData ||
     !responseData?.data ||
     !Array.isArray(responseData?.data[0]?.editor_messages)
   ) {
-    return <div>Loading...</div>; // Show loading while data is being fetched
+    return <div>Loading...</div>;
   }
-
-  console.log("shareImageData", shareImageData);
-  console.log("shareImageData id", id);
 
   const cardShareData = shareImageData?.listing?.find(
     (item: any) => item?.message_unique_id === id

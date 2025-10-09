@@ -1,9 +1,7 @@
 "use client";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
-// import NextTopLoader from "nextjs-toploader";
 const quicksand = Montserrat({ subsets: ["latin"] });
-// import "nprogress/nprogress.css";
 import Navbar from "../components/common/Navbar";
 import Footer from "../components/common/Footer";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
@@ -24,6 +22,7 @@ import { AccessTokenProvider } from "./context/AccessTokenContext";
 // import 'slick-carousel/slick/slick-theme.css';
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import MegaMenu from "@/components/common/MegaMenu";
 const roboto = Roboto({
   weight: ["400", "700"],
   subsets: ["latin"],
@@ -113,6 +112,7 @@ export default function RootLayout({
           <AntdRegistry>
             <MsalProvider instance={msalInstance}>
               <Navbar />
+              {/* <MegaMenu /> */}
               <NextTopLoader
                 color="#00C4CC"
                 initialPosition={0.08}

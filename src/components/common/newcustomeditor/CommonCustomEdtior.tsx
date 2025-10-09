@@ -80,7 +80,15 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
     const fetchDataImage = async () => {
       try {
         if (!cardId) {
-          console.error("No card ID found");
+          console.log("Waiting for cardId...");
+          return;
+        }
+
+        // Try to get from sessionStorage first
+        const cachedImage = sessionStorage.getItem(`card_image_${cardId}`);
+        if (cachedImage) {
+          setShareImageData(cachedImage);
+          console.log("Using cached image from sessionStorage");
           return;
         }
 
@@ -94,13 +102,13 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
         }
 
         const data = await response.json();
-        console.log("Full API response:", data);
-
         const showImage = data?.data?.[0]?.images?.[0]?.card_images?.[0];
-        console.log("Extracted showImage:", showImage);
 
         if (showImage) {
           setShareImageData(showImage);
+          // Store in sessionStorage
+          sessionStorage.setItem(`card_image_${cardId}`, showImage);
+          console.log("Image loaded and stored in sessionStorage");
         } else {
           console.warn("No image found in response");
         }
@@ -108,9 +116,9 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
         console.error("Error fetching image data:", error);
       }
     };
+
     fetchDataImage();
-    // Only fetch when we have either shareCartData or id available
-  }, []);
+  }, [cardId]);
 
   const id = params?.id;
 
@@ -375,33 +383,46 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   };
 
   const handleAddMessageClick = () => {
-    // Only jump to last slide if on slide 0-4
-    if (activeSlideIndex <= 1 && !isEditorPath) {
-      const lastSlideIndex = slides.length - 1;
-      // const lastSlideIndex = 5;
-      // console.log(lastSlideIndex, "lastSlideIndex");
+    if (!hasAddedFirstMessage && activeSlideIndex === 0) {
+      const newSlideIndex = slides.length;
       const newSlide = {
-        id: `slide-${slides.length + 1}`,
+        id: `slide-${newSlideIndex + 1}`,
         title: "New Slide",
         subtitle: "New Subtitle",
         text: "This is a new slide",
         link: "https://example.com",
         card_img: SlideImg_5,
       };
+      setSlides((prev) => [...prev, newSlide]);
+      setHasAddedFirstMessage(true);
+      setActiveSlideIndex(newSlideIndex);
+
+      if (sliderRef.current) {
+        sliderRef.current.value = newSlideIndex.toString();
+      }
+      setTimeout(() => {
+        setShowModal(true);
+      }, 150);
+
+      return;
+    }
+
+    if (activeSlideIndex === 0 && !isEditorPath && slides.length > 1) {
+      const lastSlideIndex = slides.length - 1;
 
       setActiveSlideIndex(lastSlideIndex);
-      setShowModal(true);
-
       if (sliderRef.current) {
         sliderRef.current.value = lastSlideIndex.toString();
       }
-      setShowModal(true);
+
+      setTimeout(() => {
+        setShowModal(true);
+      }, 150);
       return;
     }
-    // For slides 5 and above, stay on current slide
+
     setShowModal(true);
   };
-
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -425,20 +446,12 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
         const imageUrl = data.file;
         const reader = new FileReader();
         reader.onloadend = () => {
-          // For first slide (index 0), always add to last slide
-          // For slides 1-4, add to current slide
-          // For slides >=5, add to current slide
-          const targetIndex =
-            activeSlideIndex === 0 ? slides.length - 2 : activeSlideIndex;
-
+          // FIXED: Always add to current slide, no redirects
           if (activeSlideIndex !== null) {
             const newImage = {
               type: "image",
               content: `${process.env.NEXT_PUBLIC_API_URL}/${imageUrl}`,
-              slideIndex: targetIndex,
-
-              // slideIndex:
-              //   activeSlideIndex === 0 ? slides.length - 1 : activeSlideIndex,
+              slideIndex: activeSlideIndex, // Use current slide
               x: 0,
               y: 0,
               width: 320,
@@ -447,12 +460,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
             };
 
             setElements((prevElements) => [...prevElements, newImage]);
-
-            // ✅ If activeSlideIndex is 0, switch to the last slide
-            if (activeSlideIndex === 0) {
-              setActiveSlideIndex(slides.length - 2);
-            }
-
+            // REMOVED: No automatic slide switching
             sendEditorData();
           }
         };
@@ -486,9 +494,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
             result.media_formats?.gif?.url
           : result.media_formats.gif.url
       );
-      if (activeSlideIndex === 0) {
-        setActiveSlideIndex(slides.length - 2);
-      }
+      // REMOVED: No automatic slide switching
       setGifs(gifUrls);
       setOpenDropdown(false);
     } catch (error) {
@@ -580,7 +586,13 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
         className="card-carousel-container select-none overflow-visible"
         id="main-carousle"
       >
-        <div className="editor_option" style={{ marginBottom: "15px" }}>
+        <div
+          className="editor_option"
+          style={{
+            marginBottom: "15px",
+            padding: "10px",
+          }}
+        >
           <div>
             <button
               className="add_btn"
@@ -590,12 +602,23 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
                 padding: "10px",
                 fontSize: "14px",
                 borderRadius: "50px",
+                boxShadow: "rgb(0 0 0 / 25%) 4px 4px 6px 1px",
+                border: "1px solid transparent",
               }}
             >
               Add Your Message
             </button>
           </div>
-          <div className="search_input">
+          <div
+            className="search_input"
+            style={{
+              padding: "10px",
+              fontSize: "14px",
+              borderRadius: "50px",
+              boxShadow: "rgb(0 0 0 / 25%) 4px 4px 6px 1px",
+              border: "1px solid transparent",
+            }}
+          >
             <input
               type="file"
               accept="image/*"
@@ -614,7 +637,16 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
               </svg>
             </div>
           </div>
-          <div className="search_input">
+          <div
+            className="search_input"
+            style={{
+              position: "relative",
+              padding: "10px",
+              borderRadius: "50px",
+              boxShadow: "rgb(0 0 0 / 25%) 4px 4px 6px 1px",
+              border: "1px solid transparent",
+            }}
+          >
             <button
               onClick={() => openModal("GIF")}
               disabled={showModal}
@@ -636,7 +668,16 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
               </div>
             </button>
           </div>
-          <div className="search_input" style={{ position: "relative" }}>
+          <div
+            className="search_input"
+            style={{
+              position: "relative",
+              padding: "10px",
+              borderRadius: "50px",
+              boxShadow: "rgb(0 0 0 / 25%) 4px 4px 6px 1px",
+              border: "1px solid transparent",
+            }}
+          >
             <button
               onClick={toggleDropdown}
               disabled={showModal}
@@ -692,7 +733,12 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
               className="bg-[#E0E9F2] font-extrabold text-blueBg p-2 rounded-full w-[40px] h-[40px]"
               onClick={handleAddPage}
               disabled={showModal}
-              
+              style={{
+                padding: "10px",
+                borderRadius: "50px",
+                boxShadow: "rgb(0 0 0 / 25%) 4px 4px 6px 1px",
+                border: "1px solid transparent",
+              }}
               title="Add New Slide"
             >
               +

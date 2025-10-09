@@ -3,22 +3,18 @@ import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import RazorPay from "./RazorPay";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 const Checkout = ({ data }: any) => {
   const router = useRouter();
   const [bundledata, setBundledata] = useState<any>([]);
   const [cardType, setCardType] = useState<any>("group");
-  const param = useParams();
   const query: any = useSearchParams();
-  const cartUuid = query.get("cart_uuid");
-  const product_id = param.id;
   const gettoken = Cookies.get("auth_token");
   const cardId = query.get("cardId");
-
   const [bundleOption, setBundleOption] = useState<any>("single");
   const [numCards, setNumCards] = useState<any>(null);
-  const [salePrice, setSalePrice] = useState(22.45);
+  const [salePrice, setSalePrice] = useState(54); // Changed from 22.45 to 54
   const [exact, setExact] = useState<any>();
   const [selectBundle, setSelectBundle] = useState<any>("");
   const [voucher, setVaoucher] = useState<any>("");
@@ -26,6 +22,7 @@ const Checkout = ({ data }: any) => {
   const [shareCartData, setShareCartData] = useState<any>(null);
   const { id } = useParams();
   const [shareImageData, setShareImageData] = useState<any>(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -53,6 +50,7 @@ const Checkout = ({ data }: any) => {
 
     fetchData();
   }, [id]);
+
   useEffect(() => {
     const fetchDataImage = async () => {
       try {
@@ -70,10 +68,8 @@ const Checkout = ({ data }: any) => {
         }
 
         const data = await response.json();
-        console.log("Full API response:", data);
 
         const showImage = data?.data?.[0]?.images?.[0]?.card_images?.[0];
-        console.log("Extracted showImage:", showImage);
 
         if (showImage) {
           setShareImageData(showImage);
@@ -87,15 +83,13 @@ const Checkout = ({ data }: any) => {
 
     fetchDataImage();
   }, [id]);
+
   const cardShareData = shareCartData?.data || [];
 
   const handleChange = (e: any) => {
     const selectedCount = data?.data.find(
       (count: any) => count.number_of_cards === Number(e.target.value)
     );
-
-    if (!selectedCount) return;
-
     setNumCards(Number(e.target.value));
     setSelectBundle(selectedCount);
 
@@ -121,7 +115,10 @@ const Checkout = ({ data }: any) => {
         : salePrice
       : 54;
 
-  const TotalAmount: number = amount - voucherDiscount;
+  const totalState: number = amount - voucherDiscount;
+
+  // Fixed: Remove the ternary that was changing 22.45 to 54
+  const TotalAmount = totalState;
 
   const handleApplyDiscount = async () => {
     try {
@@ -183,6 +180,19 @@ const Checkout = ({ data }: any) => {
   const [quantity, setQuantity] = useState<any>(0);
 
   const handleRadioChange = async () => {
+    setBundleOption("bundle");
+
+    const selectedCount = data?.data.find(
+      (count: any) => count.number_of_cards === 5
+    );
+
+    if (selectedCount) {
+      setNumCards(5); 
+      setSelectBundle(selectedCount);
+    } else {
+      console.warn("No bundle with 5 cards found");
+    }
+
     try {
       let res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/card/bundle-quantity-total-count`,
@@ -194,18 +204,11 @@ const Checkout = ({ data }: any) => {
           },
         }
       );
-
       let posts = await res.json();
       setQuantity(posts?.message);
-
-      if (quantity > 0) {
-        toast.warning(`Remaining Card Purchase Quantity: ${quantity}`);
-      }
-
-      if (quantity === 0) {
-        setBundleOption("bundle");
-      }
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error fetching bundle quantity:", error);
+    }
   };
 
   return (
@@ -274,9 +277,7 @@ const Checkout = ({ data }: any) => {
                       className="mr-2"
                     />
                     <span className="text-lg">Card Bundle</span>
-                    <span className="ml-auto text-green-500">
-                      From ₹{data?.data[0].sale_price} INR
-                    </span>
+                    <span className="ml-auto text-green-500">From ₹54 INR</span>
                   </label>
                 </div>
 
@@ -298,7 +299,7 @@ const Checkout = ({ data }: any) => {
                       >
                         {data?.data.map((count: any) => {
                           const basePrice =
-                            cardShareData?.cardData?.group_card_price || 0;
+                            cardShareData?.cardData?.group_card_price;
                           const salePrice =
                             (count.discount
                               ? basePrice * (1 - count.discount / 100)

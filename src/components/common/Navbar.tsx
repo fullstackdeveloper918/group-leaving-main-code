@@ -8,6 +8,7 @@ import { destroyCookie } from "nookies";
 import GoodLuckCad from "../../../public/newimage/Groupwish-logo.png";
 import register from "../../assets/images/register.png";
 import Cookies from "js-cookie";
+import MegaMenu from "./MegaMenu";
 
 const Navbar = () => {
   const router = useRouter();

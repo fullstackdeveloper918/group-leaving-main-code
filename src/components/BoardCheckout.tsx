@@ -258,22 +258,8 @@ const BoardCheckout = ({data}:any) => {
           "This is a 1-1 card. Group signing will be disabled and only you will be able to add messages.Please select Group Card if you want to collect messages from others and receive a share URL."
         )}
 
-        {/* Payment Options */}
         <div className="space-y-4">
-          {/* <a href="/card/checkout/1">
-            <button className="w-full bg-blue-500 text-black py-2   border-2 border-blue-700 rounded-md hover:bg-blue-600 transition">
-              Pay with Debit/Credit Card
-            </button>
-          </a> */}
           <RazorPay amount={TotalAmount} type={"card"}  bundleId={"bundle_card"} />
-          {/* <EscrowPayment/> */}
-          {/* <CardElement />
-          <GooglePay
-            totalPrice={"1.00"}
-            currencyCode="AUD"
-            countryCode="AU"
-            // handleSocialBuy={props.handleSocialBuy}
-          /> */}
         </div>
       </div>
 
@@ -302,12 +288,6 @@ const BoardCheckout = ({data}:any) => {
             <div className="flex justify-between">
               <span>Board Price</span>
               <span className="font-bold">
-                {/* {bundleOption === "bundle"
-                  ? `$${
-                      parseFloat(cardPrices[numCards].price.toFixed(2)) -
-                      voucher1
-                    } USD`
-                  : `$${AmountCondition - voucher1} USD`} */}
                   {`₹${exact - voucherDiscount} INR`}
               </span>
             </div>
@@ -315,12 +295,6 @@ const BoardCheckout = ({data}:any) => {
               <span>Total</span>
               <span className="font-bold text-xl">
                 { `₹${TotalAmount} INR`}
-                {/* {bundleOption === "bundle"
-                  ? `$${
-                      parseFloat(cardPrices[numCards].price.toFixed(2)) -
-                      voucher1
-                    } USD`
-                  : `$${AmountCondition - voucher1} USD`} */}
               </span>
             </div>
           </div>

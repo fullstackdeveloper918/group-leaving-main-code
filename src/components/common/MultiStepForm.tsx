@@ -78,7 +78,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
         setCountBundle(bundleCount);
       } catch (error) {
         console.error("Error fetching bundle count:", error);
-        toast.error("Failed to fetch profile data");
+        // toast.error("Failed to fetch profile data");
       }
     };
 
@@ -132,9 +132,6 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
   // Form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (params) {
-      localStorage.setItem("card_params", JSON.stringify(params));
-    }
     if (!senderName) {
       setSenderError("Please enter your name.");
       return;
@@ -146,13 +143,11 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
       router.push("/login");
       return;
     }
-
     try {
       setLoading(true);
-
       const item = {
         user_uuid: uuid,
-        card_uuid: params.card_uuid,
+        card_uuid: params,
         currency_type: selectedOption || "INR",
         recipient_name: recipientName,
         recipient_email: recipientEmail,
@@ -181,7 +176,14 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
       if (response.status === 200) {
         toast.success("Cart added successfully");
         setCartUuid(data.data.cart_uuid);
-        setShowCardChoiceModal(true); // Show the popup
+        
+        // Only show modal if user has bundle cards available
+        if (countBundle > 0) {
+          setShowCardChoiceModal(true);
+        } else {
+          // Redirect directly to payment if no bundle cards
+          router.push(`/card/pay/${data.data.cart_uuid}?cardId=${params}`);
+        }
       } else if (response.status === 400) {
         toast.error(data?.error || "Invalid request");
       } else if (response.status === 401) {
@@ -250,7 +252,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
                   htmlFor="recipientName"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Recipient’s Name <span className="text-red-500">*</span>
+                  Recipient's Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="recipientName"
@@ -270,7 +272,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
                   htmlFor="recipientEmail"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Recipient’s Email Address{" "}
+                  Recipient's Email Address{" "}
                   <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -322,7 +324,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
                     onChange={() => setCardType("later")}
                     className="mr-2"
                   />
-                  <span className="text-lg">I’ll decide later</span>
+                  <span className="text-lg">I'll decide later</span>
                 </label>
 
                 {cardType === "date" && (
@@ -378,7 +380,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
                   onChange={handleSelectChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 >
-                  <option value="">Don’t collect contributions</option>
+                  <option value="">Don't collect contributions</option>
                   <option value="inr">INR</option>
                   <option value="gbp">GBP</option>
                   <option value="usd">USD</option>
