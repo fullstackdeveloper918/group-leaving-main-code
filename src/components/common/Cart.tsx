@@ -1,25 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import dayjs from "dayjs";
 import Link from "next/link";
 import Cookies from "js-cookie";
-import { parseCookies, destroyCookie } from "nookies";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Import toast styles
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 import { useRouter } from "next/navigation";
 
 const Cart = () => {
-  // const cookiesList = parseCookies();
-  // const gettoken = cookiesList.auth_token;
   const router = useRouter();
   const gettoken = Cookies.get("auth_token");
-
-  // console.log(gettoken, "gettokenravi");
-
   const [data, setData] = useState<any>([]);
-
-  // console.log(data, "iooioio");
-
   const getdata = async () => {
     try {
       let res = await fetch(
@@ -33,15 +23,11 @@ const Cart = () => {
       );
 
       let responseData = await res.json();
-      console.log("responseCartData", responseData);
       setData(responseData);
       if (res.status === 401) {
-        // Token expired case
-        // toast.error("Session expired! Please log in again.");
         Cookies.remove("auth_token");
         router.replace("/login");
         window.location.reload();
-        // destroyCookie(null, 'auth_token'); // Clear the expired token
         return;
       }
     } catch (error: any) {
@@ -55,7 +41,7 @@ const Cart = () => {
   useEffect(() => {
     getdata();
   }, []);
-
+ 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8 py-md-10">
       <h1 className="font-bold mb-4 mb-md-5 my-card-head">My Carts</h1>

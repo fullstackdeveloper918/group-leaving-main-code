@@ -1,12 +1,51 @@
 "use client"; // Ensure this is at the top for client-side rendering
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CheckCircleIcon, ClipboardIcon } from "@heroicons/react/24/solid";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import nookies from "nookies";
+import { useSearchParams, useRouter } from "next/navigation";
+
+interface UserInfo {
+  name: string;
+  email: string;
+  uuid?: string;
+}
 
 const Success = ({ cartUuid }: any) => {
-  const baseUrl = window.location.origin;
+  const [authToken, setAuthToken] = useState<string>("");
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const cartUuid2 = searchParams.get("cart_uuid");
+  const cardId = searchParams.get("cardId"); // "c1088013-bbe7-4c95-903a-cd7099fc0519"
+
+  function getCartUuid(url: string | null): string {
+    if (!url) return ""; // handle null
+    return url.split("?")[0]; // take only part before '?'
+  }
+
+  const cartUuiddata = getCartUuid(cartUuid2);
+  console.log(cartUuiddata, "cartUuiddata");
+
+  useEffect(() => {
+    const cookies = nookies.get();
+    const userInfoFromCookie: UserInfo | null = cookies.userInfo
+      ? JSON.parse(cookies.userInfo)
+      : null;
+    setUserInfo(userInfoFromCookie);
+  }, []);
+
+  useEffect(() => {
+    const cookies = nookies.get();
+    const token = cookies.auth_token || "";
+    setAuthToken(token);
+  }, []);
+
+  const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
+
   const handleCopy = () => {
     if (cartUuid) {
       navigator.clipboard
@@ -17,6 +56,45 @@ const Success = ({ cartUuid }: any) => {
         .catch(() => {
           toast.error("Failed to copy the link");
         });
+    }
+  };
+
+  const handleSignCard = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/razorpay/save-payment`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+          body: JSON.stringify({
+            cart_uuid: cartUuiddata,
+            product_id: cartUuiddata,
+            user_uuid: userInfo?.uuid,
+            sender_name: "",
+            paymentId: "pay_RQvPVchRjd68qz",
+            payment_for: "card",
+            is_payment_for_both: "",
+            bundle_uuid: "",
+            collection_link: "sdfsrwr",
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data?.error || "Failed to save payment");
+        return;
+      }
+
+      // Use router.push instead of window.location.href
+      router.push(`/share/${cartUuid}`);
+    } catch (error) {
+      console.error("Error saving payment:", error);
+      toast.error("An error occurred while saving payment");
     }
   };
 
@@ -76,9 +154,13 @@ const Success = ({ cartUuid }: any) => {
             </Link>
           )}
           {cartUuid && (
-            <Link href={`/share/${cartUuid}`}>
-              <button className="sign-card-button">Sign Card</button>
-            </Link>
+            <button
+              type="button"
+              className="sign-card-button"
+              onClick={handleSignCard}
+            >
+              Sign Card
+            </button>
           )}
         </div>
       </div>

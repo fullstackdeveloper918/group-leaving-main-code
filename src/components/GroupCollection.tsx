@@ -38,25 +38,7 @@ const GroupCollection = ({
   // console.log("searchParams here", searchParams.brandKey);
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await fetch(
-    //       `${process.env.NEXT_PUBLIC_API_URL}/card/users-cards`,
-    //       {
-    //         method: "GET",
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //           Authorization: `Bearer ${gettoken}`,
-    //         },
-    //       }
-    //     );
-
-    //     const data = await response.json();
-    //     setShareImageData(data); // Store response data in state
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //   }
-    // };
+  
     const fetchData = async () => {
       try {
         const postData = {

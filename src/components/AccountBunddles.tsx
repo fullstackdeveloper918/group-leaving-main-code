@@ -41,7 +41,7 @@ const AccountBunddles = ({ userInfo, data }: any) => {
         setCountBundle(bundleCount);
       } catch (error) {
         console.error("Error fetching bundle count:", error);
-        toast.error("Failed to fetch profile data");
+        // toast.error("Failed to fetch profile data");
       }
     };
 

@@ -6,28 +6,16 @@ import { capFirst } from "@/utils/validation";
 
 const Filter = ({
   urlValue,
-  cardLabel,
   response,
 }: {
   urlValue: string;
   cardLabel: any;
   response: any;
 }) => {
-  // let array=[ "farewell","birthday", "baby", "wedding", "get-well", "sympathy"]
-  const router = useRouter();
+ 
   const [selectedCategory, setSelectedCategory] = useState(urlValue || "farewell");
 
-  // const handleClick = (category: string, id: any) => {
-  //   console.log(category, "category");
-  //   const formattedCategory = category.toLowerCase().replace(/\s+/g, "-");
-  //   router.push(
-  //     cardLabel
-  //       ? `/card/${formattedCategory}/${cardLabel}`
-  //       : `/card/${formattedCategory}`
-  //   );
-  // };
-  // const type = searchParams?.category||"farewell"
-  // console.log(type, "Selected category");
+ 
   return (
     <div className="flex flex-col items-center p-8 bg-white">
       <h2 className="text-center text-lg mb-0 xl:text-xl font-semibold text-gray-600">

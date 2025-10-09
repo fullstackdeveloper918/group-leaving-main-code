@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-// import EscrowPayment from "./EscrowPayment";
-// import axios from "axios";
 import CollectionPayment from "./CollectionPayment";
 import ContributorsModal from "./ContributorsModal";
 import { usePathname } from "next/navigation";
@@ -11,7 +9,7 @@ import Image from "next/image";
 import userIcon from "../assets/icons/abj.png";
 import NextTopLoader from "nextjs-toploader";
 import Loader from "./common/Loader";
-// import { useTopLoader } from "nextjs-toploader";
+import { toast } from "react-toastify";
 
 type TopLoaderRef = {
   continuousStart: () => void;
@@ -27,56 +25,47 @@ const GiftCardCollectionPot = ({
   const [isContributorsModalOpen, setIsContributorsModalOpen] = useState(false);
   const [isGiftCardModalOpen, setIsGiftCardModalOpen] = useState(false);
   const [isContributeModalOpen, setIsContributeModalOpen] = useState(false);
-  // const [selectedAmount, setSelectedAmount] = useState(20); // Default selected amount
-  const [isCustomAmount, setIsCustomAmount] = useState<any>(false); // Tracks if "Other" is selected
-  // const [customAmount, setCustomAmount] = useState<any>(20); // Custom amount input
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [cardToDelete, setCardToDelete] = useState<string | null>(null);
+  const [isCustomAmount, setIsCustomAmount] = useState<any>(false);
   const [name, setName] = useState("");
   const [showWarning, setShowWarning] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
   const [showContributors, setShowContributors] = useState(false);
   const [selectedImage, setSelectedImage] = useState<any | null>(null);
   const gettoken = Cookies.get("auth_token");
-  // const loader = useTopLoader();
-  // const pathname = usePathname();
-  // const parts = pathname.split("/");
-  // const brandKey2 = parts[parts.length - 1];
+
+  // Get current user info from cookies
+  const userInfoCookie = Cookies.get("userInfo");
+  const currentUserId = userInfoCookie
+    ? JSON.parse(decodeURIComponent(userInfoCookie)).uuid
+    : null;
+ 
   const [selectedContributeAmount, setSelectedContributeAmount] =
     useState<number>(0);
   const [
     selectedContributeAmountOgCurrency,
     setSelectedContributeAmountOgCurrency,
   ] = useState<number>(0);
-  const [error, setError] = useState<string>(""); // validation message for RANGE
-  // console.log(cardShareData, "cardshareDate herer");
+  const [error, setError] = useState<string>("");
   const [reloadlyId, setReloadlyId] = useState<string>("");
-  // const [loading, setLoading] = useState(false);
-  // console.log(showContributors, "showContributors");
   const loaderRef = useRef<TopLoaderRef | null>(null);
-  const handleProceed = () => {
-    if (name.trim() === "") {
-      setShowWarning(true);
-      return;
-    }
-    setShowWarning(false);
-    setShowPayment(true); // This will render the CollectionPayment component
-  };
 
   const [giftCard, setGiftCard] = useState<any>("");
   const [makeAnonymous, setMakeAnonymous] = useState(false);
   const [state, setState] = useState<any>("");
   const [selectedProduct, setSelectedProduct] = useState<any>("");
-  // console.log(brandKey, "brandKey");
-  // console.log(isCustomAmount, "customAmount");
+  const [Loading, setLoading] = useState(false);
+
 
   const fetchGiftCard = async () => {
     try {
-      // setLoading(true);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/reloadly/card/${groupId}`, // Sending brandKey as query parameter
+        `${process.env.NEXT_PUBLIC_API_URL}/reloadly/card/${groupId}`,
         {
-          method: "GET", 
+          method: "GET",
           headers: {
-            "Content-Type": "application/json", 
+            "Content-Type": "application/json",
             Authorization: `Bearer ${gettoken}`,
           },
         }
@@ -84,8 +73,64 @@ const GiftCardCollectionPot = ({
 
       const data = await response.json();
       setGiftCard(data);
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error fetching gift card:", error);
+    }
+  };
 
+  // Check if current user is the creator
+  const isCreator = currentUserId && cardShareData?.user_uuid === currentUserId;
+  console.log("Current User ID:", cardShareData?.user_uuid);
+
+
+  const deleteGiftCard = async (uuid: string) => {
+    const MIN_DISPLAY_TIME = 500;
+    const startTime = Date.now();
+
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/reloadly/soft-delete/${uuid}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${gettoken}`,
+          },
+        }
+      );
+       toast.success("Gift card deleted successfully");
+      if (!response.ok) {
+        throw new Error("Failed to delete gift card");
+      }
+      await fetchGiftCard();
+
+      setIsDeleteModalOpen(false);
+      setCardToDelete(null);
+    } catch (error) {
+      console.error("Error deleting gift card:", error);
+      alert("Failed to delete gift card. Please try again.");
+    } finally {
+      const elapsed = Date.now() - startTime;
+      const remaining = MIN_DISPLAY_TIME - elapsed;
+
+      if (remaining > 0) {
+        setTimeout(() => setLoading(false), remaining);
+      } else {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleDeleteClick = (uuid: string) => {
+    setCardToDelete(uuid);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (cardToDelete) {
+      deleteGiftCard(cardToDelete);
+    }
   };
 
   const fetchGiftCardProducts = async () => {
@@ -100,13 +145,13 @@ const GiftCardCollectionPot = ({
           },
         }
       );
-      // console.log(response1,"response1");
       if (!response1.ok) {
         throw new Error("Failed to get products");
       }
       const data1 = await response1.json();
       setState(data1);
     } catch (error) {
+      console.error("Error fetching products:", error);
     }
   };
 
@@ -120,7 +165,6 @@ const GiftCardCollectionPot = ({
         },
       }
     );
-    // console.log(response1,"response1");
     if (!response.ok) {
       throw new Error("Failed to get products");
     }
@@ -135,11 +179,11 @@ const GiftCardCollectionPot = ({
       giftcard: giftCard,
     };
 
-    const MIN_DISPLAY_TIME = 500; 
+    const MIN_DISPLAY_TIME = 500;
     const startTime = Date.now();
 
     try {
-      setLoading(true); // start loader
+      setLoading(true);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/reloadly/save-card`,
         {
@@ -152,7 +196,7 @@ const GiftCardCollectionPot = ({
       const data = await response.json();
 
       if (data) {
-        await fetchGiftCard(); // fetch updated gift cards
+        await fetchGiftCard();
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -177,7 +221,7 @@ const GiftCardCollectionPot = ({
       fetchGiftCard();
     }
   }, [refreshFromCreateBoard]);
-  const [Loading, setLoading] = useState(false);
+
   const handleClick = async () => {
     try {
       setLoading(true);
@@ -206,43 +250,24 @@ const GiftCardCollectionPot = ({
                 </h3>
                 <div className="flex justify-center items-center mb-4 flex-col ">
                   <div className="gift-cards-tools self-end mb-4 flex space-x-6 text-2xl pb-2">
-                    {/* <AiOutlineUser
-                      className="cursor-pointer hover:text-blue-600 transition"
-                      onClick={async () => {
-                        // await fetchGiftCardProducts();
-                        setIsContributorsModalOpen(true);
-                        setReloadlyId(card?.uuid);
-                      }}
-                    /> */}
                     <button
                       className="text-center text-md font-normal relative"
                       onClick={async () => {
-                        // await fetchGiftCardProducts();
                         setIsContributorsModalOpen(true);
                         setReloadlyId(card?.uuid);
                       }}
                     >
-                      {/* <span className="absolute bottom-3 text-white rounded-full px-2 text-center usercount">
-                        {contributors.length}
-                      </span> */}
                       <span className="">
                         <Image src={userIcon} alt="user" />
                       </span>
                     </button>
-                    {/* <AiFillDelete
-                      className="cursor-pointer hover:text-red-600 transition"
-                      onClick={async () => {
-                        // delete logic
-                      }}
-                    /> */}
+                    {isCreator && (
+                      <AiFillDelete
+                        className="cursor-pointer hover:text-red-600 transition"
+                        onClick={() => handleDeleteClick(card?.uuid)}
+                      />
+                    )}
                   </div>
-                  {/* {brandKey ? (
-                    <img
-                      src={selectGiftImage}
-                      alt="E-Gift Card"
-                      className="w-50 h-30 object-contain rounded-md shadow"
-                    />
-                  ) : ( */}
                   <img
                     src={`${card?.logoUrls}`}
                     alt="E-Gift Card"
@@ -252,25 +277,23 @@ const GiftCardCollectionPot = ({
 
                 <div className="text-center mb-4 justify-center flex-col">
                   <p className="text-2xl font-bold">
-                    {" "}
                     {card?.amount.toFixed(2)} INR
-                    {/* {card?.recipient_name} */}
                   </p>
 
                   <div className="text-center mb-2 gap-2 items-center justify-center flex flex-col">
                     <button
                       onClick={async () => {
                         try {
-                          setLoading(true); // start loader immediately
+                          setLoading(true);
                           await fetchGiftCardProductDetail(
                             card?.productId,
                             card?.uuid
                           );
-                          setIsContributeModalOpen(true); // open modal after API
+                          setIsContributeModalOpen(true);
                         } catch (err) {
                           console.error(err);
                         } finally {
-                          setLoading(false); // stop loader immediately when API finishes
+                          setLoading(false);
                         }
                       }}
                       className="bg-greyBorder bgGray text-blackText rounded-lg w-100 text-sm p-2.5 cursor-pointer"
@@ -286,19 +309,46 @@ const GiftCardCollectionPot = ({
               </div>
             ))}
 
-            <button
-              // onClick={async () => {
-              //   await fetchGiftCardProducts();
-              //   setIsGiftCardModalOpen(true);
-              // }}
-              onClick={handleClick}
-              // className="w-[40%] bgblue text-[14px] text-black border-2 border-blue-700 px-2 py-2 rounded"
-              className=" btnPrimary text-center w-100 mt-3 rounded-md"
-            >
-              Add to Gift Card
-            </button>
+            {isCreator && (
+              <button
+                onClick={handleClick}
+                className=" btnPrimary text-center w-100 mt-3 rounded-md"
+              >
+                Add to Gift Card
+              </button>
+            )}
           </>
         }
+
+        {/* Delete Confirmation Modal */}
+        {isDeleteModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+            <div className="bg-white p-6 rounded-md shadow-lg max-w-md w-full">
+              <h2 className="text-xl font-semibold mb-4">Confirm Delete</h2>
+              <p className="text-gray-600 mb-6">
+                Are you sure you want to delete this gift card? This action
+                cannot be undone.
+              </p>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => {
+                    setIsDeleteModalOpen(false);
+                    setCardToDelete(null);
+                  }}
+                  className="px-4 py-2 bg-[#558ec9] text-white rounded-md hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  className="px-4 py-2 bg-[#c95555] text-white rounded-md hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {isContributorsModalOpen && (
           <ContributorsModal
@@ -312,7 +362,6 @@ const GiftCardCollectionPot = ({
         {isGiftCardModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
             <div className="bg-white shadow-lg max-w-lg w-full relative overflow-auto broad-model-box">
-              {/* Top-left Cancel Button */}
               <h2 className="model-head-broad font-semibold mb-2 text-center">
                 Choose a Gift Card
               </h2>
@@ -327,7 +376,6 @@ const GiftCardCollectionPot = ({
                   X
                 </button>
               )}
-              {/* How Collection Pots Work */}
               {!selectedImage && (
                 <div className="bg-blue-100 p-4 ps-0 rounded-md mb-2">
                   <h3 className="text-lg font-semibold">
@@ -343,7 +391,6 @@ const GiftCardCollectionPot = ({
                   </ul>
                 </div>
               )}
-              {/* Conditionally render based on whether an image is selected */}
               {selectedImage ? (
                 <div className="flex flex-col items-center">
                   <div className="mb-2">
@@ -404,7 +451,6 @@ const GiftCardCollectionPot = ({
                 </div>
               ) : (
                 <div className="relative">
-                  {/* Image Grid */}
                   <div className="grid grid-cols-2 gap-4 max-h-80 overflow-y-auto">
                     {state?.data?.content?.map((res: any, index: number) => {
                       const imageUrl = res.logoUrls?.[0];
@@ -428,7 +474,6 @@ const GiftCardCollectionPot = ({
                   </div>
                 </div>
               )}
-              {/* Modal Footer */}
               <p className="text-sm text-gray-500 mt-2 text-center">
                 You&apos;ll be redirected to Stripe to finish your payment.
               </p>
@@ -447,7 +492,6 @@ const GiftCardCollectionPot = ({
                 X
               </button>
 
-              {/* FIXED denomination handling */}
               {selectedProduct.denominationType === "FIXED" && (
                 <div className="flex flex-wrap justify-evenly gap-3 mb-4">
                   {selectedProduct.fixedSenderDenominations.map(
@@ -476,7 +520,6 @@ const GiftCardCollectionPot = ({
                 </div>
               )}
 
-              {/* RANGE denomination handling */}
               {selectedProduct.denominationType === "RANGE" && (
                 <div className="mb-4">
                   <label className="block text-sm font-medium mb-1">
@@ -484,7 +527,6 @@ const GiftCardCollectionPot = ({
                   </label>
                   <input
                     type="number"
-                    // value={selectedContributeAmount}
                     id="amount"
                     name="amount"
                     onChange={(e) => {
@@ -525,7 +567,6 @@ const GiftCardCollectionPot = ({
                 </div>
               )}
 
-              {/* Show amount, service fee, and total */}
               <p className="mb-2 text-sm text-gray-600">
                 Amount: ₹{selectedContributeAmount.toFixed(2)}
               </p>
