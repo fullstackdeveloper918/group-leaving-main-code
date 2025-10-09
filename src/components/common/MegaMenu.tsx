@@ -4,7 +4,7 @@ import React, { useState, useRef } from "react";
 import { FiChevronDown, FiGift, FiDollarSign, FiSearch } from "react-icons/fi";
 
 const icons: Record<string, JSX.Element> = {
-  "Cards by Occasion": <FiGift className="inline mr-2 text-lg" />,
+  "All Occasion": <FiGift className="inline mr-2 text-lg" />,
   "Plans & Pricing": <FiDollarSign className="inline mr-2 text-lg" />,
   Explore: <FiSearch className="inline mr-2 text-lg" />,
 };
@@ -15,46 +15,42 @@ const MegaMenu = () => {
 
   const menuItems = [
     {
-      title: "Cards by Occasion",
+      title: "All Occasion",
       links: [
-        { name: "Birthday", href: "/card/birthday" },
         { name: "Farewell", href: "/card/farewell" },
-        { name: "Wedding", href: "/card/wedding" },
-        { name: "New Baby", href: "/card/baby" },
-        { name: "Retirement", href: "/card/retirement" },
+        { name: "Birthday", href: "/card/birthday" },
+        { name: "Baby", href: "/card/baby" },
+        { name: "Get Well Soon", href: "/card/get-well" },
         { name: "Sympathy", href: "/card/sympathy" },
+        { name: "Teacher", href: "/card/teacher" },
+        { name: "Thank-you", href: "/card/thank-you" },
+        { name: "Retirement", href: "/card/retirement" },
+        { name: "Congratulations", href: "/card/congratulations" },
+        { name: "Anniversary", href: "/card/anniversary" },
         { name: "Welcome", href: "/card/welcome" },
-        { name: "Thank You", href: "/card/thank-you" },
-        { name: "Wedding", href: "/card/wedding" },
-        { name: "New Baby", href: "/card/baby" },
-        { name: "Retirement", href: "/card/retirement" },
-        { name: "Sympathy", href: "/card/sympathy" },
-        { name: "Welcome", href: "/card/welcome" },
-        { name: "Thank You", href: "/card/thank-you" },
-        { name: "Wedding", href: "/card/wedding" },
-        { name: "New Baby", href: "/card/baby" },
-        { name: "Retirement", href: "/card/retirement" },
-        { name: "Sympathy", href: "/card/sympathy" },
-        { name: "Welcome", href: "/card/welcome" },
-        { name: "Thank You", href: "/card/thank-you" },
-        { name: "Wedding", href: "/card/wedding" },
-        { name: "New Baby", href: "/card/baby" },
-        { name: "Retirement", href: "/card/retirement" },
-        { name: "Sympathy", href: "/card/sympathy" },
-
+        { name: "New-home", href: "/card/new-home" },
+        { name: "Boss", href: "/card/boss" },
       ],
     },
     {
-      title: "Plans & Pricing",
-      links: [{ name: "Pricing", href: "/pricing" }],
+      title: "Birthday",
+      links: [{ name: "Birthday", href: "/card/birthday" }],
     },
     {
-      title: "Explore",
-      links: [{ name: "Explore", href: "/explore" }],
+      title: "Get Well Soon",
+      links: [{ name: "Get Well Soon", href: "/card/get-well" }],
     },
     {
-      title: "Explore",
-      links: [{ name: "Explore", href: "/explore" }],
+      title: "Thank you",
+      links: [{ name: "Thank you", href: "/card/thank-you" }],
+    },
+    {
+      title: "New home",
+      links: [{ name: "New home", href: "/card/new-home" }],
+    },
+    {
+      title: "Anniversary",
+      links: [{ name: "Anniversary", href: "/card/anniversary" }],
     },
   ];
 
@@ -106,7 +102,7 @@ const MegaMenu = () => {
                   <div
                     className={`absolute top-full mt-3 bg-white rounded-xl shadow-2xl ring-1 ring-blue-100 p-6 transition-all duration-300 ${
                       index === 0
-                        ? "w-[70rem] flex gap-10 left-[259%] transform -translate-x-1/2"
+                        ? "w-[70rem] flex gap-10 left-[260%] transform -translate-x-1/2"
                         : "w-52"
                     }`}
                     onMouseEnter={() => handleMouseEnter(menu.title)}
@@ -127,7 +123,40 @@ const MegaMenu = () => {
                         ))}
                       </div>
                     </div>
-                    <div className="flex flex-1 bg-greyBorder">dropdown content</div>
+                    <div className="flex flex-col bg-greyBorder p-6 rounded-xl space-y-6 w-full max-w-md mx-auto">
+                      {/* Custom Card */}
+                      <div className="flex flex-col space-y-1">
+                        <h3 className="text-lg font-semibold">Custom Card</h3>
+                        <p className="text-gray-600">
+                          Upload your own card design and customise
+                        </p>
+                      </div>
+
+                      {/* Bulk send cards */}
+                      <div className="flex flex-col space-y-1">
+                        <h3 className="text-lg font-semibold">
+                          Bulk send cards
+                        </h3>
+                        <p className="text-gray-600">
+                          Upload multiple recipients to send to
+                        </p>
+                      </div>
+
+                      {/* Bulk send gift cards */}
+                      <div className="flex flex-col space-y-1">
+                        <h3 className="text-lg font-semibold">
+                          Bulk send gift cards
+                        </h3>
+                        <p className="text-gray-600">
+                          Send gift cards to multiple people
+                        </p>
+                      </div>
+
+                      {/* Get Started Button */}
+                      <button className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                        Get Started
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
