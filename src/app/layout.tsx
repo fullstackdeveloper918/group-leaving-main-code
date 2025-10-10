@@ -112,7 +112,7 @@ export default function RootLayout({
           <AntdRegistry>
             <MsalProvider instance={msalInstance}>
               <Navbar />
-              {/* <MegaMenu /> */}
+              <MegaMenu />
               <NextTopLoader
                 color="#00C4CC"
                 initialPosition={0.08}

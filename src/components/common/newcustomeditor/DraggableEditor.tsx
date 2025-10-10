@@ -314,10 +314,6 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
               style={{
                 wordBreak: "break-word",
                 whiteSpace: "pre-wrap",
-                // letterSpacing: "1px",
-                // minHeight: "20px",
-                // maxHeight: "400px",
-                // overflowY: "auto",
               }}
               dangerouslySetInnerHTML={{
                 __html: content?.split("\n")[0] || "",

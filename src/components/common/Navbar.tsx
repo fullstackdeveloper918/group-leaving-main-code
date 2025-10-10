@@ -214,14 +214,14 @@ const Navbar = () => {
               {isMobile ? (
                 isMenuOpen ? (
                   <button
-                    className="text-gray-600 z-20 absolute top-2 right-2"
+                    className="text-gray-600 z-50 absolute top-2 right-2"
                     onClick={handleMenuToggle}
                   >
                     {"✖"}
                   </button>
                 ) : (
                   <button
-                    className="text-gray-600 z-20 ml-2"
+                    className="text-gray-600 z-50 ml-2"
                     onClick={handleMenuToggle}
                   >
                     {"☰"}
@@ -233,7 +233,7 @@ const Navbar = () => {
         </div>
         {isMobile ? (
           <nav
-            className={`md:hidden text-sm text-gray-700  absolute inset-x-0  transition-transform duration-300 p-5 px-4 top-0 bg-[#e2eefa] z-10 h-lvh ${
+            className={`md:hidden text-sm text-gray-700  z-40 absolute inset-x-0  transition-transform duration-300 p-5 px-4 top-0 bg-[#e2eefa]  h-lvh ${
               isMenuOpen ? "translate-x-0" : "-translate-x-full"
             }`}
           >

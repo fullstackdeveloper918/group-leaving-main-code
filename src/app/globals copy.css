@@ -967,7 +967,7 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     cursor: pointer;
-    z-index: 999;
+    z-index: 9;
   }
   .responiveSlider::after {
     background-image: url("../assets/images/nextArrow.png");

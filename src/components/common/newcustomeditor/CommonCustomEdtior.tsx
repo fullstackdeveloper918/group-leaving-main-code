@@ -617,6 +617,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
               borderRadius: "50px",
               boxShadow: "rgb(0 0 0 / 25%) 4px 4px 6px 1px",
               border: "1px solid transparent",
+              cursor: "pointer",
             }}
           >
             <input
