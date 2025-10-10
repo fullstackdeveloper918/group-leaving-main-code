@@ -8,6 +8,7 @@ import AccountEmailprefrence from "@/components/AccountEmailprefrence";
 import AccountProfile from "@/components/AccountProfile";
 import AccountSlider from "@/components/common/AccountSlider";
 import Cart from "@/components/common/Cart";
+import PaymentHistory from "@/components/common/PaymentHistory";
 import Table from "@/components/common/Table";
 import api from "@/utils/api";
 import { cookies } from "next/headers";
@@ -47,8 +48,7 @@ const page = async ({ params }: any) => {
         {type === "email-preferences" && (
           <AccountEmailprefrence data={posts} userInfo={gettoken?.value} />
         )}
-        {/* {type==="contributions" && <AccountContribution />} */}
-        {type === "batches" && <Table />}
+        {/* {type === "payment-history" && <PaymentHistory />} */}
       </div>
     </div>
   );

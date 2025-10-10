@@ -1526,7 +1526,7 @@ button.cancel-editBtn:hover {
     background-size: contain;
     background-repeat: no-repeat;
     cursor: pointer;
-    z-index: 999;
+    z-index: 9;
   }
   .responiveSlider::after {
     background-image: url("../assets/images/nextArrow.png");
@@ -2376,9 +2376,16 @@ left: unset !important;
   margin-top: 18px;
   gap: 10px;
 }
-
-.megamenu a {
+.megamenu2 a {
   color: black !important;
+  text-decoration: none !important; /* no underline initially */
+}
+
+.megamenu2 a:hover {
+  text-decoration: underline !important; /* show underline on hover */
+}
+.megamenu a {
+  color: #1b6fc9 !important;
   text-decoration: none !important; /* no underline initially */
 }
 

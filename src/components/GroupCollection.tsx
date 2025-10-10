@@ -104,10 +104,8 @@ const GroupCollection = ({
   const cardShareData = shareCartData?.data || [];
 
   useEffect(() => {
-    const cookies = nookies.get(); // retrieves cookies from document.cookie
+    const cookies = nookies.get(); 
     const userData = cookies.userInfo ? JSON.parse(cookies.userInfo) : null;
-    // console.log(userData, "userData");
-
     setCookieValue(userData?.uuid || null);
     setOrganiser(userData?.full_name || "N/A");
   }, []);
@@ -121,7 +119,6 @@ const GroupCollection = ({
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/razorpay/locked-collecton-link`,
         {
-          // replace '/api/cart' with the correct endpoint
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -130,21 +127,15 @@ const GroupCollection = ({
           body: JSON.stringify(item),
         }
       );
-
-      // Check if the request was successful
       if (!response.ok) {
         throw new Error("Failed to add item to cart");
       }
-
-      const data = await response.json(); // Assuming the response returns JSON
+      const data = await response.json(); 
       toast.success(!isLocked ? "Unlock Successfully" : "Lock Successfully", {
         autoClose: 1000,
       });
-      // console.log(data, "sadfdgsfdg");
       setIsLocked(!isLocked);
       setButtonText(isLocked ? "Unlock Collection" : "Lock Collection");
-
-      //  router.replace(`/share/${data?.data?.uuid}?brandKey=${brandKeys}`);
     } catch (error) {}
   };
   const handleSend = async (email: string) => {
@@ -174,20 +165,13 @@ const GroupCollection = ({
           { autoClose: 2000 }
         );
       }
-      // toast.success(response.data)
     } catch (error) {
-      // console.error("Error:", error);
       toast.error(
         "Please make sure the recipient email is valid and try again.",
         { autoClose: 2000 }
       );
-      //   alert("An error occurred. Please try again.");
     }
   };
-
-  // console.log("paramsid", params.id);
-
-  // console.log(editCollection,"editCollection11");
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
