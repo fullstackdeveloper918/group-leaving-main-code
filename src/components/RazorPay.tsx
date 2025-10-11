@@ -131,7 +131,7 @@ const RazorPay = ({ amount, type, cart_id, bundleId, numberOfCards }: any) => {
             } else {
               setSuccess(true);
               router.push(
-                `/successfull?cart_uuid=${cartId}?cardId=${cardId}`
+                `/successfull?cart_uuid=${cartId}`
               );
             }
             setUniqueId(responseData?.data?.messages_unique_id);
