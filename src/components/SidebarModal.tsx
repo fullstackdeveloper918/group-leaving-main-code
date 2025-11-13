@@ -39,7 +39,7 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ cart_uuid: cartId }),
+            body: JSON.stringify({ cartUuid: cartId }),
           }
         );
 

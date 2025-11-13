@@ -1,17 +1,12 @@
 "use client";
 import type React from "react";
 import { useState, useEffect, useRef } from "react";
-// import { useDrag } from "@use-gFuel/react";
 import "react-quill/dist/quill.snow.css";
-
 import SlideImg_5 from "../../../../public/paper_grid.png";
 import SlideImg_6 from "../../../../public/paper_grid.png";
 import Modal from "react-modal";
 import axios from "axios";
 import nookies from "nookies";
-import jsPDF from "jspdf";
-import Draggable from "react-draggable";
-import { Api } from "@/interfaces/interfaces";
 import {
   useParams,
   usePathname,
@@ -32,7 +27,6 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchFromServer } from "@/app/actions/fetchFromServer";
 import Cookies from "js-cookie";
-// import { useParams } from "next/navigation";
 interface UserInfo {
   name: string;
   email: string;
@@ -41,10 +35,12 @@ interface UserInfo {
 
 interface CommonCustomEditorProps {
   cardShareData: any;
+  locked: boolean;
 }
 
 const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   cardShareData,
+  locked,
 }) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const router = useRouter();
@@ -68,14 +64,10 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   const [slides, setSlides] = useState<any[]>([]);
   const [data, setData] = useState<any[]>([]);
   const [shareImageData, setShareImageData] = useState<any>(null);
-  // console.log(slides, "sldessss");
   const pathname = usePathname();
   const isEditorPath = /^\/share\/editor\/[^/]+$/.test(pathname);
   const searchParams = useSearchParams();
-  // const [slides, setSlides] = useState<any[]>([]);
   const cardId = searchParams.get("cardId");
-  const [first, second] = pathname.split("/").slice(1, 3);
-  const basePath = `/${first}/${second}`;
   useEffect(() => {
     const fetchDataImage = async () => {
       try {
@@ -118,7 +110,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
     };
 
     fetchDataImage();
-  }, [cardId]);
+  }, [cardId,""]);
 
   const id = params?.id;
 
@@ -186,8 +178,6 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
             ? Math.max(...apiElements.map((el: any) => el.slideIndex || 0))
             : 0;
         const firstSlideImage = cardShareData?.images?.[0]?.card_images?.[0];
-
-        // Wait for image to load
         if (!firstSlideImage) {
           console.warn("First slide image not yet available. Waiting...");
           return;
@@ -195,7 +185,6 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
 
         let filledSlides: any[] = [];
 
-        // First slide with image
         filledSlides.push({
           id: `slide-1`,
           title: "New Slide",
@@ -318,9 +307,6 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
     });
   };
 
-  // console.log(slides, "elements new");
-
-  // Save elements to localStorage and update server
   useEffect(() => {
     if (elements.length > 0) {
       localStorage.setItem("slideElements", JSON.stringify(elements));
@@ -328,7 +314,6 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
     }
   }, [elements]);
 
-  // Send editor data to server
   const sendEditorData = async () => {
     const item = {
       editor_messages: elements,
@@ -353,9 +338,6 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
     }
   };
 
-  // console.log(userInfo, "oiuiuy");
-
-  // Update editor data on server
   const updateEditorData = async () => {
     const item = {
       editor_messages: elements,
@@ -556,8 +538,8 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   const handleDeleteElement = (index: number) => {
     setElements((prev) => prev.filter((_, i) => i !== index));
     closeModals();
+    toast.success("Deleted successfully!");
   };
-
   const uniqueElements = elements.reduce((acc, current) => {
     const duplicate = acc.find(
       (item: any) =>
@@ -826,6 +808,8 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
                       uniqueElements
                         .filter((el: any) => el.slideIndex === activeSlideIndex)
                         .map((el: any, i: number) => (
+                          
+                          <>
                           <DraggableElement
                             key={`${el.content}-${el.slideIndex}-${i}`}
                             content={el.content}
@@ -855,6 +839,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
                             onDelete={handleDeleteElement}
                             toast={toast}
                           />
+                          </>
                         ))}
                   </div>
                 );
@@ -934,7 +919,6 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
                     {
                       type: "gif",
                       content: gifUrl,
-                      // slideIndex: activeSlideIndex,
                       slideIndex:
                         activeSlideIndex === 0
                           ? slides.length - 1

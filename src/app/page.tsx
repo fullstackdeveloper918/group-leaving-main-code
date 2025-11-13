@@ -1,6 +1,6 @@
 // 'use client'
 import Hero from "@/components/Hero";
-import React, { useEffect } from "react";
+import React from "react";
 import { fetchFromServer } from "./actions/fetchFromServer";
 import { Api } from "@/interfaces/interfaces";
 import Image_text_Card from "@/components/common/Image_text_Card";
@@ -13,36 +13,30 @@ import cardData from "../constants/CardJson/card.json";
 import { cookies } from "next/headers";
 import PartnerCompanies from "@/components/PartnerCompanies";
 import HomeCategorySection from "@/components/HomeCategorySection";
-// import { setAuthToken } from "./actions/auth";
-// Define types for search parameters
 interface HomeProps {
   searchParams: Record<string, string | string[]>;
 }
-// Define API response type
 interface ApiResponse<T> {
   data: T;
   status: number;
 }
 const Home: React.FC<HomeProps> = async ({ searchParams }) => {
   const token:any = searchParams?.token;
-  // Fetch first API response
   const api: Api = {
     url: "https://fakestoreapi.com/products",
     method: "GET",
   };
   const data: ApiResponse<any> = await fetchFromServer(api);
-  // Fetch second API response
   const api2: Api = {
     url: "${process.env.NEXT_PUBLIC_API_URL}/card/collection-listing",
     method: "GET",
   };
   
   const data2: ApiResponse<any> = await fetchFromServer(api2);
-  console.log("Collection Listing Response:", data2.data);
   let user = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/profile`, {
-    method: 'GET', // Method set to GET
+    method: 'GET',
     headers: {
-      'Authorization': `Bearer ${token}` // Send the token in the Authorization header
+      'Authorization': `Bearer ${token}` 
     }
   });
   let userData = await user.json();
@@ -72,17 +66,14 @@ const Home: React.FC<HomeProps> = async ({ searchParams }) => {
             </Link>
           </div>
         </div>
-        {/* Section 6 */}
         <div className="bg-testimonialBg common_padding bg-no-repeat testimonial_section">
           <div className="mx-auto px-5 text-center container-fluid">
             <h2 className="xl:text-4xl md:text-xl sm:text-md font-semibold mb-10">
               See Why Our Customers Love Our Cards
             </h2>
-            {/* Reviews Grid */}
             <CustomerReview />
           </div>
         </div>
-        {/* Section 7 */}
         <NewsletterForm />
       </section>
     </>

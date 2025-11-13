@@ -10,13 +10,16 @@ const CardCollection = async ({ params }: any) => {
   console.log(type, "type");
   console.log(searchQuery, "searchQuery");
   // Sidebar: Fetch collection listing
-  let data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/card/collection-listing`, { cache: 'no-store' });
+  let data = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/card/collection-listing`,
+    { cache: "no-store" }
+  );
   let data1 = await data.json();
   console.log(data1, "Collection Listing Data");
   // Find the matching collection type (UUID) based on the URL slug
-  const normalizedType = type.replace('-', ' ');
+  const normalizedType = type.replace("-", " ");
   const matchedObject = data1?.data.find((item: any) => {
-    const normalizedTags = item.collection_title.replace('-', ' ');
+    const normalizedTags = item.collection_title.replace("-", " ");
     return normalizedTags === normalizedType;
   });
   console.log(matchedObject, "Matched Object");
@@ -24,11 +27,17 @@ const CardCollection = async ({ params }: any) => {
   console.log(collectionType, "Collection Type (UUID)");
   // Validate the search query (allow only popular, new, and trending)
   const validSearchQueries = ["popular", "new", "trending"];
-  const finalSearchQuery = validSearchQueries.includes(searchQuery) ? searchQuery : "";
-  console.log("finalSearchQuery",finalSearchQuery)
+  const finalSearchQuery = validSearchQueries.includes(searchQuery)
+    ? searchQuery
+    : "";
+  console.log("finalSearchQuery", finalSearchQuery);
   // All cards: Fetch cards based on search and category params
   const api2 = {
-    url: `${process.env.NEXT_PUBLIC_API_URL}/card/card-listing?search=${encodeURIComponent(finalSearchQuery)}&category=${encodeURIComponent(collectionType)}`,
+    url: `${
+      process.env.NEXT_PUBLIC_API_URL
+    }/card/card-listing?search=${encodeURIComponent(
+      finalSearchQuery
+    )}&category=${encodeURIComponent(collectionType)}`,
     method: "GET",
   };
   const response = await fetchFromServer(api2);
@@ -40,16 +49,21 @@ const CardCollection = async ({ params }: any) => {
       <div className="container-fluid">
         <div className="md:flex md:space-x-3 md:space-y-0 space-y-6 ">
           {/* Sidebar with collection data */}
-          <Sidebar urlValue={params?.slug[0]} cardLabel={finalSearchQuery} response={data1} />
+          <Sidebar
+            urlValue={params?.slug[0]}
+            cardLabel={finalSearchQuery}
+            response={data1}
+          />
           <main className="flex-1 md:pl-3">
             <div className="flex md:justify-between md:items-center mb-6 md:flex-row flex-col-reverse justify-start">
               <h2 className="xl:text-4xl md:text-lg text-md font-semibold mt-3">
-                Pick a <span className="capitalize">{params?.slug[0]}</span> Card Design
+                Pick a <span className="capitalize">{params?.slug[0]}</span>{" "}
+                Card Design
               </h2>
               <CollectionFilter />
             </div>
             {/* Cards Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-4 gap-6 min_gap">
+            <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-4 gap-6 min_gap">
               {response?.listing?.map((card: any) => (
                 <Card item={card} index={card.id} key={card.id} />
               ))}
@@ -61,9 +75,3 @@ const CardCollection = async ({ params }: any) => {
   );
 };
 export default CardCollection;
-
-
-
-
-
-

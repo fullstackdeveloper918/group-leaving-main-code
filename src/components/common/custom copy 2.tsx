@@ -564,21 +564,6 @@ const Custom: React.FC = () => {
               </button>
             </div>
           )}
-          {/* <div style={{ textAlign: "center" }}>
-            <button style={{
-              padding: "10px",
-              borderRadius: "50px",
-            }} className="add_btn" onClick={sendEditorData}> click</button>
-          </div> */}
-          {/* <div style={{ textAlign: "center" }}>
-          <button
-            onClick={handleDownloadPDF}
-            className="px-4 py-2 add_btn border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition"
-            style={{color:"white", marginLeft:"20px", borderRadius: "70px"}}
-          >
-            Download
-          </button>
-        </div> */}
         </div>
 
         <div className="card-carousel">

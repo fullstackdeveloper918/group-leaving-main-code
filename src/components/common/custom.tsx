@@ -1,8 +1,6 @@
 "use client";
 import type React from "react";
 import { useState, useEffect, useRef } from "react";
-// import { useDrag } from "@use-gFuel/react";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import SlideImg_0 from "../../assets/images/slide-new0.jpg";
 import SlideImg_1 from "../../assets/images/slide-new1.jpg";
@@ -13,26 +11,20 @@ import SlideImg_5 from "../../../public/paper_grid.png";
 import SlideImg_6 from "../../../public/paper_grid.png";
 import Modal from "react-modal";
 import axios from "axios";
-import { Rnd } from "react-rnd";
 import nookies from "nookies";
 import jsPDF from "jspdf";
-import Draggable from "react-draggable";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { Editor } from "react-draft-wysiwyg";
 import { EditorState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "react-quill/dist/quill.snow.css";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa6";
 import "quill-emoji/dist/quill-emoji.css";
-import { Quill } from "react-quill";
 import "quill-emoji";
 import TextEditor from "../editor/components/TextEditor";
 import { DraggableElement } from "./DraggableElement";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { fetchFromServer } from "@/app/actions/fetchFromServer";
 import Cookies from "js-cookie";
-// import { useParams } from "next/navigation";
 interface UserInfo {
   name: string;
   email: string;
@@ -102,7 +94,6 @@ const Custom: React.FC = () => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedElement, setSelectedElement] = useState<any>(null);
   const [gifs, setGifs] = useState<string[]>([]);
-  const [activeSlide, setActiveSlide] = useState<any>();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [openDropdown, setOpenDropdown] = useState(false);
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
@@ -112,23 +103,16 @@ const Custom: React.FC = () => {
   const [type, setType] = useState<string>("");
   const [slides, setSlides] = useState<any[]>([]);
   const [shareImageData, setShareImageData] = useState<any>(null);
-  console.log(slides, "sldessss");
   const pathname = usePathname();
   const isEditorPath = /^\/share\/editor\/[^/]+$/.test(pathname);
 
   const [first, second] = pathname.split("/").slice(1, 3);
   const basePath = `/${first}/${second}`;
 
-  console.log(pathname, "isEditorPath");
-
-  // Initialize params.id
   useEffect(() => {
-    console.log(params?.id, "id here to fix lalala");
     if (params.id) setId(params.id);
   }, [params]);
 
-  console.log(id, "id here to fix");
-  // Initialize userInfo from cookies
   useEffect(() => {
     const cookies = nookies.get();
     const userInfoFromCookie: UserInfo | null = cookies.userInfo
@@ -136,8 +120,6 @@ const Custom: React.FC = () => {
       : null;
     setUserInfo(userInfoFromCookie);
   }, []);
-
-  //new ravi
 
   const gettoken = Cookies.get("auth_token");
 
@@ -156,7 +138,7 @@ const Custom: React.FC = () => {
         );
 
         const data = await response.json();
-        setShareImageData(data); // Store response data in state
+        setShareImageData(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -164,10 +146,6 @@ const Custom: React.FC = () => {
 
     fetchData();
   }, [gettoken]);
-  console.log(shareImageData, "shareImageData here");
-
-  // if (basePath === "/share/editor") {
-  console.log(params, "params here to fix");
   const cardShareData = shareImageData?.listing?.find(
     (item: any) => item?.message_unique_id === params.id
   );
@@ -186,72 +164,6 @@ const Custom: React.FC = () => {
       ]);
     }
   }, [basePath, cardShareData]);
-  console.log("cardShareData", cardShareData);
-  // }
-
-  // Load elements from API and initialize slides
-  // useEffect(() => {
-  //   const getEditorData = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         "https://dating.goaideme.com/card/edit-messages-by-unique-id/fwzDVjvbQ_X",
-  //         {
-  //           method: "GET",
-  //           headers: { "Content-Type": "application/json" },
-  //         }
-  //       );
-  //       if (!response.ok) throw new Error("Failed to fetch data");
-  //       const data = await response.json();
-
-  //       console.log(data,"data is here for check")
-  //       const apiElements = data?.data[0]?.editor_messages || [];
-  //       setElements(apiElements);
-
-  //       console.log(apiElements,"apiElements")
-  //       // Determine the maximum slideIndex from API elements
-  //       const maxIndex =
-  //         apiElements.length > 0
-  //           ? Math.max(...apiElements.map((el: any) => el.slideIndex), 0) : 0;
-
-  //           console.log(maxIndex,"filledSlide length max")
-  //       // Initialize slides based on path and max slideIndex
-  //       let filledSlides = isEditorPath
-  //         ? [
-  //             {
-  //               id: "slide-1",
-  //               title: "Development",
-  //               subtitle: "SCSS Only Slider",
-  //               text: "Learn to create a SCSS-only responsive slider.",
-  //               link: "https://blog.significa.pt/css-only-slider-71727effff0b",
-  //               card_img: SlideImg_0,
-  //             },
-  //           ]
-  //         : [...initialSlides];
-  //           console.log("filledSlide length", filledSlides.length)
-  //       // Add additional slides up to maxIndex
-  //       for (let i = filledSlides.length; i <= maxIndex; i++) {
-  //         filledSlides.push({
-  //           id: `slide-${i + 1}`,
-  //           title: "New Slide",
-  //           subtitle: "New Subtitle",
-  //           text: "This is a dynamically generated slide.",
-  //           link: "https://example.com",
-  //           card_img: SlideImg_5,
-  //         });
-  //       }
-
-  //       console.log(filledSlides.length,"filledSlide length")
-
-  //       setSlides(filledSlides);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //       setElements([]);
-  //       setSlides(isEditorPath ? [initialSlides[0]] : initialSlides);
-  //     }
-  //   };
-
-  //   getEditorData();
-  // }, []);
 
   useEffect(() => {
     const fetchEditorData = async () => {
@@ -265,23 +177,13 @@ const Custom: React.FC = () => {
         );
 
         if (!response.ok) throw new Error("Failed to fetch data");
-
         const data = await response.json();
-        console.log("Fetched data here:", data);
-
         const apiElements = data?.data?.[0]?.editor_messages || [];
         setElements(apiElements);
-        console.log("API Elements:", apiElements);
-
-        // const getitingNewSlide = apiElements?.map(e)=> e.filter(slides?.lastIndex.slideIndex == e?.slideIndex return true)
-
-        console.log(slides, "ddddddd");
-        // Get max slide index from API data
         const maxIndex =
           apiElements.length >= 0
             ? Math.max(...apiElements.map((el: any) => el.slideIndex || 0))
             : 0;
-        // Initialize slides based on path
         let filledSlides = isEditorPath
           ? [
               {
@@ -292,13 +194,9 @@ const Custom: React.FC = () => {
                 link: "https://blog.significa.pt/css-only-slider-71727effff0b",
                 card_img: SlideImg_0,
               },
-           
-          ]
+            ]
           : [...initialSlides];
 
-        console.log("Initial filledSlides length:", maxIndex, filledSlides.length);
-
-        // Only add new slides if maxIndex requires it
         if (maxIndex + 1 > filledSlides.length) {
           for (let i = filledSlides.length + 1; i >= maxIndex; i--) {
             filledSlides.push({
@@ -311,8 +209,6 @@ const Custom: React.FC = () => {
             });
           }
         }
-
-        console.log("Updated filledSlides length1:", slides);
         setSlides(filledSlides);
       } catch (error) {
         console.error("Error fetching editor data:", error);
@@ -323,88 +219,47 @@ const Custom: React.FC = () => {
 
     fetchEditorData();
   }, []);
-
-  console.log(elements?.length, "new element hree");
-
-  // Refined cleanup function: remove all empty slides from the end except the last one
-  // function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
-  //   console.log(slidesArr, elementsArr ,"please giving")
-  //   let lastWithContent = slidesArr.length - 1;
-
-  //   console.log(lastWithContent,"lastWithContent new")
-  //   for (; lastWithContent >= 0; lastWithContent--) {
-  //     const hasContent = elementsArr.some(
-  //       (el: any) =>{if(el.slideIndex && !lastWithContent){
-
-  //       }else{
-  //         el.slideIndex === lastWithContent
-  //       }
-  //       }
-  //     );
-  //     if (hasContent) break;
-  //   }
-  //   const minSlides = 1;
-  //   const newLength = Math.max(lastWithContent + 2, minSlides);
-  //   return slidesArr.slice(0, newLength);
-  // }
-function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
-  console.log(slidesArr, elementsArr, "please giving new slides");
-
-  // Clone the slides to avoid mutating the original
-  const newSlides = [...slidesArr];
-
-  // Find the last slide index with content
-  let lastWithContent = newSlides.length - 1;
-  for (; lastWithContent >= 0; lastWithContent--) {
-    const hasContent = elementsArr.some((el: any) => {
-      // If element's slideIndex is beyond current slide count, add a new slide
-      if (el.slideIndex >= newSlides.length) {
-        const missingCount = el.slideIndex - newSlides.length + 1;
-        for (let i = 0; i < missingCount; i++) {
-          newSlides.push({
+  function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
+    const newSlides = [...slidesArr];
+    let lastWithContent = newSlides.length - 1;
+    for (; lastWithContent >= 0; lastWithContent--) {
+      const hasContent = elementsArr.some((el: any) => {
+        if (el.slideIndex >= newSlides.length) {
+          const missingCount = el.slideIndex - newSlides.length + 1;
+          for (let i = 0; i < missingCount; i++) {
+            newSlides.push({
               id: `slide-${i + 1}`,
               title: "New Slide",
               subtitle: "New Subtitle",
               text: "This is a dynamically generated slide.",
               link: "https://example.com",
               card_img: SlideImg_6,
-            }); // Or default slide structure
+            });
+          }
+          return true;
         }
-        console.log(`Added ${missingCount} missing slides`);
-        return true; // Now consider it as having content
-      }
 
-      // Normal check
-      return el.slideIndex === lastWithContent;
-    });
+        return el.slideIndex === lastWithContent;
+      });
 
-    if (hasContent) break;
-  }
-
-  // Always keep one empty slide at the end
-  const minSlides = 1;
-  let newLength = Math.max(lastWithContent + 2, minSlides);
-  return newSlides.slice(0, newLength);
-}
-
-  useEffect(() => {
-    if (elements?.length == 0) {
-      setSlides([...initialSlides]);
+      if (hasContent) break;
     }
 
-    // Clean up extra empty slides at the end, but never remove the last one
+    const minSlides = 1;
+    let newLength = Math.max(lastWithContent + 2, minSlides);
+    return newSlides.slice(0, newLength);
+  }
+
+  useEffect(() => {
+    if (elements?.length === 0) {
+      return;
+    }
     setSlides((prevSlides) => cleanupSlides(prevSlides, elements));
+  }, [elements]);
 
-    console.log(elements, slides, "here to matched data");
-    const lastSlide = slides?.[slides.length - 1];
-    console.log("lastSlide:", lastSlide);
-    const isLastSlideInElements = elements?.some(
-      (e) => `slide-${e?.slideIndex + 1}` === lastSlide?.id
-    );
-
-    console.log(isLastSlideInElements, "isLastSlideInElements");
-    if (isLastSlideInElements) {
-      const newSlideIndex = slides.length; // e.g., 3 if you already have 3 slides
+  const handleAddPage = () => {
+    setSlides((prevSlides) => {
+      const newSlideIndex = prevSlides.length;
       const newSlide = {
         id: `slide-${newSlideIndex + 1}`,
         title: "New Slide",
@@ -413,14 +268,17 @@ function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
         link: "https://example.com",
         card_img: SlideImg_5,
       };
+      const updatedSlides = [...prevSlides, newSlide];
+      setTimeout(() => {
+        setActiveSlideIndex(newSlideIndex);
+        if (sliderRef.current) {
+          sliderRef.current.value = newSlideIndex.toString();
+        }
+      }, 0);
+      return updatedSlides;
+    });
+  };
 
-      setSlides((prevSlides) => [...prevSlides, newSlide]);
-    }
-  }, [elements]);
-
-  console.log(slides, "elements new");
-
-  // Save elements to localStorage and update server
   useEffect(() => {
     if (elements.length > 0) {
       localStorage.setItem("slideElements", JSON.stringify(elements));
@@ -428,14 +286,12 @@ function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
     }
   }, [elements]);
 
-  // Send editor data to server
   const sendEditorData = async () => {
     const item = {
       editor_messages: elements,
       user_uuid: userInfo?.uuid,
       messages_unique_id: id,
     };
-    // return
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/card/add-editor-messages`,
@@ -452,18 +308,12 @@ function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
     }
   };
 
-  console.log(userInfo, "oiuiuy");
-
-  // Update editor data on server
   const updateEditorData = async () => {
     const item = {
       editor_messages: elements,
       user_uuid: userInfo ? userInfo?.uuid : "",
       messages_unique_id: id,
     };
-    // console.log(item,"opiuiouio");
-
-    // return
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/card/add-editor-messages`,
@@ -480,13 +330,9 @@ function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
     }
   };
 
-  // Handle adding a new message (and new slide)
   const handleAddMessageClick = () => {
-    // Only jump to last slide if on slide 0-4
     if (activeSlideIndex <= 4 && !isEditorPath) {
       const lastSlideIndex = slides.length - 2;
-      // const lastSlideIndex = 5;
-console.log(lastSlideIndex,"lastSlideIndex")
       const newSlide = {
         id: `slide-${slides.length + 1}`,
         title: "New Slide",
@@ -495,11 +341,6 @@ console.log(lastSlideIndex,"lastSlideIndex")
         link: "https://example.com",
         card_img: SlideImg_5,
       };
-
-      // const lastSlideIndex = slides.length - 1;
-
-      // setSlides((prevSlides: any[]) => [...prevSlides, newSlide]);
-      // const newSlideIndex = slides.length;
       setActiveSlideIndex(lastSlideIndex);
       setShowModal(true);
 
@@ -509,38 +350,9 @@ console.log(lastSlideIndex,"lastSlideIndex")
       setShowModal(true);
       return;
     }
-    // For slides 5 and above, stay on current slide
     setShowModal(true);
   };
 
-  // Save message from editor
-  const handleSaveMessage = () => {
-    if (activeSlideIndex === null) {
-      alert("No active slide selected!");
-      return;
-    }
-    // Text can only be added to slides after the 5th (index >= 5)
-    // If trying to add to slide 0-4, add to last slide instead
-    const targetIndex =
-      activeSlideIndex <= 4 ? slides.length - 2 : activeSlideIndex;
-
-    const newMessage = {
-      type: "text",
-      content: editorContent || "Default message",
-      slideIndex: targetIndex,
-
-      // slideIndex: activeSlideIndex,
-      x: 0,
-      y: 0,
-      user_uuid: userInfo?.uuid,
-    };
-    setElements([...elements, newMessage]);
-    setShowModal(false);
-    setEditorContent("");
-    sendEditorData();
-  };
-
-  // Handle image upload
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -564,9 +376,6 @@ console.log(lastSlideIndex,"lastSlideIndex")
         const imageUrl = data.file;
         const reader = new FileReader();
         reader.onloadend = () => {
-          // For first slide (index 0), always add to last slide
-          // For slides 1-4, add to current slide
-          // For slides >=5, add to current slide
           const targetIndex =
             activeSlideIndex === 0 ? slides.length - 2 : activeSlideIndex;
 
@@ -575,9 +384,6 @@ console.log(lastSlideIndex,"lastSlideIndex")
               type: "image",
               content: `${process.env.NEXT_PUBLIC_API_URL}/${imageUrl}`,
               slideIndex: targetIndex,
-
-              // slideIndex:
-              //   activeSlideIndex === 0 ? slides.length - 1 : activeSlideIndex,
               x: 0,
               y: 0,
               width: 320,
@@ -586,8 +392,6 @@ console.log(lastSlideIndex,"lastSlideIndex")
             };
 
             setElements((prevElements) => [...prevElements, newImage]);
-
-            // ✅ If activeSlideIndex is 0, switch to the last slide
             if (activeSlideIndex === 0) {
               setActiveSlideIndex(slides.length - 2);
             }
@@ -601,8 +405,6 @@ console.log(lastSlideIndex,"lastSlideIndex")
       console.error("Error uploading image:", error);
     }
   };
-
-  // Fetch GIFs or stickers
   const fetchGifs = async (term: string, type: "GIF" | "Sticker" = "GIF") => {
     try {
       const response = await axios.get(
@@ -635,13 +437,11 @@ console.log(lastSlideIndex,"lastSlideIndex")
     }
   };
 
-  // Handle GIF/sticker search
   const handleSearch = (e: any) => {
     e.preventDefault();
     if (searchTerm) fetchGifs(searchTerm);
   };
 
-  // Open GIF/sticker modal
   const openModal = (modalType: string) => {
     setIsOpen(true);
     setType(modalType);
@@ -651,111 +451,10 @@ console.log(lastSlideIndex,"lastSlideIndex")
     );
   };
 
-  // Add a new slide
-  const handleAddPage = () => {
-    const newSlide = {
-      id: `slide-${slides.length + 1}`,
-      title: "New Slide",
-      subtitle: "New Subtitle",
-      text: "This is a new slide",
-      link: "https://example.com",
-      card_img: SlideImg_5,
-    };
-    setSlides((prevSlides: any[]) => [...prevSlides, newSlide]);
-  };
-
-  // Convert image to base64 for PDF
-  const fetchImageAsBase64 = async (imageUrl: string) => {
-    try {
-      const response = await fetch(imageUrl, { mode: "cors" });
-      const blob = await response.blob();
-      if (blob.type === "image/avif") {
-        const imageBitmap = await createImageBitmap(blob);
-        const canvas = new OffscreenCanvas(
-          imageBitmap.width,
-          imageBitmap.height
-        );
-        const ctx = canvas.getContext("2d");
-        ctx?.drawImage(imageBitmap, 0, 0);
-        return canvas.convertToBlob({ type: "image/png" }).then((pngBlob) => {
-          return new Promise<string>((resolve) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result as string);
-            reader.readAsDataURL(pngBlob);
-          });
-        });
-      }
-      return new Promise<string>((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result as string);
-        reader.readAsDataURL(blob);
-      });
-    } catch (error) {
-      console.error("Error fetching image:", error);
-      return null;
-    }
-  };
-
-  // Download slides as PDF
-  const handleDownloadPDF = async () => {
-    const pdf = new jsPDF("p", "mm", "a4");
-    const slideWidth = 210;
-    const slideHeight = 297;
-
-    for (let i = 0; i < slides.length; i++) {
-      const base64Image = await fetchImageAsBase64(slides[i].card_img.src);
-      if (!base64Image) continue;
-
-      if (i !== 0) pdf.addPage();
-      pdf.addImage(
-        base64Image,
-        "JPEG",
-        10,
-        10,
-        slideWidth - 20,
-        slideHeight / 2
-      );
-
-      elements.forEach((el) => {
-        if (el.slideIndex === i + 1) {
-          if (el.type === "text") {
-            pdf.setFontSize(14);
-            pdf.setTextColor(0, 0, 255);
-            pdf.text(el.content, 10 + el.x, slideHeight / 2 + 20 + el.y);
-          } else if (el.type === "image" || el.type === "gif") {
-            pdf.addImage(
-              el.content,
-              "JPEG",
-              10 + el.x,
-              slideHeight / 2 + 20 + el.y,
-              50,
-              50
-            );
-          }
-        }
-      });
-    }
-    pdf.save("slides_with_positions.pdf");
-  };
-
-  // Handle slide navigation
   const handleSlideChange = (index: number) => {
     setActiveSlideIndex(index);
     if (sliderRef.current) sliderRef.current.value = index.toString();
     setSlides((prevSlides: any[]) => [...prevSlides]);
-    // If an editor is open and an element is selected, move the element to the new slide
-    // if (selectedElement) {
-    //   setElements((prev: any[]) =>
-    //     prev.map((el, i) =>
-    //       i === selectedElement.originalIndex
-    //         ? { ...el, slideIndex: index }
-    //         : el
-    //     )
-    //   );
-    //   setSelectedElement((prev: any) =>
-    //     prev ? { ...prev, slideIndex: index } : prev
-    //   );
-    // }
   };
 
   const handlePrevSlide = () => {
@@ -767,12 +466,6 @@ console.log(lastSlideIndex,"lastSlideIndex")
       handleSlideChange(activeSlideIndex + 1);
   };
 
-  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newIndex = Number.parseInt(e.target.value);
-    handleSlideChange(newIndex);
-  };
-
-  // Close modals
   const closeModal = () => {
     setIsOpen(false);
     setShowImageModal(false);
@@ -785,25 +478,21 @@ console.log(lastSlideIndex,"lastSlideIndex")
     setSelectedElement(null);
   };
 
-  // Toggle dropdown for additional options
   const toggleDropdown = () => {
     setOpenDropdown((prev) => !prev);
   };
 
-  // Handle image click for editing
   const handleImageClick = (element: any, index: number) => {
     setSelectedElement({ ...element, originalIndex: index });
     setShowImageModal(true);
     setShowModal(false);
   };
 
-  // Delete an element
   const handleDeleteElement = (index: number) => {
     setElements((prev) => prev.filter((_, i) => i !== index));
     closeModals();
   };
 
-  // Remove duplicate elements
   const uniqueElements = elements.reduce((acc, current) => {
     const duplicate = acc.find(
       (item: any) =>
@@ -823,12 +512,8 @@ console.log(lastSlideIndex,"lastSlideIndex")
     sendEditorData();
     router.push(`/envelop/${id}`);
   };
-  console.log(activeSlideIndex, "piopipi");
-
-  // Only for TextEditor: keep modal open and update content on slide change
   useEffect(() => {
     if (showModal) {
-      // Find the text element for the new active slide, if any
       const textElement = elements.find(
         (el) => el.type === "text" && el.slideIndex === activeSlideIndex
       );
@@ -836,120 +521,172 @@ console.log(lastSlideIndex,"lastSlideIndex")
     }
   }, [activeSlideIndex, showModal, elements]);
 
-  // useEffect(() => {
-  //   if (showModal) {
-  //     setShowModal(false);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [activeSlideIndex]);
-
-  console.log("selectedElement heresss", selectedElement);
-
   return (
     <>
       <div className="card-carousel-container select-none" id="main-carousle">
         <div className="editor_option" style={{ marginBottom: "15px" }}>
-          <div>
-            <button
-              className="add_btn"
-              onClick={handleAddMessageClick}
-              disabled={showModal}
-              style={{ padding: "10px", borderRadius: "50px" }}
-            >
-              Add Your Message
-            </button>
-          </div>
-          <div className="search_input">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              disabled={showModal}
-            />
-            <div className={`upload_svg ${showModal ? "disabled" : ""}`}>
-              <svg
-                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium mus-vubbuv"
-                focusable="false"
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                data-testid="AddPhotoAlternateIcon"
+          <div
+            className="editor_option"
+            style={{
+              marginBottom: "15px",
+              padding: "10px",
+            }}
+          >
+            <div>
+              <button
+                className="add_btn"
+                data-tutorial="add-message"
+                onClick={handleAddMessageClick}
+                disabled={showModal}
+                style={{
+                  padding: "10px",
+                  fontSize: "14px",
+                  borderRadius: "50px",
+                  boxShadow: "rgb(0 0 0 / 25%) 4px 4px 6px 1px",
+                  border: "1px solid transparent",
+                }}
               >
-                <path d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h3V2h2v3h3v2zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8zM5 19l3-4 2 3 3-4 4 5z"></path>
-              </svg>
+                Add Your Message
+              </button>
             </div>
-          </div>
-          <div className="search_input">
-            <button
-              onClick={() => openModal("GIF")}
-              disabled={showModal}
+            <div
+              className="search_input"
               style={{
-                all: "unset",
-                cursor: showModal ? "not-allowed" : "pointer",
+                padding: "10px",
+                fontSize: "14px",
+                borderRadius: "50px",
+                boxShadow: "rgb(0 0 0 / 25%) 4px 4px 6px 1px",
+                border: "1px solid transparent",
+                cursor: "pointer",
               }}
             >
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                disabled={showModal}
+                data-tutorial="upload-images"
+              />
               <div className={`upload_svg ${showModal ? "disabled" : ""}`}>
                 <svg
                   className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium mus-vubbuv"
                   focusable="false"
                   aria-hidden="true"
                   viewBox="0 0 24 24"
-                  data-testid="GifIcon"
+                  data-testid="AddPhotoAlternateIcon"
                 >
-                  <path d="M11.5 9H13v6h-1.5zM9 9H6c-.6 0-1 .5-1 1v4c0 .5.4 1 1 1h3c.6 0 1-.5 1-1v-2H8.5v1.5h-2v-3H10V10c0-.5-.4-1-1-1m10 1.5V9h-4.5v6H16v-2h2v-1.5h-2v-1z"></path>
+                  <path d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h3V2h2v3h3v2zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8zM5 19l3-4 2 3 3-4 4 5z"></path>
                 </svg>
               </div>
-            </button>
-          </div>
-          <div className="search_input" style={{ position: "relative" }}>
-            <button
-              onClick={toggleDropdown}
-              disabled={showModal}
+            </div>
+            <div
+              className="search_input"
               style={{
-                all: "unset",
-                cursor: showModal ? "not-allowed" : "pointer",
+                position: "relative",
+                padding: "10px",
+                borderRadius: "50px",
+                boxShadow: "rgb(0 0 0 / 25%) 4px 4px 6px 1px",
+                border: "1px solid transparent",
+              }}
+              data-tutorial="gif-upload"
+            >
+              <button
+                onClick={() => openModal("GIF")}
+                disabled={showModal}
+                style={{
+                  all: "unset",
+                  cursor: showModal ? "not-allowed" : "pointer",
+                }}
+              >
+                <div className={`upload_svg ${showModal ? "disabled" : ""}`}>
+                  <svg
+                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium mus-vubbuv"
+                    focusable="false"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    data-testid="GifIcon"
+                  >
+                    <path d="M11.5 9H13v6h-1.5zM9 9H6c-.6 0-1 .5-1 1v4c0 .5.4 1 1 1h3c.6 0 1-.5 1-1v-2H8.5v1.5h-2v-3H10V10c0-.5-.4-1-1-1m10 1.5V9h-4.5v6H16v-2h2v-1.5h-2v-1z"></path>
+                  </svg>
+                </div>
+              </button>
+            </div>
+            <div
+              className="search_input"
+              style={{
+                position: "relative",
+                padding: "10px",
+                borderRadius: "50px",
+                boxShadow: "rgb(0 0 0 / 25%) 4px 4px 6px 1px",
+                border: "1px solid transparent",
               }}
             >
-              <div className={`upload_svg ${showModal ? "disabled" : ""}`}>
-                <svg
-                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
-                  focusable="false"
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  data-testid="MoreHorizIcon"
-                >
-                  <path d="M6 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 0c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 0c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2z" />
-                </svg>
-              </div>
-            </button>
-            {openDropdown && (
-              <div className="absolute mt-2 bg-white border border-gray-200 rounded-md shadow-lg z-50 click-model">
-                <div
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer txt-ed-field"
-                  style={{ whiteSpace: "nowrap" }}
-                >
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    disabled={showModal}
-                  />
-                  <div
-                    className={`upload_svg bg-transparent ${
-                      showModal ? "disabled" : ""
-                    }`}
+              <button
+                onClick={toggleDropdown}
+                disabled={showModal}
+                style={{
+                  all: "unset",
+                  cursor: showModal ? "not-allowed" : "pointer",
+                }}
+              >
+                <div className={`upload_svg ${showModal ? "disabled" : ""}`}>
+                  <svg
+                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
+                    focusable="false"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    data-testid="MoreHorizIcon"
                   >
-                    Add HandWriting
+                    <path d="M6 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 0c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm5 0c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2z" />
+                  </svg>
+                </div>
+              </button>
+              {openDropdown && (
+                <div className="absolute mt-2 bg-white border border-gray-200 rounded-md shadow-lg z-50 click-model">
+                  <div
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer txt-ed-field"
+                    style={{ whiteSpace: "nowrap" }}
+                  >
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      disabled={showModal}
+                    />
+                    <div
+                      className={`upload_svg bg-transparent ${
+                        showModal ? "disabled" : ""
+                      }`}
+                    >
+                      Add HandWriting
+                    </div>
+                  </div>
+                  <div
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer txt-ed-field"
+                    style={{ whiteSpace: "nowrap" }}
+                    onClick={() => openModal("Sticker")}
+                  >
+                    Add Sticker
                   </div>
                 </div>
-                <div
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer txt-ed-field"
-                  style={{ whiteSpace: "nowrap" }}
-                  onClick={() => openModal("Sticker")}
-                >
-                  Add Sticker
-                </div>
-              </div>
-            )}
+              )}
+            </div>
+            <div data-tutorial="new-slide">
+              <button
+                className="bg-[#E0E9F2] font-extrabold text-blueBg p-2 rounded-full w-[40px] h-[40px]"
+                onClick={handleAddPage}
+                disabled={showModal}
+                style={{
+                  padding: "10px",
+                  borderRadius: "50px",
+                  boxShadow: "rgb(0 0 0 / 25%) 4px 4px 6px 1px",
+                  border: "1px solid transparent",
+                }}
+                title="Add New Slide"
+              >
+                +
+              </button>
+            </div>
           </div>
           {id !== "fwzDVjvbQ_X" && (
             <div style={{ textAlign: "center" }}>
@@ -1034,7 +771,6 @@ console.log(lastSlideIndex,"lastSlideIndex")
                           Yposition={selectedElement?.y || 0}
                           slides={slides}
                           toast={toast}
-                          // isFirstSlide={isFirstSlide}
                           activeSlideIndex={activeSlideIndex}
                         />
                       )}
@@ -1077,35 +813,45 @@ console.log(lastSlideIndex,"lastSlideIndex")
                 );
               })}
             </div>
-            <div className="carousel-controls">
-              <button className="carousel-arrow prev" onClick={handlePrevSlide}>
-                ◀
-              </button>
-              <div className="carousel-slider-container">
-                <div className="progress-bar-container">
-                  <div className="progress-track"></div>
-                  <div
-                    className="progress-fill"
-                    style={{
-                      width: `${((activeSlideIndex + 1) / totalSlides) * 100}%`,
-                    }}
-                  ></div>
-                  <div
-                    className="progress-dot"
-                    style={{
-                      left: `calc(${
-                        ((activeSlideIndex + 1) / totalSlides) * 100
-                      }% - 7px)`,
-                    }}
-                  ></div>
+            <div data-tutorial="slide-navigation">
+              <div className="carousel-controls">
+                <button
+                  className="carousel-arrow prev"
+                  onClick={handlePrevSlide}
+                >
+                  ◀
+                </button>
+                <div className="carousel-slider-container">
+                  <div className="progress-bar-container">
+                    <div className="progress-track"></div>
+                    <div
+                      className="progress-fill"
+                      style={{
+                        width: `${
+                          ((activeSlideIndex + 1) / totalSlides) * 100
+                        }%`,
+                      }}
+                    ></div>
+                    <div
+                      className="progress-dot"
+                      style={{
+                        left: `calc(${
+                          ((activeSlideIndex + 1) / totalSlides) * 100
+                        }% - 7px)`,
+                      }}
+                    ></div>
+                  </div>
                 </div>
+                <button
+                  className="carousel-arrow next"
+                  onClick={handleNextSlide}
+                >
+                  ▶
+                </button>
               </div>
-              <button className="carousel-arrow next" onClick={handleNextSlide}>
-                ▶
-              </button>
-            </div>
-            <div className="page-indicator">
-              Page <b>{activeSlideIndex + 1}</b> of <b>{totalSlides}</b>
+              <div className="page-indicator">
+                Page <b>{activeSlideIndex + 1}</b> of <b>{totalSlides}</b>
+              </div>
             </div>
           </div>
         </div>
@@ -1151,7 +897,6 @@ console.log(lastSlideIndex,"lastSlideIndex")
                     {
                       type: "gif",
                       content: gifUrl,
-                      // slideIndex: activeSlideIndex,
                       slideIndex:
                         activeSlideIndex === 0
                           ? slides.length - 1

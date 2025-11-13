@@ -95,9 +95,6 @@ const RazorPay = ({ amount, type, cart_id, bundleId, numberOfCards }: any) => {
           const paymentId = response.razorpay_payment_id;
           const product_id = param.id;
 
-          // console.log("product_id",product_id)
-          // console.log("sadfasdfassfdasf",userInfo)
-          // headers["Authorization"] = `Bearer ${getToken}`;
           try {
             const paymentResponse = await fetch(
               `${process.env.NEXT_PUBLIC_API_URL}/razorpay/save-payment`,
@@ -131,7 +128,7 @@ const RazorPay = ({ amount, type, cart_id, bundleId, numberOfCards }: any) => {
             } else {
               setSuccess(true);
               router.push(
-                `/successfull?cart_uuid=${cartId}?cardId=${cardId}`
+                `/successfull?cart_uuid=${cartId}`
               );
             }
             setUniqueId(responseData?.data?.messages_unique_id);

@@ -41,14 +41,12 @@ const AccountSlider = ({type}:any) => {
         >
           Bundles
         </a>
-
-        {/* Navigate to Email Preferences */}
-        {/* <a
+        <a
           onClick={() => handleNavigation('/account/payment-history')}
           className={type==="payment-history"?"text-black text-blue-600 font-semibold border-b-2 border-blue-600 cursor-pointer no-underline":"text-black text-gray-500 hover:text-blue-500 cursor-pointer no-underline"}
         >
           Payment History
-        </a> */}
+        </a>
 
       </div>
     </div>

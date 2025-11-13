@@ -182,7 +182,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
           setShowCardChoiceModal(true);
         } else {
           // Redirect directly to payment if no bundle cards
-          router.push(`/card/pay/${data.data.cart_uuid}?cardId=${params}`);
+          router.push(`/card/pay/${data.data.cart_uuid}`);
         }
       } else if (response.status === 400) {
         toast.error(data?.error || "Invalid request");
@@ -272,7 +272,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
                   htmlFor="recipientEmail"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Recipient`&apos;`s Email Address{" "}
+                  Recipient&apos;s Email Address{" "}
                   <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -525,7 +525,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
                     const useCardData = await useCardRes.json();
                     if (useCardData) {
                       router.push(
-                        `/successfull?cart_uuid=${cartUuid}?cardId=${params}`
+                        `/successfull?cart_uuid=${cartUuid}`
                       );
                     } else {
                       toast.error(useCardData?.error || "Failed to use card");

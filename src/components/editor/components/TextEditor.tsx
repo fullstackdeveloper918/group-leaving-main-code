@@ -2,8 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { FaTrash } from "react-icons/fa";
 import { useEditorPosition } from "../hooks/useEditorPosition";
 import Toolbar from "./Toolbar";
-import ResizableContainer from "./ResizableContainer";
-import { toast } from "react-toastify";
+import ResizableEditor from "@/components/common/newcustomeditor/ResizableEditor";
 
 // Interfaces
 interface Element {
@@ -54,14 +53,8 @@ interface TextEditorProps {
 const TextEditor: React.FC<TextEditorProps> = ({
   onHide,
   setElements,
-  elements,
   selectedElement,
-  content,
   cardIndex,
-  Xposition,
-  Yposition,
-  slides,
-  isFirstSlide,
   toast,
   activeSlideIndex,
 }) => {
@@ -96,84 +89,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
       editorHeight: selectedElement?.height ?? 100,
     });
 
-  // Sync editor state and position
-  // useEffect(() => {
-  //   setEditorState((prevState) => ({
-  //     ...prevState,
-  //     content: content || (selectedElement ? selectedElement.content : ""),
-  //     fontSize: selectedElement?.fontSize || prevState.fontSize,
-  //     fontFamily: selectedElement?.fontFamily || prevState.fontFamily,
-  //     fontWeight: selectedElement?.fontWeight || prevState.fontWeight,
-  //     color: selectedElement?.color || prevState.color,
-  //   }));
-
-  //   setPosition((prev) => ({
-  //     ...prev,
-  //     x: Math.max(
-  //       0,
-  //       Math.min(Xposition, 500 - (selectedElement?.width || prev.width))
-  //     ),
-  //     y: Math.max(
-  //       0,
-  //       Math.min(Yposition, 650 - (selectedElement?.height || prev.height))
-  //     ),
-  //     width: selectedElement?.width || prev.width,
-  //     height: selectedElement?.height || prev.height,
-  //   }));
-  // }, [content, selectedElement, Xposition, Yposition, setPosition]);
-
-  // Adjust drag coordinates to be relative to the slide
-  // useEffect(() => {
-  //   if (!isDragging || !slideRef.current) return;
-
-  //   const slideRect = slideRef.current.getBoundingClientRect();
-  //   const handleMouseMove = (e: MouseEvent) => {
-  //     const newX = Math.max(
-  //       0,
-  //       Math.min(
-  //         e.clientX - slideRect.left - position.width / 2,
-  //         500 - position.width
-  //       )
-  //     );
-  //     const newY = Math.max(
-  //       0,
-  //       Math.min(
-  //         e.clientY - slideRect.top - position.height / 2,
-  //         650 - position.height
-  //       )
-  //     );
-
-  //     setPosition((prev) => ({
-  //       ...prev,
-  //       x: newX,
-  //       y: newY,
-  //     }));
-  //   };
-
-  //   const handleMouseUp = () => {
-  //     // setIsDragging(false); // Uncomment if needed
-  //   };
-
-  //   document.addEventListener("mousemove", handleMouseMove);
-  //   document.addEventListener("mouseup", handleMouseUp);
-
-  //   return () => {
-  //     document.removeEventListener("mousemove", handleMouseMove);
-  //     document.removeEventListener("mouseup", handleMouseUp);
-  //   };
-  // }, [isDragging, position.width, position.height, setPosition]);
-
-  // Handle text content changes
-  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const content = e.target.value;
-    setEditorState((prev) => ({ ...prev, content }));
-  };
-
-  console.log(position, "xy positioning");
-  // Slide selection for moving element
-  // const [targetSlide, setTargetSlide] = useState<number>(cardIndex.activeSlide);
-
-  // When activeSlideIndex changes and editor is open, move the element to the new slide
   useEffect(() => {
     if (selectedElement && selectedElement.slideIndex !== activeSlideIndex) {
       setElements((prev: any[]) =>
@@ -184,28 +99,29 @@ const TextEditor: React.FC<TextEditorProps> = ({
         )
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSlideIndex]);
-
-  // Save the edited or new element
+  const adjustTextareaHeight = () => {
+    if (editorRef.current) {
+      editorRef.current.style.height = "auto";
+      const newHeight = editorRef.current.scrollHeight;
+      editorRef.current.style.height = `${newHeight}px`;
+      handleResize(position.width, newHeight + 50);
+    }
+  };
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [editorState.message]);
   const handleSave = () => {
-    setLoading(true);
-    if (!editorState.message) {
-      setLoading(false);
-      return toast.error("Please add your message");
-    }
-    if (!editorState.name) {
-      setLoading(false);
-      return toast.error("Please add your name");
-    }
+    if (!editorState.message) return toast.error("Please add your message");
+    if (!editorState.name) return toast.error("Please add your name");
 
     const combinedContent = `${editorState.message}\n${editorState.name}`;
 
     const newElement: Element = {
       type: "text",
       content: combinedContent,
-      slideIndex: activeSlideIndex, // Ensure current slide is used
-      x: position.x, // Ensure current position is used
+      slideIndex: activeSlideIndex,
+      x: position.x,
       y: position.y,
       width: position.width,
       height: position.height,
@@ -215,7 +131,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
       color: editorState.color,
     };
 
-    // Save to React state
     if (selectedElement && cardIndex.original !== undefined) {
       setElements((prev) =>
         prev.map((element, idx) =>
@@ -228,31 +143,23 @@ const TextEditor: React.FC<TextEditorProps> = ({
 
     localStorage.setItem(
       "textEditorData",
-      JSON.stringify({
-        message: editorState.message,
-        name: editorState.name,
-      })
+      JSON.stringify({ message: editorState.message, name: editorState.name })
     );
 
-    toast.success("Saved Changes");
-
-    setTimeout(() => {
-      setLoading(false);
-      onHide();
-    }, 2000);
+    onHide(); // hide immediately
+    toast.success("Saved Changes"); // toast can still show
   };
 
-  // Delete the selected element
   const handleDelete = () => {
     if (selectedElement && cardIndex.original !== undefined) {
       setElements((prev) =>
         prev.filter((_, idx) => idx !== cardIndex.original)
       );
+      toast.success("Deleted Successfully");
     }
     onHide();
   };
 
-  // Execute document commands for formatting
   const handleCommand = (command: string, value?: string) => {
     document.execCommand(command, false, value);
     if (editorRef.current) {
@@ -303,18 +210,16 @@ const TextEditor: React.FC<TextEditorProps> = ({
         top: `${position.y}px`,
         left: `${position.x}px`,
         zIndex: 1000,
-        // Removed transform: none !important
       }}
     >
       <div
         style={{
           position: "absolute",
-          top: "-50px",
-          left: 0,
-          width: "100%",
-          zIndex: 1010,
+          top: "-120px",
+          zIndex: 9010,
           backgroundColor: "white",
         }}
+        className="shadow-2xl border rounded z-9999"
       >
         <Toolbar
           editorState={editorState}
@@ -324,28 +229,94 @@ const TextEditor: React.FC<TextEditorProps> = ({
           handleCommand={handleCommand}
         />
       </div>
-      <ResizableContainer
+      <ResizableEditor
         isDragging={isDragging}
         startDragging={startDragging}
         onResize={handleResize}
         width={position.width}
         height={position.height}
       >
-        <div className="flex flex-col w-full rounded-md shadow-md">
+        <div className="flex flex-col w-full rounded-md shadow-md relative">
+          <div
+            className="absolute left-[-8px] top-1/2 -translate-y-1/2 w-3 h-3 bg-blueBg rounded-full cursor-ew-resize"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              const startX = e.clientX;
+              const startWidth = position.width;
+              const startLeft = position.x;
+
+              const onMouseMove = (moveEvent: MouseEvent) => {
+                const deltaX = startX - moveEvent.clientX;
+                const newWidth = Math.min(
+                  Math.max(startWidth + deltaX, 220),
+                  400
+                );
+                const newLeft = Math.min(
+                  Math.max(startLeft - deltaX, 0),
+                  400 - newWidth
+                );
+                handleResize(newWidth, position.height);
+                setPosition({ ...position, x: newLeft, width: newWidth });
+              };
+
+              const onMouseUp = () => {
+                window.removeEventListener("mousemove", onMouseMove);
+                window.removeEventListener("mouseup", onMouseUp);
+              };
+
+              window.addEventListener("mousemove", onMouseMove);
+              window.addEventListener("mouseup", onMouseUp);
+            }}
+          />
+          <div
+            className="absolute right-[-8px] top-1/2 -translate-y-1/2 w-3 h-3 bg-blueBg rounded-full cursor-ew-resize"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              const startX = e.clientX;
+              const startWidth = position.width;
+
+              const onMouseMove = (moveEvent: MouseEvent) => {
+                const deltaX = moveEvent.clientX - startX;
+                const newWidth = Math.min(
+                  Math.max(startWidth + deltaX, 220),
+                  400
+                );
+                handleResize(newWidth, position.height);
+              };
+
+              const onMouseUp = () => {
+                window.removeEventListener("mousemove", onMouseMove);
+                window.removeEventListener("mouseup", onMouseUp);
+              };
+
+              window.addEventListener("mousemove", onMouseMove);
+              window.addEventListener("mouseup", onMouseUp);
+            }}
+          />
           <div className="flex flex-col gap-1 p-2">
-            <input
+            <textarea
+              ref={editorRef}
               placeholder="Enter your message here"
               value={editorState.message}
-              onChange={(e) =>
-                setEditorState((prev) => ({ ...prev, message: e.target.value }))
-              }
-              className="resize-none outline-none text-editor-place"
+              onChange={(e) => {
+                setEditorState((prev) => ({
+                  ...prev,
+                  message: e.target.value,
+                }));
+                adjustTextareaHeight();
+              }}
+              className="resize-none outline-none hightTextArea w-full"
               style={{
                 fontFamily: editorState.fontFamily,
                 fontSize: editorState.fontSize,
                 fontWeight: editorState.fontWeight,
                 color: editorState.color,
                 background: "transparent",
+                whiteSpace: "pre-wrap",
+                wordWrap: "break-word",
+                minHeight: "10px",
+                maxHeight: "400px",
+                lineHeight: "1",
               }}
             />
             <input
@@ -355,20 +326,22 @@ const TextEditor: React.FC<TextEditorProps> = ({
               onChange={(e) =>
                 setEditorState((prev) => ({ ...prev, name: e.target.value }))
               }
-              className={`outline-none text-editor-place `}
+              className="outline-none text-editor-place"
               style={{
                 fontFamily: editorState.fontFamily,
                 fontSize: "18px",
                 fontWeight: "normal",
                 color: editorState.color,
                 background: "transparent",
+                wordWrap: "break-word",
+                maxWidth: "100%",
               }}
             />
           </div>
         </div>
-      </ResizableContainer>
+      </ResizableEditor>
       <div className="px-2 pb-2 mt-1">
-        <div className="border-t bg-white pt-2 px-4">
+        <div className=" bg-white pt-2 px-4">
           <input
             type="email"
             placeholder="Your email (optional)"

@@ -1,8 +1,8 @@
 import Image from "next/image";
 import React from "react";
-import MultiStepForm from "./common/MultiStepForm";
 import { fetchFromServer } from "@/app/actions/fetchFromServer";
 import { Api } from "@/interfaces/interfaces";
+import MultiStepForm from "./common/MultiStepForm";
 const Recipient = async ({searchParams,params}: {searchParams: any;params: any;}) => {
   const api: Api = {
     url: `${process.env.NEXT_PUBLIC_API_URL}/card/edit-card/${params?.id}`,

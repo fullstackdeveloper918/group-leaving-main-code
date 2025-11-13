@@ -126,11 +126,11 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
       setElements((prev: any) => [...prev, newElement]);
     }
 
-    toast.success("Saved Changes"); // ✅ Trigger immediately
+    toast.success("Saved Changes"); 
     setTimeout(() => {
       setLoading(false);
-      onHide(); // Close modal after toast shows
-    }, 2000); // 1 second is usually enough
+      onHide(); 
+    }, 2000); 
   };
 
   const handleDelete = () => {

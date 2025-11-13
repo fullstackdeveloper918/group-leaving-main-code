@@ -1,54 +1,34 @@
 "use client";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import upload_img from "../assets/images/upload_img.png";
-import upload_gif from "../assets/images/upload_gif.png";
-import EditorModal from "./common/EditorModal";
-import EditorCrousal from "./common/EditorCrousal";
-import { CopyOutlined } from "@ant-design/icons";
-import { Button, Input, Modal, QRCode, Space, Typography } from "antd";
-import { toast } from "react-toastify";
-import DemoViewCard from "./common/DemoViewCard";
-import DemoBoard from "./common/DemoBoard";
-import userIcon from "../assets/icons/abj.png";
 import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import EditorModal from "./common/EditorModal";
+import DemoBoard from "./common/DemoBoard";
 import Custom from "./common/custom";
-import Customcraousal from "./common/Customcraousal";
-// import { zIndex } from "html2canvas/dist/types/css/property-descriptors/z-index";
 import MySignatures from "./common/MySignatures";
-import EnvelopCard from "./common/EnvelopCard";
-import { useRouter } from "next/navigation";
-import CustomEditior from "./common/CustomEditior";
-const { Paragraph, Text } = Typography;
-import AMZ from "../assets/icons/amz.jpeg";
-const DemoCard = ({ params }: any) => {
-  const router = useRouter();
-  const [show, setShow] = useState<any>(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleModalClose = () => {
-    setIsModalVisible(false); // Close the modal
-  };
-  console.log(show, "show");
+import TutorialCard from "./common/TutorialCard";
+import userIcon from "../assets/icons/abj.png";
 
-  const handleShare = () => {
-    setIsModalVisible(true);
-  };
+interface Contributor {
+  name: string;
+  amount: number;
+}
+
+interface DemoCardProps {
+  params: string;
+}
+
+const DemoCard: React.FC<DemoCardProps> = ({ params }) => {
+  const [show, setShow] = useState<boolean>(false);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [showFirstTimePopup, setShowFirstTimePopup] = useState<boolean>(false);
+  const [tutorialStep, setTutorialStep] = useState<number>(0);
+  const [spotlightStyle, setSpotlightStyle] = useState<any>(null);
+  const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   const shareableLink = "https://groupwish.in/demo/fwzDVjvbQ_X";
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(shareableLink);
-    toast.success("Copied to clipboard", { autoClose: 2000 });
-  };
-  const addCard = () => {
-    setShow(true);
-  };
-
-  const showCard = () => {
-    setShow(false);
-  };
-
-  const contributors = [
+  const contributors: Contributor[] = [
     { name: "Harry", amount: 100 },
     { name: "Hermione", amount: 50 },
     { name: "Anonymous", amount: 20 },
@@ -59,40 +39,154 @@ const DemoCard = ({ params }: any) => {
   ];
 
   const totalAmount = contributors.reduce((sum, c) => sum + c.amount, 0);
-  const [elements, setElements] = useState<any[]>([]);
 
-  // Step 1: Retrieve from localStorage on component mount
   useEffect(() => {
-    const storedElements = localStorage.getItem("slideElements");
-
-    if (storedElements) {
-      setElements(JSON.parse(storedElements));
+    const hasVisited = sessionStorage.getItem("hasVisitedDemoCard");
+    if (!hasVisited) {
+      setShowFirstTimePopup(true);
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (elements.length > 0) {
-  //     localStorage.setItem("slideElements", JSON.stringify(elements));
-  //   }
-  // }, [elements]);
-  console.log(elements, "sdasdqweqw");
-  const openEnvelop = () => {
-    router.push("/envelop");
+  const scrollToElement = (element: Element) => {
+    const rect = element.getBoundingClientRect();
+    const absoluteTop = window.pageYOffset + rect.top;
+    const middle = absoluteTop - window.innerHeight / 2 + rect.height / 2;
+
+    window.scrollTo({
+      top: middle,
+      behavior: "smooth",
+    });
   };
+
+  useEffect(() => {
+    const calculateSpotlight = (selector: string) => {
+      const button = document.querySelector(`[data-tutorial="${selector}"]`);
+      if (button) {
+        // Scroll to element first
+        scrollToElement(button);
+
+        // Wait for scroll to complete before calculating position
+        setTimeout(() => {
+          const rect = button.getBoundingClientRect();
+          const absoluteTop = window.pageYOffset + rect.top;
+          const absoluteLeft = window.pageXOffset + rect.left;
+
+          setSpotlightStyle({
+            top: absoluteTop - 10,
+            left: absoluteLeft - 10,
+            width: rect.width + 20,
+            height: rect.height + 20,
+          });
+          setIsTransitioning(false);
+        }, 500); // Wait for smooth scroll
+      }
+    };
+
+    if (tutorialStep === 1) {
+      setIsTransitioning(true);
+      const timer = setTimeout(() => calculateSpotlight("add-message"), 100);
+      return () => clearTimeout(timer);
+    }
+
+    if (tutorialStep === 2) {
+      setIsTransitioning(true);
+      const timer = setTimeout(
+        () => calculateSpotlight("slide-navigation"),
+        100
+      );
+      return () => clearTimeout(timer);
+    }
+
+    if (tutorialStep === 3) {
+      setIsTransitioning(true);
+      const timer = setTimeout(
+        () => calculateSpotlight("Share-Gift-card"),
+        100
+      );
+      return () => clearTimeout(timer);
+    }
+
+    if (tutorialStep === 4) {
+      setIsTransitioning(true);
+      const timer = setTimeout(() => calculateSpotlight("send-messages"), 100);
+      return () => clearTimeout(timer);
+    }
+
+    if (tutorialStep === 0 || tutorialStep > 4) {
+      setSpotlightStyle(null);
+      setIsTransitioning(false);
+    }
+  }, [tutorialStep]);
+
+  const handleModalClose = () => setIsModalVisible(false);
+  const handleShare = () => setIsModalVisible(true);
+
+  const handleFirstTimePopupClose = () => {
+    setShowFirstTimePopup(false);
+    setTutorialStep(0);
+    sessionStorage.setItem("hasVisitedDemoCard", "true");
+  };
+
+  const handleTutorialNext = () => {
+    setTutorialStep((prev) => {
+      const next = prev + 1;
+      if (next > 4) {
+        setShowFirstTimePopup(false);
+        sessionStorage.setItem("hasVisitedDemoCard", "true");
+        return 0;
+      }
+      return next;
+    });
+  };
+
+  const handleTutorialBack = () => {
+    if (tutorialStep > 0) {
+      setTutorialStep(tutorialStep - 1);
+    }
+  };
+
+  const getTutorialContent = (step: number) => {
+    switch (step) {
+      case 1:
+        return {
+          text: "Click this button to add a message to the card. You can choose the message, font, size and position.",
+          stepCount: "1/4",
+        };
+      case 2:
+        return {
+          text: "Navigate through different slides using these controls to view all messages on the card.",
+          stepCount: "2/4",
+        };
+      case 3:
+        return {
+          text: "Contributors can chip in for a shared gift fund. Click here to add your contribution.",
+          stepCount: "3/4",
+        };
+      case 4:
+        return {
+          text: "View and manage all messages sent to the card. You can see who has contributed and their messages.",
+          stepCount: "4/4",
+        };
+      default:
+        return { text: "", stepCount: "" };
+    }
+  };
+
   return (
     <>
       {params === "fwzDVjvbQ_X" ? (
         <>
+          {/* Demo Banner Section */}
           <section className="bg-demo_banner text-center demo_section common_padding bg-cover bg-no-repeat">
             <div className="container-fluid">
               <h1 className="text-md tracking-tight demo_heading">
                 Welcome to Your Interactive Demo
               </h1>
-              <p className="demo_paragraph text-grey ">
+              <p className="demo_paragraph text-grey">
                 Experience the card creation process firsthand! Add your own
                 messages, upload images, and insert GIFs to explore all the
-                features. When you create your own card, you&apos;ll unlock even
-                more customization options and management tools.
+                features. When you create your own card, you'll unlock even more
+                customization options and management tools.
               </p>
               <p>
                 <b>Ready to make it yours?</b> Start your own card now and enjoy
@@ -100,53 +194,30 @@ const DemoCard = ({ params }: any) => {
               </p>
               <div className="demo_button_wrapper">
                 <Link href={`/create`}>
-                  <button className=" btnPrimary">Create Your Card</button>
+                  <button className="btnPrimary">Create Your Card</button>
                 </Link>
-                {/* 0cVkV16gHzX */}
                 <Link href={`/demo/0cVkV16gHzX`}>
                   <button className="btnSecondary ml-3">View Demo Board</button>
                 </Link>
               </div>
             </div>
           </section>
-          <section className="greeting_card_sign common_padding">
-            <div className="containers 2xl:max-w-[1200px] max-w-[1080px] mx-auto ">
-              <div className=" lg:flex flex-col lg:flex-row ">
-                <div className="2xl:w-1/2 w-full lg:max-w-[600px] max-w-full">
-                  <div
-                    className="flex space-x-2 mb-2 "
-                    style={{ paddingLeft: "110px" }}
-                  >
-                    {/* {show ? (
-                      <button
-                        className="btnPrimary py-2 px-3"
-                        onClick={showCard}
-                      >
-                        Show Card
-                      </button>
-                    ) : (
-                      <button
-                        className="btnPrimary py-2 px-3"
-                        onClick={addCard}
-                      >
-                        Add Card
-                      </button>
-                    )} */}
-                    {/* <button className="bg-lightBg rounded-md p-2"><img src={upload_img.src} alt="upload img" className="upload_img" /></button>
-                <button className="bg-lightBg rounded-md p-2"><img src={upload_gif.src} alt="upload img" className="upload_img" /></button> */}
-                  </div>
 
-                  {/* {show ? <EditorModal showCard={showCard}/> : <EditorCrousal />} */}
-                  {/* {show ? <EditorModal/> : <Customcraousal />} */}
-                  {/* {show ? <EditorModal /> : <CustomEditior />} */}
+          <section className="greeting_card_sign common_padding">
+            <div className="containers 2xl:max-w-[1200px] max-w-[1080px] mx-auto">
+              <div className="lg:flex flex-col lg:flex-row">
+                <div className="2xl:w-1/2 w-full lg:max-w-[600px] max-w-full">
                   {show ? <EditorModal /> : <Custom />}
-                  {/* <Carousel /> */}
-                  {/* <EditorModal/> */}
                 </div>
-                <div className="2xl:w-1/2 w-full md:mt-0 mt-5  flex items-center justify-start flex-col 2xl:max-w-full lg:max-w-[400px] max-w-full mx-auto px-4 ">
-                  <MySignatures />
+                <div className="2xl:w-1/2 w-full md:mt-0 mt-5 flex items-center justify-start flex-col 2xl:max-w-full lg:max-w-[400px] max-w-full mx-auto px-4">
+                  <div
+                    data-tutorial="send-messages"
+                    className="w-full flex justify-center mb-4"
+                  >
+                    <MySignatures />
+                  </div>
                   <div className="bg-white shadow-lg rounded-lg md:p-10 py-8 px-6 w-full max-w-lg flex flex-col gap-2 items-center">
-                    <h3 className="text-center text-md font-normal ">
+                    <h3 className="text-center text-md font-normal">
                       Shared Gift Fund
                     </h3>
                     <button
@@ -156,79 +227,71 @@ const DemoCard = ({ params }: any) => {
                       <span className="absolute bottom-3 text-white rounded-full px-2 text-center usercount">
                         {contributors.length}
                       </span>
-                      <span className="">
+                      <span>
                         <Image src={userIcon} alt="user" />
                       </span>
                     </button>
                     <Image
-                      // src={AMZ}
                       src="https://gift.wegift.io/static/product_assets/AMZ-GB/AMZ-GB-card.png"
                       width={200}
                       height={200}
                       alt="Amazon"
                       className="voucher_img mx-auto rounded"
                     />
-                    <h4 className="font-bold text-center ">INR360</h4>
-                    <button className="bg-greyBorder text-blackText rounded-lg  w-100 text-sm p-2.5">
+                    <h4 className="font-bold text-center">INR360</h4>
+                    <button
+                      data-tutorial="Share-Gift-card"
+                      className="bg-greyBorder text-blackText rounded-lg w-100 text-sm p-2.5"
+                    >
                       Chip in for Hagrid&apos;s Gift
                     </button>
                   </div>
-                  <div className="w-full md:max-w-[500px] max-w-full" >
+
+                  <div className="w-full md:max-w-[500px] max-w-full">
                     <button
-                      className=" btnPrimary text-center w-100 mt-3 rounded-md"
+                      className="btnPrimary text-center w-100 mt-3 rounded-md"
                       onClick={handleShare}
                     >
                       Share Your Card
                     </button>
                   </div>
                 </div>
-                {/* <button className="" onClick={openEnvelop}>click</button> */}
-                {/* <EnvelopCard/> */}
               </div>
             </div>
-            <Modal
-              visible={isModalVisible}
-              onCancel={handleModalClose}
-              footer={null}
-              width={600} // Adjust as needed
-              centered
-              bodyStyle={{ padding: "24px" }}
-            >
-              {/* Title */}
-              <Typography.Title level={3}>Share Your Card</Typography.Title>
 
-              {/* Instructions */}
-              <Paragraph>
-                Share this URL with everyone who you want to be able to add a
-                message. They will be able to add a message to the card without
-                having to sign up for an account. You can also share the QR code
-                if that is easier.
-              </Paragraph>
-
-              {/* Shareable Link */}
-              <Space
-                direction="vertical"
-                style={{ width: "100%", marginBottom: "16px" }}
-              >
-                <Text strong>Shareable link</Text>
-                <Input
-                  value={shareableLink}
-                  readOnly
-                  addonAfter={
-                    <Button
-                      type="text"
-                      icon={<CopyOutlined />}
-                      onClick={handleCopy}
+            {/* Share Modal */}
+            {isModalVisible && (
+              <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                <div className="bg-white rounded-lg p-6 w-full max-w-md relative">
+                  <button
+                    onClick={handleModalClose}
+                    className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+                  >
+                    X
+                  </button>
+                  <h3 className="text-lg font-semibold mb-2">
+                    Share Your Card
+                  </h3>
+                  <p className="mb-4">
+                    Share this URL with everyone who you want to be able to add
+                    a message. They can add a message without signing up.
+                  </p>
+                  <input
+                    value={shareableLink}
+                    readOnly
+                    className="w-full border rounded px-3 py-2 mb-4"
+                  />
+                  <div className="flex justify-center">
+                    <Image
+                      src="/qrcode-placeholder.png"
+                      alt="QR Code"
+                      width={160}
+                      height={160}
                     />
-                  }
-                />
-              </Space>
-
-              {/* QR Code */}
-              <Space style={{ display: "flex", justifyContent: "center" }}>
-                <QRCode value={shareableLink} size={160} />
-              </Space>
-            </Modal>
+                  </div>
+                </div>
+              </div>
+            )}
           </section>
         </>
       ) : (
@@ -236,34 +299,15 @@ const DemoCard = ({ params }: any) => {
       )}
 
       {isModalOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-          style={{ zIndex: 2 }}
-        >
-          <div className="relative bg-white rounded-lg shadow-lg p-6 w-full max-w-lg table-model-open-demo">
-            {/* Close Button */}
+        <div className="fixed inset-0 bg-black flex items-center justify-center z-40">
+          <div className="relative bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-5 focus:outline-none model-cross-btn"
+              className="absolute top-4 right-5 focus:outline-none"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+              X
             </button>
-            <h2 className="font-semibold mb-4 contribute-head mb-4">
-              Contributors
-            </h2>
+            <h2 className="font-semibold mb-4">Contributors</h2>
             <ul className="p-0">
               {contributors.map((contributor, index) => (
                 <li
@@ -279,14 +323,92 @@ const DemoCard = ({ params }: any) => {
               <span>Total:</span>
               <span>£{totalAmount.toFixed(2)}</span>
             </div>
-            {/* <button
-              onClick={() => setIsModalOpen(false)}
-              className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-            >
-              Close
-            </button> */}
           </div>
         </div>
+      )}
+
+      {/* Tutorial Step 0 - Welcome Modal */}
+      {showFirstTimePopup && tutorialStep === 0 && (
+        <div className="fixed inset-0 bg-[#000000]/20 z-50 transition-opacity duration-300">
+          <div className="fixed inset-0 flex items-center justify-center z-[57]">
+            <div className="pointer-events-auto">
+              <TutorialCard
+                onClose={handleFirstTimePopupClose}
+                onSkip={handleFirstTimePopupClose}
+                onNext={handleTutorialNext}
+                currentStep={tutorialStep}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tutorial Steps 1-4 with Spotlight */}
+      {showFirstTimePopup && tutorialStep >= 1 && tutorialStep <= 4 && (
+        <>
+          <div
+            className="fixed inset-0 z-50 transition-opacity duration-300"
+            style={{ pointerEvents: "none" }}
+          />
+          {spotlightStyle && !isTransitioning && (
+            <>
+              <div
+                className="absolute z-[56] pointer-events-none transition-all duration-500 ease-in-out"
+                style={{
+                  top: `${spotlightStyle.top}px`,
+                  left: `${spotlightStyle.left}px`,
+                  width: `${spotlightStyle.width}px`,
+                  height: `${spotlightStyle.height}px`,
+                  boxShadow: "0 0 0 9999px rgba(0, 0, 0, 0.3)",
+                  borderRadius: "8px",
+                }}
+              />
+              <div
+                className="absolute bg-white rounded-lg shadow-xl p-4 max-w-xs z-[57] transition-all duration-500 ease-in-out"
+                style={{
+                  top:
+                    tutorialStep === 1 || tutorialStep === 4
+                      ? `${spotlightStyle.top + spotlightStyle.height + 20}px`
+                      : `${spotlightStyle.top + spotlightStyle.height - 240}px`,
+                  left: `${Math.max(
+                    20,
+                    Math.min(spotlightStyle.left, window.innerWidth - 340)
+                  )}px`,
+                }}
+              >
+                <p className="text-sm text-gray-700 mb-3">
+                  {getTutorialContent(tutorialStep).text}
+                </p>
+                <div className="flex justify-between items-center">
+                  <div className="flex gap-2">
+                    {tutorialStep > 1 && (
+                      <button
+                        onClick={handleTutorialBack}
+                        className="bg-[#5696DB] hover:bg-[#4580c5] text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                      >
+                        Back
+                      </button>
+                    )}
+                    <button
+                      onClick={handleFirstTimePopupClose}
+                      className="text-gray-500 hover:text-gray-700 text-sm transition-colors"
+                    >
+                      Skip
+                    </button>
+                  </div>
+                  <button
+                    onClick={handleTutorialNext}
+                    className="bg-[#5696DB] hover:bg-[#4580c5] text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                  >
+                    {tutorialStep === 4
+                      ? "Finish"
+                      : `Next (${getTutorialContent(tutorialStep).stepCount})`}
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </>
       )}
     </>
   );

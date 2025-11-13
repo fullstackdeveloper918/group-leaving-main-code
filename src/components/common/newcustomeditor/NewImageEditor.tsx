@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useEditorPosition } from "../../editor/hooks/useEditorPosition";
 import { FaTrash } from "react-icons/fa";
-// import ImageResizableContainer from "../../editor/components/ImageResizableContainer";
 import { toast } from "react-toastify";
 import ResizableEditor from "./ResizableEditor";
 
@@ -29,16 +28,12 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
   selectedElement,
   content,
   cardIndex,
-  activeSlideIndex,
-  isFirstSlide,
   toast,
-  slides,
   onDelete,
 }) => {
   const { position, setPosition, isDragging, startDragging } =
     useEditorPosition(
       selectedElement?.x || 0
-      // selectedElement?.y || 0
     );
   const [loading, setLoading] = useState(false);
 
@@ -55,44 +50,6 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
       });
     }
   }, [selectedElement, setPosition]);
-
-  const handleResize = (newWidth: number, newHeight: number) => {
-    const SLIDE_WIDTH = 500;
-    const SLIDE_HEIGHT = 650;
-
-    // Clamp width and height to slide dimensions
-    const clampedWidth = Math.min(Math.max(newWidth, 50), SLIDE_WIDTH); // Min 50px, max 500px
-    const clampedHeight = Math.min(Math.max(newHeight, 50), SLIDE_HEIGHT); // Min 50px, max 650px
-
-    // Adjust position to keep the image within slide boundaries
-    const updatedPosition = {
-      ...position,
-      width: clampedWidth,
-      height: clampedHeight,
-      x: Math.min(Math.max(position.x, 0), SLIDE_WIDTH - clampedWidth),
-      y: Math.min(Math.max(position.y, 0), SLIDE_HEIGHT - clampedHeight),
-    };
-
-    // Update position state immediately
-    setPosition(updatedPosition);
-
-    // Update elements array
-    if (selectedElement && typeof cardIndex.original === "number") {
-      setElements((prev: any) =>
-        prev.map((el: any, i: number) =>
-          i === cardIndex.original
-            ? {
-                ...el,
-                width: clampedWidth,
-                height: clampedHeight,
-                x: updatedPosition.x,
-                y: updatedPosition.y,
-              }
-            : el
-        )
-      );
-    }
-  };
 
   const handleSave = () => {
     setLoading(true);
@@ -127,11 +84,11 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
       setElements((prev: any) => [...prev, newElement]);
     }
 
-    toast.success("Saved Changes"); // ✅ Trigger immediately
+    toast.success("Saved Changes");
     setTimeout(() => {
       setLoading(false);
-      onHide(); // Close modal after toast shows
-    }, 2000); // 1 second is usually enough
+      onHide();
+    }, 2000);
   };
 
   const handleDelete = () => {
@@ -147,7 +104,9 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
         startDragging={startDragging}
         width={position.width}
         height={position.height}
-        onResize={handleResize}
+        minWidth={50}
+        minHeight={50}
+        bounds={{ width: 500, height: 650 }}
       >
         <img
           src={content || selectedElement?.content || "/placeholder.svg"}
@@ -159,28 +118,27 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
             objectFit: "fill",
             display: "block",
           }}
-          draggable={false}
         />
       </ResizableEditor>
       <div className="px-2 pb-2">
-        <div className="bg-white mt-2 px-4 w-fit">
-          <div className="flex justify-center align-items-center gap-2 py-2">
+        <div className="mt-2 px-4 w-fit">
+          <div className="flex justify-center  gap-2 py-2">
             <button
               onClick={onHide}
-              className="transition cancel-editBtn"
-              style={{ color: "red" }}
+              className="px-4 py-2  text-white bg-[#DC3545] hover:bg-[#8b323b] rounded transition editor-cancel"
             >
               Cancel
             </button>
             <button
               onClick={handleSave}
-              className="text-white transition image-saveBtn"
+              disabled={loading}
+              className="px-4 py-2 bg-[#061178] text-white rounded flex items-center gap-1 hover:bg-indigo-800 transition editor-save disabled:opacity-50"
             >
               {loading ? "Saving..." : "Save"}
             </button>
             <button
               onClick={handleDelete}
-              className=" transition delete-red-btn"
+              className="px-4 py-2 text-white bg-[#5696DB] hover:bg-[#0d5780] rounded transition editor-delete"
             >
               <FaTrash />
             </button>

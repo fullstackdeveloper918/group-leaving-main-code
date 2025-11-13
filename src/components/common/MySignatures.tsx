@@ -38,8 +38,6 @@ export default function MySignatures() {
 
   useEffect(() => {
     const storedElements = localStorage.getItem("slideElements");
-    console.log(typeof storedElements, "asdfasdfasdf");
-
     if (storedElements) {
       setElements(JSON.parse(storedElements));
     }

@@ -22,7 +22,6 @@ const page = async ({ params }: any) => {
     method: "GET",
   };
   const data2 = await fetchFromServer(api2);
-  console.log(data2, "data2accountpage");
   const data: any = {
     url: `${process.env.NEXT_PUBLIC_API_URL}/user/profile`,
     method: "GET",
@@ -48,7 +47,7 @@ const page = async ({ params }: any) => {
         {type === "email-preferences" && (
           <AccountEmailprefrence data={posts} userInfo={gettoken?.value} />
         )}
-        {/* {type === "payment-history" && <PaymentHistory />} */}
+        {type === "payment-history" && <PaymentHistory />}
       </div>
     </div>
   );

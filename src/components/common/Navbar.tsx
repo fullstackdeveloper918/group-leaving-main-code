@@ -8,12 +8,15 @@ import { destroyCookie } from "nookies";
 import GoodLuckCad from "../../../public/newimage/Groupwish-logo.png";
 import register from "../../assets/images/register.png";
 import Cookies from "js-cookie";
+import api from "@/utils/api";
+import NotificationDropdown from "./NotificationDropdown";
 import MegaMenu from "./MegaMenu";
-
 const Navbar = () => {
   const router = useRouter();
   const param = useParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSubMenuOpen, setSubMenuOpen] = useState(false);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -50,9 +53,18 @@ const Navbar = () => {
   };
 
   const handleLogout = async () => {
-    destroyCookie(null, "auth_token", { path: "/" });
-    destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-    router.push(`/login`);
+    const currentPath = window.location.pathname + window.location.search;
+    Cookies.set("redirect_after_login", currentPath, { expires: 1 }); // 1 day
+    Cookies.remove("auth_token");
+    Cookies.remove("COOKIES_USER_ACCESS_TOKEN");
+    Cookies.remove("userToken");
+    Cookies.remove("userInfo");
+    localStorage.removeItem("access_token");
+
+    setAccessToken(null);
+
+    api.setToken(undefined);
+    router.push("/login");
   };
 
   const confirmLogout = () => {
@@ -81,6 +93,23 @@ const Navbar = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    if (isMobile) {
+      if (isMenuOpen) {
+        document.body.style.overflow = "hidden"; // Disable scrolling
+      } else {
+        document.body.style.overflow = ""; // Re-enable scrolling
+      }
+    } else {
+      document.body.style.overflow = ""; // Ensure scroll works normally on desktop
+    }
+
+    // Cleanup (important when component unmounts)
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen, isMobile]);
 
   return (
     <>
@@ -126,6 +155,7 @@ const Navbar = () => {
                   >
                     Dashboard
                   </Link>
+                  <NotificationDropdown />
                   <div className="dropdown">
                     <img
                       src="https://img.freepik.com/premium-psd/greeting-card-with-flowers-it-pink-background_74869-4261.jpg?w=826"
@@ -233,58 +263,76 @@ const Navbar = () => {
         </div>
         {isMobile ? (
           <nav
-            className={`md:hidden text-sm text-gray-700  z-40 absolute inset-x-0  transition-transform duration-300 p-5 px-4 top-0 bg-[#e2eefa]  h-lvh ${
+            className={`md:hidden text-sm text-gray-700 z-40 absolute inset-x-0 transition-transform duration-300 p-5 px-4 top-0 bg-[#e2eefa] h-lvh ${
               isMenuOpen ? "translate-x-0" : "-translate-x-full"
             }`}
           >
-            <Link
-              href="/card/farewell"
-              className="block lg:px-4 md:px-2 py-3 hover:text-blueText no-underline text-black m-0 text-md  border-b border-[#8b8b8b29]"
-            >
-              Farewell
-            </Link>
-            <Link
-              href="/card/birthday"
-              className="block lg:px-4 md:px-2 py-3 hover:text-blueText no-underline text-black m-0 text-md  border-b border-[#8b8b8b29]"
-            >
-              Birthday Cards
-            </Link>
-            <Link
-              href="/card/baby"
-              className="block lg:px-4 md:px-2 py-3 hover:text-blueText no-underline text-black m-0 text-md  border-b border-[#8b8b8b29]"
-            >
-              New Baby
-            </Link>
-            <Link
-              href="/card/retirement"
-              className="block lg:px-4 md:px-2 py-3 hover:text-blueText no-underline text-black m-0 text-md  border-b border-[#8b8b8b29]"
-            >
-              Retirement
-            </Link>
-            <Link
-              href="/card/sympathy"
-              className="block lg:px-4 md:px-2 py-3 hover:text-blueText no-underline text-black m-0 text-md  border-b border-[#8b8b8b29]"
-            >
-              Sympathy
-            </Link>
-            <Link
-              href="/card/wedding"
-              className="block lg:px-4 md:px-2 py-3 hover:text-blueText no-underline text-black m-0 text-md  border-b border-[#8b8b8b29]"
-            >
-              Wedding
-            </Link>
-            <Link
-              href="/card/welcome"
-              className="block lg:px-4 md:px-2 py-3 hover:text-blueText no-underline text-black m-0 text-md  border-b border-[#8b8b8b29]"
-            >
-              Welcome
-            </Link>
-            <Link
-              href="/card/thank-you"
-              className="block lg:px-4 md:px-2 py-3 hover:text-blueText no-underline text-black m-0 text-md "
-            >
-              Thank You
-            </Link>
+            {/* --- Top Section: Authenticated vs Guest --- */}
+            <div className="mb-4 border-b border-[#8b8b8b29] pb-2">
+              {accessToken ? (
+                <>
+                  <Link
+                    href="/account/cards"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block text-md text-blackText no-underline font-medium py-2 hover:text-blueText"
+                  >
+                    Dashboard
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/register"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block text-md text-blackText no-underline font-medium py-2 hover:text-blueText"
+                  >
+                    Join Now
+                  </Link>
+                  <Link
+                    href="/login"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block text-md text-blackText no-underline font-medium py-2 hover:text-blueText"
+                  >
+                    Sign In
+                  </Link>
+                </>
+              )}
+            </div>
+
+            {/* --- Cards Submenu --- */}
+            <div>
+              <button
+                onClick={() => setSubMenuOpen(!isSubMenuOpen)}
+                className="w-full text-left text-md font-medium text-black py-3 border-b border-[#8b8b8b29] flex justify-between items-center"
+              >
+                Cards
+                <span>{isSubMenuOpen ? "▲" : "▼"}</span>
+              </button>
+
+              {isSubMenuOpen && (
+                <div className="mt-2">
+                  {[
+                    { href: "/card/farewell", label: "Farewell" },
+                    { href: "/card/birthday", label: "Birthday Cards" },
+                    { href: "/card/baby", label: "New Baby" },
+                    { href: "/card/retirement", label: "Retirement" },
+                    { href: "/card/sympathy", label: "Sympathy" },
+                    { href: "/card/wedding", label: "Wedding" },
+                    { href: "/card/welcome", label: "Welcome" },
+                    { href: "/card/thank-you", label: "Thank You" },
+                  ].map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="block py-3 hover:text-blueText border-[#8b8b8b29]"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           </nav>
         ) : (
           ""

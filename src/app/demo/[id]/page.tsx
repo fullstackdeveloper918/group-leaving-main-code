@@ -1,13 +1,8 @@
-import DemoCard from '@/components/DemoCard'
-import React from 'react'
+import DemoCard from "@/components/DemoCard";
+import React from "react";
 
-const page = ({params}:any) => {
-  
-  return (
-    <div>
-      <DemoCard params={params.id}/>
-    </div>
-  )
-}
+const page = ({ params }: any) => {
+  return <DemoCard params={params.id} />;
+};
 
-export default page
+export default page;

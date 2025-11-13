@@ -14,7 +14,6 @@ interface ResizableContainerProps {
 
 const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
   children,
-  position,
   width,
   height,
   setPosition,
@@ -65,8 +64,6 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
       if (direction.includes("top")) {
         newHeight = Math.max(50, startHeight - dy);
       }
-
-      // Call onResize with the new dimensions
       if (onResize) {
         onResize(newWidth, newHeight);
       }
@@ -83,12 +80,10 @@ const ImageResizableContainer: React.FC<ResizableContainerProps> = ({
 
   return (
     <div
-      // ref={containerRef}
       className="relative"
       style={{
         width,
         height,
-        // transform: `translate(${position.x}px, ${position.y}px)`,
         cursor: isDragging ? "grabbing" : "grab",
         border: "3px solid #44AAFF",
       }}

@@ -41,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  // console.log(accessToken, "dfghere");
+
 
   useEffect(() => {
     const cookies = parseCookies();

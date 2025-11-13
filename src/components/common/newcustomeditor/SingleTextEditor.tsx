@@ -3,9 +3,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { FaTrash } from "react-icons/fa";
 import { useEditorPosition } from "../../editor/hooks/useEditorPosition";
 import Toolbar from "../../editor/components/Toolbar";
-import { toast } from "react-toastify";
 import { useParams } from "next/navigation";
 import ResizableEditor from "./ResizableEditor";
+import Cookies from "js-cookie"; 
 
 // Interfaces
 interface Element {
@@ -96,11 +96,22 @@ const TextEditor: React.FC<TextEditorProps> = ({
       editorHeight: selectedElement?.height ?? 100,
     });
 
-  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const content = e.target.value;
-    setEditorState((prev) => ({ ...prev, content }));
-    adjustTextareaHeight();
-  };
+  useEffect(() => {
+    try {
+      const userInfo = Cookies.get("userInfo"); // your cookie name
+      if (userInfo) {
+        const parsedUser = JSON.parse(decodeURIComponent(userInfo));
+        if (parsedUser?.full_name && !editorState.name) {
+          setEditorState((prev) => ({
+            ...prev,
+            name: parsedUser.full_name,
+          }));
+        }
+      }
+    } catch (error) {
+      console.error("Error reading user info from cookies:", error);
+    }
+  }, []);
 
   // Auto-resize textarea height
   const adjustTextareaHeight = () => {
@@ -156,7 +167,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
       color: editorState.color,
     };
 
-    // Update elements immediately to prevent position jump
     if (selectedElement && cardIndex.original !== undefined) {
       setElements((prev) =>
         prev.map((element, idx) =>
@@ -182,7 +192,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
         user_uuid: user_uuid,
         editor_messages: [newElement],
       };
-      
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/cart/upsert-editor-messages`,
         {
@@ -198,10 +208,9 @@ const TextEditor: React.FC<TextEditorProps> = ({
         throw new Error("Failed to save to server");
       }
 
-      const result = await response.json();
+      await response.json();
       toast.success("Saved Changes Successfully");
-      
-      // Close editor immediately after successful save
+
       setLoading(false);
       onHide();
     } catch (error) {
@@ -217,6 +226,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
         prev.filter((_, idx) => idx !== cardIndex.original)
       );
     }
+    toast.success("Deleted Successfully");
     onHide();
   };
 
@@ -293,6 +303,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
           handleCommand={handleCommand}
         />
       </div>
+
       <ResizableEditor
         isDragging={isDragging}
         startDragging={startDragging}
@@ -301,62 +312,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
         height={position.height}
       >
         <div className="flex flex-col w-full rounded-md shadow-md relative">
-          <div
-            className="absolute left-[-8px] top-1/2 -translate-y-1/2 w-3 h-3 bg-blueBg rounded-full cursor-ew-resize"
-            onMouseDown={(e) => {
-              e.preventDefault();
-              const startX = e.clientX;
-              const startWidth = position.width;
-              const startLeft = position.x;
-
-              const onMouseMove = (moveEvent: MouseEvent) => {
-                const deltaX = startX - moveEvent.clientX;
-                const newWidth = Math.min(
-                  Math.max(startWidth + deltaX, 220),
-                  400
-                );
-                const newLeft = Math.min(
-                  Math.max(startLeft - deltaX, 0),
-                  400 - newWidth
-                );
-                handleResize(newWidth, position.height);
-                setPosition({ ...position, x: newLeft, width: newWidth });
-              };
-
-              const onMouseUp = () => {
-                window.removeEventListener("mousemove", onMouseMove);
-                window.removeEventListener("mouseup", onMouseUp);
-              };
-
-              window.addEventListener("mousemove", onMouseMove);
-              window.addEventListener("mouseup", onMouseUp);
-            }}
-          />
-          <div
-            className="absolute right-[-8px] top-1/2 -translate-y-1/2 w-3 h-3 bg-blueBg rounded-full cursor-ew-resize"
-            onMouseDown={(e) => {
-              e.preventDefault();
-              const startX = e.clientX;
-              const startWidth = position.width;
-
-              const onMouseMove = (moveEvent: MouseEvent) => {
-                const deltaX = moveEvent.clientX - startX;
-                const newWidth = Math.min(
-                  Math.max(startWidth + deltaX, 220),
-                  400
-                );
-                handleResize(newWidth, position.height);
-              };
-
-              const onMouseUp = () => {
-                window.removeEventListener("mousemove", onMouseMove);
-                window.removeEventListener("mouseup", onMouseUp);
-              };
-
-              window.addEventListener("mousemove", onMouseMove);
-              window.addEventListener("mouseup", onMouseUp);
-            }}
-          />
           <div className="flex flex-col gap-1 p-2">
             <textarea
               ref={editorRef}
@@ -387,16 +342,13 @@ const TextEditor: React.FC<TextEditorProps> = ({
               type="text"
               placeholder="Your name"
               value={editorState.name}
-              onChange={(e) =>
-                setEditorState((prev) => ({ ...prev, name: e.target.value }))
-              }
-              className="outline-none text-editor-place"
+              readOnly 
+              className="outline-none text-editor-place bg-transparent cursor-default"
               style={{
                 fontFamily: editorState.fontFamily,
                 fontSize: "18px",
                 fontWeight: "normal",
                 color: editorState.color,
-                background: "transparent",
                 wordWrap: "break-word",
                 maxWidth: "100%",
               }}
@@ -404,6 +356,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
           </div>
         </div>
       </ResizableEditor>
+
       <div className="px-2 pb-2 mt-1">
         <div className="bg-white shadow-2xl border rounded pt-2 px-4">
           <input

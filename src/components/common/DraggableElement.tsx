@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Rnd } from "react-rnd";
 import nookies from "nookies";
-import TextEditor from "../editor/components/TextEditor";
-import ImageEditor from "../editor/components/ImageEditor";
-import ReactDOM from "react-dom";
 import { FaLock } from "react-icons/fa";
+import TextEditor from "./newcustomeditor/SingleTextEditor";
+import ImageEditor from "./newcustomeditor/NewImageEditor";
 
 // Interfaces
 interface UserInfo {
@@ -26,6 +25,7 @@ interface Element {
   fontWeight?: string;
   color?: string;
   user_uuid?: string;
+  _initialized?: boolean;
 }
 
 interface DraggableElementProps {
@@ -66,8 +66,8 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   elements,
   initialX,
   initialY,
-  width = 220,
-  height = 200,
+  width,
+  height,
   isDraggable = true,
   color = "#000",
   fontFamily = "Arial",
@@ -86,41 +86,14 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [showTextModal, setShowTextModal] = useState(false);
+  const [zIndex, setZIndex] = useState(1);
   const isEditing = activeSlide === index.activeSlide;
-  const [showOverlapPopup, setShowOverlapPopup] = useState(false);
-  const [pendingElement, setPendingElement] = useState<any>(null);
-  const [forceSave, setForceSave] = useState(false);
-  const sizeRef = useRef({ width, height });
+  const sizeRef = useRef<{ width: any; height: any }>({
+    width: width,
+    height: height,
+  });
 
-  // Lock logic for first slide only
   const isFirstSlide = activeSlide === 0;
-
-  // Helper: Check overlap between two elements
-  function isOverlapping(a: any, b: any) {
-    if (a.slideIndex !== b.slideIndex) return false;
-    return !(
-      a.x + (a.width || 220) <= b.x ||
-      a.x >= b.x + (b.width || 220) ||
-      a.y + (a.height || 200) <= b.y ||
-      a.y >= b.y + (b.height || 200)
-    );
-  }
-
-  // Check for overlap before saving/moving
-  function checkAndHandleOverlap(newElement: any) {
-    const overlap = elements.some(
-      (el, i) =>
-        i !== index.original &&
-        el.slideIndex === newElement.slideIndex &&
-        isOverlapping(el, newElement)
-    );
-    if (overlap && !forceSave) {
-      setPendingElement(newElement);
-      setShowOverlapPopup(true);
-      return true; // Block action
-    }
-    return false; // No overlap, proceed
-  }
 
   // Initialize userInfo from cookies
   useEffect(() => {
@@ -135,33 +108,46 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   useEffect(() => {
     const element = elements[index.original];
     if (element) {
-      setPosition({
-        x: element.x || 0,
-        y: element.y || 0,
-      });
+      setPosition({ x: element.x || 0, y: element.y || 0 });
       if (type === "image" || type === "gif") {
         sizeRef.current = {
-          width: element.width || width,
-          height: element.height || height,
+          width: element.width || width || 200,
+          height: element.height || height || 200,
         };
       }
     }
   }, [elements, index.original, type, width, height]);
 
-  // Update position and size when selectedElement changes
+  // Auto-open image editor immediately after upload
   useEffect(() => {
-    if (selectedElement && selectedElement.originalIndex === index.original) {
-      setPosition({ x: selectedElement.x, y: selectedElement.y });
-      if (type === "image" || type === "gif") {
-        sizeRef.current = {
-          width: selectedElement.width || width,
-          height: selectedElement.height || height,
-        };
-      }
-    }
-  }, [selectedElement, index.original, width, height]);
+    const element = elements[index.original];
+    // If it's an image just added (no position or not saved yet)
+    if (
+      element &&
+      (type === "image" || type === "gif") &&
+      !showImageModal &&
+      !element._initialized
+    ) {
+      setSelectedElement({ ...element, originalIndex: index.original });
+      setShowImageModal(true);
 
-  // Update element in elements array and localStorage
+      // Mark as initialized so this only happens once
+      setElements((prev) =>
+        prev.map((el, i) =>
+          i === index.original ? { ...el, _initialized: true } : el
+        )
+      );
+    }
+  }, [
+    elements,
+    type,
+    showImageModal,
+    index.original,
+    setSelectedElement,
+    setShowImageModal,
+    setElements,
+  ]);
+
   const updateElement = (
     newX: number,
     newY: number,
@@ -182,17 +168,11 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
         fontSize,
         fontWeight,
       };
-      localStorage.setItem("slideElements", JSON.stringify(updated));
       return updated;
     });
   };
 
-  // Handle text element click
   const handleClick = () => {
-    if (isFirstSlide) {
-      toast("You do not have permission to add to the front cover");
-      return;
-    }
     if (type === "text" && !showTextModal && !showImageModal && isEditing) {
       setSelectedElement({
         ...elements[index.original],
@@ -204,29 +184,19 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     }
   };
 
-  // Handle image/gif click
   const handleImageClick = () => {
-    if (isFirstSlide) {
-      toast("You do not have permission to add to the front cover");
-      return;
-    }
-    if (
-      (type === "image" || type === "gif") &&
-      !showImageModal &&
-      !showTextModal &&
-      isEditing
-    ) {
+    if ((type === "image" || type === "gif") && !showImageModal && isEditing) {
       onImageClick(elements[index.original], index.original);
-      setShowTextModal(false);
-      setCurrentSlide?.(activeSlide);
+      setSelectedElement({
+        ...elements[index.original],
+        originalIndex: index.original,
+      });
+      setShowImageModal(true);
     }
   };
 
-  // Modal Management for TextEditor
   const closeModals = (fromEditor = false) => {
-    if (fromEditor) {
-      setShowTextModal(false);
-    }
+    if (fromEditor) setShowTextModal(false);
     setShowImageModal(false);
     setSelectedElement(null);
   };
@@ -234,130 +204,18 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   const isImageModalOpenForThisElement =
     showImageModal && selectedElement?.originalIndex === index.original;
 
-  // Overlap popup
-  const overlapPopup = showOverlapPopup
-    ? ReactDOM.createPortal(
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-[9999]">
-          <div className="bg-white p-6 rounded shadow-lg max-w-md w-full">
-            <h2 className="text-lg font-bold mb-2">
-              Overlapping {type === "text" ? "Signature" : "Element"}
-            </h2>
-            <p className="mb-2">
-              Whoa this card is popular, it looks like your{" "}
-              {type === "text" ? "signature" : "element"} is overlapping.
-              <br />
-              Someone may have signed or added content while you were writing
-              your message.
-            </p>
-            <h3 className="font-semibold mt-4 mb-2">
-              How to move your {type === "text" ? "signature" : "element"}
-            </h3>
-            <ul className="list-disc pl-5 mb-4 text-sm text-gray-700">
-              <li>
-                Drag and drop your {type === "text" ? "signature" : "element"}{" "}
-                to a free spot
-              </li>
-              <li>Change pages by using the arrows below the card</li>
-              <li>Once done click the save button</li>
-            </ul>
-            <div className="flex justify-end gap-2 mt-4">
-              <button
-                className="text-red-500 hover:underline mr-2"
-                onClick={() => {
-                  setShowOverlapPopup(false);
-                  setForceSave(true);
-                  if (pendingElement) {
-                    updateElement(
-                      pendingElement.x,
-                      pendingElement.y,
-                      pendingElement.width,
-                      pendingElement.height
-                    );
-                    setPendingElement(null);
-                    setForceSave(false);
-                    setShowTextModal(false);
-                    setShowImageModal(false);
-                  }
-                }}
-              >
-                Save anyway
-              </button>
-              <button
-                className="bg-blue-600 text-black px-4 py-2 rounded"
-                onClick={() => {
-                  setShowOverlapPopup(false);
-                  setPendingElement(null);
-                  setForceSave(false);
-                }}
-              >
-                Move {type === "text" ? "Signature" : "Element"}
-              </button>
-            </div>
-          </div>
-        </div>,
-        document.body
-      )
-    : null;
-
   return (
     <>
-      {/* Lock icon for first slide only */}
       {isFirstSlide && (
         <div style={{ position: "absolute", top: 8, left: 8, zIndex: 10000 }}>
           <FaLock size={24} color="#888" title="Front cover is locked" />
         </div>
       )}
+
       <Rnd
-        className={`${type === "text" ? "editor-react-drag" : ""} ${
-          showTextModal && "editor-transform"
-        }`.trim()}
         bounds="parent"
         position={showTextModal ? { x: 0, y: 0 } : position}
         size={type === "text" ? undefined : sizeRef.current}
-        onDrag={
-          showTextModal
-            ? (_, d) => {
-                if (d.x < 200) return false;
-              }
-            : undefined
-        }
-        onDragStop={(_, d) => {
-          const newElement = { ...elements[index.original], x: d.x, y: d.y };
-          if (!checkAndHandleOverlap(newElement)) {
-            if (!isFirstSlide) setPosition({ x: d.x, y: d.y });
-            updateElement(d.x, d.y);
-          }
-        }}
-        onResize={(_, __, ref, ___, pos) => {
-          if (type === "image" || type === "gif") {
-            const newWidth = parseInt(ref.style.width);
-            const newHeight = parseInt(ref.style.height);
-            sizeRef.current = { width: newWidth, height: newHeight };
-            if (!isFirstSlide) setPosition({ x: pos.x, y: pos.y });
-            updateElement(pos.x, pos.y, newWidth, newHeight);
-          }
-        }}
-        onResizeStop={(_, __, ref, ___, pos) => {
-          if (
-            (type === "image" || type === "gif") &&
-            isImageModalOpenForThisElement
-          ) {
-            const newWidth = parseInt(ref.style.width);
-            const newHeight = parseInt(ref.style.height);
-            const newElement = {
-              ...elements[index.original],
-              x: pos.x,
-              y: pos.y,
-              width: newWidth,
-              height: newHeight,
-            };
-            if (!checkAndHandleOverlap(newElement)) {
-              if (!isFirstSlide) setPosition(pos);
-              sizeRef.current = { width: newWidth, height: newHeight };
-              updateElement(pos.x, pos.y, newWidth, newHeight);
-            }
-          }
-        }}
         disableDragging={!isDraggable || isFirstSlide}
         enableResizing={
           isDraggable &&
@@ -365,13 +223,20 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
           isImageModalOpenForThisElement &&
           !isFirstSlide
         }
-        style={{
-          width: "100%",
-          height: "100%",
-          opacity: isEditing ? 1 : 0.5,
-          pointerEvents: "auto",
-          cursor: "default",
-          transform: "none",
+        onDragStop={(_, d) => {
+          if (!isFirstSlide) {
+            setPosition({ x: d.x, y: d.y });
+            updateElement(d.x, d.y);
+          }
+        }}
+        onResizeStop={(_, __, ref, ___, pos) => {
+          if ((type === "image" || type === "gif") && !isFirstSlide) {
+            const newWidth = parseInt(ref.style.width);
+            const newHeight = parseInt(ref.style.height);
+            setPosition(pos);
+            sizeRef.current = { width: newWidth, height: newHeight };
+            updateElement(pos.x, pos.y, newWidth, newHeight);
+          }
         }}
       >
         {(type === "image" || type === "gif") &&
@@ -390,6 +255,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
               />
             </div>
           )}
+
         {type === "text" && !showTextModal && (
           <div
             className="text-sm"
@@ -398,28 +264,24 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
               opacity: isEditing ? 1 : 0.5,
               cursor: isEditing ? "pointer" : "not-allowed",
               userSelect: "none",
-              width: "100%",
-              height: "100%",
+              width: width,
+              height: height,
               padding: "8px",
               color,
               fontFamily,
               fontSize,
               fontWeight,
-              transform: "none",
             }}
             onClick={handleClick}
           >
             <div
               className="p-2"
-              dangerouslySetInnerHTML={{
-                __html: content?.split("\n")[0] || "",
-              }}
+              style={{ whiteSpace: "pre-wrap" }}
+              dangerouslySetInnerHTML={{ __html: content }}
             />
-            <div className="p-2 text-base font-normal">
-              {content?.split("\n")[1] || ""}
-            </div>
           </div>
         )}
+
         {showImageModal &&
           selectedElement?.originalIndex === index.original &&
           isEditing && (
@@ -437,6 +299,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
               toast={toast}
             />
           )}
+
         {showTextModal && (
           <TextEditor
             onHide={() => closeModals(true)}
@@ -453,16 +316,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
             isFirstSlide={isFirstSlide}
           />
         )}
-        {/* If you have a gifEditor, add similar logic here: */}
-        {/* {showGifModal && (
-          <GifEditor
-            ...
-            isFirstSlide={isFirstSlide}
-            toast={toast}
-          />
-        )} */}
       </Rnd>
-      {/* {overlapPopup} */}
     </>
   );
 };
