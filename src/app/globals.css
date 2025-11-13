@@ -1506,6 +1506,17 @@ button.cancel-editBtn:hover {
   /****** card page css ended ********/
 }
 
+.locked-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999; /* on top of everything */
+  background: rgba(255, 255, 255, 0.3); /* semi-transparent */
+  cursor: not-allowed;
+}
+
 @media screen and (max-width: 767px) {
   .regform-field-box .ant-input-affix-wrapper {
     padding: 7px 11px;

@@ -1,23 +1,26 @@
-import CreateGroup from '@/components/CreateGroup'
-import Link from 'next/link'
-import React from 'react'
+import CreateGroup from "@/components/CreateGroup";
+import React from "react";
 
-const page = async() => {
+export const dynamic = "force-dynamic";
 
-  let data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tango/fetch-data`, {
-    method: 'GET', 
-    headers: {
-      'Cache-Control': 'no-cache',
-       cache: 'reload'
-    }
-  });
-  let posts = await data.json();
+const page = async () => {
+  let posts = [];
 
-  return (
-   <>
-   <CreateGroup data={posts}/>
-   </>
-  )
-}
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/tango/fetch-data`,
+      {
+        method: "GET",
+        cache: "no-store",
+      }
+    );
+    if (!res.ok) throw new Error("Failed to fetch");
+    posts = await res.json();
+  } catch (e) {
+    console.error("Error fetching:", e);
+  }
 
-export default page
+  return <CreateGroup data={posts} />;
+};
+
+export default page;

@@ -21,24 +21,19 @@ const GroupCollection = ({
   isClose,
 }: any) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  // console.log(data, "jdkhdur");
   const { id } = useParams();
   const [cookieValue, setCookieValue] = useState<string | null>(null);
-  // console.log(cookieValue, "cookieValue");
-  const [isLocked, setIsLocked] = useState(false); // State to track the lock/unlock state
+  const [isLocked, setIsLocked] = useState(false);
   const [buttonText, setButtonText] = useState("Lock Collection");
   const [organiser, setOrganiser] = useState("");
-  // console.log(organiser, "organiser");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [shareImageData, setShareImageData] = useState<any>(null);
   const [shareCartData, setShareCartData] = useState<any>(null);
   const gettoken = Cookies.get("auth_token");
   const searchParams2 = useSearchParams();
   const cardId = searchParams2.get("cardId");
-  // console.log("searchParams here", searchParams.brandKey);
 
   useEffect(() => {
-  
     const fetchData = async () => {
       try {
         const postData = {
@@ -50,22 +45,24 @@ const GroupCollection = ({
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              // Authorization: `Bearer ${gettoken}`,
             },
             body: JSON.stringify(postData),
           }
         );
 
         const data = await response.json();
-        // console.log(data,"data from api")
-        setShareCartData(data); // Store response data in state
+        setShareCartData(data);
+        setIsLocked(data?.data?.is_linked_locked);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, [id]);
+  }, [id, isLocked]);
+
+  const lockdata = shareCartData?.data?.is_linked_locked;
+
   useEffect(() => {
     const fetchDataImage = async () => {
       try {
@@ -104,7 +101,7 @@ const GroupCollection = ({
   const cardShareData = shareCartData?.data || [];
 
   useEffect(() => {
-    const cookies = nookies.get(); 
+    const cookies = nookies.get();
     const userData = cookies.userInfo ? JSON.parse(cookies.userInfo) : null;
     setCookieValue(userData?.uuid || null);
     setOrganiser(userData?.full_name || "N/A");
@@ -112,8 +109,8 @@ const GroupCollection = ({
 
   const lockeCollection = async () => {
     let item = {
-      user_uuid: cookieValue,
-      type: isLocked,
+      cart_uuid: id,
+      type: !isLocked,
     };
     try {
       const response = await fetch(
@@ -130,10 +127,15 @@ const GroupCollection = ({
       if (!response.ok) {
         throw new Error("Failed to add item to cart");
       }
-      const data = await response.json(); 
-      toast.success(!isLocked ? "Unlock Successfully" : "Lock Successfully", {
-        autoClose: 1000,
-      });
+      const data = await response.json();
+      toast.success(
+        !isLocked
+        ? "Editor locked successfully. Editing is now disabled."
+          : "Editor unlocked successfully. You can now edit.",
+        {
+          autoClose: 1000,
+        }
+      );
       setIsLocked(!isLocked);
       setButtonText(isLocked ? "Unlock Collection" : "Lock Collection");
     } catch (error) {}
@@ -161,7 +163,7 @@ const GroupCollection = ({
         toast.success("Gift sent successfully!", { autoClose: 1000 });
       } else {
         toast.error(
-          "Please make sure the recipient email is valid and try again.",
+          "Please make sure the recipient email is the same as the modified collection recipient email.",
           { autoClose: 2000 }
         );
       }
@@ -240,13 +242,18 @@ const GroupCollection = ({
             <CopyclickBoard />
           </div>
 
-          <div className="flex w-full justify-center">
+          <div
+            className="flex w-full justify-center"
+            style={{ position: "relative" }}
+          >
+            {lockdata && <div className="locked-overlay" />}
             <div
               className="mt-8 flex flex-col"
               style={{ width: "550px", maxWidth: "650px" }}
             >
               <CommonCustomEditor
                 cardShareData={cardShareData}
+                locked={lockdata}
               />
             </div>
 

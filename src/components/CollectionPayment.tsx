@@ -31,6 +31,7 @@ const CollectionPayment = ({
   reloadly_amount,
   groupId,
   onSuccess,
+  original_amount,
 }: any) => {
   // const router = useRouter();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
@@ -53,10 +54,10 @@ const CollectionPayment = ({
     setUserInfo(userInfoFromCookie);
   }, []);
   const handlePayment = async () => {
-      if(!name){
-        toast.error("Please add your name first.")
-        return;
-      }
+    if (!name) {
+      toast.error("Please add your name first.");
+      return;
+    }
 
     setIsProcessing(true);
     try {
@@ -69,8 +70,6 @@ const CollectionPayment = ({
       }
 
       const options = {
-
-
         // key: "rzp_test_NPDqhJnbXJi072",
         // amount: paymentAmount * 100, // Razorpay requires the amount in paise
         // currency: "INR",
@@ -99,15 +98,16 @@ const CollectionPayment = ({
               {
                 method: "POST",
                 headers: {
-                  "Content-Type": "application/json"
+                  "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  cart_id:groupId,
-                  reloadly_cart_id:reloadly_cart_id,
+                  cart_id: groupId,
+                  reloadly_cart_id: reloadly_cart_id,
                   product_id: product_id,
                   quantity: 1,
                   unit_price: reloadly_amount,
                   sender_name: name,
+                  original_amount: original_amount,
                 }),
               }
             );
@@ -144,8 +144,7 @@ const CollectionPayment = ({
 
       const rzp1 = new window.Razorpay(options);
       rzp1.open();
-            setIsCustomAmount(false)
-
+      setIsCustomAmount(false);
     } catch (error) {
       console.error("Payment failed", error);
     } finally {
@@ -158,14 +157,12 @@ const CollectionPayment = ({
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       <button
-         onClick={() =>handlePayment()}
+        onClick={() => handlePayment()}
         disabled={isProcessing}
         className="mt-6 bg-blue-600 text-blueText w-full py-2 rounded-xl border-2 border-[blueText] hover:bg-blue-700"
       >
         {isProcessing ? "Processing..." : `Pay Now: ${amount.toFixed(2)} INR`}
       </button>
-     
-     
     </>
   );
 };

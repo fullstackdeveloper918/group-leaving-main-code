@@ -41,10 +41,12 @@ interface UserInfo {
 
 interface CommonCustomEditorProps {
   cardShareData: any;
+  locked: boolean;
 }
 
 const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   cardShareData,
+  locked,
 }) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const router = useRouter();

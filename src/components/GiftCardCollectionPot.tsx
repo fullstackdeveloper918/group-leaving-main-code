@@ -40,7 +40,7 @@ const GiftCardCollectionPot = ({
   const currentUserId = userInfoCookie
     ? JSON.parse(decodeURIComponent(userInfoCookie)).uuid
     : null;
- 
+
   const [selectedContributeAmount, setSelectedContributeAmount] =
     useState<number>(0);
   const [
@@ -56,7 +56,6 @@ const GiftCardCollectionPot = ({
   const [state, setState] = useState<any>("");
   const [selectedProduct, setSelectedProduct] = useState<any>("");
   const [Loading, setLoading] = useState(false);
-
 
   const fetchGiftCard = async () => {
     try {
@@ -82,7 +81,6 @@ const GiftCardCollectionPot = ({
   const isCreator = currentUserId && cardShareData?.user_uuid === currentUserId;
   console.log("Current User ID:", cardShareData?.user_uuid);
 
-
   const deleteGiftCard = async (uuid: string) => {
     const MIN_DISPLAY_TIME = 500;
     const startTime = Date.now();
@@ -99,7 +97,7 @@ const GiftCardCollectionPot = ({
           },
         }
       );
-       toast.success("Gift card deleted successfully");
+      toast.success("Gift card deleted successfully");
       if (!response.ok) {
         throw new Error("Failed to delete gift card");
       }
@@ -546,10 +544,10 @@ const GiftCardCollectionPot = ({
                         setError("");
                         setSelectedContributeAmount(value);
                         setSelectedContributeAmountOgCurrency(
-                          Math.round(
-                            value /
-                              selectedProduct.recipientCurrencyToSenderCurrencyExchangeRate
-                          )
+                          // Math.round(
+                          value /
+                            selectedProduct.recipientCurrencyToSenderCurrencyExchangeRate
+                          // )
                         );
                       }
                     }}
@@ -611,6 +609,7 @@ const GiftCardCollectionPot = ({
                   product_id={selectedProduct.productId}
                   groupId={groupId}
                   amount={selectedContributeAmount * 1.05}
+                  original_amount={selectedContributeAmount}
                   setIsCustomAmount={setIsContributeModalOpen}
                   reloadly_cart_id={selectedProduct.reloadly_cart_id}
                   reloadly_amount={selectedContributeAmountOgCurrency}

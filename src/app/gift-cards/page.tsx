@@ -8,15 +8,30 @@ import amazon_gift from "../../assets/images/amazon_gift.png";
 import Link from "next/link";
 import GiftCard from "@/components/common/GiftCard";
 const page = async () => {
-  let data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tango/fetch-data`, {
-    method: "GET", // Method set to GET
-    headers: {
-      "Cache-Control": "no-cache",
-      cache: "reload",
-    },
-  });
+  let posts = [];
 
-  let posts = await data.json();
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/tango/fetch-data`,
+      {
+        method: "GET",
+        cache: "no-store", // ✅ disables Next.js fetch cache
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch: ${res.status}`);
+    }
+
+    posts = await res.json();
+  } catch (err) {
+    console.error("Error fetching API data:", err);
+    // Optional fallback data
+    posts = [];
+  }
   return (
     <>
       {/* <div className=""> */}
