@@ -212,8 +212,8 @@ const Checkout = ({ data }: any) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center p-5">
-      <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 md:flex">
+    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center p-3 md:p-5">
+      <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-2 md:p-6 md:flex">
         <div className="flex-1">
           <div className="mb-6">
             <h2 className="text-xl font-bold mb-2">Card Type</h2>
@@ -282,8 +282,8 @@ const Checkout = ({ data }: any) => {
                 </div>
 
                 {bundleOption === "bundle" ? (
-                  <div className="mt-4 p-4 bg-gray-50 rounded-md border">
-                    <ul className="text-green-600 mb-4 space-y-1">
+                  <div className="mt-4 p-2 md:p-4 bg-gray-50 rounded-md border">
+                    <ul className="text-green-600 mb-4 mt-2 md:mt-0 space-y-1 p-0">
                       <li>💰 Save up to 40% by buying a bundle</li>
                       <li>🤝 Share bundle with colleagues</li>
                       <li>🕑 No Expiry. No Subscription.</li>
@@ -295,7 +295,7 @@ const Checkout = ({ data }: any) => {
                       </label>
                       <select
                         onChange={handleChange}
-                        className="border border-gray-300 p-2 rounded-lg w-full max-w-full text-center"
+                        className="border border-gray-300 p-2 rounded-lg w-full max-w-full text-center text-sm sm:text-base"
                       >
                         {data?.data.map((count: any) => {
                           const basePrice =
@@ -316,7 +316,7 @@ const Checkout = ({ data }: any) => {
                             <option
                               key={count.number_of_cards}
                               value={count.number_of_cards}
-                              className="dropdown-menu2"
+                              className="dropdown-menu2 whitespace-normal break-words"
                             >
                               {count?.number_of_cards} Cards — ₹
                               {salePrice.toFixed(2)} INR (₹

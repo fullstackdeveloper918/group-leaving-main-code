@@ -2297,7 +2297,9 @@ html {
   position: absolute;
   z-index: 10000;
   /* top: unset !important; */
-  width: 61% !important;
+  width: 100% !important;
+  left: 0px !important;
+  right: 0px !important;
 }
 .editor-design-image {
   /* height: 100% !important; */
@@ -2946,6 +2948,7 @@ left: unset !important;
 
 .editor-design {
   max-width: 500px;
+  width: 100%;
   font-family: Arial, sans-serif;
 }
 
@@ -2979,3 +2982,69 @@ left: unset !important;
 /* .hightTextArea {
   height: 40px !important;
 } */
+
+
+
+/* pankaj start css */
+
+@media screen and (max-width:600px){
+  .greeting_card_sign .mobileWidth {
+    max-width: 100% !important;
+    width: 100% !important;
+}
+   .greeting_card_sign .mobileWidth {
+        width: 100% !important;
+    }
+   .greeting_card_sign .postion-change {
+    left: 0px !important;
+    width: 100% !important;
+        top: 148px !important;
+}
+   /* .greeting_card_sign .carousel-slide {
+        max-width: 355px;
+        height: 380px;
+        width: 100%;
+    } */
+    .vardana-card-flex {
+    flex-wrap: wrap;
+}
+
+.postion-change > .relative textarea {
+   
+            font-size: 14px !important;
+        color: #000 !important;
+}
+
+.postion-change > .relative {
+  max-width: 91% !important;
+    font-size: 16px;
+}
+.email-box {
+    width: 100%;
+}
+.editor_option {
+   
+    flex-wrap: wrap;
+   
+}
+.start-cardBtn {
+    font-size: 13px;
+    padding: 7px 9px;
+}
+.editor-design.demo > div {
+    position: unset !important;
+}
+.editor-design.demo {
+    top: 27px !important;
+}
+
+option.dropdown-menu2 {
+    text-align: left;
+    padding: 2px 0px !important;
+}
+    .dropdown-menu2, select {
+      
+        font-size: 10px !important;
+     
+    }
+}

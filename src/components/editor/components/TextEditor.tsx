@@ -297,7 +297,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
   return (
     <div
       ref={slideRef}
-      className="flex flex-col w-full max-w-2xl editor-design"
+      className="flex flex-col w-full max-w-2xl editor-design demo"
       style={{
         position: "absolute",
         top: `${position.y}px`,

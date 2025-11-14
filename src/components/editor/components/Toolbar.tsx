@@ -179,7 +179,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
     "🙊",
   ];
   return (
-    <div className="p-2 bg-white flex items-center gap-1">
+    <div className="p-2 bg-white flex items-center gap-1 vardana-card-flex">
       {/* Font dropdown */}
       <div className="relative mr-1 flex items-center">
         <button

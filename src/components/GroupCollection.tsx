@@ -251,7 +251,7 @@ const GroupCollection = ({
                 >
                   {lockdata && <div className="locked-overlay" />}
                   <div
-                    className="mt-8 flex flex-col mobileWidth"
+                    className="mt-8 flex flex-col mobileWidth "
                     style={{ width: "550px", maxWidth: "650px" }}
                   >
                     <CommonCustomEditor
