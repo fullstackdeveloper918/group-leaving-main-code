@@ -597,7 +597,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
         >
           <div>
             <button
-              className="add_btn"
+              className="add_btn add-message-btn"
               onClick={handleAddMessageClick}
               disabled={showModal}
               style={{

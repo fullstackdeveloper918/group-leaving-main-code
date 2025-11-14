@@ -1702,6 +1702,13 @@ button.cancel-editBtn:hover {
   .container-fluid.newsletter_section.common_padding {
     padding: 0px 0 important;
   }
+  .heroSectionHeight .btnPrimary {
+    width: 199px;
+    margin-left: 12px;
+  }
+  .heroSectionHeight .btnSecondary {
+    margin-top: 10px;
+  }
   .heroSectionHeight .btnPrimary,
   .heroSectionHeight .btnSecondary {
     padding: 10px 14px;
@@ -1716,6 +1723,35 @@ button.cancel-editBtn:hover {
   .choose_content_wrapper p {
     font-size: 12px !important;
   }
+  .fontSmall {
+    font-size: small !important;
+  }
+  .OptionCards {
+    width: 200px !important;
+  }
+  .dropdown-menu2,
+  select {
+    width: 100% !important;
+    max-width: 100% !important;
+    font-size: 8.2px !important;
+    display: block !important;
+  }
+
+  .mobileWidth {
+    width: 344px !important;
+  }
+  .mobileflex {
+    flex-direction: column !important;
+  }
+  .add-message-btn {
+    font-size: 8px !important;
+    padding: 10px !important;
+  }
+
+  .mobilewidthGiftCard {
+    width: 100% !important;
+  }
+
   .choose_content_wrapper .p-10 {
     padding: 1.5rem !important;
   }
@@ -1749,6 +1785,15 @@ button.cancel-editBtn:hover {
   .slider_two {
     margin-top: 1rem;
     padding-bottom: 130px;
+  }
+  .step-container {
+    font-size: small !important;
+  }
+  .steps-container .step {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    font-size: small;
   }
   .slider_three.heroSectionHeight {
     background-position: bottom;

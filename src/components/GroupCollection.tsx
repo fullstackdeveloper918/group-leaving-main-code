@@ -130,7 +130,7 @@ const GroupCollection = ({
       const data = await response.json();
       toast.success(
         !isLocked
-        ? "Editor locked successfully. Editing is now disabled."
+          ? "Editor locked successfully. Editing is now disabled."
           : "Editor unlocked successfully. You can now edit.",
         {
           autoClose: 1000,
@@ -242,28 +242,34 @@ const GroupCollection = ({
             <CopyclickBoard />
           </div>
 
-          <div
-            className="flex w-full justify-center"
-            style={{ position: "relative" }}
-          >
-            {lockdata && <div className="locked-overlay" />}
-            <div
-              className="mt-8 flex flex-col"
-              style={{ width: "550px", maxWidth: "650px" }}
-            >
-              <CommonCustomEditor
-                cardShareData={cardShareData}
-                locked={lockdata}
-              />
-            </div>
+          <section className="greeting_card_sign common_padding">
+            <div className="containers 2xl:max-w-[1200px] max-w-[1080px] mx-auto ">
+              <div className=" lg:flex flex-col lg:flex-row ">
+                <div
+                  className="flex w-full justify-center mobileflex"
+                  style={{ position: "relative" }}
+                >
+                  {lockdata && <div className="locked-overlay" />}
+                  <div
+                    className="mt-8 flex flex-col mobileWidth"
+                    style={{ width: "550px", maxWidth: "650px" }}
+                  >
+                    <CommonCustomEditor
+                      cardShareData={cardShareData}
+                      locked={lockdata}
+                    />
+                  </div>
 
-            <GiftCardCollectionPot
-              brandKey={searchParams?.brandKey}
-              groupId={params.id}
-              cardShareData={cardShareData}
-              searchParams={searchParams}
-            />
-          </div>
+                  <GiftCardCollectionPot
+                    brandKey={searchParams?.brandKey}
+                    groupId={params.id}
+                    cardShareData={cardShareData}
+                    searchParams={searchParams}
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
       <SidebarModal

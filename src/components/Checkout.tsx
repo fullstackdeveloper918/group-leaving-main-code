@@ -187,7 +187,7 @@ const Checkout = ({ data }: any) => {
     );
 
     if (selectedCount) {
-      setNumCards(5); 
+      setNumCards(5);
       setSelectBundle(selectedCount);
     } else {
       console.warn("No bundle with 5 cards found");
@@ -217,7 +217,7 @@ const Checkout = ({ data }: any) => {
         <div className="flex-1">
           <div className="mb-6">
             <h2 className="text-xl font-bold mb-2">Card Type</h2>
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-2 fontSmall">
               <label className="flex items-center">
                 <input
                   type="radio"
@@ -252,7 +252,7 @@ const Checkout = ({ data }: any) => {
             <>
               <div className="mb-6">
                 <h2 className="text-xl font-bold mb-2">Bundle Discount</h2>
-                <div className="flex flex-col space-y-2">
+                <div className="flex flex-col space-y-2 fontSmall">
                   <label className="flex items-center">
                     <input
                       type="radio"
@@ -295,7 +295,7 @@ const Checkout = ({ data }: any) => {
                       </label>
                       <select
                         onChange={handleChange}
-                        className="border border-gray-300 p-2 rounded-lg w-full"
+                        className="border border-gray-300 p-2 rounded-lg w-full max-w-full text-center"
                       >
                         {data?.data.map((count: any) => {
                           const basePrice =
@@ -316,6 +316,7 @@ const Checkout = ({ data }: any) => {
                             <option
                               key={count.number_of_cards}
                               value={count.number_of_cards}
+                              className="dropdown-menu2"
                             >
                               {count?.number_of_cards} Cards — ₹
                               {salePrice.toFixed(2)} INR (₹

@@ -235,7 +235,7 @@ const GiftCardCollectionPot = ({
   return (
     <>
       <Loader loading={Loading} />
-      <div className="p-6 w-[30%] flex flex-col mt-[36px]">
+      <div className="p-6 w-[30%] flex flex-col mt-[36px] mobilewidthGiftCard">
         {
           <>
             {giftCard?.cards?.map((card: any) => (
