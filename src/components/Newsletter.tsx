@@ -1,11 +1,12 @@
-"use client"
-import React, { useState } from 'react';
+"use client";
+import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 const NewsletterForm: React.FC = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    email: '',
-    phoneNumber: ''
+    firstName: "",
+    email: "",
+    phoneNumber: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,32 +17,43 @@ const NewsletterForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission here
-    console.log('Form Data: ', formData);
+
+    toast.success("subscribed successfully!");
+    setFormData({
+      firstName: "",
+      email: "",
+      phoneNumber: "",
+    });
+    console.log("Form Data: ", formData);
   };
 
   return (
     <div className="container-fluid newsletter_section common_padding">
       <div className="bg-newsletterbg p-5 bg-cover rounded-[20px]">
-        <h2 className="mt-2 text-2xl  xl:text-3xl font-bold text-center text-gray-600 text-white">Subscribe to Our Newsletter</h2>
-        <form className="flex space-x-2 max-w-[90%] mx-auto newsForm mt-5" onSubmit={handleSubmit}>
-          
-            <input
-              type="text"
-              name="firstName"
-              placeholder="First name"
-              value={formData.firstName}
-              onChange={handleChange}
-              className="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Email address"
-              value={formData.email}
-              onChange={handleChange}
-              className="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
-          
+        <h2 className="mt-2 text-2xl  xl:text-3xl font-bold text-center text-gray-600 text-white">
+          Subscribe to Our Newsletter
+        </h2>
+        <form
+          className="flex space-x-2 max-w-[90%] mx-auto newsForm mt-5"
+          onSubmit={handleSubmit}
+        >
+          <input
+            type="text"
+            name="firstName"
+            placeholder="First name"
+            value={formData.firstName}
+            onChange={handleChange}
+            className="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email address"
+            value={formData.email}
+            onChange={handleChange}
+            className="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+          />
+
           <input
             type="tel"
             name="phoneNumber"
@@ -58,7 +70,7 @@ const NewsletterForm: React.FC = () => {
           </button>
         </form>
       </div>
-      </div>
+    </div>
   );
 };
 

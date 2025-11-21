@@ -77,7 +77,7 @@ const AccountCards = ({ data }: any) => {
                   </div>
 
                   <div className="outer-card-box-ac">
-                    <div className="flex justify-between card-cont-para">
+                    <div className="flex justify-between card-cont-para flex-col lg:flex-col gap-2">
                       <div>
                         <h2 className="text-xl font-bold text-black">
                           Card for {detail?.recipient_name || "Recipient"}
@@ -87,7 +87,7 @@ const AccountCards = ({ data }: any) => {
                         </p>
                       </div>
 
-                      <div className="d-flex items-center gap-2">
+                      <div className="d-flex gap-1 lg:mt-0 mt-[7px]">
                         {card.is_remove_from_cart === 0 ? (
                           <Link href={`/card/pay/${card?.card_uuid}`}>
                             <button className="mt-2 bg-blue-500 text-black border border-gray-300 px-4 rounded-full hover:bg-blue-600">
@@ -102,20 +102,37 @@ const AccountCards = ({ data }: any) => {
                           </Link>
                         )}
 
-                        <AiFillDelete
+                        {/* <Link href={`/share/${detail?.cart_uuid}`}> */}
+                        <button
+                          onClick={() => {
+                            setSelectedCartUuid(detail?.cart_uuid);
+                            setShowModal(true);
+                          }}
+                          className="hoverbutton px-3 h-10 rounded-full text-red-600 border-2 border-red-600 hover:bg-red-600 hover:text-white transition-colors"
+                          style={{ color: "red" }} // optional, but redundant with text-red-600
+                        >
+                          Delete
+                        </button>
+
+                        {/* </Link> */}
+
+                        {/* <AiFillDelete
                           fill="#db0404"
                           className="cursor-pointer text-red-600"
                           onClick={() => {
                             setSelectedCartUuid(detail?.cart_uuid);
                             setShowModal(true);
                           }}
-                        />
+                        /> */}
                       </div>
                     </div>
 
-                    <div className="flex justify-between w-full">
+                    <div className="flex justify-between w-full flex-col lg:flex-row">
                       <div>
-                        <p className="text-gray-500 text-sm">
+                        <p
+                          className="text-gray-500 text-sm mt-0 mb-0"
+                          style={{ marginBottom: "0px !important" }}
+                        >
                           Created On: {formattedCreateDate}
                         </p>
                         <p className="text-gray-500 text-sm mb-0 fw-semibold">
@@ -133,12 +150,12 @@ const AccountCards = ({ data }: any) => {
                           </span>
                         </p>
                       </div>
-                      <div className="text-right">
-                        <p className="text-gray-500 text-sm">
-                          Scheduled Delivery: {formattedDeliveryDate}
-                        </p>
-                        <p className="text-gray-500 text-sm">
+                      <div className="text-left lg:text-right">
+                        <p className="text-gray-500 text-sm mt-0 mb-0">
                           Messages: {card.signatures || "-"}
+                        </p>
+                        <p className="text-gray-500 text-sm mt-0 mb-0">
+                          Delivery: {formattedDeliveryDate}
                         </p>
                       </div>
                     </div>

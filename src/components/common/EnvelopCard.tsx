@@ -27,6 +27,24 @@ const EnvelopCard = ({ getdata }: any) => {
   const { id } = useParams();
   const [responseData, setResponseData] = useState<any>(null);
 
+  // Responsive width/height for flipbook
+  const getBookSize = () => {
+    if (typeof window === "undefined") return { width: 550, height: 650 };
+
+    const w = window.innerWidth;
+    if (w < 420) return { width: w - 20, height: (w - 20) * 1.35 };
+    if (w < 768) return { width: w - 40, height: (w - 40) * 1.35 };
+    return { width: 550, height: 650 };
+  };
+
+  const [size, setSize] = useState(getBookSize());
+
+  useEffect(() => {
+    const handleResize = () => setSize(getBookSize());
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   useEffect(() => {
     if (!id) return;
 
@@ -45,24 +63,25 @@ const EnvelopCard = ({ getdata }: any) => {
     fetchData();
   }, [id]);
 
-  // ❗ DO NOT RENDER HTMLFlipBook UNTIL DATA IS LOADED
-  if (!responseData) {
-    return <div>Loading...</div>;
-  }
+  if (!responseData) return <div>Loading...</div>;
 
   const messages = responseData?.data?.[0]?.editor_messages || [];
 
   return (
     <>
+      {/* Responsive Styles */}
       <style>{`
         .album-web {
           background: rgb(255, 251, 251);
           text-align: center;
         }
+
         .page {
           box-shadow: 0 1.5em 3em -1em rgb(70, 69, 69);
           position: relative;
+          overflow: hidden;
         }
+
         .cover {
           background-color: rgb(251, 225, 139);
           box-shadow: 0 1.5em 3em -1em rgb(70, 69, 69);
@@ -73,25 +92,39 @@ const EnvelopCard = ({ getdata }: any) => {
           height: 100%;
           width: 100%;
           position: relative;
+          overflow: hidden;
         }
+
         .bottom-text {
           position: absolute;
-          bottom: 20px;
-          font-size: 1em;
+          bottom: 15px;
+          font-size: 0.85em;
           color: #333;
-          text-align: center;
-          width: 100%;
+          width: 90%;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+
+        /* Mobile Responsive Fixes */
+        @media (max-width: 480px) {
+          .page, .cover {
+            box-shadow: none;
+            border-radius: 6px;
+          }
+          .bottom-text {
+            font-size: 0.75em;
+          }
         }
       `}</style>
 
-      <div className="mt-5 mb-3">
+      <div className="mt-5 mb-3" style={{ width: "100%" }}>
         <HTMLFlipBook
-          width={550}
-          height={650}
-          minWidth={315}
+          width={size.width}
+          height={size.height}
+          minWidth={300}
           maxWidth={1000}
-          minHeight={420}
-          maxHeight={1350}
+          minHeight={400}
+          maxHeight={1500}
           showCover={true}
           flippingTime={1000}
           style={{ margin: "0 auto" }}
@@ -110,24 +143,30 @@ const EnvelopCard = ({ getdata }: any) => {
           showPageCorners={false}
           disableFlipByClick={false}
         >
-          {/* Cover page */}
+          {/* Front Cover */}
           <PageCover>
             <img
-              style={{ height: "100%", width: "100%", objectFit: "cover" }}
+              style={{
+                height: "100%",
+                width: "100%",
+                objectFit: "cover",
+              }}
               src={`${process.env.NEXT_PUBLIC_API_URL}/${getdata?.data?.images?.[0]?.card_images?.[0]}`}
               alt="content"
             />
           </PageCover>
 
-          {/* Editor message pages */}
+          {/* Pages */}
           {messages.length > 0 ? (
             messages.map((item: any, index: number) => (
-              <Page key={index} number={item?.slideIndex ?? index}>
+              <Page key={index}>
                 <div
                   style={{
                     position: "absolute",
                     left: item?.x ?? 0,
                     top: item?.y ?? 0,
+                    maxWidth: "90%",
+                    wordBreak: "break-word",
                   }}
                 >
                   {item?.type === "text" && (
@@ -135,18 +174,23 @@ const EnvelopCard = ({ getdata }: any) => {
                       dangerouslySetInnerHTML={{
                         __html: item?.content || "",
                       }}
+                      style={{ fontSize: "1rem" }}
                     />
                   )}
 
-                  {item?.type === "image" && item?.content && (
-                    <img src={item.content} alt="content" />
-                  )}
-
-                  {item?.type === "gif" && item?.content && (
+                  {item?.type === "image" && (
                     <img
                       src={item.content}
                       alt="content"
-                      style={{ maxWidth: "50%", maxHeight: "40%" }}
+                      style={{ maxWidth: "80%", objectFit: "contain" }}
+                    />
+                  )}
+
+                  {item?.type === "gif" && (
+                    <img
+                      src={item.content}
+                      alt="gif"
+                      style={{ maxWidth: "70%", maxHeight: "50%" }}
                     />
                   )}
                 </div>
@@ -154,13 +198,13 @@ const EnvelopCard = ({ getdata }: any) => {
             ))
           ) : (
             <Page>
-              <div style={{ padding: 30, textAlign: "center" }}>
+              <div style={{ padding: 20, textAlign: "center" }}>
                 <h3>No content available</h3>
               </div>
             </Page>
           )}
 
-          {/* Back cover */}
+          {/* Back Cover */}
           <PageCover>
             <Image
               src={"/newimage/logoGroup.png"}

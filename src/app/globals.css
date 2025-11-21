@@ -559,11 +559,11 @@ body {
   content: "";
   display: block;
   position: absolute;
-  width: 100%;
+  width: 160%;
   height: 4px;
   top: 15.5px;
   left: auto;
-  right: calc(-70% + 5px);
+  right: calc(-70% + -43px);
   background: #ebebeb;
   border: 2px #f5f5f5 solid;
   -o-transition: 0.4s;
@@ -611,11 +611,11 @@ body {
   content: "";
   display: block;
   position: absolute;
-  width: 100%;
+  width: 161%;
   height: 4px;
   top: 15.5px;
   left: auto;
-  right: calc(-70% + 5px);
+  /* right: calc(-70% + -43px); */
   background: #ebebeb;
   border: 2px #f5f5f5 solid;
   -o-transition: 0.4s;
@@ -1040,7 +1040,7 @@ button.cancel-editBtn:hover {
   margin-bottom: 18px !important;
 }
 .register-page-sec {
-  padding: 80px 0;
+  padding: 35px 0;
   border-top: 1px solid #e0e0e0;
 }
 .regBtn {
@@ -1529,8 +1529,8 @@ button.cancel-editBtn:hover {
     content: "";
     background-image: url("../assets/images/preArrow.png");
     position: absolute;
-    left: 15px;
-    width: 16px;
+    left: 4px;
+    width: 9px;
     height: 16px;
     background-position: left;
     top: 26px;
@@ -1542,7 +1542,7 @@ button.cancel-editBtn:hover {
   .responiveSlider::after {
     background-image: url("../assets/images/nextArrow.png");
     left: auto;
-    right: 10px;
+    right: 4px;
   }
   .responiveSlider ul::-webkit-scrollbar,
   .imgAfter::after {
@@ -1576,6 +1576,38 @@ button.cancel-editBtn:hover {
   .choose_card-wrapper {
     padding: 30px 20px 10px;
     width: 100%;
+  }
+  .DroptextSize {
+    font-size: 16px !important;
+  }
+  .textContribution {
+    font-size: 14px !important;
+  }
+  .mobileView {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .animate-fadeIn {
+    margin: 18px;
+  }
+  .register-page-sec {
+    padding: 19px 0;
+    border-top: 1px solid #e0e0e0;
+  }
+  .loginPage {
+    padding-top: 2rem !important;
+    padding-bottom: 1rem !important;
+  }
+  .common_padding {
+    padding: 3px 0;
+  }
+  #StartCardSection {
+    padding: 31px 0;
+  }
+  .card_pricing_Wapper {
+    padding-top: 23px;
   }
 }
 
@@ -2042,7 +2074,7 @@ button.add_btn:disabled {
 .steps-container {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .step {
@@ -2744,6 +2776,15 @@ left: unset !important;
     width: 100% !important;
     height: auto !important;
   }
+
+  .success-card {
+    padding: 13px !important;
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+  }
+  .success-container {
+    padding: 20px !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -2983,68 +3024,78 @@ left: unset !important;
   height: 40px !important;
 } */
 
-
-
 /* pankaj start css */
 
-@media screen and (max-width:600px){
+@media screen and (max-width: 600px) {
+  .editor-image {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 350px !important;
+    object-fit: contain !important;
+  }
   .greeting_card_sign .mobileWidth {
     max-width: 100% !important;
     width: 100% !important;
-}
-   .greeting_card_sign .mobileWidth {
-        width: 100% !important;
-    }
-   .greeting_card_sign .postion-change {
+  }
+  .greeting_card_sign .mobileWidth {
+    width: 100% !important;
+  }
+  .greeting_card_sign .postion-change {
     left: 0px !important;
     width: 100% !important;
-        top: 148px !important;
-}
-   /* .greeting_card_sign .carousel-slide {
+    top: 148px !important;
+  }
+  /* .greeting_card_sign .carousel-slide {
         max-width: 355px;
         height: 380px;
         width: 100%;
     } */
-    .vardana-card-flex {
+  .vardana-card-flex {
     flex-wrap: wrap;
-}
+  }
 
-.postion-change > .relative textarea {
-   
-            font-size: 14px !important;
-        color: #000 !important;
-}
+  .postion-change > .relative textarea {
+    font-size: 14px !important;
+    color: #000 !important;
+  }
 
-.postion-change > .relative {
-  max-width: 91% !important;
+  .postion-change > .relative {
+    max-width: 91% !important;
     font-size: 16px;
-}
-.email-box {
+  }
+  .email-box {
     width: 100%;
-}
-.editor_option {
-   
+  }
+  .editor_option {
     flex-wrap: wrap;
-   
-}
-.start-cardBtn {
+  }
+  .start-cardBtn {
     font-size: 13px;
     padding: 7px 9px;
-}
-.editor-design.demo > div {
+  }
+  .editor-design.demo > div {
     position: unset !important;
-}
-.editor-design.demo {
+  }
+  .editor-design.demo {
     top: 27px !important;
-}
+  }
 
-option.dropdown-menu2 {
+  option.dropdown-menu2 {
     text-align: left;
     padding: 2px 0px !important;
+  }
+  .dropdown-menu2,
+  select {
+    font-size: 10px !important;
+  }
 }
-    .dropdown-menu2, select {
-      
-        font-size: 10px !important;
-     
-    }
+
+.hoverbutton:hover {
+  background-color: rgb(255, 47, 47) !important;
+  color: white !important;
+}
+
+/* Prevent RND from eating touch events */
+.no-drag * {
+  touch-action: manipulation;
 }

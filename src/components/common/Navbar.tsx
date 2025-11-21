@@ -14,7 +14,7 @@ const Navbar = () => {
   const router = useRouter();
   const param = useParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSubMenuOpen, setSubMenuOpen] = useState(false);
+  const [isSubMenuOpen, setSubMenuOpen] = useState(true);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -233,14 +233,14 @@ const Navbar = () => {
               {isMobile ? (
                 isMenuOpen ? (
                   <button
-                    className="text-gray-600 z-50 absolute top-2 right-2"
+                    className="text-gray-600 z-50 absolute top-2 right-2 text-[24px]"
                     onClick={handleMenuToggle}
                   >
                     {"✖"}
                   </button>
                 ) : (
                   <button
-                    className="text-gray-600 z-50 ml-2"
+                    className="text-gray-600 z-50 ml-2 text-[21px]"
                     onClick={handleMenuToggle}
                   >
                     {"☰"}
@@ -257,7 +257,7 @@ const Navbar = () => {
             }`}
           >
             {/* --- Top Section: Authenticated vs Guest --- */}
-            <div className="mb-4 border-b border-[#8b8b8b29] pb-2">
+            <div className="border-b border-[#8b8b8b29] pb-0">
               {accessToken ? (
                 <>
                   <Link
@@ -273,14 +273,14 @@ const Navbar = () => {
                   <Link
                     href="/register"
                     onClick={() => setIsMenuOpen(false)}
-                    className="block text-md text-blackText no-underline font-medium py-2 hover:text-blueText"
+                    className="block text-md text-blackText no-underline font-medium border-b border-[#8b8b8b29] pb-3 hover:text-blueText"
                   >
                     Join Now
                   </Link>
                   <Link
                     href="/login"
                     onClick={() => setIsMenuOpen(false)}
-                    className="block text-md text-blackText no-underline font-medium py-2 hover:text-blueText"
+                    className="block text-md text-blackText no-underline font-medium py-3 hover:text-blueText"
                   >
                     Sign In
                   </Link>
@@ -314,7 +314,7 @@ const Navbar = () => {
                       key={item.href}
                       href={item.href}
                       onClick={() => setIsMenuOpen(false)}
-                      className="block py-3 hover:text-blueText border-[#8b8b8b29]"
+                      className="block py-3 hover:text-blueText border-[#8b8b8b29] no-underline"
                     >
                       {item.label}
                     </Link>

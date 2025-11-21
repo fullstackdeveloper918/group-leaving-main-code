@@ -176,7 +176,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
       if (response.status === 200) {
         toast.success("Cart added successfully");
         setCartUuid(data.data.cart_uuid);
-        
+
         // Only show modal if user has bundle cards available
         if (countBundle > 0) {
           setShowCardChoiceModal(true);
@@ -207,19 +207,19 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
       <div className="flex space-x-8 mb-8 absolute top-10">
         <div className="text-center after_line disabled">
           <div className={step >= 1 ? "step_count" : "step_count1"}>1</div>
-          <p className="md:text-md text-sm font-medium mb-0">
+          <p className="md:text-md text-sm font-medium mb-0 text-center">
             Choose a Template
           </p>
         </div>
         <div className="text-center before_line">
           <div className={step >= 2 ? "step_count" : "step_count1"}>2</div>
-          <p className="md:text-md text-sm font-medium mb-0">
+          <p className="md:text-md text-sm font-medium mb-0 text-center">
             Fill in the Details
           </p>
         </div>
         <div className={step > 3 ? "text-center before_line" : ""}>
           <div className={step >= 3 ? "step_count" : "step_count1"}>3</div>
-          <p className="md:text-md text-sm font-medium mb-0">
+          <p className="md:text-md text-sm font-medium mb-0 text-center">
             Complete Payment & Share
           </p>
         </div>
@@ -272,7 +272,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
                   htmlFor="recipientEmail"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Recipient`&apos;`s Email Address{" "}
+                  Recipient&apos;s Email Address{" "}
                   <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -378,7 +378,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
                   id="selectOption"
                   value={selectedOption}
                   onChange={handleSelectChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="mt-1 block w-full px-3 textContribution py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 >
                   <option value="">Don&apos;t collect contributions</option>
                   <option value="inr">INR</option>
@@ -524,9 +524,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
                     );
                     const useCardData = await useCardRes.json();
                     if (useCardData) {
-                      router.push(
-                        `/successfull?cart_uuid=${cartUuid}`
-                      );
+                      router.push(`/successfull?cart_uuid=${cartUuid}`);
                     } else {
                       toast.error(useCardData?.error || "Failed to use card");
                     }

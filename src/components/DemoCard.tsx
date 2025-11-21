@@ -99,13 +99,17 @@ const DemoCard = ({ params }: any) => {
                 unlimited messages and pages for one simple price.
               </p>
               <div className="demo_button_wrapper">
-                <Link href={`/create`}>
-                  <button className=" btnPrimary">Create Your Card</button>
+                {/* <Link href={`/create`}>
+                  <button className="btnPrimary">Create Your Card</button>
+                </Link> */}
+                <Link href="/create" className="btnPrimary relative z-10">
+                  Create Your Card
                 </Link>
+
                 {/* 0cVkV16gHzX */}
-                <Link href={`/demo/0cVkV16gHzX`}>
+                {/* <Link href={`/demo/0cVkV16gHzX`}>
                   <button className="btnSecondary ml-3">View Demo Board</button>
-                </Link>
+                </Link> */}
               </div>
             </div>
           </section>
@@ -173,7 +177,7 @@ const DemoCard = ({ params }: any) => {
                       Chip in for Hagrid&apos;s Gift
                     </button>
                   </div>
-                  <div className="w-full md:max-w-[500px] max-w-full" >
+                  <div className="w-full md:max-w-[500px] max-w-full">
                     <button
                       className=" btnPrimary text-center w-100 mt-3 rounded-md"
                       onClick={handleShare}

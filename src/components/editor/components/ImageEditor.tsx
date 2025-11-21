@@ -43,14 +43,25 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
 
   useEffect(() => {
     if (selectedElement) {
-      const width = selectedElement.width || 320;
-      const height = selectedElement.height || 200;
+      // Detect mobile width (you can adjust breakpoint if needed)
+      const isMobile = window.innerWidth <= 768;
+
+      // Default sizes
+      const defaultWidth = selectedElement.width || 320;
+      const defaultHeight = selectedElement.height || 200;
+
+      // Mobile override sizes
+      const mobileWidth = 170;
+      const mobileHeight = 120;
+
+      const width = isMobile ? mobileWidth : defaultWidth;
+      const height = isMobile ? mobileHeight : defaultHeight;
 
       setPosition({
         x: Math.max(0, selectedElement.x || 0),
         y: Math.max(0, selectedElement.y || 0),
-        width: width,
-        height: height,
+        width,
+        height,
       });
     }
   }, [selectedElement, setPosition]);
@@ -138,51 +149,56 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center w-full max-w-2xl editor-design-image">
-      <ImageResizableContainer
-        position={position}
-        setPosition={setPosition}
-        isDragging={isDragging}
-        startDragging={startDragging}
-        width={position.width}
-        height={position.height}
-        onResize={handleResize}
-      >
-        <img
-          src={content || selectedElement?.content || "/placeholder.svg"}
-          alt="uploaded"
-          className="pointer-events-none select-none"
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "fill",
-            display: "block",
-          }}
-          draggable={false}
-        />
-      </ImageResizableContainer>
-      <div className="px-2 pb-2">
-        <div className="bg-white mt-2 px-4 w-fit">
-          <div className="flex justify-center align-items-center gap-2 py-2">
-            <button
-              onClick={onHide}
-              className="transition cancel-editBtn"
-              style={{ color: "red" }}
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSave}
-              className="text-white transition image-saveBtn"
-            >
-              {loading ? "Saving..." : "Save"}
-            </button>
-            <button
-              onClick={handleDelete}
-              className=" transition delete-red-btn"
-            >
-              <FaTrash />
-            </button>
+    <div className="modal-overlay">
+      <div className="flex flex-col items-center w-full max-w-2xl editor-design-image">
+        <ImageResizableContainer
+          position={position}
+          setPosition={setPosition}
+          isDragging={isDragging}
+          startDragging={startDragging}
+          width={position.width}
+          height={position.height}
+          onResize={handleResize}
+        >
+          <img
+            src={content || selectedElement?.content || "/placeholder.svg"}
+            alt="uploaded"
+            className="select-none"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "fill",
+              display: "block",
+            }}
+            draggable={false}
+          />
+        </ImageResizableContainer>
+        <div className="px-2 pb-2">
+          <div className="bg-white mt-2 px-4 w-fit">
+            <div className="flex justify-center align-items-center gap-2 py-2">
+              <button
+                onClick={onHide}
+                onTouchStart={onHide}
+                className="transition cancel-editBtn"
+                style={{ color: "red" }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                onTouchStart={handleSave}
+                className="text-white transition image-saveBtn"
+              >
+                {loading ? "Saving..." : "Save"}
+              </button>
+              <button
+                onClick={handleDelete}
+                onTouchStart={handleDelete}
+                className=" transition delete-red-btn"
+              >
+                <FaTrash />
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -5,7 +5,6 @@ import TextEditor from "./SingleTextEditor";
 import ImageEditor from "./NewImageEditor";
 import { FaLock } from "react-icons/fa";
 
-// Interfaces
 interface UserInfo {
   name: string;
   email: string;
@@ -56,7 +55,6 @@ interface DraggableElementProps {
   toast: (element: any) => void;
 }
 
-// DraggableElement Component
 export const DraggableElement: React.FC<DraggableElementProps> = ({
   content,
   type,
@@ -65,8 +63,6 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   elements,
   initialX,
   initialY,
-  // width = 220,
-  // height = 200,
   width,
   height,
   isDraggable = true,
@@ -87,15 +83,12 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [showTextModal, setShowTextModal] = useState(false);
-  const [zIndex, setZIndex] = useState(1); // Default z-index
+  const [zIndex, setZIndex] = useState(1);
   const isEditing = activeSlide === index.activeSlide;
-  // const sizeRef = useRef({ width, height });
   const sizeRef = useRef<{ width: any; height: any }>({ width: 0, height: 0 });
 
-  // Lock logic for first slide only
   const isFirstSlide = activeSlide === 0;
 
-  // Initialize userInfo from cookies
   useEffect(() => {
     const cookies = nookies.get();
     const userInfoFromCookie: UserInfo | null = cookies.userInfo
@@ -104,14 +97,11 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     setUserInfo(userInfoFromCookie);
   }, []);
 
-  // Sync position and size with elements array
   useEffect(() => {
     const element = elements[index.original];
     if (element) {
-      setPosition({
-        x: element.x || 0,
-        y: element.y || 0,
-      });
+      setPosition({ x: element.x || 0, y: element.y || 0 });
+
       if (type === "image" || type === "gif") {
         sizeRef.current = {
           width: element.width || width,
@@ -121,7 +111,6 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     }
   }, [elements, index.original, type, width, height]);
 
-  // Update position and size when selectedElement changes
   useEffect(() => {
     if (selectedElement && selectedElement.originalIndex === index.original) {
       setPosition({ x: selectedElement.x, y: selectedElement.y });
@@ -134,7 +123,6 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     }
   }, [selectedElement, index.original, width, height]);
 
-  // Update element in elements array and localStorage
   const updateElement = (
     newX: number,
     newY: number,
@@ -160,7 +148,6 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     });
   };
 
-  // Handle text element click
   const handleClick = () => {
     if (type === "text" && !showTextModal && !showImageModal && isEditing) {
       setSelectedElement({
@@ -173,8 +160,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     }
   };
 
-  // Handle image/gif click
-  const handleImageClick = () => {
+  const handleImageClickInternal = () => {
     if (
       (type === "image" || type === "gif") &&
       !showImageModal &&
@@ -187,11 +173,8 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     }
   };
 
-  // Modal Management for TextEditor
   const closeModals = (fromEditor = false) => {
-    if (fromEditor) {
-      setShowTextModal(false);
-    }
+    if (fromEditor) setShowTextModal(false);
     setShowImageModal(false);
     setSelectedElement(null);
   };
@@ -201,36 +184,24 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
 
   return (
     <>
-      {/* Lock icon for first slide only */}
       {isFirstSlide && (
         <div style={{ position: "absolute", top: 8, left: 8, zIndex: 10000 }}>
           <FaLock size={24} color="#888" title="Front cover is locked" />
         </div>
       )}
+
       <Rnd
-        className={`${type === "text" ? "editor-react-drag" : ""} ${
-          showTextModal && "editor-transform"
-        }`.trim()}
         bounds="parent"
         position={showTextModal ? { x: 0, y: 0 } : position}
         size={type === "text" ? undefined : sizeRef.current}
         onDragStart={() => {
-          if (!isFirstSlide) {
-            setZIndex(100); // Set high z-index when dragging starts
-          }
+          if (!isFirstSlide) setZIndex(100);
         }}
-        onDrag={
-          showTextModal
-            ? (_, d) => {
-                if (d.x < 200) return false;
-              }
-            : undefined
-        }
         onDragStop={(_, d) => {
           if (!isFirstSlide) {
             setPosition({ x: d.x, y: d.y });
             updateElement(d.x, d.y);
-            setZIndex(1); // Reset z-index after dragging
+            setZIndex(1);
           }
         }}
         onResize={(_, __, ref, ___, pos) => {
@@ -238,7 +209,9 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
             const newWidth = parseInt(ref.style.width);
             const newHeight = parseInt(ref.style.height);
             sizeRef.current = { width: newWidth, height: newHeight };
+
             if (!isFirstSlide) setPosition({ x: pos.x, y: pos.y });
+
             updateElement(pos.x, pos.y, newWidth, newHeight);
           }
         }}
@@ -253,7 +226,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
               setPosition(pos);
               sizeRef.current = { width: newWidth, height: newHeight };
               updateElement(pos.x, pos.y, newWidth, newHeight);
-              setZIndex(1); // Reset z-index after resizing
+              setZIndex(1);
             }
           }
         }}
@@ -271,16 +244,22 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
           pointerEvents: "auto",
           cursor: "default",
           transform: "none",
-          zIndex: zIndex, // Apply dynamic z-index
+          zIndex,
         }}
       >
+        {/* -------------- UPDATED IMAGE CLICK AREA (MOBILE SAFE) ------------- */}
         {(type === "image" || type === "gif") &&
           !isImageModalOpenForThisElement && (
-            <div onClick={handleImageClick}>
+            <div
+              className="no-drag"
+              onClick={handleImageClickInternal}
+              onTouchStart={handleImageClickInternal}
+              style={{ width: "100%", height: "100%" }}
+            >
               <img
                 src={content || "/placeholder.svg"}
                 alt="uploaded"
-                className="rounded-md pointer-events-none"
+                className="rounded-md"
                 style={{
                   width: "100%",
                   height: "100%",
@@ -290,6 +269,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
               />
             </div>
           )}
+
         {type === "text" && !showTextModal && (
           <div
             className="text-sm"
@@ -324,6 +304,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
             </div>
           </div>
         )}
+
         {showImageModal &&
           selectedElement?.originalIndex === index.original &&
           isEditing && (
@@ -341,6 +322,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
               toast={toast}
             />
           )}
+
         {showTextModal && (
           <TextEditor
             onHide={() => closeModals(true)}

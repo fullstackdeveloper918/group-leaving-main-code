@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; 
+import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 
 const Cart = () => {
@@ -41,7 +41,7 @@ const Cart = () => {
   useEffect(() => {
     getdata();
   }, []);
- 
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8 py-md-10">
       <h1 className="font-bold mb-4 mb-md-5 my-card-head">My Carts</h1>
@@ -105,9 +105,9 @@ const Cart = () => {
                     </div>
                     {/* <hr /> */}
 
-                    <div className="flex justify-between w-full">
+                    <div className="flex justify-between w-full lg:flex-row flex-col mt-3">
                       <div className="">
-                        <p className="text-gray-500 text-sm">
+                        <p className="text-gray-500 text-sm mb-0">
                           CREATED: {formattedCreateDate}
                         </p>
                         <p className="text-gray-500 text-sm fw-bold mb-0">
@@ -123,9 +123,9 @@ const Cart = () => {
                           </span>
                         </p>
                       </div>
-                      <div className="text-right">
+                      <div className="text-left lg:text-right">
                         {/* Formatted Delivery Date */}
-                        <p className="text-gray-500 text-sm">
+                        <p className="text-gray-500 text-sm mb-0">
                           DELIVERY DATE: {formattedDeliveryDate}
                         </p>
                         <p className="text-gray-500 text-sm mb-0">

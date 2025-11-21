@@ -179,17 +179,16 @@ const GroupCollection = ({
     <div className="min-h-screen bg-gray-100 p-6">
       {cookieValue && (
         <div className="bg-white shadow-lg rounded-lg p-6 mb-6 text-center">
-          {searchParams?.brandKey ? (
+          {/* {searchParams?.brandKey ? (
             <h1 className="text-3xl font-bold mb-4">
-              {/* {capFirst(data?.data?.collection_title)} */}
             </h1>
           ) : (
             <h1 className="text-3xl font-bold mb-4">
               {cardShareData?.cartDetail?.[0]?.recipient_name}
             </h1>
-          )}
+          )} */}
 
-          <div className="flex gap-5 mb-4 items-center justify-center">
+          <div className="flex gap-2 mb-4 items-center justify-center flex-col lg:flex-row lg:gap-5">
             <button
               className="bg-blue-600 border-2 border-blue-700 text-black px-4 py-2 rounded-md hover:bg-blue-700 transition"
               onClick={() => setIsSidebarOpen(true)}
@@ -219,7 +218,7 @@ const GroupCollection = ({
 
       <div className="flex  items-center justify-center w-full">
         <div className="flex flex-col w-full justify-center">
-          <div className="bg-white shadow-lg  rounded-lg p-6 ">
+          <div className="bg-white shadow-lg  rounded-lg p-6 mobileView">
             {cookieValue && (
               <>
                 <div className="texts-sections" id="flex-orgainisier">

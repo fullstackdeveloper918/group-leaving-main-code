@@ -376,7 +376,13 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
       >
         {(type === "image" || type === "gif") &&
           !isImageModalOpenForThisElement && (
-            <div onClick={handleImageClick}>
+            <div
+              // onClick={handleImageClick}
+              className="no-drag"
+              onClick={handleImageClick}
+              onTouchStart={handleImageClick}
+              style={{ width: "100%", height: "100%" }}
+            >
               <img
                 src={content || "/placeholder.svg"}
                 alt="uploaded"

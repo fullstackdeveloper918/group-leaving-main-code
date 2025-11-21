@@ -235,7 +235,7 @@ const GiftCardCollectionPot = ({
   return (
     <>
       <Loader loading={Loading} />
-      <div className="p-6 w-[30%] flex flex-col mt-[36px] mobilewidthGiftCard">
+      <div className="p-6 w-[38%] flex flex-col mt-[36px] mobilewidthGiftCard">
         {
           <>
             {giftCard?.cards?.map((card: any) => (
@@ -397,7 +397,7 @@ const GiftCardCollectionPot = ({
                       className="text-black"
                       onClick={() => setSelectedImage(null)}
                     >
-                      <i className="fas fa-arrow-left"></i> Back
+                      <i className="fas fa-arrow-left"></i>
                     </button>
                   </div>
                   <div className="">

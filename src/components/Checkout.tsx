@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import RazorPay from "./RazorPay";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import CheckoutSkeleton from "@/utils/Skeleton/CheckoutSkeleton";
 
 const Checkout = ({ data }: any) => {
   const router = useRouter();
@@ -211,10 +212,12 @@ const Checkout = ({ data }: any) => {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center p-3 md:p-5">
+  return !shareCartData || !shareImageData ? (
+    <CheckoutSkeleton />
+  ) : (
+    <div className="min-h-[80%] bg-gray-100 flex flex-col items-center p-3 md:p-5">
       <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-2 md:p-6 md:flex">
-        <div className="flex-1">
+        <div className="flex-1 px-[20px] pt-[20px]">
           <div className="mb-6">
             <h2 className="text-xl font-bold mb-2">Card Type</h2>
             <div className="flex flex-col space-y-2 fontSmall">

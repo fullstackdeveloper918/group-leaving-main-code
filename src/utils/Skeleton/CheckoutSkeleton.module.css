@@ -1,0 +1,347 @@
+.container {
+  min-height: 80vh;
+  background: #f8f8f8;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  background: white;
+  width: 100%;
+  max-width: 950px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 30px;
+}
+
+.left,
+.right {
+  flex: 1;
+}
+
+/* ---------- Skeleton Animation ---------- */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.skelLine,
+.skelTitle,
+.skelTitleSmall,
+.skelBox,
+.skelButton,
+.skelImage,
+.skelInput,
+.skelLineLarge {
+  background: #dadada;
+  border-radius: 6px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* ---------- Skeleton Sizes ---------- */
+.skelTitle {
+  height: 22px;
+  width: 180px;
+  margin-bottom: 10px;
+}
+
+.skelTitleSmall {
+  height: 20px;
+  width: 120px;
+  margin-bottom: 20px;
+}
+
+.skelLine {
+  height: 16px;
+  width: 100%;
+  margin: 6px 0;
+}
+
+.skelLineLarge {
+  height: 28px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.skelBox {
+  height: 75px;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.skelButton {
+  margin-top: 25px;
+  height: 45px;
+  width: 100%;
+}
+
+.skelImage {
+  height: 150px;
+  width: 150px;
+  border-radius: 10px;
+}
+
+.skelInput {
+  height: 42px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.section {
+  margin-bottom: 30px;
+}
+
+/* ---------- MOBILE RESPONSIVENESS ---------- */
+@media (max-width: 768px) {
+  .card {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .left,
+  .right {
+    width: 100%;
+  }
+
+  /* .skelImage {
+    margin: 0 auto;
+  } */
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+
+  .card {
+    padding: 15px;
+    border-radius: 10px;
+  }
+
+  .skelTitle {
+    width: 140px;
+  }
+
+  .skelImage {
+    height: 130px;
+    width: 130px;
+  }
+
+  .skelButton {
+    height: 40px;
+  }
+}
+
+/* Success skeleton styles */
+
+/* Main container */
+.successContainer {
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+  background: #f9f9f9;
+  min-height: 80vh;
+}
+
+/* Card */
+.successCard {
+  width: 100%;
+  max-width: 600px;
+  background: white;
+  border-radius: 12px;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 0px;
+  padding-bottom: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Animation */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.skel {
+  background: #e1e1e1;
+  border-radius: 6px;
+  animation: pulse 1.5s infinite;
+}
+
+/* ------------------ Steps ------------------ */
+
+.stepsContainer {
+  display: flex;
+  justify-content: space-between;
+  /* margin-bottom: 30px; */
+}
+
+.step {
+  /* text-align: center; */
+  /* width: 33.33%; */
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.skelStepCircle {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  margin: 0 auto 10px;
+  background: #e1e1e1;
+  animation: pulse 1.5s infinite;
+}
+
+.skelStepLabel {
+  width: 80px;
+  height: 14px;
+  margin: 0 auto;
+  margin-top: 13px;
+  margin-left: 5px;
+  background: #e1e1e1;
+  animation: pulse 1.5s infinite;
+}
+
+/* ------------------ Success Message ------------------ */
+
+.successMessage {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.skelIcon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 15px;
+  border-radius: 50%;
+  background: #e1e1e1;
+  animation: pulse 1.5s infinite;
+}
+
+.skelTitle {
+  width: 150px;
+  height: 22px;
+  margin: 10px auto;
+  background: #e1e1e1;
+  animation: pulse 1.5s infinite;
+}
+
+.skelSubtitle {
+  width: 90%;
+  height: 14px;
+  margin: 10px auto;
+  background: #e1e1e1;
+  animation: pulse 1.5s infinite;
+}
+
+/* ------------------ Shareable Input ------------------ */
+
+.shareableLinkContainer {
+  margin-bottom: 25px;
+}
+
+.skelLabel {
+  width: 80%;
+  height: 16px;
+  margin-bottom: 10px;
+  background: #e1e1e1;
+  animation: pulse 1.5s infinite;
+}
+
+.shareableInputContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.skelInput {
+  flex: 1;
+  height: 45px;
+  border-radius: 8px;
+  background: #e1e1e1;
+  animation: pulse 1.5s infinite;
+}
+
+.skelCopy {
+  width: 45px;
+  height: 45px;
+  margin-top: 20px;
+  border-radius: 8px;
+  background: #e1e1e1;
+  animation: pulse 1.5s infinite;
+}
+
+/* ------------------ Buttons ------------------ */
+
+.buttonContainer {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.skelButton {
+  width: 150px;
+  height: 45px;
+  border-radius: 8px;
+  background: #e1e1e1;
+  animation: pulse 1.5s infinite;
+}
+
+/* ------------------ Mobile Responsive ------------------ */
+
+@media (max-width: 600px) {
+  .successCard {
+    padding: 20px;
+  }
+
+  .stepsContainer {
+    flex-direction: row;
+    gap: 15px;
+  }
+
+  .step {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .buttonContainer {
+    flex-direction: column;
+  }
+
+  .skelButton {
+    width: 100%;
+  }
+
+  .shareableInputContainer {
+    flex-direction: column;
+  }
+
+  .stepsContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+
+  .skelCopy {
+    width: 100%;
+  }
+}

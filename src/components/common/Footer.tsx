@@ -39,13 +39,13 @@ const Footer: React.FC = () => {
               />
             </Link>
 
-            <p
+            {/* <p
               className="text-blackText text-left mt-2"
               style={{ maxWidth: "90%" }}
             >
               Clarity gives you the blocks and components you need to create a
               truly professional website.
-            </p>
+            </p> */}
             <div style={{ marginTop: "20px" }}>
               <FacebookOutlined style={iconStyle} />
               <InstagramOutlined style={iconStyle} />
@@ -60,25 +60,34 @@ const Footer: React.FC = () => {
           </Title>
           <ul className="p-0">
             <li className="block  py-2  no-underline text-black  transition-all ease-in  hover:text-blueBg hover:px-2 ">
-              <a href="/about" className="text-black hover:text-blueBg">
+              <a
+                href="/about"
+                className="text-black hover:text-blueBg no-underline"
+              >
                 About
               </a>
             </li>
             <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2  ">
-              <a href="/office" className="text-black hover:text-blueBg">
+              <a
+                href="/office"
+                className="text-black hover:text-blueBg no-underline"
+              >
                 Office
               </a>
             </li>
             <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2  ">
               <a
                 href="/license-verification"
-                className="text-black hover:text-blueBg"
+                className="text-black hover:text-blueBg no-underline"
               >
                 License Verification
               </a>
             </li>
             <li className="block  py-2  no-underline text-black  transition-all ease-in  hover:text-blueBg hover:px-2 ">
-              <a href="/spay-neuter" className="text-black hover:text-blueBg">
+              <a
+                href="/spay-neuter"
+                className="text-black hover:text-blueBg no-underline"
+              >
                 Spay & Neuter
               </a>
             </li>
@@ -140,27 +149,33 @@ const Footer: React.FC = () => {
           </Title>
           <ul className="p-0">
             <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2   hover:text-blueBg hover:px-2">
-              <a href="/free-ebooks" className="text-black hover:text-blueBg">
+              <a
+                href="/free-ebooks"
+                className="text-black hover:text-blueBg no-underline"
+              >
                 Free eBooks
               </a>
             </li>
             <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2  ">
               <a
                 href="/development-tutorial"
-                className="text-black hover:text-blueBg"
+                className="text-black hover:text-blueBg no-underline"
               >
                 Development Tutorial
               </a>
             </li>
             <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2  ">
-              <a href="/how-to-blog" className="text-black hover:text-blueBg">
+              <a
+                href="/how-to-blog"
+                className="text-black hover:text-blueBg no-underline"
+              >
                 How to - Blog
               </a>
             </li>
             <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2  ">
               <a
                 href="/youtube-playlist"
-                className="text-black hover:text-blueBg"
+                className="text-black hover:text-blueBg no-underline"
               >
                 Youtube Playlist
               </a>

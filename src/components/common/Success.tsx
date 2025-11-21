@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import Link from "next/link";
 import nookies from "nookies";
 import { useSearchParams, useRouter } from "next/navigation";
+import SuccessSkeleton from "@/utils/Skeleton/SuccessSkeleton";
 
 interface UserInfo {
   name: string;
@@ -97,6 +98,10 @@ const Success = ({ cartUuid }: any) => {
       toast.error("An error occurred while saving payment");
     }
   };
+
+  if (!userInfo || !cartUuid) {
+    return <SuccessSkeleton />;
+  }
 
   return (
     <div className="success-container">

@@ -64,12 +64,12 @@ const ContributorsModal: React.FC<ContributeModelProps> = ({
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-100 bg-opacity-20 z-50 shadow-lg">
       <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-lg relative animate-fadeIn">
-        <button
-          className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl"
+        {/* <button
+          className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-5xl"
           onClick={onClose}
         >
           &times;
-        </button>
+        </button> */}
         <h2 className="text-2xl font-bold mb-4 text-blue-700 text-center">
           Contributors
         </h2>
