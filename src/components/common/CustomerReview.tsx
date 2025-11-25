@@ -44,7 +44,7 @@ const CustomerReview = (props:any) => {
   
         
         {/* Reviews Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-3">
           {reviews.map((review, index) => (
             <div key={index} className="bg-white shadow-lg rounded-lg p-6 text-left">
               <p className="text-gray-700 mb-4">

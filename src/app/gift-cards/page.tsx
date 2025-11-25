@@ -35,7 +35,7 @@ const page = async () => {
   return (
     <>
       {/* <div className=""> */}
-      <section className="bg-lightBg common_padding">
+      <section className="bg-lightBg common_padding py-5">
         <div className=" text-center container-fluid">
           <h2 className="mt-2 text-2xl  xl:text-3xl font-bold text-center text-gray-900">
             Shared Gift Funds
@@ -125,7 +125,7 @@ const page = async () => {
         </div>
       </section>
 
-      <section className="text-center xl:mb-10 md:mb-5">
+      <section className="text-center xl:mb-10 md:mb-5 free-charge">
         <div className="container-fluid common_padding">
           <h2 className="2xl:text-4xl text-center lg:text-2xl text-xl font-semibold lg:mb-6 mb:2 text-gray-800">
             Begin Free of Charge

@@ -74,8 +74,8 @@ const Home: React.FC<HomeProps> = async ({ searchParams }) => {
         </div>
         {/* Section 6 */}
         <div className="bg-testimonialBg common_padding bg-no-repeat testimonial_section">
-          <div className="mx-auto px-5 text-center container-fluid">
-            <h2 className="xl:text-4xl md:text-xl sm:text-md font-semibold mb-10">
+          <div className="mx-auto lg:px-5 text-center container-fluid">
+            <h2 className="xl:text-4xl md:text-xl sm:text-md font-semibold mb-10 our-costomers">
               See Why Our Customers Love Our Cards
             </h2>
             {/* Reviews Grid */}

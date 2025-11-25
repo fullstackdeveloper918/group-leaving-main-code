@@ -83,7 +83,7 @@ const DemoCard = ({ params }: any) => {
     <>
       {params === "fwzDVjvbQ_X" ? (
         <>
-          <section className="bg-demo_banner text-center demo_section common_padding bg-cover bg-no-repeat">
+          <section className="bg-demo_banner text-center demo_section common_padding bg-cover bg-no-repeat py-5">
             <div className="container-fluid">
               <h1 className="text-md tracking-tight demo_heading">
                 Welcome to Your Interactive Demo
@@ -113,7 +113,7 @@ const DemoCard = ({ params }: any) => {
               </div>
             </div>
           </section>
-          <section className="greeting_card_sign common_padding">
+          <section className="greeting_card_sign common_padding py-5">
             <div className="containers 2xl:max-w-[1200px] max-w-[1080px] mx-auto ">
               <div className=" lg:flex flex-col lg:flex-row ">
                 <div className="2xl:w-1/2 w-full lg:max-w-[600px] max-w-full">

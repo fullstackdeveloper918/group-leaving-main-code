@@ -597,7 +597,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
         >
           <div>
             <button
-              className="add_btn add-message-btn"
+              className="add_btn add-message-btn font-montserrat"
               onClick={handleAddMessageClick}
               disabled={showModal}
               style={{
@@ -611,6 +611,7 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
               Add Your Message
             </button>
           </div>
+          <div className="chooes-card flex gap-3 ">
           <div
             className="search_input"
             style={{
@@ -746,6 +747,8 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
             >
               +
             </button>
+          </div>
+
           </div>
         </div>
 

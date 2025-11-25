@@ -31,7 +31,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
             Create cards one at a time to send to a friend or colleague or
             purchase a card bundle if you plan to send 5 or more cards.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {/* Single Card Section */}
             {data?.data.slice(0, 3).map((res: any, index: number) => (
               <div
@@ -228,7 +228,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
 
       {/* Card Bundles Section */}
       <div ref={bundlesRef} className="container py-0 lg:py-20 ">
-        <h1 className="2xl:text-4xl text-center lg:text-2xl text-xl font-semibold lg:mb-6 mb:2 text-gray-800">
+        <h1 className="2xl:text-4xl text-center lg:text-2xl text-xl font-semibold lg:mb-6 mb:2 text-gray-800 pt-5">
           Pricing and Card Bundles
         </h1>
         <p className="text-center text-[#4b5563] mb-10 md:text-xl  text-md 2xl:max-w-[60%] mx-auto font-medium ">
@@ -388,7 +388,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
         </p>
       </div>
 
-      <section className="container-fluid bg-lightBg  common_padding px-5 rounded-md relative card_pricing_Wapper">
+      <section className="container-fluid bg-lightBg  common_padding px-5 rounded-md relative card_pricing_Wapper mt-5">
         <div>
           <h4 className="2xl:text-4xl text-left lg:text-2xl text-xl font-semibold lg:mb-6 mb-4 text-gray-800">
             Gift Card Pricing
