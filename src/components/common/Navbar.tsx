@@ -52,8 +52,8 @@ const Navbar = () => {
   };
 
   const handleLogout = async () => {
-    destroyCookie(null, "auth_token", { path: "/" });
-    destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+    Cookies.remove("auth_token");
+    Cookies.remove("user_info");
     router.push(`/login`);
   };
 

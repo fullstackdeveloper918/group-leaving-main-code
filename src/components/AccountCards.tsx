@@ -89,8 +89,8 @@ const AccountCards = ({ data }: any) => {
 
                       <div className="d-flex gap-1 lg:mt-0 mt-[7px]">
                         {card.is_remove_from_cart === 0 ? (
-                          <Link href={`/card/pay/${card?.card_uuid}`}>
-                            <button className="mt-2 bg-blue-500 text-black border border-gray-300 px-4 rounded-full hover:bg-blue-600">
+                          <Link href={`/card/pay/${detail?.cart_uuid}`}>
+                            <button className="bg-[#ecc94b] text-black border border-gray-300 px-3 h-10 rounded-pill fw-semibold payCart-btn">
                               Pay now
                             </button>
                           </Link>
@@ -139,13 +139,15 @@ const AccountCards = ({ data }: any) => {
                           Current Status:{" "}
                           <span
                             className={
-                              card.paymentStatus === "captured"
-                                ? "text-[#48bb78] font-semibold"
+                              card.is_remove_from_cart === 1
+                                ? // card.paymentStatus === "captured"
+                                  "text-[#48bb78] font-semibold"
                                 : "text-[#CB6E17]"
                             }
                           >
-                            {card.paymentStatus === "captured"
-                              ? "Active"
+                            {card.is_remove_from_cart === 1
+                              ? // card.paymentStatus === "captured"
+                                "Active"
                               : "Unpaid"}
                           </span>
                         </p>

@@ -29,17 +29,17 @@ const page = async ({ params }: any) => {
   };
   const posts = await fetchFromServer(data);
 
-
-
   return (
     <div className=" bg-lightbg flex justify-center items-center">
       <div className="w-full max-w-[70%] bg-white shadow-md rounded-lg account-sec-main">
-        <h1 className="font-bold text-center text-md-start mb-6 account-main-head">Account</h1>
+        <h1 className="font-bold text-center text-md-start mb-6 account-main-head">
+          Account
+        </h1>
         <AccountSlider type={type} />
         {type === "profile" && (
           <AccountProfile data={posts} userInfo={gettoken?.value} />
         )}
-        {type === "cart" && <Cart />}
+        {/* {type === "cart" && <Cart />} */}
         {type === "cards" && <AccountCards data={data2} />}
         {/* {type==="cards" && <AccountCards />} */}
         {type === "bundles" && (

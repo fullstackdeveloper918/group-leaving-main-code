@@ -4,7 +4,7 @@ import StripeElement from "@/components/common/StripeElement";
 import { Api } from "@/interfaces/interfaces";
 import React from "react";
 
-const page = async({ searchParams,params }:any) => {
+const page = async ({ searchParams, params }: any) => {
   // console.log(params,"mnmnnm");
   const api2: Api = {
     url: `${process.env.NEXT_PUBLIC_API_URL}/card/bundle-list`,
@@ -14,12 +14,12 @@ const page = async({ searchParams,params }:any) => {
   };
 
   const data2 = await fetchFromServer(api2);
-  // console.log(data2,"opop");
-  
+  console.log(data2, "bundle list on pay page");
+
   return (
     <>
       {/* <StripeElement> */}
-        <Checkout data={data2}/>
+      <Checkout data={data2} />
       {/* </StripeElement> */}
     </>
   );

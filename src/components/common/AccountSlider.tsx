@@ -1,43 +1,55 @@
-"use client"
-import { useRouter } from 'next/navigation';
-import React from 'react'
+"use client";
+import { useRouter } from "next/navigation";
+import React from "react";
 
-const AccountSlider = ({type}:any) => {
-    const router = useRouter();
-  
+const AccountSlider = ({ type }: any) => {
+  const router = useRouter();
+
   // This function is used to navigate to a different URL
   const handleNavigation = (url: string) => {
     router.push(url);
   };
   return (
     <div className="flex justify-start items-center border-gray-200 mb-6 account-tab-outer">
-    <div className="flex space-x-6 account-tab-box">
+      <div className="flex space-x-6 account-tab-box">
         {/* Navigate to Cards */}
-        <a
+        {/* <a
           onClick={() => handleNavigation('/account/cart')}
           className={type==="cart"?"text-black text-blue-600 font-semibold border-b-2 border-blue-600 cursor-pointer no-underline":"text-black text-gray-500 hover:text-blue-500 cursor-pointer no-underline"}
         >
           Cart
-        </a>
+        </a> */}
         <a
-          onClick={() => handleNavigation('/account/cards')}
-          className={type==="cards"?"text-black text-blue-600 font-semibold border-b-2 border-blue-600 cursor-pointer no-underline":"text-black text-gray-500 hover:text-blue-500 cursor-pointer no-underline"}
+          onClick={() => handleNavigation("/account/cards")}
+          className={
+            type === "cards"
+              ? "text-black text-blue-600 font-semibold border-b-2 border-blue-600 cursor-pointer no-underline"
+              : "text-black text-gray-500 hover:text-blue-500 cursor-pointer no-underline"
+          }
         >
           Cards
         </a>
 
         {/* Navigate to Profile */}
         <a
-          onClick={() => handleNavigation('/account/profile')}
-          className={type==="profile"?" text-black text-blue-600 font-semibold border-b-2 border-blue-600 cursor-pointer no-underline":"text-black text-gray-500 hover:text-blue-500 cursor-pointer no-underline"}
+          onClick={() => handleNavigation("/account/profile")}
+          className={
+            type === "profile"
+              ? " text-black text-blue-600 font-semibold border-b-2 border-blue-600 cursor-pointer no-underline"
+              : "text-black text-gray-500 hover:text-blue-500 cursor-pointer no-underline"
+          }
         >
           Profile
         </a>
 
         {/* Navigate to Bundles */}
         <a
-          onClick={() => handleNavigation('/account/bundles')}
-          className={type==="bundles"?" text-black text-blue-600 font-semibold border-b-2 border-blue-600 cursor-pointer no-underline":"text-black text-gray-500 hover:text-blue-500 cursor-pointer no-underline"}
+          onClick={() => handleNavigation("/account/bundles")}
+          className={
+            type === "bundles"
+              ? " text-black text-blue-600 font-semibold border-b-2 border-blue-600 cursor-pointer no-underline"
+              : "text-black text-gray-500 hover:text-blue-500 cursor-pointer no-underline"
+          }
         >
           Bundles
         </a>
@@ -49,10 +61,9 @@ const AccountSlider = ({type}:any) => {
         >
           Payment History
         </a> */}
-
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AccountSlider
+export default AccountSlider;

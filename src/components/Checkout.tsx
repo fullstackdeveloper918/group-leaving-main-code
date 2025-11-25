@@ -58,7 +58,7 @@ const Checkout = ({ data }: any) => {
         if (!cardId) {
           return;
         }
-
+        console.log(cardId, "cardIdddddd");
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/card/edit-card/${cardId}`,
           { method: "GET" }
@@ -69,7 +69,7 @@ const Checkout = ({ data }: any) => {
         }
 
         const data = await response.json();
-
+        console.log(data, "dataimagee");
         const showImage = data?.data?.[0]?.images?.[0]?.card_images?.[0];
 
         if (showImage) {
@@ -212,7 +212,9 @@ const Checkout = ({ data }: any) => {
     }
   };
 
-  return !shareCartData || !shareImageData ? (
+  console.log(shareCartData, "shareCartDatashareCartData");
+
+  return !shareCartData && !shareImageData ? (
     <CheckoutSkeleton />
   ) : (
     <div className="min-h-[80%] bg-gray-100 flex flex-col items-center p-3 md:p-5">
@@ -363,7 +365,7 @@ const Checkout = ({ data }: any) => {
               <div>
                 <div className="flex flex-col w-[150px] h-[150px] items-center">
                   <img
-                    src={`${process.env.NEXT_PUBLIC_API_URL}/${shareImageData}`}
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/${cardShareData?.images?.[0]?.card_images?.[0]}`}
                     alt="E-Gift Card"
                     className="w-full h-full mt-3 object-cover rounded-md"
                   />
