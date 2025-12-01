@@ -16,7 +16,14 @@ interface UserInfo {
   uuid?: string;
 }
 
-const RazorPay = ({ amount, type, cart_id, bundleId, numberOfCards }: any) => {
+const RazorPay = ({
+  amount,
+  type,
+  cart_id,
+  card_name,
+  bundleId,
+  numberOfCards,
+}: any) => {
   //  const getToken = cookies().get("auth_token")?.value || "";
   //   console.log(getToken, "Access Token");
   console.log(
@@ -26,6 +33,10 @@ const RazorPay = ({ amount, type, cart_id, bundleId, numberOfCards }: any) => {
     "bundleid",
     cart_id,
     "cartid",
+    card_name,
+    "card_name",
+    type,
+    "type",
     "numberOfCards",
     numberOfCards
   );
@@ -86,7 +97,8 @@ const RazorPay = ({ amount, type, cart_id, bundleId, numberOfCards }: any) => {
         // key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Ensure this is set in .env.local
         amount: Math.round(amount * 100),
         currency: "INR",
-        name: "Wedding",
+        // name: "Wedding",
+        name: card_name || "Card Purchase",
         description: "Test Transaction",
         order_id: data.orderId,
         handler: async (response: any) => {
@@ -130,9 +142,7 @@ const RazorPay = ({ amount, type, cart_id, bundleId, numberOfCards }: any) => {
               router.push(`/account/bundles`);
             } else {
               setSuccess(true);
-              router.push(
-                `/successfull?cart_uuid=${cartId}`
-              );
+              router.push(`/successfull?cart_uuid=${cartId}`);
             }
             setUniqueId(responseData?.data?.messages_unique_id);
           } catch (error) {
@@ -142,7 +152,12 @@ const RazorPay = ({ amount, type, cart_id, bundleId, numberOfCards }: any) => {
         prefill: {
           name: userInfo?.name || "Guest User",
           email: userInfo?.email || "testing@gmail.com",
-          contact: "9999999999",
+          // contact: "8999999998",
+          contact: "", // <-- IMPORTANT: EMPTY to force Razorpay to ask user
+          readonly: {
+            email: false,
+            contact: false,
+          },
         },
         notes: {
           product_id: param.id,

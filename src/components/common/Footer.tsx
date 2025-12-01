@@ -19,7 +19,7 @@ const year = date.getFullYear();
 
 const Footer: React.FC = () => {
   return (
-    <div className="container-fluid pt-12">
+    <div className="container-fluid pt-2 md:pt-12">
       <Row justify="space-around">
         <Col xs={24} sm={12} md={6}>
           <div style={{ textAlign: "center" }}>
@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
                 src={GoodLuckCad.src}
                 height={200}
                 width={200}
-                alt="Good Luck"
+                alt="Groupwish"
                 className="text-4xl font-bold logo_img"
               />
             </Link>
@@ -183,15 +183,8 @@ const Footer: React.FC = () => {
           </ul>
         </Col>
       </Row>
-      <Row
-        justify="center"
-        style={{
-          marginTop: "40px",
-          borderTop: "1px solid #E2E8F0",
-          padding: "20px 0",
-        }}
-      >
-        <Text>© Copyright {year}, All Rights Reserved by Groupluckcards</Text>
+      <Row className="footer-row" justify="center">
+        <Text>© Copyright {year}, All Rights Reserved by Groupwish</Text>
       </Row>
     </div>
   );

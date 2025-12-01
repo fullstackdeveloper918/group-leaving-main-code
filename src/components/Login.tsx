@@ -112,7 +112,7 @@ const Login = () => {
       console.log(error?.response?.body?.message, "werwer");
       setLoading(false);
       if (error?.response?.body?.message === "Unauthorized") {
-        toast.error("Unauthorized");
+        toast.error("Invalid email or password.");
         // setCorrectPass(true);
       } else {
         toast.error(error?.response?.body?.message);

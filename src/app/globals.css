@@ -1072,15 +1072,20 @@ button.cancel-editBtn:hover {
   padding: 13px 20px;
   line-height: normal;
 }
-.receipt-card{
-    border: 1px solid #80808014;
-    padding: 20px;
-    border-radius: 10px !important;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+.receipt-card {
+  border: 1px solid #80808014;
+  padding: 20px;
+  border-radius: 10px !important;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
 }
-.receipt-list{
-  border-bottom: 1px solid #80808014; 
+.receipt-list {
+  border-bottom: 1px solid #80808014;
   padding: 10px 0px;
+}
+.footer-row {
+  margin-top: 40px;
+  border-top: 1px solid #e2e8f0;
+  padding: 20px 0;
 }
 
 @media (max-width: 1600px) {
@@ -1229,7 +1234,6 @@ button.cancel-editBtn:hover {
     padding: 8px 19px;
     font-size: 14px;
   }
-
 }
 @media screen and (max-width: 1023px) {
   .cardBox {
@@ -1514,15 +1518,14 @@ button.cancel-editBtn:hover {
   .margin_responsive.mb-4 {
     margin-bottom: 10px !important;
   }
-    .editor_option  {
+  .editor_option {
     flex-direction: column !important;
   }
   .chooes-card {
     display: flex;
     gap: 20px;
-    
   }
-  
+
   /****** card page css ended ********/
 }
 .locked-overlay {
@@ -1619,9 +1622,9 @@ button.cancel-editBtn:hover {
     padding-top: 2rem !important;
     padding-bottom: 1rem !important;
   }
-   .editor_option{
-  flex-direction: column !important;
- }
+  .editor_option {
+    flex-direction: column !important;
+  }
   .common_padding {
     padding: 3px 0;
   }
@@ -1631,26 +1634,30 @@ button.cancel-editBtn:hover {
   .card_pricing_Wapper {
     padding-top: 23px;
   }
-  .free-charge{
+  .free-charge {
     padding: 50px 0px !important;
   }
-  .chooes-card{
+  .chooes-card {
     margin-top: 20px !important;
   }
   div#main-carousle button.add_btn {
-        padding: 13px 40px !important;
+    padding: 13px 40px !important;
   }
-.contribute-card{
-  max-width: 90% !important;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
-}
-.chooes-gift-card{
+  .footer-row {
+    margin-top: 2px;
+    /* padding: 0; */
+  }
+  .contribute-card {
     max-width: 90% !important;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
-}
-.receive-card{
-  margin-top: 40px !important;
-}
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  .chooes-gift-card {
+    max-width: 90% !important;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  .receive-card {
+    margin-top: 40px !important;
+  }
 }
 
 @media (max-width: 765px) {
@@ -1662,9 +1669,9 @@ button.cancel-editBtn:hover {
     width: 100% !important;
     min-width: 120px;
   }
- .container-fluid .our-costomers{
-  margin-top: 50px !important;
- } 
+  .container-fluid .our-costomers {
+    margin-top: 50px !important;
+  }
 }
 @media (max-width: 575px) {
   .gift-collec-form-box {
@@ -1992,7 +1999,6 @@ button.cancel-editBtn:hover {
   margin: 0px auto;
   justify-content: center;
   align-items: center;
-
 }
 .editor_option > div {
   /* max-width: fit-content; */
@@ -2013,7 +2019,7 @@ button.add_btn {
   font-weight: 300;
 }
 .editor_option button.add_btn {
- font-family: '__Montserrat_069ab3';
+  font-family: "__Montserrat_069ab3";
   font-weight: 500;
 }
 
@@ -2515,7 +2521,7 @@ left: unset !important;
   justify-content: center;
   margin-top: 18px;
   gap: 10px;
-  margin-top:50px;
+  margin-top: 50px;
 }
 .megamenu2 a {
   color: black !important;
@@ -2836,16 +2842,15 @@ left: unset !important;
   .success-container {
     padding: 20px !important;
   }
-    .account-btn{
+  .account-btn {
     justify-content: center !important;
   }
   .gift-collec {
-        padding: 50px 0 !important;
-      }
-      .gift-collec h2{
-        margin-top: -20px;
-      }
-
+    padding: 50px 0 !important;
+  }
+  .gift-collec h2 {
+    margin-top: -20px;
+  }
 }
 
 @media (max-width: 480px) {

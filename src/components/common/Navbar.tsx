@@ -122,7 +122,7 @@ const Navbar = () => {
               src={GoodLuckCad.src}
               height={200}
               width={200}
-              alt="Good Luck"
+              alt="Groupwish"
               className="text-4xl font-bold logo_img"
             />
           </Link>

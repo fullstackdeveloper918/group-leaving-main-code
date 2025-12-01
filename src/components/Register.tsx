@@ -22,53 +22,55 @@ const { Row, Col, Button } = {
 };
 
 const Register = () => {
-    const router= useRouter()
-    const [loading, setLoading]= useState(false)
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const onFinish = async (values: any) => {
-    console.log(values,"lsjdflj");
-    
+    console.log(values, "lsjdflj");
+
     let items = {
       full_name: validation.toLowCase(values?.full_name),
       email: String(values.email).toLowerCase(),
       password: values.password,
-      marketing_email_and_discounts:values.newsletter
+      marketing_email_and_discounts: values.newsletter,
     };
-    
+
     try {
-      setLoading(true)
+      setLoading(true);
       let res = await api.Auth.signUp(items);
-      toast.success("Please verify your email to continue", {autoClose:2000})
-      console.log("resforregister",res)
+      toast.success("Please verify your email to continue", {
+        autoClose: 2000,
+      });
+      console.log("resforregister", res);
       // router.replace("/login")
     } catch (error: any) {
-      if(error?.message === "Conflict"){
-        toast.error("Email already exists", {autoClose:3000});
+      console.log("errorinregister123", error);
+      if (error?.status === 409 || error?.message === "Email already exists") {
+        toast.error("Email already exists", { autoClose: 3000 });
       }
-    }finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 
-
-  
   return (
     <section className="auth-pages d-flex align-items-center h-100 bg-lightBg loginPage register-page-sec">
       <div className="container">
         <Row justify="center">
           <Col className="gutter-row" xs={23} sm={21} md={19} lg={12} xl={10}>
-          <h3 className="text-center register-head-txt font-bold">Register</h3>
+            <h3 className="text-center register-head-txt font-bold">
+              Register
+            </h3>
             <Card
               className="reg-form"
               bordered={false}
               style={{
                 borderRadius: "12px",
                 // boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-                background:" #558ec912",
+                background: " #558ec912",
                 padding: "40px 35px",
                 border: "1px solid rgb(85 142 201 / 25%)",
               }}
             >
-  
               <Form
                 name="normal_login"
                 className="login-form"
@@ -77,7 +79,7 @@ const Register = () => {
                 scrollToFirstError
               >
                 <Form.Item
-                className="regform-field-box"
+                  className="regform-field-box"
                   name="full_name"
                   rules={[
                     {
@@ -96,7 +98,7 @@ const Register = () => {
                 </Form.Item>
 
                 <Form.Item
-                className="regform-field-box"
+                  className="regform-field-box"
                   name="email"
                   rules={[
                     {
@@ -115,14 +117,19 @@ const Register = () => {
                 </Form.Item>
 
                 <Form.Item
-                className="regform-field-box"
+                  className="regform-field-box"
                   name="password"
                   rules={[
                     { required: true, message: "Please enter a password" },
-                    { min: 8, message: "Password must be at least 8 characters" },
                     {
-                      pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=]).*$/,
-                      message: "Password must include at least one lowercase letter, one uppercase letter, one number, and one special character (@, #, $, etc.)",
+                      min: 8,
+                      message: "Password must be at least 8 characters",
+                    },
+                    {
+                      pattern:
+                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=]).*$/,
+                      message:
+                        "Password must include at least one lowercase letter, one uppercase letter, one number, and one special character (@, #, $, etc.)",
                     },
                   ]}
                 >
@@ -137,7 +144,7 @@ const Register = () => {
                   Must be at least 8 characters
                 </small>
 
-                <Form.Item name="newsletter" valuePropName="checked" >
+                <Form.Item name="newsletter" valuePropName="checked">
                   <Checkbox className="checkBoxWrapper receive-txt-box">
                     Receive occasional emails with exclusive special offers and
                     product updates.
@@ -148,8 +155,8 @@ const Register = () => {
                   size="large"
                   type="primary"
                   htmlType="submit"
-               className="loginBtn regBtn w-100"
-               loading={loading}
+                  className="loginBtn regBtn w-100"
+                  loading={loading}
                 >
                   Register
                 </Button>
@@ -167,12 +174,21 @@ const Register = () => {
 
               <div className="auth-footer text-center mt-2">
                 <p>
-                  Already have an account? <Link href="/login" className="alreadyText">Login</Link>
+                  Already have an account?{" "}
+                  <Link href="/login" className="alreadyText">
+                    Login
+                  </Link>
                 </p>
                 <p className="text-muted">
                   By registering you accept our{" "}
-                  <Link href="/terms" className="alreadyText">Terms of Use</Link> and{" "}
-                  <Link href="/privacy" className="alreadyText">Privacy Policy</Link>.
+                  <Link href="/terms" className="alreadyText">
+                    Terms of Use
+                  </Link>{" "}
+                  and{" "}
+                  <Link href="/privacy" className="alreadyText">
+                    Privacy Policy
+                  </Link>
+                  .
                 </p>
               </div>
             </Card>

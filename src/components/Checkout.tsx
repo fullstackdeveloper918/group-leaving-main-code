@@ -350,6 +350,7 @@ const Checkout = ({ data }: any) => {
             <RazorPay
               amount={TotalAmount}
               cart_id={id}
+              card_name={shareCartData?.data?.cardData?.title}
               type={bundleOption}
               bundleId={selectBundle?.uuid}
               numberOfCards={bundleOption === "bundle" ? numCards : 1}
