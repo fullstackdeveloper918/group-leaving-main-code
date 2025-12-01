@@ -10,8 +10,8 @@ const AccountSlider = ({ type }: any) => {
     router.push(url);
   };
   return (
-    <div className="flex justify-start items-center border-gray-200 mb-6 account-tab-outer">
-      <div className="flex space-x-6 account-tab-box">
+    <div className="flex justify-start items-center border-gray-200 mb-6 account-tab-outer account-btn">
+    <div className="flex space-x-6 account-tab-box">
         {/* Navigate to Cards */}
         {/* <a
           onClick={() => handleNavigation('/account/cart')}

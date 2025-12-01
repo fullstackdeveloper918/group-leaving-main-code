@@ -859,6 +859,7 @@ console.log(lastSlideIndex,"lastSlideIndex")
               Add Your Message
             </button>
           </div>
+          <div className="chooes-card flex gap-3" >
           <div className="search_input">
             <input
               type="file"
@@ -950,6 +951,8 @@ console.log(lastSlideIndex,"lastSlideIndex")
                 </div>
               </div>
             )}
+          </div>
+
           </div>
           {id !== "fwzDVjvbQ_X" && (
             <div style={{ textAlign: "center" }}>

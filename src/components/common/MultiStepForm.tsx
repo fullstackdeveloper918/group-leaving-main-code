@@ -233,7 +233,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
         )}
       </div>
 
-      <div className="bg-white shadow-lg rounded-lg p-10 w-full max-w-lg">
+      <div className="receive-card bg-white shadow-lg rounded-lg p-10 w-full max-w-lg">
         <h2 className="text-2xl font-semibold mb-6">
           {step === 1
             ? "Who will receive this card?"

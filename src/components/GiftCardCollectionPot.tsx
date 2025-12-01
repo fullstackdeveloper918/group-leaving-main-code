@@ -359,7 +359,7 @@ const GiftCardCollectionPot = ({
 
         {isGiftCardModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-            <div className="bg-white shadow-lg max-w-lg w-full relative overflow-auto broad-model-box">
+            <div className=" chooes-gift-card bg-white shadow-lg max-w-lg w-full relative overflow-auto broad-model-box ">
               <h2 className="model-head-broad font-semibold mb-2 text-center">
                 Choose a Gift Card
               </h2>
@@ -480,7 +480,7 @@ const GiftCardCollectionPot = ({
         )}
         {isContributeModalOpen && selectedProduct && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-            <div className="bg-white p-6 rounded-md shadow-lg max-w-lg w-full relative">
+            <div className="bg-white p-6 rounded-md shadow-lg max-w-lg w-full relative contribute-card">
               <h2 className="text-center py-3">Contribute to the Gift Card</h2>
 
               <button

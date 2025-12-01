@@ -45,7 +45,7 @@ const CardCollection = async ({ params }: any) => {
   console.log(searchQuery, "searchQuery");
   console.log(response, "Card Listing Response");
   return (
-    <div className=" bg-lightBg py-12">
+    <div className=" bg-lightBg pt-12">
       <div className="container-fluid">
         <div className="md:flex md:space-x-3 md:space-y-0 space-y-6 ">
           {/* Sidebar with collection data */}
@@ -56,7 +56,7 @@ const CardCollection = async ({ params }: any) => {
           />
           <main className="flex-1 md:pl-3">
             <div className="flex md:justify-between md:items-center mb-6 md:flex-row flex-col-reverse justify-start">
-              <h2 className="xl:text-4xl md:text-lg text-md font-semibold mt-3">
+              <h2 className="xl:text-4xl md:text-lg text-md font-semibold mt-3 ">
                 Pick a <span className="capitalize">{params?.slug[0]}</span>{" "}
                 Card Design
               </h2>

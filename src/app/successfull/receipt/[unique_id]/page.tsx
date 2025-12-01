@@ -21,33 +21,33 @@ const ReceiptPage = async ({ params }: { params: { unique_id: string } }) => {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center bg-gray-100 py-10">
-      <div className="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full h-[700px]">
-        <h1 className="text-2xl font-bold mb-[90px] text-center text-[25px]">Receipt</h1>
+      <div className="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full">
+        <h1 className="text-2xl font-bold mb-[30px] text-center text-[25px] text-[#5696db]">Receipt</h1>
         {receipt ? (
           <>
-            <div className="mb-4  flex flex-col gap-6">
-              <div className="flex justify-between mb-2 ">
+            <div className="mb-4 flex flex-col gap-4 receipt-card">
+              <div className=" receipt-list flex justify-between">
                 <span className="font-semibold">Product</span>
-                <span>Group Card</span>
+                <span className="text-[14px]">Group Card</span>
               </div>
-              <div className="flex justify-between mb-2">
+              <div className="receipt-list  flex justify-between ">
                 <span className="font-semibold">Recipient Name:</span>
-                <span>{receipt.recipient_name || "-"}</span>
+                <span className="text-[14px]">{receipt.recipient_name || "-"}</span>
               </div>
-              <div className="flex justify-between mb-2">
+              <div className="receipt-list flex justify-between ">
                 <span className="font-semibold">Recipient Email:</span>
-                <span>{receipt.recipient_email || "-"}</span>
+                <span className="text-[14px]">{receipt.recipient_email || "-"}</span>
               </div>
-              <div className="flex justify-between mb-2">
+              <div className="receipt-list flex justify-between ">
                 <span className="font-semibold">Sender Name:</span>
-                <span>{receipt.sender_name || "-"}</span>
+                <span className="text-[14px]">{receipt.sender_name || "-"}</span>
               </div>
-              <div className="flex justify-between mb-2">
+              <div className="flex justify-between ">
                 <span className="font-semibold">Amount:</span>
-                <span>{receipt.currency_type} {receipt.amount || "-"}</span>
+                <span className="text-[14px]">{receipt.currency_type} {receipt.amount || "-"}</span>
               </div>
             </div>
-            <div className="text-center mt-[200px]">
+            <div className="text-center mt-[30px]">
               <span className="text-green-600 text-[20px] font-semibold text-lg">
                 Thank you for your purchase!
               </span>

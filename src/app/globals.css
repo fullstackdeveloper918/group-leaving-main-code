@@ -796,7 +796,7 @@ body {
   padding-bottom: 30px;
 }
 .account-sec-main {
-  padding: 80px 20px;
+  padding: 40px 20px;
 }
 .seeGiftbtn {
   background: transparent;
@@ -1072,6 +1072,16 @@ button.cancel-editBtn:hover {
   padding: 13px 20px;
   line-height: normal;
 }
+.receipt-card{
+    border: 1px solid #80808014;
+    padding: 20px;
+    border-radius: 10px !important;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+}
+.receipt-list{
+  border-bottom: 1px solid #80808014; 
+  padding: 10px 0px;
+}
 
 @media (max-width: 1600px) {
   .partner_logos img {
@@ -1334,7 +1344,7 @@ button.cancel-editBtn:hover {
     font-size: 24px;
   }
   .account-sec-main {
-    padding: 60px 15px;
+    padding: 40px 15px;
   }
   .account-main-head {
     font-size: 30px;
@@ -1630,7 +1640,17 @@ button.cancel-editBtn:hover {
   div#main-carousle button.add_btn {
         padding: 13px 40px !important;
   }
-
+.contribute-card{
+  max-width: 90% !important;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+}
+.chooes-gift-card{
+    max-width: 90% !important;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+}
+.receive-card{
+  margin-top: 40px !important;
+}
 }
 
 @media (max-width: 765px) {
@@ -2816,6 +2836,16 @@ left: unset !important;
   .success-container {
     padding: 20px !important;
   }
+    .account-btn{
+    justify-content: center !important;
+  }
+  .gift-collec {
+        padding: 50px 0 !important;
+      }
+      .gift-collec h2{
+        margin-top: -20px;
+      }
+
 }
 
 @media (max-width: 480px) {

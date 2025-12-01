@@ -46,7 +46,7 @@ const AccountCards = ({ data }: any) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8 py-md-10">
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-3 py-md-10">
       <h1 className="font-bold mb-4 mb-md-5 my-card-head">My Cards</h1>
       <div className="w-full account-card-box">
         {!cards || cards.length === 0 ? (
