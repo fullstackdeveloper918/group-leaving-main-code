@@ -78,45 +78,68 @@ const Login = () => {
   // };
 
   const onFinish1 = async (values: any) => {
-    let items = {
-      // full_name: capFirst(values?.full_name),
+    console.log("running login");
+
+    const items = {
       email: String(values.email).toLowerCase(),
       password: values.password,
     };
 
+    console.log("items for login", items);
+
     try {
       setLoading(true);
-      const res = await api.Auth.login(items);
-      console.log(res.data, "reerrer");
-      Cookies.set("userInfo", JSON.stringify(res?.data));
-      // Cookies.set("user_infos", res?.data);
-      if (res?.data) {
-        toast.success("Login Successfully", { autoClose: 1000 });
-        router.replace("/");
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(items),
+      });
+
+      const data = await res.json(); // must await
+
+      console.log("Login response:", data);
+
+      // ------------------ ERROR HANDLING ------------------
+      if (res.status === 401 || data.message === "Unauthorized") {
+        toast.error("Invalid email or password.");
+        return;
       }
 
-      api.setToken(JSON.stringify(res?.token));
-      setAccessToken(JSON.stringify(res?.token));
-      // createSessionCookie(JSON.stringify(res?.token));
-      createSessionCookie2(JSON.stringify(res?.token));
-      createSessionCookie1(JSON.stringify(res?.data));
-      if (res?.token) {
-        Cookies.set("auth_token", res?.token, {
+      if (!res.ok) {
+        toast.error(data.message || "Login failed");
+        return;
+      }
+
+      // ------------------ SUCCESS HANDLING ------------------
+      toast.success("Login Successfully", { autoClose: 1000 });
+      console.log(data.data, "data user here login");
+      // Save user
+      Cookies.set("userInfo", JSON.stringify(data.data));
+
+      // Save token
+      if (data.token) {
+        Cookies.set("auth_token", data.token, {
           sameSite: "None",
           secure: true,
         });
-        localStorage.setItem("access_token", JSON.stringify(res?.token)); // Store the token in localStorage
+
+        localStorage.setItem("access_token", JSON.stringify(data.token));
       }
-      // router.replace("/");
+
+      // Optional custom cookies
+      createSessionCookie2(JSON.stringify(data.token));
+      createSessionCookie1(JSON.stringify(data.data));
+
+      // Redirect
+      router.replace("/");
     } catch (error: any) {
-      console.log(error?.response?.body?.message, "werwer");
+      console.log("login error", error);
+      toast.error("Something went wrong");
+    } finally {
       setLoading(false);
-      if (error?.response?.body?.message === "Unauthorized") {
-        toast.error("Invalid email or password.");
-        // setCorrectPass(true);
-      } else {
-        toast.error(error?.response?.body?.message);
-      }
     }
   };
 

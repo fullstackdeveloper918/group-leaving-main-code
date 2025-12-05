@@ -25,8 +25,6 @@ const Register = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const onFinish = async (values: any) => {
-    console.log(values, "lsjdflj");
-
     let items = {
       full_name: validation.toLowCase(values?.full_name),
       email: String(values.email).toLowerCase(),
@@ -35,18 +33,42 @@ const Register = () => {
     };
 
     try {
+      console.log("running register");
       setLoading(true);
-      let res = await api.Auth.signUp(items);
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // backend DOES NOT expect { items }
+          body: JSON.stringify(items),
+        }
+      );
+
+      const data = await res.json(); // MUST await
+      console.log("resforregister", data);
+
+      // Handle 409 here
+      if (res.status === 409) {
+        toast.error("Email already exists", { autoClose: 3000 });
+        return;
+      }
+
+      if (!res.ok) {
+        toast.error(data.message || "Registration error");
+        return;
+      }
+
       toast.success("Please verify your email to continue", {
         autoClose: 2000,
       });
-      console.log("resforregister", res);
-      // router.replace("/login")
+      router.replace("/login");
     } catch (error: any) {
       console.log("errorinregister123", error);
-      if (error?.status === 409 || error?.message === "Email already exists") {
-        toast.error("Email already exists", { autoClose: 3000 });
-      }
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }
