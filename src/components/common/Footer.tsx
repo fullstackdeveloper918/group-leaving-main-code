@@ -75,7 +75,7 @@ const Footer: React.FC = () => {
                 Office
               </a>
             </li>
-            <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2  ">
+            {/* <li className="block  py-2  no-underline text-black  transition-all ease-in  text-black hover:text-blueBg hover:px-2  ">
               <a
                 href="/license-verification"
                 className="text-black hover:text-blueBg no-underline"
@@ -90,7 +90,7 @@ const Footer: React.FC = () => {
               >
                 Spay & Neuter
               </a>
-            </li>
+            </li> */}
           </ul>
         </Col>
 
