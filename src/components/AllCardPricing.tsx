@@ -227,7 +227,7 @@ const AllCardPricing = ({ data, data2 }: any) => {
       </div>
 
       {/* Card Bundles Section */}
-      <div ref={bundlesRef} className="container py-0 lg:py-20 ">
+      <div ref={bundlesRef} className="container py-0 lg:py-20 " id="card_bundle">
         <h1 className="2xl:text-4xl text-center lg:text-2xl text-xl font-semibold lg:mb-6 mb:2 text-gray-800 pt-5">
           Pricing and Card Bundles
         </h1>

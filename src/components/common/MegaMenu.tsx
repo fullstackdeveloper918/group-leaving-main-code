@@ -20,6 +20,7 @@ import {
   PartyPopper,
   PartyPopperIcon,
   Smile,
+  WalletCards,
 } from "lucide-react";
 import { FaAward } from "react-icons/fa";
 
@@ -231,6 +232,29 @@ const MegaMenu = () => {
                         <div className="flex ">
                           <div className="flex flex-1 flex-col space-y-2">
                             <div className="flex items-center gap-3">
+                             {/* <Group height={40} color="#1b6fc9" width={40} /> */}
+                             <WalletCards height={40} color="#1b6fc9" width={40} />
+                              <h3 className="text-xl mt-2 font-semibold">
+                                Card Bundles
+                              </h3>
+                            </div>
+                            <p className="text-gray-600">
+                              Create cards one at a time to send to a friend or colleague or purchase a card bundle if you plan to send 5 or more cards.
+                            </p>
+                          </div>
+                          <div className="flex items-end h-full">
+                            <Link href="/pricing#card_bundle">
+                              <button className="mt-2  h-[40px] shadow-2xl bg-[#558EC9] text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition">
+                                Get Started
+                              </button>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                      {/* <div className="flex flex-col space-y-2 p-4 bg-white rounded-lg shadow ">
+                        <div className="flex ">
+                          <div className="flex flex-1 flex-col space-y-2">
+                            <div className="flex items-center gap-3">
                               <Group height={40} color="#1b6fc9" width={40} />
                               <h3 className="text-xl mt-2 font-semibold">
                                 Bulk Send Cards
@@ -277,7 +301,7 @@ const MegaMenu = () => {
                             </Link>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>

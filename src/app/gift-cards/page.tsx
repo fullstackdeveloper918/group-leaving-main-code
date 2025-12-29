@@ -130,8 +130,8 @@ const page = async () => {
           <h2 className="2xl:text-4xl text-center lg:text-2xl text-xl font-semibold lg:mb-6 mb:2 text-gray-800">
             Begin Free of Charge
           </h2>
-          <div className="space-y-6 grid md:grid-col-3 md:grid-col-2  md:grid-flow-col gap-4 pt-2">
-            <div className="bg-white p-6 rounded-[20px] hover:shadow-lg transition-all  border border-[#e5e7eb]  h-full">
+          <div className="space-y-6 grid md:grid-col-2 md:grid-col-2  md:grid-flow-col gap-4 pt-2">
+            {/* <div className="bg-white p-6 rounded-[20px] hover:shadow-lg transition-all  border border-[#e5e7eb]  h-full">
               <h3 className="font-semibold text-lg mb-2">
                 Start a No-Cost Collection Pot
               </h3>
@@ -144,7 +144,7 @@ const page = async () => {
                   Open a Free Money Pool
                 </button>
               </Link>
-            </div>
+            </div> */}
 
             <div className="bg-white p-6 rounded-[20px] hover:shadow-lg transition-all  border border-[#e5e7eb] m-0  h-full">
               <h3 className="font-semibold text-lg mb-2">
@@ -163,15 +163,15 @@ const page = async () => {
 
             <div className="bg-white p-6 rounded-[20px] hover:shadow-lg transition-all m-0 border border-[#e5e7eb]  h-full">
               <h3 className="font-semibold text-lg mb-2">
-                Start a Group Board with Fund
+                Start a Card Bundles with Fund
               </h3>
               <p className="text-sm ">
-                Attach a collection pot to any new or current Group Board for
+                Attach a collection pot to any new or current Card Bundles for
                 free.
               </p>
-              <Link href={`/board`}>
+              <Link href={`/pricing#card_bundle`}>
                 <button className="mt-3 px-3 bg-blue-600 text-blueText  py-2 rounded-xl border-1 border-[blueText] hover:bg-blue-700">
-                  Create a Group Board
+                  Create a Card Bundles
                 </button>
               </Link>
             </div>

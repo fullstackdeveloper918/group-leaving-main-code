@@ -13,7 +13,7 @@ const page = () => {
         <h2 className="font-semibold text-center sCardpara">
           What would you like to create?
         </h2>
-        <div className="grid md:grid-cols-3 sm:grid-cols-1   lg:grid-cols-3 md:gap-8 gap-4 lg:mt-5 justify-center">
+        <div className="grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 md:gap-8 gap-4 lg:mt-5 justify-center">
           <Link href="/card/farewell" className="no-underline">
             <OptionCard
               title="Greeting"
@@ -22,7 +22,15 @@ const page = () => {
               buttonText="Create Greeting"
             />
           </Link>
-          <Link href={`/board`} className="no-underline">
+          <Link href={`/pricing#card_bundle`} className="no-underline">
+            <OptionCard
+              title="Card Bundles"
+              imageSrc={Images?.board}
+              description="Create cards one at a time to send to a friend or colleague or purchase a card bundle if you plan to send 5 or more cards."
+              buttonText="Create Card Bundles"
+            />
+          </Link>
+          {/* <Link href={`/board`} className="no-underline">
             <OptionCard
               title="Greeting board"
               imageSrc={Images?.board}
@@ -39,7 +47,7 @@ const page = () => {
               buttonText="Create Gift fund"
               isFree={true}
             />
-          </Link>
+          </Link> */}
         </div>
       </div>
     </div>

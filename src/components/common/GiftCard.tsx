@@ -91,9 +91,9 @@ const GiftCard = ({ data }: any) => {
       {isModalOpen && (
         <>
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-            <div className="bg-white p-6 rounded-md shadow-lg max-w-lg w-full relative overflow-auto">
+            <div className="bg-white p-6 rounded-md shadow-lg max-w-lg w-full relative overflow-auto max-h-[100%]">
               {/* Top-left Cancel Button */}
-              <h2 className="text-lg font-semibold mb-4 text-center">
+              <h2 className="text-lg font-semibold mb-1 text-center">
                 Choose a Gift Card
               </h2>
 
@@ -105,7 +105,7 @@ const GiftCard = ({ data }: any) => {
               </button>
 
               {/* How Collection Pots Work */}
-              <div className="bg-blue-100 p-4 rounded-md mb-4">
+              <div className="bg-blue-100 p-4 rounded-md mb-2">
                 <h3 className="text-sm font-semibold">
                   How does a collection pot function?
                 </h3>
@@ -132,7 +132,7 @@ const GiftCard = ({ data }: any) => {
                   <div className="">
                     <img src={selectGiftImage} alt="" className="" />
                   </div>
-                  <div className="w-20 h-12 bg-black text-white flex items-center justify-center rounded mb-4">
+                  <div className="px-6 py-2 bg-black text-white flex items-center justify-center rounded mb-4 mt-2">
                     {selectedImage.brandName}
                   </div>
                   <h2 className="text-xl font-bold mb-2">
@@ -162,12 +162,12 @@ const GiftCard = ({ data }: any) => {
                   </p>
                   <a
                     href="#"
-                    className="text-sm text-blue-600 hover:underline mt-4"
+                    className="text-sm text-blue-600 hover:underline mt-2"
                   >
                     Terms and conditions
                   </a>
                   {/* <button
-                    className="bg-blue-600 text-black px-4 py-2 rounded mt-6 hover:bg-blue-700"
+                    className="bg-blue-600 text-black px-4 py-2 rounded mt-2 hover:bg-blue-700"
                     onClick={AddGiftCard}
                   >
                     Add Gift Card
@@ -213,7 +213,7 @@ const GiftCard = ({ data }: any) => {
               )}
 
               {/* Modal Footer */}
-              <p className="text-sm text-gray-500 mt-4 text-center">
+              <p className="text-sm text-gray-500 mt-2 text-center">
                 You will be redirected to Stripe, our payment provider, to
                 finish your payment.
               </p>

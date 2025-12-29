@@ -24,8 +24,10 @@ const CreateGroup = ({ data }: any) => {
   const [state, setState] = useState<any>("");
   // const openModal = () => setIsModalOpen(true);
   const openModal = async () => {
+    console.log("clicked here1");
     try {
       setLoading1(true);
+      console.log("clicked here2");
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/order/create-token`,
         {
@@ -38,14 +40,16 @@ const CreateGroup = ({ data }: any) => {
           body: "",
         }
       );
-
+      console.log("clicked here3.1");
       // Check if the request was successful
       if (!response.ok) {
         throw new Error("Failed to add item to cart");
       }
+      console.log("clicked here3");
 
       const data = await response.json(); // Assuming the response returns JSON
       console.log(data, "sdfghjkl;");
+      console.log("clicked here4");
       const response1 = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/order/get-products`,
         {
@@ -63,9 +67,11 @@ const CreateGroup = ({ data }: any) => {
       if (!response1.ok) {
         throw new Error("Failed to add item to cart");
       }
-
+      console.log("clicked here5");
       const data1 = await response1.json();
+      console.log("clicked here6");
       console.log(data1, "data1");
+
       setState(data1);
       setIsModalOpen(true);
       // toast.success("Added Successfully", {autoClose:2000});
