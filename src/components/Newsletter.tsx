@@ -15,17 +15,26 @@ const NewsletterForm: React.FC = () => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission here
+  e.preventDefault();
 
-    toast.success("subscribed successfully!");
-    setFormData({
-      firstName: "",
-      email: "",
-      phoneNumber: "",
-    });
-    console.log("Form Data: ", formData);
-  };
+  const { firstName, email, phoneNumber } = formData;
+
+  // Validation
+  if (!firstName || !email || !phoneNumber) {
+    toast.error("Please fill in all fields");
+    return;
+  }
+
+  // Success
+  toast.success("Subscribed successfully!");
+  console.log("Form Data: ", formData);
+
+  setFormData({
+    firstName: "",
+    email: "",
+    phoneNumber: "",
+  });
+};
 
   return (
     <div className="container-fluid newsletter_section common_padding">

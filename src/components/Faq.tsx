@@ -10,8 +10,8 @@ type FAQItem = {
 const Faq = () => {
   
   return (
-    <div className="max-w-4xl mx-auto py-8">
-      <h1 className="text-3xl font-semibold mb-6 text-center">Frequently Asked Questions</h1>
+    <div className="">
+      <h1 className="text-3xl font-semibold mb-6 text-left">Frequently Asked Questions</h1>
       <div className="bg-white shadow-md rounded-lg p-6">
         {/* <div className="mb-4">
           <input

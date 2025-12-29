@@ -359,7 +359,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
                 onClick={handleNext}
                 className="w-full bg-[#558ec9] mt-2 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700"
               >
-                Continue →
+                Continue
               </button>
             </>
           )}
