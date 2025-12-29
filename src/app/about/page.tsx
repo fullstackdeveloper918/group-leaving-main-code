@@ -31,7 +31,7 @@ const AboutUs = () => {
         <h2 className="text-xl font-semibold mt-6 mb-2">Designed for Simplicity</h2>
         <p>
           Our platform is designed to be intuitive and accessible. Whether
-          you're creating a card for a close friend or organizing a team
+          you&apos;re creating a card for a close friend or organizing a team
           message, GroupWish keeps the process smooth, fast, and enjoyable.
         </p>
 
@@ -57,7 +57,7 @@ const AboutUs = () => {
         </p>
 
         <div className="">
-          <span>Thank you for choosing Groupwish. Together, let's make every moment special and every card unforgettable. </span>
+          <span>Thank you for choosing Groupwish. Together, let&apos;s make every moment special and every card unforgettable. </span>
         <p>Join our growing community and discover the joy of group celebrations, made easy and memorable with Groupwish.</p>
         </div>
       </div>
