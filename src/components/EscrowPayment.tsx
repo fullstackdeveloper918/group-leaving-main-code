@@ -63,7 +63,7 @@ const EscrowPayment = ({ closeModal, brandKey, groupId,paymentAmount,name }: any
 
       // Configure Razorpay Checkout options
       const options = {
-        key: "rzp_test_NPDqhJnbXJi072",
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "",
         amount: paymentAmount * 100, // Razorpay requires the amount in paise
         currency: "INR",
         name: name||"Anonymous",
