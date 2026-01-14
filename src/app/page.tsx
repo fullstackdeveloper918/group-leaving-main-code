@@ -33,7 +33,7 @@ const Home: React.FC<HomeProps> = async ({ searchParams }) => {
   const data: ApiResponse<any> = await fetchFromServer(api);
   // Fetch second API response
   const api2: Api = {
-    url: "${process.env.NEXT_PUBLIC_API_URL}/card/collection-listing",
+    url: `${process.env.NEXT_PUBLIC_API_URL}/card/collection-listing`,
     method: "GET",
   };
   
