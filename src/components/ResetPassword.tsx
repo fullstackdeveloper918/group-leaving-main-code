@@ -26,7 +26,6 @@ const ResetPassword = () => {
         }
       );
       const data = await response.json();
-      // console.log(data, "responseResetPassword");
 // toast.success(data.message)
       if (data?.status === 200 && data?.message) {
         toast.success(data?.message, {autoClose:2000});

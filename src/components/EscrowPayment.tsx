@@ -12,7 +12,6 @@ declare global {
 }
 
 const EscrowPayment = ({ closeModal, brandKey, groupId,paymentAmount,name }: any) => {
-  console.log(groupId, "groupId");
 
   const router = useRouter();
 
@@ -22,7 +21,6 @@ const EscrowPayment = ({ closeModal, brandKey, groupId,paymentAmount,name }: any
   const [isProcessing, setIsProcessing] = useState(false);
   const [userInfo, setUserInfo] = useState<any>(null);
   const [uuid, setUuid] = useState<string | null>(null);
-  console.log(uuid, "uuid");
   useEffect(() => {
     const cookies = document.cookie.split("; ");
     const userInfoCookie = cookies.find((cookie) =>
@@ -38,7 +36,6 @@ const EscrowPayment = ({ closeModal, brandKey, groupId,paymentAmount,name }: any
         // Extracting the UUID from the parsed userInfo object
         if (parsedUserInfo && parsedUserInfo.uuid) {
           setUuid(parsedUserInfo.uuid);
-          console.log("UUID:", parsedUserInfo.uuid);
         }
       } catch (error) {
         console.error("Error parsing userInfo cookie", error);
@@ -52,15 +49,7 @@ const EscrowPayment = ({ closeModal, brandKey, groupId,paymentAmount,name }: any
       const response = await fetch("/api/create", { method: "POST" });
       const data = await response.json();
 
-      //   if (data.error) {
-      //     console.error("Error from backend:", data.error);
-      //     return;
-      //   }
-
-      // Log the escrow hold amount and beneficiary account
-      console.log("Escrow Hold Amount:", data.holdAmount); // Log hold amount
-      console.log("Beneficiary Account:", data.beneficiaryAccount); // Log beneficiary account
-
+     
       // Configure Razorpay Checkout options
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "",
@@ -70,7 +59,6 @@ const EscrowPayment = ({ closeModal, brandKey, groupId,paymentAmount,name }: any
         description: "Test Transaction with Escrow",
         order_id: data.orderId, // Use the order ID from the backend respo7nse
         handler: function (response: any) {
-          console.log("Payment successful", response);
           fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/razorpay/save-payment`,
             // 'https://dating.goaideme.com/razorpay/link-by-user-id',
@@ -104,7 +92,6 @@ const EscrowPayment = ({ closeModal, brandKey, groupId,paymentAmount,name }: any
       // Initialize and open Razorpay Checkout
       const rzp1 = new window.Razorpay(options);
       rzp1.open();
-      // console.log(rzp1,"rzp1paymentStatus")
       closeModal();
       
     } catch (error) {

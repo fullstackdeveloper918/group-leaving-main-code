@@ -112,22 +112,18 @@ const Custom: React.FC = () => {
   const [type, setType] = useState<string>("");
   const [slides, setSlides] = useState<any[]>([]);
   const [shareImageData, setShareImageData] = useState<any>(null);
-  console.log(slides, "sldessss");
   const pathname = usePathname();
   const isEditorPath = /^\/share\/editor\/[^/]+$/.test(pathname);
 
   const [first, second] = pathname.split("/").slice(1, 3);
   const basePath = `/${first}/${second}`;
 
-  console.log(pathname, "isEditorPath");
 
   // Initialize params.id
   useEffect(() => {
-    console.log(params?.id, "id here to fix lalala");
     if (params.id) setId(params.id);
   }, [params]);
 
-  console.log(id, "id here to fix");
   // Initialize userInfo from cookies
   useEffect(() => {
     const cookies = nookies.get();
@@ -164,10 +160,8 @@ const Custom: React.FC = () => {
 
     fetchData();
   }, [gettoken]);
-  console.log(shareImageData, "shareImageData here");
 
   // if (basePath === "/share/editor") {
-  console.log(params, "params here to fix");
   const cardShareData = shareImageData?.listing?.find(
     (item: any) => item?.message_unique_id === params.id
   );
@@ -186,7 +180,6 @@ const Custom: React.FC = () => {
       ]);
     }
   }, [basePath, cardShareData]);
-  console.log("cardShareData", cardShareData);
   // }
 
   // Load elements from API and initialize slides
@@ -203,17 +196,17 @@ const Custom: React.FC = () => {
   //       if (!response.ok) throw new Error("Failed to fetch data");
   //       const data = await response.json();
 
-  //       console.log(data,"data is here for check")
+  //       // console.log(data,"data is here for check")
   //       const apiElements = data?.data[0]?.editor_messages || [];
   //       setElements(apiElements);
 
-  //       console.log(apiElements,"apiElements")
+  //       // console.log(apiElements,"apiElements")
   //       // Determine the maximum slideIndex from API elements
   //       const maxIndex =
   //         apiElements.length > 0
   //           ? Math.max(...apiElements.map((el: any) => el.slideIndex), 0) : 0;
 
-  //           console.log(maxIndex,"filledSlide length max")
+  //           // console.log(maxIndex,"filledSlide length max")
   //       // Initialize slides based on path and max slideIndex
   //       let filledSlides = isEditorPath
   //         ? [
@@ -227,7 +220,7 @@ const Custom: React.FC = () => {
   //             },
   //           ]
   //         : [...initialSlides];
-  //           console.log("filledSlide length", filledSlides.length)
+  //           // console.log("filledSlide length", filledSlides.length)
   //       // Add additional slides up to maxIndex
   //       for (let i = filledSlides.length; i <= maxIndex; i++) {
   //         filledSlides.push({
@@ -240,7 +233,7 @@ const Custom: React.FC = () => {
   //         });
   //       }
 
-  //       console.log(filledSlides.length,"filledSlide length")
+  //       // console.log(filledSlides.length,"filledSlide length")
 
   //       setSlides(filledSlides);
   //     } catch (error) {
@@ -267,15 +260,12 @@ const Custom: React.FC = () => {
         if (!response.ok) throw new Error("Failed to fetch data");
 
         const data = await response.json();
-        console.log("Fetched data here:", data);
 
         const apiElements = data?.data?.[0]?.editor_messages || [];
         setElements(apiElements);
-        console.log("API Elements:", apiElements);
 
         // const getitingNewSlide = apiElements?.map(e)=> e.filter(slides?.lastIndex.slideIndex == e?.slideIndex return true)
 
-        console.log(slides, "ddddddd");
         // Get max slide index from API data
         const maxIndex =
           apiElements.length >= 0
@@ -296,7 +286,6 @@ const Custom: React.FC = () => {
           ]
           : [...initialSlides];
 
-        console.log("Initial filledSlides length:", maxIndex, filledSlides.length);
 
         // Only add new slides if maxIndex requires it
         if (maxIndex + 1 > filledSlides.length) {
@@ -312,7 +301,6 @@ const Custom: React.FC = () => {
           }
         }
 
-        console.log("Updated filledSlides length1:", slides);
         setSlides(filledSlides);
       } catch (error) {
         console.error("Error fetching editor data:", error);
@@ -324,14 +312,13 @@ const Custom: React.FC = () => {
     fetchEditorData();
   }, []);
 
-  console.log(elements?.length, "new element hree");
 
   // Refined cleanup function: remove all empty slides from the end except the last one
   // function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
-  //   console.log(slidesArr, elementsArr ,"please giving")
+  //   // console.log(slidesArr, elementsArr ,"please giving")
   //   let lastWithContent = slidesArr.length - 1;
 
-  //   console.log(lastWithContent,"lastWithContent new")
+  //   // console.log(lastWithContent,"lastWithContent new")
   //   for (; lastWithContent >= 0; lastWithContent--) {
   //     const hasContent = elementsArr.some(
   //       (el: any) =>{if(el.slideIndex && !lastWithContent){
@@ -348,7 +335,6 @@ const Custom: React.FC = () => {
   //   return slidesArr.slice(0, newLength);
   // }
 function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
-  console.log(slidesArr, elementsArr, "please giving new slides");
 
   // Clone the slides to avoid mutating the original
   const newSlides = [...slidesArr];
@@ -370,7 +356,6 @@ function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
               card_img: SlideImg_6,
             }); // Or default slide structure
         }
-        console.log(`Added ${missingCount} missing slides`);
         return true; // Now consider it as having content
       }
 
@@ -395,14 +380,11 @@ function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
     // Clean up extra empty slides at the end, but never remove the last one
     setSlides((prevSlides) => cleanupSlides(prevSlides, elements));
 
-    console.log(elements, slides, "here to matched data");
     const lastSlide = slides?.[slides.length - 1];
-    console.log("lastSlide:", lastSlide);
     const isLastSlideInElements = elements?.some(
       (e) => `slide-${e?.slideIndex + 1}` === lastSlide?.id
     );
 
-    console.log(isLastSlideInElements, "isLastSlideInElements");
     if (isLastSlideInElements) {
       const newSlideIndex = slides.length; // e.g., 3 if you already have 3 slides
       const newSlide = {
@@ -418,7 +400,6 @@ function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
     }
   }, [elements]);
 
-  console.log(slides, "elements new");
 
   // Save elements to localStorage and update server
   useEffect(() => {
@@ -452,7 +433,6 @@ function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
     }
   };
 
-  console.log(userInfo, "oiuiuy");
 
   // Update editor data on server
   const updateEditorData = async () => {
@@ -461,7 +441,6 @@ function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
       user_uuid: userInfo ? userInfo?.uuid : "",
       messages_unique_id: id,
     };
-    // console.log(item,"opiuiouio");
 
     // return
     try {
@@ -486,7 +465,6 @@ function cleanupSlides(slidesArr: any[], elementsArr: any[]) {
     if (activeSlideIndex <= 4 && !isEditorPath) {
       const lastSlideIndex = slides.length - 2;
       // const lastSlideIndex = 5;
-console.log(lastSlideIndex,"lastSlideIndex")
       const newSlide = {
         id: `slide-${slides.length + 1}`,
         title: "New Slide",
@@ -823,7 +801,6 @@ console.log(lastSlideIndex,"lastSlideIndex")
     sendEditorData();
     router.push(`/envelop/${id}`);
   };
-  console.log(activeSlideIndex, "piopipi");
 
   // Only for TextEditor: keep modal open and update content on slide change
   useEffect(() => {
@@ -843,7 +820,6 @@ console.log(lastSlideIndex,"lastSlideIndex")
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [activeSlideIndex]);
 
-  console.log("selectedElement heresss", selectedElement);
 
   return (
     <>

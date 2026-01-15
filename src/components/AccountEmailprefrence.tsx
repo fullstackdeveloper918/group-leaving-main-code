@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 
 const AccountEmailprefrence = ({ userInfo, data }: any) => {
   const router = useRouter();
-  console.log(data, "datadatadata");
   const gettoken = Cookies.get("auth_token");
   // const gettoken:any = cookiesList.get('auth_token');
 
@@ -49,11 +48,8 @@ const AccountEmailprefrence = ({ userInfo, data }: any) => {
 
       // Parse the response JSON
       let posts = await res.json();
-      // console.log(posts.message, "sds");
       if (posts?.status === 200) {
-        // console.log(posts.status, "sds");
         toast.success(posts?.message, { autoClose: 2000 });
-        // toast.success("Preferences Updated Successfully");
       } else if (
         posts?.statusCode === 401 &&
         posts?.message === "Token is expire"

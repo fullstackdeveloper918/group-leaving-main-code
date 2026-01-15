@@ -38,7 +38,6 @@ const Home: React.FC<HomeProps> = async ({ searchParams }) => {
   };
   
   const data2: ApiResponse<any> = await fetchFromServer(api2);
-  console.log("Collection Listing Response:", data2.data);
   let user = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/profile`, {
     method: 'GET', // Method set to GET
     headers: {

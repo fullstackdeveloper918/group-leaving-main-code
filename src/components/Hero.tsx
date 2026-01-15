@@ -38,19 +38,12 @@ const Hero = ({
   userData?: any;
   data?: any[];
 }) => {
-  // console.log(userData, "props"); // :white_tick: Corrected console.log
-  // console.log("tokendata", token);
   const [isNewLogin, setIsNewLogin] = useState(false);
   const [displayedText, setDisplayedText] = useState("");
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(true);
   const [categoryName, setCategoryName] = useState(cardData?.data?.[0] || ""); // :white_tick: Avoid undefined error
-  // const searchParams = useSearchParams();
-  // useEffect(()=>{
-  // const tokenFromUrl = searchParams.get("token");
-  // console.log("tokenFromUrla:", searchParams);
-  //   console.log("object")
-  // },[])
+ 
   useEffect(() => {
     const storedToken = Cookies.get("auth_token");
     if (token && !storedToken && token !== "login") {
@@ -87,7 +80,6 @@ const Hero = ({
       typeWriter(categoriesName[currentCategoryIndex], 0);
     }
   }, [currentCategoryIndex, isTyping]);
-  // console.log(displayedText, "displayedText");
   const settings = {
     dots: true,
     infinite: true,

@@ -18,26 +18,21 @@ const PlanBunddlePage = ({ data2 }: any) => {
      const gettoken = Cookies.get("auth_token");   
 
      const TotalAmount = (data2.data[0].sale_price - voucherDiscount).toFixed(2);
-  console.log(TotalAmount, "TotalAmount");
 
   const { accessToken, setAccessToken } = useAccessToken();
   useEffect(() => {
     const cookies = parseCookies();
-    console.log(cookies, "cookies");
     const token = cookies.auth_token;
-    console.log(typeof token, "iooioio");
     if (token) {
       setAccessToken(token);
     } else {
       // alert("nothing")
     }
   }, []);
-  console.log(accessToken, "accessToken");
 
 
    const handleApplyDiscount = async() => {
   
-        console.log("object")
         // setVaoucher1(voucher);
         try {
            const requestData = {
@@ -58,10 +53,8 @@ const PlanBunddlePage = ({ data2 }: any) => {
               
               // Parse the response JSON
               let posts = await res.json();
-              console.log(posts,"jklklkj");
               const numberValue = parseFloat(posts?.data.replace(/[^0-9.]/g, "")); 
               setVaoucherDiscount(numberValue)
-              // console.log("voucher discount", voucherDiscount);
               if(res.status===200){
                 toast.success("Voucher Added Suceesfully", {autoClose:2000})
               }else if(posts?.statusCode === 401){

@@ -70,7 +70,6 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
   const [slides, setSlides] = useState<any[]>([]);
   const [data, setData] = useState<any[]>([]);
   const [shareImageData, setShareImageData] = useState<any>(null);
-  // console.log(slides, "sldessss");
   const pathname = usePathname();
   const isEditorPath = /^\/share\/editor\/[^/]+$/.test(pathname);
   const searchParams = useSearchParams();
@@ -90,7 +89,6 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
         const cachedImage = sessionStorage.getItem(`card_image_${cardId}`);
         if (cachedImage) {
           setShareImageData(cachedImage);
-          console.log("Using cached image from sessionStorage");
           return;
         }
 
@@ -110,7 +108,6 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
           setShareImageData(showImage);
           // Store in sessionStorage
           sessionStorage.setItem(`card_image_${cardId}`, showImage);
-          console.log("Image loaded and stored in sessionStorage");
         } else {
           console.warn("No image found in response");
         }
@@ -320,7 +317,6 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
     });
   };
 
-  // console.log(slides, "elements new");
 
   // Save elements to localStorage and update server
   useEffect(() => {
@@ -349,13 +345,11 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
       );
       if (!response.ok) throw new Error("Failed to upload data");
       const data = await response.json();
-      // console.log("Data uploaded successfully:", data);
     } catch (error) {
       console.error("Error uploading data:", error);
     }
   };
 
-  // console.log(userInfo, "oiuiuy");
 
   // Update editor data on server
   const updateEditorData = async () => {
@@ -364,7 +358,6 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
       user_uuid: userInfo ? userInfo?.uuid : "",
       messages_unique_id: id,
     };
-    // console.log(item,"opiuiouio");
 
     // return
     try {
@@ -378,7 +371,6 @@ const CommonCustomEditor: React.FC<CommonCustomEditorProps> = ({
       );
       if (!response.ok) throw new Error("Failed to upload data");
       const data = await response.json();
-      // console.log("Data uploaded successfully:", data);
     } catch (error) {
       console.error("Error uploading data:", error);
     }

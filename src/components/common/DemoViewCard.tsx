@@ -30,11 +30,9 @@ const DemoViewCard = ({ downloadBoard, excludeDiv }: any) => {
     },
   ];
   const [boardData, setBoardData] = useState<any>([]);
-  console.log(boardData, "boardData");
   let existingResponses = JSON.parse(
     sessionStorage.getItem("signboarddata") || "[]"
   );
-  console.log(existingResponses, "existingResponses");
 
   const getBoard = async () => {
     try {

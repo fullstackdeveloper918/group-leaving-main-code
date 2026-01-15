@@ -23,7 +23,7 @@ const Silder = () => {
     //     swipeToSlide: true,
     //     autoplay: true,
     //     afterChange: function(index:any) {
-    //       console.log(
+    //       // console.log(
     //         `Slider Changed to: ${index + 1}, background: #222; color: #bada55`
     //       );
     //     }

@@ -40,15 +40,12 @@ interface UserInfo {
 const Custom: React.FC = () => {
   const router =useRouter()
   const params = useParams(); // Access the dynamic route params
-  console.log(params,"kjhkjkjhk");
   
   const [id, setId] = useState<any>(null);
-console.log(id,"flsjdfl");
 
 useEffect(() => {
   if (params.id) {
     setId(params.id); // Set the dynamic id (B3729047)
-    console.log("Extracted ID:", params.id); // Log the id
   }
 }, [params]);
    const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
@@ -59,18 +56,14 @@ useEffect(() => {
   const [activeSlideIndex, setActiveSlideIndex] = useState<any>(0);
   useEffect(() => {
     const cookies = nookies.get();
-    console.log("cookiesUserInfo",cookies.userInfo);
     const userInfoFromCookie: UserInfo | null = cookies.userInfo
       ? JSON.parse(cookies.userInfo)
       : null;
     setUserInfo(userInfoFromCookie);
   }, []);
-console.log(userInfo?.uuid,"userInf");
 
   const [elements, setElements] = useState<any[]>([]);
-  // console.log(elements,"elements");
   const sendEditorData = async () => {
-    console.log(elements, "elementsasadsasasdas");
   
     let item = {
       editor_messages: elements,
@@ -106,7 +99,6 @@ console.log(userInfo?.uuid,"userInf");
     "https://groupleavingcards.com/assets/design/66967675b0d2b479aa568c98_sm.avif",
     "https://groupleavingcards.com/assets/design/66d88499b4fb75024aa2d8de_sm.avif",
   ]);
-console.log(elements,"elements");
 const [slides, setSlides] = useState<Slide[]>([
   {
     id: "slide-1",
@@ -154,12 +146,10 @@ const [slides, setSlides] = useState<Slide[]>([
     // card_img:"https://groupleavingcards.com/assets/design/66d88499b4fb75024aa2d8de_sm.avif",
   },
 ]);
-console.log(slides,"wertyuio");
 
 
   useEffect(() => {
     const storedElements:any = localStorage.getItem("slideElements");
-    console.log(JSON.parse(storedElements),"sdafasd");
     
     if (storedElements) {
       setElements(JSON.parse(storedElements));
@@ -192,8 +182,6 @@ console.log(slides,"wertyuio");
       y: 0,
       user_uuid:userInfo?.uuid
     };
-console.log(activeSlideIndex,"activeSlideIndex");
-console.log(newMessage,"newMessage");
 
     setElements([...elements, newMessage]);
     setShowModal(false);
@@ -223,7 +211,6 @@ console.log(newMessage,"newMessage");
   // };
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    console.log(file, "file");
     
     if (!file) {
       console.error("No file selected");
@@ -247,7 +234,6 @@ console.log(newMessage,"newMessage");
       }
   
       const data = await response.json();
-      console.log("Image uploaded successfully:", data);
   
       // Assuming the API responds with an object that includes the URL
       if (data) {
@@ -269,7 +255,6 @@ console.log(newMessage,"newMessage");
               };
   
               // Add the new image object to the state
-              console.log(newImage, "newImage");
               setElements((prevElements) => [...prevElements, newImage]);
             }
           };
@@ -459,16 +444,13 @@ console.log(newMessage,"newMessage");
   const [activeSlide, setActiveSlide] = useState<number>(0); // Default to slide-3
   const totalSlides = slides.length;
 
-  console.log(totalSlides, "totalSlides");
   const progress = ((activeSlide + 1) / totalSlides) * 100;
 
   const handleSlideChange = useCallback((index: number) => {
-    console.log(index,"index")
     setActiveSlide(index);
     setActiveSlideIndex(index);
   }, []);
 
-  console.log(activeSlide,activeSlideIndex, "progress");
 
   
   const openEnvelop=()=>{
@@ -638,7 +620,6 @@ console.log(newMessage,"newMessage");
             {slides.map((slide, index) =>{
 
 
-                console.log(activeSlideIndex , slide.id,"id gete")
           return(
               <>
                 <label
@@ -759,7 +740,6 @@ const DraggableElement = ({
 
   useEffect(() => {
     const cookies = nookies.get();
-    console.log("cookiesUserInfo", cookies.userInfo);
     const userInfoFromCookie: UserInfo | null = cookies.userInfo
       ? JSON.parse(cookies.userInfo)
       : null;
@@ -768,7 +748,7 @@ const DraggableElement = ({
 
   // Log when userInfo1 changes
   useEffect(() => {
-    console.log(userInfo1, "userInfo1 updated");
+    console.log("userInfo1 updated");
   }, [userInfo1]);
   const bind = useDrag((state: any) => {
 
@@ -776,7 +756,6 @@ const DraggableElement = ({
     const [newX, newY] = state.offset;
 
     api.start({ x: newX, y: newY });
-console.log(userInfo1,"piopoi");
 
     setElements((prevElements) => {
       const updatedElements = [...prevElements];

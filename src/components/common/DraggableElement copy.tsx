@@ -183,11 +183,11 @@
 //     setShowImageModal(false);
 //     setSelectedElement(null);
 //   };
-//   console.log(content, "selectedElement");
+//   // console.log(content, "selectedElement");
 
 //   const isImageModalOpenForThisElement =
 //     showImageModal && selectedElement?.originalIndex === index.original;
-//   console.log(content, selectedElement, "size here to set");
+//   // console.log(content, selectedElement, "size here to set");
 //   return (
 //     <Rnd
 //     className={type === "text" ? "editor-react-drag" :""}

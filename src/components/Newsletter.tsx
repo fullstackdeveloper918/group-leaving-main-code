@@ -27,7 +27,6 @@ const NewsletterForm: React.FC = () => {
 
   // Success
   toast.success("Subscribed successfully!");
-  console.log("Form Data: ", formData);
 
   setFormData({
     firstName: "",

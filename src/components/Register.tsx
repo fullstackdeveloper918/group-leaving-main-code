@@ -33,7 +33,6 @@ const Register = () => {
     };
 
     try {
-      console.log("running register");
       setLoading(true);
 
       const res = await fetch(
@@ -49,7 +48,6 @@ const Register = () => {
       );
 
       const data = await res.json(); // MUST await
-      console.log("resforregister", data);
 
       // Handle 409 here
       if (res.status === 409) {

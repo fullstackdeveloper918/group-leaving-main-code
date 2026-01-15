@@ -65,7 +65,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
     showEmailForm: true,
   });
 
-  console.log(selectedElement, "selectedElementlalala");
   const editorRef = useRef<HTMLTextAreaElement>(null);
   const slideRef = useRef<HTMLDivElement>(null); // Reference to slide container
 

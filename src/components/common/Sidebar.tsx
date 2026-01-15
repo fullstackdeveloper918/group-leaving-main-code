@@ -21,12 +21,9 @@ const categories = [
 ];
 
 const Sidebar = ({ urlValue,cardLabel,response }: { urlValue: string,cardLabel:any,response:any }) => {
-  // console.log(urlValue, "yyyyy");
-  // console.log(response, "tyuityui");
   const router = useRouter();
 
   const handleClick = (category: string, id:any) => {
-    // console.log(category, "category");
     const formattedCategory = category.toLowerCase().replace(/\s+/g, '-');
     router.push(cardLabel?`/card/${formattedCategory}/${cardLabel}`:`/card/${formattedCategory}`);
   };

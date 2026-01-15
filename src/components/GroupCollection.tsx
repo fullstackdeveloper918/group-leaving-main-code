@@ -81,10 +81,8 @@ const GroupCollection = ({
         }
 
         const data = await response.json();
-        console.log("Full API response:", data);
 
         const showImage = data?.data?.[0]?.images?.[0]?.card_images?.[0];
-        console.log("Extracted showImage:", showImage);
 
         if (showImage) {
           setShareImageData(showImage);

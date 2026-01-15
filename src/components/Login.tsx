@@ -61,7 +61,6 @@ const Login = () => {
   //     password: values.password,
   //   };
   //   let res = await api.Auth.login(items);
-  //   console.log(res, "yuyyyu");
 
   //   // if (res.token) {
   //     // }
@@ -70,7 +69,6 @@ const Login = () => {
   //     //   path: "/",
   //     // });
 
-  //   console.log(res, "rereere");
   //   router.replace("/");
 
   //   try {
@@ -78,14 +76,12 @@ const Login = () => {
   // };
 
   const onFinish1 = async (values: any) => {
-    console.log("running login");
 
     const items = {
       email: String(values.email).toLowerCase(),
       password: values.password,
     };
 
-    console.log("items for login", items);
 
     try {
       setLoading(true);
@@ -100,7 +96,6 @@ const Login = () => {
 
       const data = await res.json(); // must await
 
-      console.log("Login response:", data);
 
       // ------------------ ERROR HANDLING ------------------
       if (res.status === 401 || data.message === "Unauthorized") {
@@ -115,7 +110,6 @@ const Login = () => {
 
       // ------------------ SUCCESS HANDLING ------------------
       toast.success("Login Successfully", { autoClose: 1000 });
-      console.log(data.data, "data user here login");
       // Save user
       Cookies.set("userInfo", JSON.stringify(data.data));
 

@@ -169,7 +169,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
     setEditorState((prev) => ({ ...prev, content }));
   };
 
-  console.log(position, "xy positioning");
   // Slide selection for moving element
   // const [targetSlide, setTargetSlide] = useState<number>(cardIndex.activeSlide);
 

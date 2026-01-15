@@ -7,7 +7,7 @@ const MicroSoftLogin = () => {
   const handleLogin = () => {
     instance.loginPopup()
       .then(response => {
-        console.log('Logged in:', response);
+        console.log('Logged in:');
       })
       .catch(error => {
         console.error('Login failed:', error);

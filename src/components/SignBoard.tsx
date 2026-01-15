@@ -6,11 +6,9 @@ import Modal from "react-modal";
 const SignBoard = ({searchParams}:any) => {
     const router = useRouter();
     const[state,  setState]=useState<any>({})
-    console.log(state,"state");
     const [message, setMessage] = useState<any>("");
     const [name, setName] = useState<any>("");
     const [gifUrl, setGifUrl] = useState<any>(null);
-    console.log(gifUrl, "gifUrl");
   
     const handleAddGif = (gifUrl: any) => {
       // Replace with a real GIF URL or integrate a GIF picker (like Giphy API)
@@ -26,12 +24,8 @@ const SignBoard = ({searchParams}:any) => {
     const [gifs, setGifs] = useState<string[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [imageUrl, setImageUrl] = useState<any>(null); // New state for image
-    console.log(gifs, "fgdhjkl");
-    console.log(imageUrl, "imageUrl");
-    console.log(searchTerm, "searchTerm");
     const defaultTerm = "wave";
     const fetchGifs = async (term: string) => {
-      console.log(term, "term");
   
       try {
         const searchTerm = term || defaultTerm;
@@ -47,7 +41,6 @@ const SignBoard = ({searchParams}:any) => {
             },
           }
         );
-        console.log(response.data.results, "jgjgj");
   
         setGifs(
           response.data.results.map((result: any) => result.media_formats.gif.url)
@@ -114,7 +107,6 @@ const SignBoard = ({searchParams}:any) => {
             "Content-Type": "multipart/form-data", // Set header to multipart/form-data
           },
         });
-        console.log('Success:', response.data);
         let existingResponses = JSON.parse(sessionStorage.getItem('signboarddata') || '[]');
 
         // Add the new API response to the array
@@ -147,7 +139,6 @@ const SignBoard = ({searchParams}:any) => {
 const getData=async()=>{
 try {
   let res=await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/messages/single-demo-board/${searchParams}`)
-  console.log(res.data.data,"lsjlsjdfjsljd");
   setState(res.data.data)
 } catch (error) {
   
@@ -191,7 +182,6 @@ const editBoard = async (e: React.FormEvent) => {
         "Content-Type": "multipart/form-data", // Set header to multipart/form-data
       },
     });
-    console.log('Success:', response.data);
     let existingResponses = JSON.parse(sessionStorage.getItem('signboarddata') || '[]');
 
     // Add the new API response to the array
@@ -376,7 +366,6 @@ const editBoard = async (e: React.FormEvent) => {
                  className="rounded-lg cursor-pointer"
                  onClick={() => {
                    handleAddGif(gifUrl);
-                   console.log("Selected GIF:", gifUrl); // Handle selected GIF URL
                    closeModal();
                  }}
                />

@@ -5,7 +5,6 @@ import React, { useRef } from "react";
 import cardPricing from "../assets/images/card_pricing.png";
 import greeting_cards from "../assets/images/greeting_cards.png";
 const AllCardPricing = ({ data, data2 }: any) => {
-  console.log(data2, "checkcards");
 
   const bundlesRef = useRef<any>(null);
   const router = useRouter();

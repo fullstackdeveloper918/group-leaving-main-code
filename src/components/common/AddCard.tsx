@@ -51,7 +51,6 @@ const AddCardElement = ({ initialiseCard, addOrder, isExpended, setIsExpended, l
 
 
     const selectCard = async (name: string, data: any) => {
-        console.log(name, data, "nameData");
 
         // const oldQuery = router.query
         // oldQuery[name] = data._id

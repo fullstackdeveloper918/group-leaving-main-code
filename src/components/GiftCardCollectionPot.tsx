@@ -79,7 +79,6 @@ const GiftCardCollectionPot = ({
 
   // Check if current user is the creator
   const isCreator = currentUserId && cardShareData?.user_uuid === currentUserId;
-  console.log("Current User ID:", cardShareData?.user_uuid);
 
   const deleteGiftCard = async (uuid: string) => {
     const MIN_DISPLAY_TIME = 500;

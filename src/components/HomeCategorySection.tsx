@@ -9,7 +9,6 @@ import { Api } from "@/interfaces/interfaces";
 import { fetchFromServer } from "@/app/actions/fetchFromServer";
 
 const HomeCategorySection = async ({ params, searchParams }: any) => {
-  console.log(searchParams?.category, "yuuuuuuu");
 
   const array = [
     {
@@ -413,13 +412,7 @@ const HomeCategorySection = async ({ params, searchParams }: any) => {
     (card) => card.type === searchParams?.category?.category
   );
   const filteredCards1 = array.filter((card) => card.type);
-  // const type = searchParams?.category||"farewell"
-  // console.log(type,"ioioio");
-
-  // const type = params.slug[0];
-
-  // console.log(type,"type");
-
+  
   //  Sidebar
 
   let data = await fetch(
@@ -427,27 +420,15 @@ const HomeCategorySection = async ({ params, searchParams }: any) => {
     { cache: "no-store" }
   );
   let data1 = await data.json();
-  console.log(data1, "qwe323355");
-  //  const url = 'https://dating.goaideme.com/card/collection-listing';
-
-  //  const response1 = await fetch(url, {
-  //   method: 'GET',
-  //   cache: 'no-store',
-  // });
-
-  // const data = await response1.json();
-  //   console.log(data, "check145454523");
+  
   const normalizedType =
     searchParams?.category?.replace("-", " ") || "farewell";
-  console.log(normalizedType, "normalizedType");
 
   const matchedObject = data1.data.find((item: any) => {
     const normalizedTags = item.collection_title.replace("-", " ");
     return normalizedTags === normalizedType;
   });
-  console.log(matchedObject, "matchedObject");
   const collectionType = matchedObject ? matchedObject.uuid : null;
-  console.log(collectionType, "collectionType");
 
   // All cards
 
@@ -459,10 +440,8 @@ const HomeCategorySection = async ({ params, searchParams }: any) => {
   };
 
   const response = await fetchFromServer(api2);
-  console.log(response, "response on homecategorysection");
 
   const cardLabel = "params.slug[1]";
-  //  console.log(type, "tyjgjgjgjgpe");
 
   return (
     <div>

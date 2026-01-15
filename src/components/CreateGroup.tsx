@@ -10,24 +10,19 @@ import { parseCookies } from "nookies";
 import Cookies from "js-cookie";
 
 const CreateGroup = ({ data }: any) => {
-  console.log(data.data, "datadata");
   const [addCard, setAddCard] = useState<any>("");
-  console.log(addCard, "addcard");
 
   const router = useRouter();
   const [userInfo, setUserInfo] = useState<any>(null);
   const [uuid, setUuid] = useState<string | null>(null);
-  console.log(uuid, "uuid");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading1, setLoading1] = useState<any>(false);
 
   const [state, setState] = useState<any>("");
   // const openModal = () => setIsModalOpen(true);
   const openModal = async () => {
-    console.log("clicked here1");
     try {
       setLoading1(true);
-      console.log("clicked here2");
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/order/create-token`,
         {
@@ -40,16 +35,14 @@ const CreateGroup = ({ data }: any) => {
           body: "",
         }
       );
-      console.log("clicked here3.1");
       // Check if the request was successful
       if (!response.ok) {
         throw new Error("Failed to add item to cart");
       }
-      console.log("clicked here3");
+      // console.log("clicked here3");
 
       const data = await response.json(); // Assuming the response returns JSON
-      console.log(data, "sdfghjkl;");
-      console.log("clicked here4");
+    
       const response1 = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/order/get-products`,
         {
@@ -67,14 +60,11 @@ const CreateGroup = ({ data }: any) => {
       if (!response1.ok) {
         throw new Error("Failed to add item to cart");
       }
-      console.log("clicked here5");
       const data1 = await response1.json();
-      console.log("clicked here6");
-      console.log(data1, "data1");
+   
 
       setState(data1);
       setIsModalOpen(true);
-      // toast.success("Added Successfully", {autoClose:2000});
     } catch (error) {
     } finally {
       setLoading1(false);
@@ -94,16 +84,13 @@ const CreateGroup = ({ data }: any) => {
 
     if (authCookie) {
       const cookieValue = authCookie.split("=")[1];
-      console.log(cookieValue, "cookieValue");
 
       try {
         const parsedAuthInfo = JSON.parse(decodeURIComponent(cookieValue));
-        console.log(parsedAuthInfo, "parsedAuthInfo");
 
         // Extracting the 'uid' from the Auth cookie
         if (parsedAuthInfo && parsedAuthInfo.uid) {
           setUuid(parsedAuthInfo.uid); // Setting the UUID
-          console.log("UID:", parsedAuthInfo.uid);
         }
       } catch (error) {
         console.error("Error parsing Auth cookie", error);
@@ -117,16 +104,13 @@ const CreateGroup = ({ data }: any) => {
 
     if (userInfoCookie) {
       const cookieValue = userInfoCookie.split("=")[1];
-      console.log(cookieValue, "userInfo cookieValue");
 
       try {
         const parsedUserInfo = JSON.parse(decodeURIComponent(cookieValue));
         setUserInfo(parsedUserInfo);
 
         if (parsedUserInfo && parsedUserInfo.uuid) {
-          console.log(parsedUserInfo, "parsedUserInfo");
           setUuid(parsedUserInfo.uuid);
-          console.log("UUID from userInfo:", parsedUserInfo.uuid);
         }
       } catch (error) {
         console.error("Error parsing userInfo cookie", error);
@@ -136,11 +120,9 @@ const CreateGroup = ({ data }: any) => {
   const [collectionTitle, setCollectionTitle] = useState("");
   const [loading, setLoading] = useState<any>(false);
   const [brandKeys, setBrandKeys] = useState("");
-  console.log(brandKeys, "brandKeys");
 
   const [selectedImage, setSelectedImage] = useState<any | null>(null);
   const [addSelectedImage, setAddSelectedImage] = useState<any | null>(null);
-  console.log(addSelectedImage, "addSelectedImage");
 
   const gettoken = Cookies.get("auth_token");
   // State to store other form data
@@ -164,10 +146,8 @@ const CreateGroup = ({ data }: any) => {
   const { accessToken, setAccessToken } = useAccessToken();
   useEffect(() => {
     const cookies = parseCookies();
-    console.log(cookies, "cookies");
 
     const token = cookies.auth_token;
-    console.log(typeof token, "iooioio");
 
     if (token) {
       setAccessToken(token);
@@ -175,7 +155,6 @@ const CreateGroup = ({ data }: any) => {
       // alert("nothing")
     }
   }, []);
-  console.log(accessToken, "accessToken");
   const handleLogin = () => {
     router.push("/login");
   };
@@ -186,7 +165,6 @@ const CreateGroup = ({ data }: any) => {
     //   collectionTitle,
     //   ...formData
     // };
-    console.log(brandKeys, "kfhaskhdfkashdfkhasdfh");
 
     // return
     let item = {
@@ -196,7 +174,6 @@ const CreateGroup = ({ data }: any) => {
       brandKey: brandKeys,
       // file: "",
     };
-    console.log(item, "item");
     try {
       setLoading(true);
       const response = await fetch(
@@ -219,7 +196,6 @@ const CreateGroup = ({ data }: any) => {
 
       const data = await response.json(); // Assuming the response returns JSON
       toast.success("Added Successfully", { autoClose: 2000 });
-      console.log(data, "sadfdgsfdg");
       router.replace(`/share/${data?.data?.uuid}?brandKey=${brandKeys}`);
     } catch (error) {
       setLoading(false);
@@ -227,31 +203,14 @@ const CreateGroup = ({ data }: any) => {
       setLoading(false);
     }
   };
-  // const submit=async(e:any)=>{
-  //     let item={
-  //         user_uuid :"",
-  //         collection_title :"",
-
-  //     }
-  //     try {
-  // const res= await api.Collection.create(item)
-  //     } catch (error) {
-
-  //     }
-  // }
-  // const check=data.data.brands.map((res:any)=>console.log(res.imageUrls.80w-326ppi,"iooo"))
-
+  
   const handleImageClick = (imageData: any) => {
     setSelectedImage(imageData);
-    console.log(imageData, "imageData");
     setBrandKeys(imageData?.productId);
     setIsModalOpen(true); // Open modal when an image is clicked
   };
 
-  // Close modal
-  // const handleCloseModal = () => {
-  //   setIsModalOpen(false);
-  // };
+ 
   const handleBackClick = () => {
     setSelectedImage(null);
     setBrandKeys(""); // Reset the selected image to show the image grid again
@@ -262,15 +221,9 @@ const CreateGroup = ({ data }: any) => {
     setIsModalOpen(false);
     setSelectedImage(null);
   };
-  console.log(selectedImage, "selectedImage");
-  // const faceValues = selectedImage?.items.map((item:any) => item.faceValue);
-  // console.log(faceValues,"faceValues");
-
+ 
   const faceValues = selectedImage?.logoUrls[0]; // Filter out undefined or null values
-  // const faceValues = selectedImage?.items
-  // .map((item: any) => item.faceValue) // Extract faceValue
-  // .filter((value: any) => value !== undefined && value !== null); // Filter out undefined or null values
-
+ 
   let minFaceValue: number | undefined;
   let maxFaceValue: number | undefined;
 
@@ -278,15 +231,10 @@ const CreateGroup = ({ data }: any) => {
     minFaceValue = Math.min(...faceValues);
     maxFaceValue = Math.max(...faceValues);
 
-    console.log(`Minimum Face Value: ₹${minFaceValue}`);
-    console.log(`Maximum Face Value: ₹${maxFaceValue}`);
   } else {
     console.log("No valid face values found.");
   }
 
-  console.log(faceValues, "faceValues");
-  console.log(minFaceValue, "minFaceValue"); // This will now work because minFaceValue is declared above
-  console.log(maxFaceValue, "maxFaceValue");
   const selectGiftImage = selectedImage?.logoUrls[0];
   return (
     <div>

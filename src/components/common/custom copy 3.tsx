@@ -96,9 +96,7 @@ const Custom: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [gifs, setGifs] = useState<string[]>([]);
   const [activeSlide, setActiveSlide] = useState<any>();
-  console.log(activeSlide, "activeSlide");
   // let slideIndex=activeSlide?3:0
-  // console.log(slideIndex,"slideIndex");
   const [activeSlideIndex, setActiveSlideIndex] = useState<any>(0);
   useEffect(() => {
     const newIndex = activeSlide ? activeSlide : 0;
@@ -108,7 +106,6 @@ const Custom: React.FC = () => {
   const [editorContent, setEditorContent] = useState("");
   const sliderRef = useRef<HTMLInputElement>(null);
 
-  console.log(id, "popo");
 
   useEffect(() => {
     if (params.id) {
@@ -136,15 +133,11 @@ const Custom: React.FC = () => {
       localStorage.setItem("slideElements", JSON.stringify(elements));
     }
   }, [elements]);
-  console.log(elements, "wertyui");
 
   const [slides, setSlides] = useState<any>([]);
-  console.log(slides, "ouetouer");
 
   const pathname = usePathname();
-  console.log(pathname, "pathname");
   const isEditorPath = /^\/share\/editor\/[^/]+$/.test(pathname);
-  console.log(isEditorPath, "isEditorPath");
 
   useEffect(() => {
     const storedElements = localStorage.getItem("slideElements");
@@ -371,7 +364,6 @@ const Custom: React.FC = () => {
       }
 
       const data = await response.json();
-      console.log("Image uploaded successfully:", data);
 
       if (data) {
         const imageUrl = data.file;
@@ -571,7 +563,6 @@ const Custom: React.FC = () => {
     router.push(`/envelop/${id}`);
   };
 
-  console.log(slides, "slides");
 
   return (
     <>
@@ -660,7 +651,6 @@ const Custom: React.FC = () => {
             <div className="carousel-slides">
               {slides.map((slide: any, index: any) => {
                 // Calculate position classes
-                console.log(slide, "jlgfj");
 
                 let positionClass = "slide-hidden";
 

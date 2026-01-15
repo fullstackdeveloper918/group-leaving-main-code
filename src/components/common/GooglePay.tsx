@@ -11,7 +11,6 @@ interface Props {
 }
 
 export default function GooglePay(props: any) {
-  console.log("GooglePay Props:", props); // Log props to check render
 
   const processPayment = async (paymentData: any) => {
     return new Promise<void>(async (resolve, reject) => {
@@ -20,7 +19,6 @@ export default function GooglePay(props: any) {
           paymentData.paymentMethodData.tokenizationData.token;
         const _paymentToken = JSON.parse(paymentToken);
         const tokenId = _paymentToken?.id;
-        console.log("Token ID:", tokenId);
         await props.handleSocialBuy(
           tokenId,
           henceofrthEnums.PaymentType.googlePay
@@ -34,7 +32,6 @@ export default function GooglePay(props: any) {
   };
 
   const onPaymentAuthorized = (paymentData: any): Promise<any> => {
-    console.log("Payment Authorized:", paymentData);
     return new Promise((resolve) => {
       processPayment(paymentData)
         .then(() => {

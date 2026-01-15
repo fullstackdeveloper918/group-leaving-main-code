@@ -36,15 +36,12 @@ const CardSlider: React.FC<any> = ({
 
   useEffect(() => {
     const cookies = nookies.get();
-    console.log("cookiesUserInfo",cookies.userInfo);
     const userInfoFromCookie: any | null = cookies.userInfo
       ? JSON.parse(cookies.userInfo)
       : null;
     setUserInfo(userInfoFromCookie);
   }, []);
-  console.log(userInfo?.uuid, "userInfo?.uuid");
   const sendEditorData = async () => {
-    console.log(elements, "elementsasadsasasdas");
   
     let item = {
       editor_messages: elements,
@@ -79,7 +76,6 @@ const CardSlider: React.FC<any> = ({
     const storedElements = localStorage.getItem("slideElements");
     if (storedElements) {
       const parsed = JSON.parse(storedElements);
-      console.log(parsed, "parsedElements"); // Logs the raw data from localStorage
       setParsedElements(parsed); // Save parsed elements in a separate state
     }
   }, []); 
@@ -88,7 +84,6 @@ const CardSlider: React.FC<any> = ({
   useEffect(() => {
     if (parsedElements.length > 0) {
       const slideElements = parsedElements.filter((el: any) => el.slideIndex === activeSlideIndex);
-      console.log(slideElements, "slideElements");
       setElements(slideElements); // Set filtered elements for the active slide
     }
   }, [activeSlideIndex, parsedElements]); 
@@ -101,7 +96,6 @@ const CardSlider: React.FC<any> = ({
   // Handle position change when a draggable element is moved
   // const handleDragStop = (e: any, data: any, elementIndex: number) => {
 
-  //   console.log(e,data,elementIndex,"classes of checkus")
   //   const updatedElements = [...elements];
   //   updatedElements[elementIndex] = {
   //     ...updatedElements[elementIndex],
@@ -115,7 +109,6 @@ const CardSlider: React.FC<any> = ({
   // };
   
   const handleDragStop = (e: any, data: any, elementIndex: number) => {
-    console.log(e, data, elementIndex, "classes of checkus");
   
     // Get the dragged element
     const draggedElement = elements[elementIndex];

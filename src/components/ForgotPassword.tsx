@@ -22,7 +22,6 @@ const ForgotPassword = ({searchParams}:any) => {
               body: JSON.stringify(item ),
             }
           );
-          console.log(response, "responsereset");
     
           if (response.ok) {
             // alert("Password reset email sent!");

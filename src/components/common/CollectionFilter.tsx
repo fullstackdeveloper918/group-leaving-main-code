@@ -7,7 +7,6 @@ const CollectionFilter = () => {
   const searchParam = useParams();
   const urlValue = searchParam?.slug[0];
   const urlValue1 = searchParam?.slug[1];
-  console.log(urlValue, "searchParam");
   const { slug } = useParams();
   const [selectedOption, setSelectedOption] = useState<string>("");
 

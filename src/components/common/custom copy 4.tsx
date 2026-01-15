@@ -104,9 +104,7 @@ const Custom: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [openDropdown, setOpenDropdown] = useState(false);
 
-  console.log(activeSlide, "activeSlide");
   // let slideIndex=activeSlide?3:0
-  // console.log(slideIndex,"slideIndex");
   const [activeSlideIndex, setActiveSlideIndex] = useState<any>(0);
   useEffect(() => {
     const newIndex = activeSlide ? activeSlide : 0;
@@ -116,7 +114,6 @@ const Custom: React.FC = () => {
   const [editorContent, setEditorContent] = useState<any>("");
   const sliderRef = useRef<HTMLInputElement>(null);
 
-  console.log(id, "popo");
 
   useEffect(() => {
     if (params.id) {
@@ -144,15 +141,11 @@ const Custom: React.FC = () => {
       localStorage.setItem("slideElements", JSON.stringify(elements));
     }
   }, [elements]);
-  console.log(elements, "wertyui");
 
   const [slides, setSlides] = useState<any>([]);
-  console.log(slides, "ouetouer");
 
   const pathname = usePathname();
-  console.log(pathname, "pathname");
   const isEditorPath = /^\/share\/editor\/[^/]+$/.test(pathname);
-  console.log(isEditorPath, "isEditorPath");
 
   useEffect(() => {
     const storedElements = localStorage.getItem("slideElements");
@@ -313,7 +306,6 @@ const Custom: React.FC = () => {
     }
   }, []);
 
-  console.log(showModal, "setShowModal12334");
   const sendEditorData = async () => {
     const item = {
       editor_messages: elements,
@@ -402,7 +394,6 @@ const Custom: React.FC = () => {
     getEditorDaya()
   },[])
   const handleAddMessageClick = () => {
-    console.log(activeSlideIndex, "activeSlideIndex");
     if (activeSlideIndex < slides.length - 1) {
       const lastSlideIndex = slides.length - 1; // Get the last slide index
 
@@ -415,7 +406,6 @@ const Custom: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log(showModal, "12345678");
   }, [showModal]);
 
   const closeModal = () => setIsOpen(false);
@@ -468,7 +458,6 @@ const Custom: React.FC = () => {
       }
 
       const data = await response.json();
-      console.log("Image uploaded successfully:", data);
 
       if (data) {
         const imageUrl = data.file;
@@ -570,11 +559,9 @@ const [type, setType]=useState<any>("")
 
   useEffect(() => {
     const storedElements = localStorage.getItem("slideElements");
-    console.log("slide length", slides.length);
     if (storedElements) {
       const parsedElements = JSON.parse(storedElements);
       parsedElements.forEach((element: any) => {
-        console.log("Checking slideIndex:", element.slideIndex);
         // Check if the slideIndex matches slides.length
         if (slides.length - 1 === element.slideIndex) {
           console.log("Matched Element:", element);
@@ -588,7 +575,6 @@ const [type, setType]=useState<any>("")
   }, [elements]); // Watching slides.length and elements for changes
   useEffect(() => {
     const storedElements = localStorage.getItem("slideElements");
-    console.log("slide length", slides.length);
     if (storedElements) {
       updateEditorData()
     }
@@ -685,12 +671,10 @@ const [type, setType]=useState<any>("")
 
     pdf.save("slides_with_positions.pdf");
   };
-  console.log(activeSlideIndex, "handleAddPage11");
 
   const handleSlideChange = (index: number) => {
     // Store previous active index
     const prevActiveIndex = activeSlideIndex;
-    console.log(index, "handleAddPage");
     // Set new active index
     setActiveSlideIndex(index);
 
@@ -926,7 +910,6 @@ const [type, setType]=useState<any>("")
                         .filter((el) => el.slideIndex === activeSlideIndex)
                         .map((el, i) => {
                           const originalIndex = elements.findIndex((el) => el === el);
-                          console.log(originalIndex,"originalIndex1234567");
                           
                           return (
                             ""

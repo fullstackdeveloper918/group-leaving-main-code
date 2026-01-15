@@ -11,23 +11,7 @@ const BoardCheckout = ({data}:any) => {
     const gettoken = Cookies.get("auth_token");   
     const router = useRouter();
     const [cardType, setCardType] = useState<any>("group");
-    // console.log(cardType, "cardType");
     const param=useParams()
-    // console.log(param.id,"param");
-    // console.log(data,"datadatadata");
-    
-    // const cookiesList = cookies();
-    // const userInfoCookie = cookiesList.get('userInfo'); 
-    // console.log(userInfoCookie,"ppppp");
-    // let userInfo = null;
-    // if (userInfoCookie) {
-    //   try {
-    //     userInfo = JSON.parse(userInfoCookie.value);
-    //   } catch (error) {
-    //     console.error("Error parsing userInfo cookie", error);
-    //   }
-    // }
-    // console.log(userInfo,"pooooo");
     
     const [bundleOption, setBundleOption] = useState<any>("single");
     const [numCards, setNumCards] = useState<any>(null);
@@ -48,9 +32,6 @@ const BoardCheckout = ({data}:any) => {
     const [paywith, setPaywith] = useState<any>("STRIPE");
       const [voucher, setVaoucher] = useState<any>("");
       const [voucherDiscount, setVaoucherDiscount] = useState<any>(""); 
-    console.log(numCards,"numCards");
-    console.log(salePrice,"salePrice");
-    console.log(bundleOption,"bundleOption");
     
     const onChange = (e: any) => {
       setVaoucher(e);
@@ -98,8 +79,6 @@ const BoardCheckout = ({data}:any) => {
 
       const handleApplyDiscount = async() => {
       
-            // console.log("object")
-            // setVaoucher1(voucher);
             try {
                const requestData = {
                 code: voucher,
@@ -119,10 +98,8 @@ const BoardCheckout = ({data}:any) => {
                   
                   // Parse the response JSON
                   let posts = await res.json();
-                  console.log(posts,"jklklkj");
                   const numberValue = parseFloat(posts?.data.replace(/[^0-9.]/g, "")); 
                   setVaoucherDiscount(numberValue)
-                  // console.log("voucher discount", voucherDiscount);
                   if(res.status===200){
                     toast.success("Voucher Added Suceesfully", {autoClose:2000})
                   }
@@ -231,7 +208,6 @@ const BoardCheckout = ({data}:any) => {
                       className="border border-gray-300 p-2 rounded-lg w-full"
                     >
                       {data?.data.map((count: any) => (
-                        // console.log(count,"count")
                         
                         <option key={count.number_of_cards} value={count.number_of_cards}>
                           {count?.number_of_cards} Cards — ₹

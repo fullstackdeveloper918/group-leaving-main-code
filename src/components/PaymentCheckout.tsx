@@ -36,12 +36,10 @@ const PaymentCheckout = () => {
   const stripe = useStripe();
   const elements: any = useElements();
   const submit=async(values:any)=>{
-    console.log(values,"values");
     try {
         let cardElement: any
         let payload: any
         cardElement = elements.getElement(CardElement);
-        console.log(cardElement, 'cardElement');
 
         const data = {
             type: 'card',
@@ -59,7 +57,6 @@ const PaymentCheckout = () => {
         } as any;
 
         payload = await stripe?.createPaymentMethod(data);
-        console.log(payload,"payload");
         
     } catch (error) {
         
@@ -574,9 +571,9 @@ const PaymentCheckout = () => {
                             </div>
                           </Space>
                           <Space className="align-self-end">
-                            {/* <Button size='small' type='text' onClick={() => console.log("hhhhhhhhhhh")} className='p-0' icon={<Icons.MinusRewards />}></Button>
+                            {/* <Button size='small' type='text' onClick={() => // console.log("hhhhhhhhhhh")} className='p-0' icon={<Icons.MinusRewards />}></Button>
                                             <Input placeholder='' style={{ width: "50px" }} className='border-0 px-0 bg-transparent text-white rounded-0 text-center' />
-                                            <Button size='small' type='text' onClick={() => console.log("hhhhhhhhhhh")} className='p-0' icon={<Icons.PlusRewards />}></Button> */}
+                                            <Button size='small' type='text' onClick={() => // console.log("hhhhhhhhhhh")} className='p-0' icon={<Icons.PlusRewards />}></Button> */}
                           </Space>
                         </div>
                         <div className="border mt-3 bg-white p-2 rounded-3 d-flex justify-content-between align-items-center">

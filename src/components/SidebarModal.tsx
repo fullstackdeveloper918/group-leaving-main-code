@@ -86,7 +86,6 @@ const SidebarModal: React.FC<SidebarModalProps> = ({
 
     try {
       setLoading(true);
-      console.log("Submitting data:", formData);
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/cart/modify-cart-details`,

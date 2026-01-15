@@ -35,9 +35,7 @@ const AccountBunddles = ({ userInfo, data }: any) => {
         }
 
         const result = await response.json();
-        console.log(result, "profile data");
         const bundleCount = result?.data?.bundle_card_count ?? 0;
-        console.log(bundleCount, "bundle count");
         setCountBundle(bundleCount);
       } catch (error) {
         console.error("Error fetching bundle count:", error);
@@ -68,9 +66,7 @@ const AccountBunddles = ({ userInfo, data }: any) => {
 
       // Parse the response JSON
       let posts = await res.json();
-      console.log(posts, "AccountBundle");
       setState(posts);
-      // toast.success("Preferences Updated Successfully");
     } catch (error) {}
   };
   useEffect(() => {

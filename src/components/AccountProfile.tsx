@@ -12,23 +12,6 @@ const AccountProfile = ({ userInfo, data }: any) => {
   const router = useRouter();
   const gettoken = Cookies.get("auth_token");
 
-  console.log(data, "userInfoCookie");
-
-  // const { accessToken, setAccessToken } = useAccessToken();
-  //  useEffect(() => {
-  //      const cookies = parseCookies();
-  //      console.log(cookies, "cookies");
-
-  //      const token = cookies.auth_token;
-  //      console.log(typeof token, "iooioio");
-
-  //      if (token) {
-  //        setAccessToken(token);
-  //      } else {
-  //        // alert("nothing")
-  //      }
-  //    }, []);
-  //  console.log(accessToken,"accessToken");
   const [name, setName] = useState(data?.data?.full_name);
   const [email, setEmail] = useState(data?.data?.email);
   const [invoiceDetails, setInvoiceDetails] = useState(
@@ -54,7 +37,6 @@ const AccountProfile = ({ userInfo, data }: any) => {
 
       // Parse the response JSON
       let posts = await res.json();
-      // console.log(posts,"jklklkj");
       if (res.status === 201) {
         toast.success("Profile Updated Suceesfully", { autoClose: 2000 });
         window.location.reload();
@@ -67,21 +49,6 @@ const AccountProfile = ({ userInfo, data }: any) => {
       }
     } catch (error) {}
   };
-
-  // https://dating.goaideme.com/user/update-profile
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const res = await api.User.listing();
-  //       console.log(res, "jkjkjk");
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   getData(); // Call function inside useEffect
-  // }, [name]);
 
   return (
     <div>

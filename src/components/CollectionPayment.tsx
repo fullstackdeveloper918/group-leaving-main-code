@@ -36,18 +36,11 @@ const CollectionPayment = ({
   // const router = useRouter();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const param = useParams();
-  // console.log(param, "param");
-  // const [giftCard, setGiftCard] = useState<any>("");
-  // const searchParams = useSearchParams();
-  // console.log(type, "type");
-
-  // const cartId = searchParams.get("cart_uuid"); // Correct way to extract cart_uuid
-  // console.log("cartId", cartId);
+  
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     const cookies = nookies.get();
-    // console.log("cookiesUserInfo", cookies.user_info);
     const userInfoFromCookie: UserInfo | null = cookies.user_info
       ? JSON.parse(cookies.user_info)
       : null;
@@ -83,14 +76,9 @@ const CollectionPayment = ({
         description: "Test Transaction",
         order_id: data.orderId,
         handler: async (response: any) => {
-          console.log("Payment successful", response);
 
           const paymentId = response.razorpay_payment_id;
-          // const product_id = param.id;
-
-          // console.log("product_id", product_id);
-          // console.log("reloadly amount ",reloadly_amount);
-          // console.log("groupID ",groupId);
+          
           try {
             const paymentResponse = await fetch(
               `${process.env.NEXT_PUBLIC_API_URL}/order/create-orders`,
@@ -116,13 +104,7 @@ const CollectionPayment = ({
             if (paymentResponse) {
               if (onSuccess) await onSuccess();
             }
-            // console.log(paymentResponse," payment res order save");
-            // Redirect based on type after successful payment
-            // if (type === "bundle") {
-            //   router.push(`/account/bundles`);
-            // } else {
-            //   router.push(`/payment`);
-            // }
+            
           } catch (error) {
             console.error("Error saving payment:", error);
           }
@@ -151,7 +133,6 @@ const CollectionPayment = ({
     }
   };
 
-  // console.log(paymentAmount,"paymentAmount")
   return (
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />

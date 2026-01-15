@@ -133,7 +133,6 @@ const EditorModal = ({ showCard }: any) => {
       fill: string;
     }[]
   >([]);
-  console.log(texts, "texts");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [gifs, setGifs] = useState<string[]>([]); // State to store GIF URLs
@@ -229,8 +228,6 @@ const EditorModal = ({ showCard }: any) => {
   };
   const [imageBlob, setImageBlob] = useState<any>(null);
   const stageRef = useRef<any>(null);
-  console.log(imageBlob, "imageBlob");
-  console.log(stageRef, "stageRef");
 
   const handleDownloadClick = () => {
     if (stageRef.current) {
@@ -243,10 +240,8 @@ const EditorModal = ({ showCard }: any) => {
         .then((blob) => {
           // Create a Blob URL
           const blobUrl = URL.createObjectURL(blob);
-          console.log(blobUrl, "blobUrl");
           const newBlobUrl = URL.createObjectURL(blob);
           localStorage.setItem("imageBlobUrl", newBlobUrl);
-          console.log(newBlobUrl, "newBlobUrl");
           // Store the Blob URL in state
           setImageBlob(blobUrl);
 
@@ -272,7 +267,6 @@ const EditorModal = ({ showCard }: any) => {
   const [searchTerm1, setSearchTerm1] = useState<string>(""); // Default search term
   const [modalOpen, setModalOpen] = useState<boolean>(false); // Modal visibility state
   const [error, setError] = useState<string>(""); // State to handle errors
-  console.log(selectedGif, "selectedGif");
 
   // Function to handle search input change
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -324,7 +318,6 @@ const EditorModal = ({ showCard }: any) => {
     closeModal1(); // Close the modal after selection
   };
   const [gifImages, setGifImages] = useState<any>([]);
-  console.log(gifImages, "gifImages");
 
   // Load GIFs as Konva Image nodes (HTMLImageElement objects)
   useEffect(() => {
@@ -351,7 +344,6 @@ const EditorModal = ({ showCard }: any) => {
     loadGifImages();
   }, [selectedGif]);
 
-  console.log(images, "images");
 
   return (
     <div className="editor_app">

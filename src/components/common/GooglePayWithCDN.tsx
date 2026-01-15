@@ -143,9 +143,7 @@ export const GooglePayWithCDN = (props: any) => {
             paymentData.paymentMethodData.tokenizationData.token;
           let _paymentToken = JSON.parse(paymentToken);
           let tokenId = _paymentToken?.id;
-          console.log(tokenId, "tokenId");
-          console.log(_paymentToken, "_paymentToken");
-
+        
           await props?.handleSocialBuy(
             tokenId,
             henceofrthEnums.PaymentType.googlePay
@@ -165,7 +163,6 @@ export const GooglePayWithCDN = (props: any) => {
       script.src = "https://pay.google.com/gp/p/js/pay.js";
       script.async = true;
       script.onload = () => {
-        console.log("Google Pay library loaded");
         onGooglePayLoaded();
       };
       document.body.appendChild(script);

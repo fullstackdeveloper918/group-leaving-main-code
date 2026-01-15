@@ -12,7 +12,6 @@ const page =async({ searchParams,params }:any) => {
       };
     
       const data2 = await fetchFromServer(api2);
-      console.log(data2,"opop");
   return (
     <div><BoardCheckout data={data2}/></div>
   )

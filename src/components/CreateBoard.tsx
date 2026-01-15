@@ -11,10 +11,8 @@ const CreateBoard = ({ data }: any) => {
   const { accessToken, setAccessToken } = useAccessToken();
   useEffect(() => {
     const cookies = parseCookies();
-    console.log(cookies, "cookies");
 
     const token = cookies.auth_token;
-    console.log(typeof token, "iooioio");
 
     if (token) {
       setAccessToken(token);
@@ -22,11 +20,9 @@ const CreateBoard = ({ data }: any) => {
       // alert("nothing")
     }
   }, []);
-  console.log(accessToken, "accessToken");
   const router = useRouter();
   const [userInfo, setUserInfo] = useState<any>(null);
   const [uuid, setUuid] = useState<string | null>(null);
-  console.log(uuid, "uuid");
   const [loading1, setLoading1] = useState<any>(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [state, setState] = useState<any>("");
@@ -53,7 +49,6 @@ const CreateBoard = ({ data }: any) => {
       }
 
       const data = await response.json(); // Assuming the response returns JSON
-      console.log(data, "sdfghjkl;");
       const response1 = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/order/get-products`,
         {
@@ -73,7 +68,6 @@ const CreateBoard = ({ data }: any) => {
       }
 
       const data1 = await response1.json();
-      console.log(data1, "data1 here1");
       setState(data1);
       setIsModalOpen(true);
       // toast.success("Added Successfully", {autoClose:2000});
@@ -95,16 +89,13 @@ const CreateBoard = ({ data }: any) => {
 
     if (authCookie) {
       const cookieValue = authCookie.split("=")[1];
-      console.log(cookieValue, "cookieValue");
 
       try {
         const parsedAuthInfo = JSON.parse(decodeURIComponent(cookieValue));
-        console.log(parsedAuthInfo, "parsedAuthInfo");
 
         // Extracting the 'uid' from the Auth cookie
         if (parsedAuthInfo && parsedAuthInfo.uid) {
           setUuid(parsedAuthInfo.uid); // Setting the UUID
-          console.log("UID:", parsedAuthInfo.uid);
         }
       } catch (error) {
         console.error("Error parsing Auth cookie", error);
@@ -118,16 +109,13 @@ const CreateBoard = ({ data }: any) => {
 
     if (userInfoCookie) {
       const cookieValue = userInfoCookie.split("=")[1];
-      console.log(cookieValue, "userInfo cookieValue");
 
       try {
         const parsedUserInfo = JSON.parse(decodeURIComponent(cookieValue));
         setUserInfo(parsedUserInfo);
 
         if (parsedUserInfo && parsedUserInfo.uuid) {
-          console.log(parsedUserInfo, "parsedUserInfo");
           setUuid(parsedUserInfo.uuid);
-          console.log("UUID from userInfo:", parsedUserInfo.uuid);
         }
       } catch (error) {
         console.error("Error parsing userInfo cookie", error);
@@ -144,7 +132,6 @@ const CreateBoard = ({ data }: any) => {
     selectedGift: "",
   });
   const [brandKeys, setBrandKeys] = useState("");
-  console.log(brandKeys, "brandKeys");
 
   // Handle collection title change
   const handleCollectionTitleChange = (e: any) => {
@@ -171,14 +158,12 @@ const CreateBoard = ({ data }: any) => {
   const gettoken = Cookies.get("auth_token");
   const AddGiftCard = () => {
     setAddCard(selectedImage.brandKey); // Reset the selected image to show the image grid again
-    console.log("slectedImagedsssssssss", selectedImage);
     setAddSelectedImage(selectGiftImage);
     setIsModalOpen(false);
     setSelectedImage(null);
   };
   const handleImageClick = (imageData: any) => {
     setSelectedImage(imageData);
-    console.log(imageData, "imageData");
     setBrandKeys(imageData.brand?.brandId);
     setIsModalOpen(true); // Open modal when an image is clicked
   };
@@ -201,10 +186,7 @@ const CreateBoard = ({ data }: any) => {
       brand_key: brandKeys,
       // user_uuid : string
     };
-    console.log(item, "item");
 
-    // router.replace(`/share/${data?.data?.uuid}`)
-    // return
     try {
       setLoading(true);
       const response = await fetch(
@@ -232,25 +214,11 @@ const CreateBoard = ({ data }: any) => {
         router.replace(`/card/boardpay/${data?.data?.uuid}`);
       }
 
-      console.log(data, "groupboard");
-
-      // router.replace(`/card/boardpay/1`)
     } catch (error) {
       setLoading(false);
     }
   };
-  // const submit=async(e:any)=>{
-  //     let item={
-  //         user_uuid :"",
-  //         collection_title :"",
-
-  //     }
-  //     try {
-  // const res= await api.Collection.create(item)
-  //     } catch (error) {
-
-  //     }
-  // }
+  
 
   const faceValues = selectedImage?.logoUrls[0]; // Filter out undefined or null values
 
@@ -261,13 +229,10 @@ const CreateBoard = ({ data }: any) => {
     minFaceValue = Math.min(...faceValues);
     maxFaceValue = Math.max(...faceValues);
 
-    console.log(`Minimum Face Value: ₹${minFaceValue}`);
-    console.log(`Maximum Face Value: ₹${maxFaceValue}`);
   } else {
     console.log("No valid face values found.");
   }
   const selectGiftImage = selectedImage?.logoUrls[0];
-  console.log(selectGiftImage, "selectGiftImage");
   const handleLogin = () => {
     router.push("/login");
   };

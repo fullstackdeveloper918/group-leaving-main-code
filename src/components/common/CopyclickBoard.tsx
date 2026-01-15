@@ -8,7 +8,6 @@ const CopyclickBoard = () => {
   const pathname = usePathname(); // Get the path part of the URL
   const searchParams = useSearchParams();
   const url = `${pathname}?${searchParams.toString()}`;
-  // console.log(url, "hhhh");
   const [showCopyBoard, setShowCopyBoard] = useState(false);
   // const [baseUrl, setBaseUrl] = useState("");
   const [value, setValue] = useState("");
@@ -18,7 +17,6 @@ const CopyclickBoard = () => {
   //     setBaseUrl(window.location.origin); // 👉 gives "https://groupwish.in"
   //   }
   // }, []);
-  // console.log(baseUrl, "baseurl");
 
   const handleClick = () => {
     setShowCopyBoard((prev) => !prev);
@@ -30,7 +28,6 @@ const CopyclickBoard = () => {
       setValue(`${baseUrl}${url}`); // 👉 full link
     }
   }, [url]);
-  console.log(value, "value of url");
   let currentToastPromise: Promise<void> | null = null;
   const handleCopy = () => {
     navigator.clipboard

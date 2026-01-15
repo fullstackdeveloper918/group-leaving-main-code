@@ -58,7 +58,6 @@ const Checkout = ({ data }: any) => {
         if (!cardId) {
           return;
         }
-        console.log(cardId, "cardIdddddd");
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/card/edit-card/${cardId}`,
           { method: "GET" }
@@ -69,7 +68,6 @@ const Checkout = ({ data }: any) => {
         }
 
         const data = await response.json();
-        console.log(data, "dataimagee");
         const showImage = data?.data?.[0]?.images?.[0]?.card_images?.[0];
 
         if (showImage) {
@@ -212,7 +210,6 @@ const Checkout = ({ data }: any) => {
     }
   };
 
-  console.log(shareCartData, "shareCartDatashareCartData");
 
   return !shareCartData && !shareImageData ? (
     <CheckoutSkeleton />

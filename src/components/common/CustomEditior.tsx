@@ -42,9 +42,7 @@ const CustomEditior = () => {
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
   const [elements, setElements] = useState<any[]>([]);
-  // console.log(elements,"elements");
   const sendEditorData = async () => {
-    console.log(elements, "elementsasadsasasdas");
 
     let item = {
       editor_messages: elements,
@@ -64,7 +62,6 @@ const CustomEditior = () => {
       }
 
       const data = await response.json();
-      console.log("Image uploaded successfully:", data);
     } catch (error) {
       console.error("Error uploading image:", error);
     }
@@ -128,7 +125,6 @@ const CustomEditior = () => {
   const [slides, setSlides] = useState<any>([]);
   const [parsedElements, setParsedElements] = useState<any[]>([]);
 
-  console.log(slides, "wertyuio");
   useEffect(() => {
     const storedElements = localStorage.getItem("slideElements");
     if (storedElements) {
@@ -206,7 +202,6 @@ const CustomEditior = () => {
 
   useEffect(() => {
     const storedElements: any = localStorage.getItem("slideElements");
-    console.log(JSON.parse(storedElements), "sdafasd");
 
     if (storedElements) {
       setElements(JSON.parse(storedElements));
@@ -238,8 +233,7 @@ const CustomEditior = () => {
       x: 0,
       y: 0,
     };
-    console.log(activeSlideIndex, "activeSlideIndex");
-    console.log(newMessage, "newMessage");
+   
 
     setElements([...elements, newMessage]);
     setShowModal(false);
@@ -270,7 +264,6 @@ const CustomEditior = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
-    console.log(file, "file");
 
     if (!file) {
       console.error("No file selected");
@@ -296,7 +289,6 @@ const CustomEditior = () => {
       }
 
       const data = await response.json();
-      console.log("Image uploaded successfully:", data);
 
       // Assuming the API responds with an object that includes the URL
       if (data) {
@@ -318,7 +310,6 @@ const CustomEditior = () => {
               };
 
               // Add the new image object to the state
-              console.log(newImage, "newImage");
               setElements((prevElements) => [...prevElements, newImage]);
             }
           };

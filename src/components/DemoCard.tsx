@@ -29,7 +29,6 @@ const DemoCard = ({ params }: any) => {
   const handleModalClose = () => {
     setIsModalVisible(false); // Close the modal
   };
-  console.log(show, "show");
 
   const handleShare = () => {
     setIsModalVisible(true);
@@ -70,12 +69,7 @@ const DemoCard = ({ params }: any) => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (elements.length > 0) {
-  //     localStorage.setItem("slideElements", JSON.stringify(elements));
-  //   }
-  // }, [elements]);
-  console.log(elements, "sdasdqweqw");
+
   const openEnvelop = () => {
     router.push("/envelop");
   };

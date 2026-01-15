@@ -41,18 +41,14 @@ const Navbar = () => {
      ✅ FIX ADDED: READ COOKIE ON FIRST LOAD (GOOGLE REDIRECT)
      ===================================================== */
   useEffect(() => {
-    console.log("running1")
     if (typeof window !== "undefined") {
       const token = Cookies.get("auth_token");
-      console.log("token for navbar update",token)
       setAccessToken(token || null);
        router.replace("/");
     }
   }, []);
-  console.log("accesstoken here for navbar update",accessToken)
   useEffect(() => {
     // Ensure we're on the client side before accessing cookies
-    console.log("running2")
     if (typeof window !== 'undefined') {
       const token = Cookies.get("auth_token");
       setAccessToken(token || null);

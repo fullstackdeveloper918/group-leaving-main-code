@@ -28,7 +28,6 @@ const ContributorsModal: React.FC<ContributeModelProps> = ({
   const [contributors, setContributors] = useState<Contributor[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  console.log(reloadlyId, "reloadlyId");
   useEffect(() => {
     if (!isOpen) return;
     setLoading(true);
@@ -57,8 +56,6 @@ const ContributorsModal: React.FC<ContributeModelProps> = ({
     0
   );
 
-  console.log(contributors, "contribution data");
-  // console.log(isOpen,"here to see")
   if (!isOpen) return null;
 
   return (

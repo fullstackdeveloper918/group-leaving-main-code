@@ -29,7 +29,6 @@ const Success = ({ cartUuid }: any) => {
   }
 
   const cartUuiddata = getCartUuid(cartUuid2);
-  console.log(cartUuiddata, "cartUuiddata");
 
   useEffect(() => {
     const cookies = nookies.get();

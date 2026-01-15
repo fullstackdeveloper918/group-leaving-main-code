@@ -86,7 +86,7 @@ const GooglePayButton: React.FC = () => {
   };
 
   const processPayment = (paymentData: any) => {
-    console.log('Payment Data:', paymentData);
+    console.log('Payment Data:');
     // Send the payment data to your backend for processing if needed
   };
 

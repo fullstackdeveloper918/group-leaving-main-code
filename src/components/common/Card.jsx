@@ -55,7 +55,6 @@ const array = [
 const Card = ({ item, index }) => {
 
   const matchingCard = array.find((card) => card.type === item.type);
-  console.log(matchingCard, "matchingCard");
 
   const imageToDisplay = matchingCard
     ? matchingCard.image

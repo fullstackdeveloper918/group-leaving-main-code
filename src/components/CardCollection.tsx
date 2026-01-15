@@ -3,34 +3,27 @@ import Card from "./common/Card";
 import CollectionFilter from "./common/CollectionFilter";
 import { fetchFromServer } from "@/app/actions/fetchFromServer";
 const CardCollection = async ({ params }: any) => {
-  console.log(params, "qwertyui");
   // Extract type and cardLabel from URL params
   const type = params.slug[0];
   const searchQuery = params?.slug[1]; // Assuming search type (popular, new, trending) is the second slug
-  console.log(type, "type");
-  console.log(searchQuery, "searchQuery");
   // Sidebar: Fetch collection listing
   let data = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/card/collection-listing`,
     { cache: "no-store" }
   );
   let data1 = await data.json();
-  console.log(data1, "Collection Listing Data");
   // Find the matching collection type (UUID) based on the URL slug
   const normalizedType = type.replace("-", " ");
   const matchedObject = data1?.data.find((item: any) => {
     const normalizedTags = item.collection_title.replace("-", " ");
     return normalizedTags === normalizedType;
   });
-  console.log(matchedObject, "Matched Object");
   const collectionType = matchedObject ? matchedObject.uuid : null;
-  console.log(collectionType, "Collection Type (UUID)");
   // Validate the search query (allow only popular, new, and trending)
   const validSearchQueries = ["popular", "new", "trending"];
   const finalSearchQuery = validSearchQueries.includes(searchQuery)
     ? searchQuery
     : "";
-  console.log("finalSearchQuery", finalSearchQuery);
   // All cards: Fetch cards based on search and category params
   const api2 = {
     url: `${
@@ -41,9 +34,7 @@ const CardCollection = async ({ params }: any) => {
     method: "GET",
   };
   const response = await fetchFromServer(api2);
-  console.log(type, "type");
-  console.log(searchQuery, "searchQuery");
-  console.log(response, "Card Listing Response");
+
   return (
     <div className=" bg-lightBg pt-12">
       <div className="container-fluid">

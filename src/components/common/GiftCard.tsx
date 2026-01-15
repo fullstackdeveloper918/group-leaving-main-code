@@ -17,7 +17,6 @@ const GiftCard = ({ data }: any) => {
   };
   const handleImageClick = (imageData: any) => {
     setSelectedImage(imageData);
-    console.log(imageData, "imageData");
     setBrandKeys(imageData.brandKey);
     setIsModalOpen(true); // Open modal when an image is clicked
   };
@@ -33,13 +32,10 @@ const GiftCard = ({ data }: any) => {
     minFaceValue = Math.min(...faceValues);
     maxFaceValue = Math.max(...faceValues);
 
-    console.log(`Minimum Face Value: ₹${minFaceValue}`);
-    console.log(`Maximum Face Value: ₹${maxFaceValue}`);
   } else {
     console.log("No valid face values found.");
   }
 
-  console.log(data, "data herer");
   return (
     <>
       <section className="text-center  section_space_50 view_card_section">
