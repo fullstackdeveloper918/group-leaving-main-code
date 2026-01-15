@@ -1,19 +1,20 @@
 "use client";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense  } from "react";
 import Image from "next/image";
 import LogoutModal from "./LogoutModal";
-import { useParams, useRouter, useSearchParams  } from "next/navigation";
+import { useParams, useRouter  } from "next/navigation";
 import { destroyCookie } from "nookies";
 import GoodLuckCad from "../../../public/newimage/Groupwish-logo.png";
 import register from "../../assets/images/register.png";
 import Cookies from "js-cookie";
 import MegaMenu from "./MegaMenu";
+import UrlTokenHandler from "../UrlTokenHandler";
 
 const Navbar = () => {
   const router = useRouter();
   const param = useParams();
-   const searchParams = useSearchParams();
+  //  const searchParams = useSearchParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSubMenuOpen, setSubMenuOpen] = useState(true);
 console.log("params here123",param)
@@ -22,8 +23,8 @@ console.log("params here123",param)
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
     // ✅ get token from URL
-  const urltoken = searchParams.get("token");
-  console.log("urlToken here123",urltoken)
+  // const urltoken = searchParams.get("token");
+  // console.log("urlToken here123",urltoken)
   useEffect(() => {
     // Ensure we're on the client side before accessing cookies
     if (typeof window !== 'undefined') {
@@ -45,15 +46,15 @@ console.log("params here123",param)
   /* =====================================================
      ✅ FIX ADDED: READ COOKIE ON FIRST LOAD (GOOGLE REDIRECT)
      ===================================================== */
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const token = Cookies.get("auth_token");
-      setAccessToken(token || null);
-      // if (urltoken) {
-       router.replace("/");
-      // }
-    }
-  }, [urltoken]);
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     const token = Cookies.get("auth_token");
+  //     setAccessToken(token || null);
+  //     // if (urltoken) {
+  //      router.replace("/");
+  //     // }
+  //   }
+  // }, [urltoken]);
   useEffect(() => {
     // Ensure we're on the client side before accessing cookies
     if (typeof window !== 'undefined') {
@@ -126,8 +127,13 @@ console.log("params here123",param)
     };
   }, [isMenuOpen, isMobile]);
 
+  console.log("accessToken for testing",accessToken)
+
   return (
     <>
+     <Suspense fallback={null}>
+        <UrlTokenHandler onToken={setAccessToken} />
+      </Suspense>
       <div className="announcementBar bg-blueText text-center md:py-2 p-1 text-white">
         <p className="text-xs font-normal mb-0 text-center">
           Our back-to-school sale is here!{" "}
