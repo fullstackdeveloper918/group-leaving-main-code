@@ -44,7 +44,7 @@ const Navbar = () => {
     if (typeof window !== "undefined") {
       const token = Cookies.get("auth_token");
       setAccessToken(token || null);
-       router.replace("/");
+      //  router.replace("/");
     }
   }, []);
   useEffect(() => {
