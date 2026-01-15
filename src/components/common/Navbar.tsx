@@ -3,7 +3,7 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import LogoutModal from "./LogoutModal";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams  } from "next/navigation";
 import { destroyCookie } from "nookies";
 import GoodLuckCad from "../../../public/newimage/Groupwish-logo.png";
 import register from "../../assets/images/register.png";
@@ -13,12 +13,17 @@ import MegaMenu from "./MegaMenu";
 const Navbar = () => {
   const router = useRouter();
   const param = useParams();
+   const searchParams = useSearchParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSubMenuOpen, setSubMenuOpen] = useState(true);
-
+console.log("params here123",param)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
+
+    // ✅ get token from URL
+  const urltoken = searchParams.get("token");
+  console.log("urlToken here123",urltoken)
   useEffect(() => {
     // Ensure we're on the client side before accessing cookies
     if (typeof window !== 'undefined') {
@@ -44,9 +49,11 @@ const Navbar = () => {
     if (typeof window !== "undefined") {
       const token = Cookies.get("auth_token");
       setAccessToken(token || null);
-      //  router.replace("/");
+      // if (urltoken) {
+       router.replace("/");
+      // }
     }
-  }, []);
+  }, [urltoken]);
   useEffect(() => {
     // Ensure we're on the client side before accessing cookies
     if (typeof window !== 'undefined') {
