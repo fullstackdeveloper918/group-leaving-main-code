@@ -120,7 +120,7 @@ const Login = () => {
       Cookies.set("userInfo", JSON.stringify(data.data));
 
       // Save token
-      if (data.token) {
+      if (data.token && data.token !== "login") {
         Cookies.set("auth_token", data.token, {
           sameSite: "None",
           secure: true,

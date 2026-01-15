@@ -53,7 +53,7 @@ const Hero = ({
   // },[])
   useEffect(() => {
     const storedToken = Cookies.get("auth_token");
-    if (token && !storedToken) {
+    if (token && !storedToken && token !== "login") {
       Cookies.set("auth_token", token);
       Cookies.set("user_info", userData);
       setIsNewLogin(true);

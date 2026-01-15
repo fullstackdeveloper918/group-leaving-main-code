@@ -20,21 +20,29 @@ const Navbar = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   useEffect(() => {
-    let token = "";
-    if (typeof param.auth === "string") {
-      token = param.auth.split("token%3D")[1] || param.auth;
-    } else if (Array.isArray(param.auth)) {
-      token = param.auth[0]?.split("token%3D")[1] || param.auth[0];
-    }
-    const storedToken = Cookies.get("auth_token");
-    if (token && !storedToken) {
-      router.replace("/");
+    // Ensure we're on the client side before accessing cookies
+    if (typeof window !== 'undefined') {
+      let token = "";
+      if (typeof param.auth === "string") {
+        token = param.auth.split("token%3D")[1] || param.auth;
+      } else if (Array.isArray(param.auth)) {
+        token = param.auth[0]?.split("token%3D")[1] || param.auth[0];
+      }
+        const storedToken = Cookies.get("auth_token");
+      if (token && !storedToken && token !== "login") {
+        Cookies.set("auth_token", token);
+        setAccessToken(token); // Set access token immediately
+        router.replace("/");
+      }
     }
   }, []);
 
   useEffect(() => {
-    const token: any = Cookies.get("auth_token");
-    setAccessToken(token);
+    // Ensure we're on the client side before accessing cookies
+    if (typeof window !== 'undefined') {
+      const token = Cookies.get("auth_token");
+      setAccessToken(token || null);
+    }
   }, [param]);
 
   useEffect(() => {
