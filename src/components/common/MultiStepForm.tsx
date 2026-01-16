@@ -264,7 +264,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
                   }}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
-                {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+                {error && <p className="text-red-500 text-sm mt-2" style={{color: "red"}}>{error}</p>}
               </div>
 
               <div>
@@ -286,7 +286,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
                 {emailError && (
-                  <p className="text-red-500 text-sm mt-2">{emailError}</p>
+                  <p className="text-red-500 text-sm mt-2" style={{color: "red"}}>{emailError}</p>
                 )}
               </div>
 
@@ -382,10 +382,10 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
                 >
                   <option value="">Don&apos;t collect contributions</option>
                   <option value="inr">INR</option>
-                  <option value="gbp">GBP</option>
-                  <option value="usd">USD</option>
-                  <option value="aud">AUD</option>
-                  <option value="eur">EUR</option>
+                  {/* <option value="gbp">GBP</option> */}
+                  {/* <option value="usd">USD</option> */}
+                  {/* <option value="aud">AUD</option> */}
+                  {/* <option value="eur">EUR</option> */}
                 </select>
                 {currencyError && (
                   <p className="text-red-500 text-sm mt-2">{currencyError}</p>
@@ -425,7 +425,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ params }) => {
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
                 {senderError && (
-                  <p className="text-red-500 text-sm mt-2">{senderError}</p>
+                  <p className="text-red-500 text-sm mt-2" style={{color: "red"}}>{senderError}</p>
                 )}
               </div>
 

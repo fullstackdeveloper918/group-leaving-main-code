@@ -748,7 +748,7 @@ const DraggableElement = ({
 
   // Log when userInfo1 changes
   useEffect(() => {
-    console.log("userInfo1 updated");
+    console.log("dumy updated");
   }, [userInfo1]);
   const bind = useDrag((state: any) => {
 

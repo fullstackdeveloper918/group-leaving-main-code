@@ -1,10 +1,13 @@
 "use client";
+
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import HTMLFlipBook from "react-pageflip";
 import Image from "next/image";
 
-const PageCover = React.forwardRef((props: any, ref: any) => (
+/* ---------------- Page Components ---------------- */
+
+const PageCover = React.forwardRef<HTMLDivElement, any>((props, ref) => (
   <div
     ref={ref}
     data-density="hard"
@@ -16,18 +19,20 @@ const PageCover = React.forwardRef((props: any, ref: any) => (
 ));
 PageCover.displayName = "PageCover";
 
-const Page = React.forwardRef((props: any, ref: any) => (
+const Page = React.forwardRef<HTMLDivElement, any>((props, ref) => (
   <div className="page" ref={ref}>
     {props.children}
   </div>
 ));
 Page.displayName = "Page";
 
+/* ---------------- Main Component ---------------- */
+
 const EnvelopCard = ({ getdata }: any) => {
   const { id } = useParams();
   const [responseData, setResponseData] = useState<any>(null);
 
-  // Responsive width/height for flipbook
+  /* ---------- Responsive size ---------- */
   const getBookSize = () => {
     if (typeof window === "undefined") return { width: 550, height: 650 };
 
@@ -45,6 +50,7 @@ const EnvelopCard = ({ getdata }: any) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  /* ---------- Fetch data ---------- */
   useEffect(() => {
     if (!id) return;
 
@@ -65,11 +71,16 @@ const EnvelopCard = ({ getdata }: any) => {
 
   if (!responseData) return <div>Loading...</div>;
 
-  const messages = responseData?.data?.[0]?.editor_messages || [];
+  /* ---------- Messages ---------- */
+  const messages = responseData?.data?.[0]?.editor_messages ?? [];
+
+  /* ---------- FIXED slideIndexes ---------- */
+  const slideIndexes: number[] = Array.from(
+    new Set<number>(messages.map((msg: any) => Number(msg.slideIndex)))
+  ).sort((a, b) => a - b);
 
   return (
     <>
-      {/* Responsive Styles */}
       <style>{`
         .album-web {
           background: rgb(255, 251, 251);
@@ -105,7 +116,6 @@ const EnvelopCard = ({ getdata }: any) => {
           transform: translateX(-50%);
         }
 
-        /* Mobile Responsive Fixes */
         @media (max-width: 480px) {
           .page, .cover {
             box-shadow: none;
@@ -125,89 +135,93 @@ const EnvelopCard = ({ getdata }: any) => {
           maxWidth={1000}
           minHeight={400}
           maxHeight={1500}
-          showCover={true}
+          showCover
           flippingTime={1000}
           style={{ margin: "0 auto" }}
           maxShadowOpacity={0.5}
           className="album-web"
           startPage={0}
           size="fixed"
-          drawShadow={true}
-          usePortrait={true}
+          drawShadow
+          usePortrait
           startZIndex={1000}
           autoSize={false}
-          mobileScrollSupport={true}
+          mobileScrollSupport
           clickEventForward={false}
-          useMouseEvents={true}
+          useMouseEvents
           swipeDistance={50}
           showPageCorners={false}
           disableFlipByClick={false}
         >
-          {/* Front Cover */}
+          {/* -------- Front Cover -------- */}
           <PageCover>
-            <img
-              style={{
-                height: "100%",
-                width: "100%",
-                objectFit: "cover",
-              }}
-              src={`${process.env.NEXT_PUBLIC_API_URL}/${getdata?.data?.images?.[0]?.card_images?.[0]}`}
-              alt="content"
-            />
+            {getdata?.data?.images?.[0]?.card_images?.[0] ? (
+              <Image
+                src={`${process.env.NEXT_PUBLIC_API_URL}/${getdata.data.images[0].card_images[0]}`}
+                alt="front cover"
+                fill
+                style={{ objectFit: "cover" }}
+              />
+            ) : (
+              <div>No cover image</div>
+            )}
           </PageCover>
 
-          {/* Pages */}
-          {messages.length > 0 ? (
-            messages.map((item: any, index: number) => (
-              <Page key={index}>
-                <div
-                  style={{
-                    position: "absolute",
-                    left: item?.x ?? 0,
-                    top: item?.y ?? 0,
-                    maxWidth: "90%",
-                    wordBreak: "break-word",
-                  }}
-                >
-                  {item?.type === "text" && (
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: item?.content || "",
-                      }}
-                      style={{ fontSize: "1rem" }}
-                    />
-                  )}
+          {/* -------- Pages -------- */}
+          {slideIndexes.map((slideIndex) => {
+            const pageMessages = messages.filter(
+              (msg: any) => Number(msg.slideIndex) === slideIndex
+            );
 
-                  {item?.type === "image" && (
-                    <img
-                      src={item.content}
-                      alt="content"
-                      style={{ maxWidth: "80%", objectFit: "contain" }}
-                    />
-                  )}
+            return (
+              <Page key={slideIndex}>
+                {pageMessages.map((item: any, index: number) => (
+                  <div
+                    key={index}
+                    style={{
+                      position: "absolute",
+                      left: item?.x ?? 0,
+                      top: item?.y ?? 0,
+                      maxWidth: "90%",
+                      wordBreak: "break-word",
+                    }}
+                  >
+                    {item.type === "text" && (
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: item?.content || "",
+                        }}
+                        style={{ fontSize: "1rem" }}
+                      />
+                    )}
 
-                  {item?.type === "gif" && (
-                    <img
-                      src={item.content}
-                      alt="gif"
-                      style={{ maxWidth: "70%", maxHeight: "50%" }}
-                    />
-                  )}
-                </div>
+                    {item.type === "image" && (
+                      <Image
+                        src={item.content}
+                        alt="content"
+                        width={300}
+                        height={300}
+                        style={{ objectFit: "contain" }}
+                      />
+                    )}
+
+                    {item.type === "gif" && (
+                      <img
+                        src={item.content}
+                        alt="gif"
+                        style={{ maxWidth: "70%", maxHeight: "50%" }}
+                      />
+                    )}
+                  </div>
+                ))}
               </Page>
-            ))
-          ) : (
-            <Page>
-              <div style={{ padding: 20, textAlign: "center" }}>
-                <h3>No content available</h3>
-              </div>
-            </Page>
-          )}
+            );
+          })}
 
-          {/* Back Cover */}
+          {/* -------- Back Cover -------- */}
           <PageCover>
             <Image
-              src={"/newimage/logoGroup.png"}
+              src="/newimage/logoGroup.png"
               alt="logo"
               width={150}
               height={50}

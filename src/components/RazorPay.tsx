@@ -24,20 +24,20 @@ const RazorPay = ({
   bundleId,
   numberOfCards,
 }: any) => {
-  console.log(
-    amount,
-    "amount",
-    bundleId,
-    "bundleid",
-    cart_id,
-    "cartid",
-    card_name,
-    "card_name",
-    type,
-    "type",
-    "numberOfCards",
-    numberOfCards
-  );
+  // console.log(
+  //   amount,
+  //   "amount",
+  //   bundleId,
+  //   "bundleid",
+  //   cart_id,
+  //   "cartid",
+  //   card_name,
+  //   "card_name",
+  //   type,
+  //   "type",
+  //   "numberOfCards",
+  //   numberOfCards
+  // );
 
 
   const router = useRouter();

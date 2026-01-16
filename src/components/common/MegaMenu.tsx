@@ -115,7 +115,7 @@ const MegaMenu = () => {
   };
 
   return (
-    <nav className="bg-white hidden lg:block megamenu2 shadow-lg z-20 w-full border-t border-b border-[#e5e7eb] sticky top-0 ">
+    <nav className="bg-white hidden lg:block megamenu2 z-20 w-full border-t border-b border-[#e5e7eb] sticky top-0 ">
       <div className="flex justify-center items-center gap-5 px-4 py-3">
         {menuItems.map((menu, index) => {
           const isDropdown = menu.links.length > 1;

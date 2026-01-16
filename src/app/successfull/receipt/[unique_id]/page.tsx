@@ -2,11 +2,21 @@ import React from "react";
 import { fetchFromServer } from "@/app/actions/fetchFromServer";
 
 const ReceiptPage = async ({ params }: { params: { unique_id: string } }) => {
+  // const api = {
+  //   url: `${process.env.NEXT_PUBLIC_API_URL}/cart/${params?.unique_id}`,
+  //   method: "POST",
+  //   headers: { "Content-Type": "application/json" },
+  // };
   const api = {
-    url: `${process.env.NEXT_PUBLIC_API_URL}/cart/single-cart-by-id`,
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-  };
+  url: `${process.env.NEXT_PUBLIC_API_URL}/cart/single-cart-by-id`,
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: {
+  cartUuid: params?.unique_id,
+},
+ 
+  // body: JSON.stringify({cartUuid: params?.unique_id}),
+};
 
   let data: any = null;
 
@@ -18,6 +28,10 @@ const ReceiptPage = async ({ params }: { params: { unique_id: string } }) => {
   }
 
   const receipt = data?.data;
+
+  console.log("receipt data details",data)
+  console.log("receipt details",receipt)
+  console.log("unique_id details",params)
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center bg-gray-100 py-10">
@@ -44,7 +58,7 @@ const ReceiptPage = async ({ params }: { params: { unique_id: string } }) => {
               </div>
               <div className="flex justify-between ">
                 <span className="font-semibold">Amount:</span>
-                <span className="text-[14px]">{receipt.currency_type} {receipt.amount || "-"}</span>
+                <span className="text-[14px]">{receipt.currency_type?.toUpperCase()} {receipt.amount || "-"}</span>
               </div>
             </div>
             <div className="text-center mt-[30px]">

@@ -65,7 +65,6 @@ const Register = () => {
       });
       router.replace("/login");
     } catch (error: any) {
-      console.log("errorinregister123", error);
       toast.error("Something went wrong");
     } finally {
       setLoading(false);

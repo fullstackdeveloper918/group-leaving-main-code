@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
-import React, { useState, useEffect, Suspense  } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import LogoutModal from "./LogoutModal";
-import { useParams, useRouter  } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { destroyCookie } from "nookies";
 import GoodLuckCad from "../../../public/newimage/Groupwish-logo.png";
 import register from "../../assets/images/register.png";
@@ -11,20 +11,25 @@ import Cookies from "js-cookie";
 import MegaMenu from "./MegaMenu";
 import UrlTokenHandler from "../UrlTokenHandler";
 
+type UserInfo = {
+  email?: string;
+  name?: string;
+  id?: number;
+};
+
 const Navbar = () => {
   const router = useRouter();
   const param = useParams();
   //  const searchParams = useSearchParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSubMenuOpen, setSubMenuOpen] = useState(true);
-console.log("params here123",param)
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
-    // ✅ get token from URL
+  // ✅ get token from URL
   // const urltoken = searchParams.get("token");
-  // console.log("urlToken here123",urltoken)
   useEffect(() => {
     // Ensure we're on the client side before accessing cookies
     if (typeof window !== 'undefined') {
@@ -34,7 +39,8 @@ console.log("params here123",param)
       } else if (Array.isArray(param.auth)) {
         token = param.auth[0]?.split("token%3D")[1] || param.auth[0];
       }
-        const storedToken = Cookies.get("auth_token");
+      const storedToken = Cookies.get("auth_token");
+      // const userInfo = Cookies.get("userInfo");
       if (token && !storedToken && token !== "login") {
         Cookies.set("auth_token", token);
         setAccessToken(token); // Set access token immediately
@@ -42,6 +48,18 @@ console.log("params here123",param)
       }
     }
   }, []);
+
+  useEffect(() => {
+    const cookieUser = Cookies.get("userInfo");
+
+    if (cookieUser) {
+      try {
+        setUserInfo(JSON.parse(cookieUser)); // if stored as JSON
+      } catch (err) {
+        console.error("Invalid userInfo cookie", err);
+      }
+    }
+  }, [param]);
 
   /* =====================================================
      ✅ FIX ADDED: READ COOKIE ON FIRST LOAD (GOOGLE REDIRECT)
@@ -80,6 +98,7 @@ console.log("params here123",param)
   const handleLogout = async () => {
     Cookies.remove("auth_token");
     Cookies.remove("user_info");
+    Cookies.remove("userInfo");
     router.push(`/login`);
   };
 
@@ -127,14 +146,13 @@ console.log("params here123",param)
     };
   }, [isMenuOpen, isMobile]);
 
-  console.log("accessToken for testing",accessToken)
 
   return (
     <>
-     <Suspense fallback={null}>
+      <Suspense fallback={null}>
         <UrlTokenHandler onToken={setAccessToken} />
       </Suspense>
-      <div className="announcementBar bg-blueText text-center md:py-2 p-1 text-white">
+      {/* <div className="announcementBar bg-blueText text-center md:py-2 p-1 text-white">
         <p className="text-xs font-normal mb-0 text-center">
           Our back-to-school sale is here!{" "}
           <span className="font-bold">Save 15%</span> on Coins for all your fall
@@ -143,7 +161,7 @@ console.log("params here123",param)
             Shop Now.
           </Link>
         </p>
-      </div>
+      </div> */}
       <header className="w-full">
         {/* Main Header */}
         <div className="flex justify-between items-center md:py-4 md:px-6 px-2 py-3 container-fluid">
@@ -194,14 +212,22 @@ console.log("params here123",param)
                       }}
                     />
                     <ul
-                      className="dropdown-menu"
+                      className="dropdown-menu px-2 py-2 rounded-lg shadow-lg"
                       aria-labelledby="dropdownMenuButton1"
                       id="dropdownMenu"
                     >
-                      <li>
+                      {/* User Email */}
+                      <li className="px-1 py-2 mb-2 border-b">
+                        <span className="block text-sm font-medium whitespace-nowrap text-blue-600 break-all">
+                          {userInfo?.email}
+                        </span>
+                      </li>
+
+                      {/* Browse Cards */}
+                      <li className="mb-1">
                         <Link
                           href="/card/farewell"
-                          className="dropdown-item"
+                          className="dropdown-item px-3 py-2 rounded-md hover:bg-gray-100 transition"
                           onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                             e.stopPropagation();
                             document
@@ -212,10 +238,12 @@ console.log("params here123",param)
                           Browse Cards
                         </Link>
                       </li>
-                      <li>
+
+                      {/* Our Plans */}
+                      <li className="mb-1">
                         <Link
                           href="/pricing"
-                          className="dropdown-item"
+                          className="dropdown-item px-3 py-2 rounded-md hover:bg-gray-100 transition"
                           onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                             e.stopPropagation();
                             document
@@ -226,9 +254,11 @@ console.log("params here123",param)
                           Our Plans
                         </Link>
                       </li>
-                      <li>
+
+                      {/* Sign Out */}
+                      <li className="mt-2 pt-2 border-t">
                         <button
-                          className="dropdown-item"
+                          className="dropdown-item w-full text-left px-3 py-2 rounded-md hover:bg-red-50 transition"
                           onClick={() => setIsModalOpen(true)}
                         >
                           <span className="text-[#970119] font-semibold">
@@ -237,6 +267,7 @@ console.log("params here123",param)
                         </button>
                       </li>
                     </ul>
+
                   </div>
                 </>
               ) : (
@@ -283,9 +314,8 @@ console.log("params here123",param)
         </div>
         {isMobile ? (
           <nav
-            className={`md:hidden text-sm text-gray-700 z-40 absolute inset-x-0 transition-transform duration-300 p-5 px-4 top-0 bg-[#e2eefa] h-lvh ${
-              isMenuOpen ? "translate-x-0" : "-translate-x-full"
-            }`}
+            className={`md:hidden text-sm text-gray-700 z-40 absolute inset-x-0 transition-transform duration-300 p-5 px-4 top-0 bg-[#e2eefa] h-lvh ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+              }`}
           >
             {/* --- Top Section: Authenticated vs Guest --- */}
             <div className="border-b border-[#8b8b8b29] pb-0">

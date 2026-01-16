@@ -172,7 +172,8 @@ const editBoard = async (e: React.FormEvent) => {
   }
   const logFormData = (formData: FormData) => {
     formData.forEach((value, key) => {
-      console.log(`${key}:`, value);
+      // console.log(`${key}:`, value);
+      console.log("dummy")
     });
   };
   logFormData(formData);

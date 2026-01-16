@@ -1,10 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Checkbox, Divider, Flex, Form, Input } from "antd";
 import dynamic from "next/dynamic";
 import SocalLogin from "../components/common/SocialLogin";
 import MicroSoftLogin from "../components/common/MicroSoftLogin";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { capFirst } from "@/utils/validation";
 import api from "../utils/api";
 import { setCookie } from "nookies";
@@ -31,11 +31,25 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   // const [correctPass, setCorrectPass] = useState(false);
   const { accessToken, setAccessToken } = useAccessToken();
+   const searchParams = useSearchParams();
   const setCookie = (name: string, value: string) => {
     // const expires = new Date();
     // expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
     // document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
   };
+
+   useEffect(() => {
+    const verified = searchParams.get("verified");
+
+    if (verified === "true") {
+      toast.success("Email verified successfully.");
+    }
+
+    if (verified === "false") {
+      toast.error("Email verification failed or expired.");
+    }
+  }, [searchParams]);
+
 
   // const createSessionCookie = (idToken: string) => {
   //   try {
@@ -120,7 +134,7 @@ const Login = () => {
           secure: true,
         });
 
-        localStorage.setItem("access_token", JSON.stringify(data.token));
+        // localStorage.setItem("access_token", JSON.stringify(data.token));
       }
 
       // Optional custom cookies
@@ -130,7 +144,6 @@ const Login = () => {
       // Redirect
       router.replace("/");
     } catch (error: any) {
-      console.log("login error", error);
       toast.error("Something went wrong");
     } finally {
       setLoading(false);

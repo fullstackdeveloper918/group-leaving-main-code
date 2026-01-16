@@ -31,7 +31,6 @@ const Cart = () => {
         return;
       }
     } catch (error: any) {
-      console.log(error, "errorresponsedata");
       toast.error("Something went wrong! Please try again.", {
         autoClose: 3000,
       });
